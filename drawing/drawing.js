@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Y9 Home Page</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="expires" content="0">
+		<link rel="stylesheet" href="../css/style-main.css" > <!-- main stylesheet -->
+		<link rel="stylesheet" href="../css/style-tables.css" > <!-- tables stylesheet -->
+		<link rel="stylesheet" href="../css/styles-sched.css"> 
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+		<!--<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" /> -->
+
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.js"></script>
+		<script type="text/javascript" src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> 
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
+
+		<!--<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script> -->
+		<script src="../js/jquery.caret.js"></script>
+		<!--<script type="text/javascript" src="../misc/sorttable.js"></script> -->
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../js/log4js.min.js" type="text/javascript"></script>
+
+	</head>
+
+Width:<input type="text" id="width"><br>
+height:<input type="text" id="height"><br>
+<canvas id="canvas" width=300 height=300></canvas>
+
+
+
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+
+var width = 50;
+var height = 35;
+var $width = document.getElementById('width');
+var $height = document.getElementById('height')
+
+$width.value = width;
+$height.value = height;
+
+draw();
+
+$width.addEventListener("keyup", function() {
+  width = this.value;
+  draw();
+}, false);
+
+$height.addEventListener("keyup", function() {
+  height = this.value;
+  draw();
+}, false);
+
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(40, 40, width, height);
+}

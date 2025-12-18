@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <title>Slide show</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+      <link rel="stylesheet" href="../css/style-carousel.css"> 
+    </head>
+<body>
+<div class="w3-content slideshow-container" id="placeHolderSlide">
+ <!-- <img class="mySlides" src="uploads/IMG_3942.jpg" >
+  <img class="mySlides" src="uploads/Sterling.jpg" > -->
+  
+</div>
+
+<script>
+
+var slideIndex = 1;
+uploadImages();
+showDivs(slideIndex);
+
+  // Read image names fro mthe url and update the class
+  function uploadImages() 
+  {
+
+      var params = {};
+      var param_array = window.location.href.split('?')[1].split('&');
+      let items = document.getElementById('placeHolderSlide'); 
+      let out = "";
+      for (var i in param_array) {
+          x = param_array[i].split('=');
+          //params[x[0]] = x[1]; // x[1] is the file name to show 
+          out += `<img class="mySlides" src="${x[1]}">`;
+          console.log(x[1]);
+      }
+
+      out +=`<button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>`;
+      out +=`<button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>`;
+    
+    items.innerHTML = out;
+    console.log(out);
+  }
+
+
+  // Loop through the images
+  function plusDivs(n) {
+    showDivs(slideIndex += n);
+  }
+
+  function showDivs(n) {
+
+    var x = document.getElementsByClassName("mySlides");
+    if (n > x.length) 
+      slideIndex = 1;
+    if (n < 1) 
+      slideIndex = x.length;
+      
+    for (var i = 0; i < x.length; i++) 
+      x[i].style.display = "none"; 
+    
+    x[slideIndex-1].style.display = "block";  
+
+  }
+
+</script>
+
+</body>
+</html>

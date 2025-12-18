@@ -1,0 +1,68 @@
+<?php
+
+
+?>
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.6.3/css/all.min.css"  />
+     
+
+    <title>Tree directory structure  script With PHP</title>
+    
+  </head>
+  <body>
+    <div class="container py-2">
+      <div class="row m-0">
+      <div class="col-md-5">       
+        <?php
+
+        define('SITE_URL', 'https://bootstrapfriendly.com/demo/live-demo/file-directory-tree-php_1654194145');
+        function listFolderFiles($dir)
+        {
+            $allowed = array('php', 'html', 'css', 'js', 'txt');
+        
+            $fileFolderList = scandir($dir);
+            echo '<ul class="drop" id="menu">';
+            foreach ($fileFolderList as $fileFolder) {
+                if ($fileFolder != '.' && $fileFolder != '..') {
+                    if (!is_dir($dir.'/'.$fileFolder)) {
+                        $ext = pathinfo($fileFolder, PATHINFO_EXTENSION);
+                        if (in_array($ext, $allowed)) {
+                            echo '<li><a href="'.SITE_URL.'/index.php?page='.ltrim($dir.'/'.$fileFolder, './').'"><i class="fas fa-file-alt"></i>'.$fileFolder.'</a>';
+                        }
+                    } else {
+                        echo '<li><a href="#"><i class="fas fa-folder-open"></i>'.$fileFolder.'</a>';
+                    }
+                    if (is_dir($dir.'/'.$fileFolder)) {
+                        listFolderFiles($dir.'/'.$fileFolder);
+                    }
+                    echo '</li>';
+                }
+            }
+            echo '</ul>';
+        }
+
+        listFolderFiles('theme');
+       
+ 
+        ?>
+        </div>
+
+        
+      </div>
+    </div>
+
+
+
+
+</body>
+</html>

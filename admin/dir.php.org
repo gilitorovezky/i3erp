@@ -1,0 +1,86 @@
+<?php
+    date_default_timezone_set("America/Los_Angeles");
+    $current_time=date("m-d-Y H:i:s");
+    $logDate=date("n.j.Y");
+    file_put_contents('../log/log_'.$logDate.'.log', "(dir.php) ".$current_time." info 1-inside dir.php\n", FILE_APPEND); 
+    $ret_results=array();
+    $post_json = file_get_contents('php://input');
+    $sessionJSON = json_decode($post_json, true);
+    
+    $arrLength=count($sessionJSON);
+    $prjNumber=$sessionJSON['prjNumber'];
+    file_put_contents('../log/log_'.$logDate.'.log', "(dir.php) ".$current_time." info 2-Rec Num:".$arrLength." Rec:".print_r($sessionJSON,true)."\n", FILE_APPEND); 
+   // $elements = ;
+    //$array=json_decode($_POST['elements']);
+    //$elements = explode(',', $elements);
+    //echo $elements;
+    if ( $prjNumber != 0)   // 0 indicates root folder, in that case just ignore
+        $target_dir = "../uploads/".$prjNumber;
+    else
+        $target_dir = "../uploads";
+    if (file_exists($target_dir)) {
+
+        listFolderFiles($target_dir);
+        file_put_contents('../log/log_'.$logDate.'.log',"(dir.pho) ".$current_time." info 3:target dir:".$target_dir."\n", FILE_APPEND); 
+
+        $out = array();
+        $out[]["Status"]="Success";
+
+        /*foreach (glob($target_dir.'/*') as $filename) {
+            if (is_dir($filename) ) {
+                $out2 = array();
+                $folder=ltrim(strrchr($filename, '/'), '/');
+                $i=0;
+                foreach (glob($filename.'/*') as $subFilename) {
+                    $p2 = pathinfo($subFilename);
+                    $out2[$folder]["file-".$i] = $p2['basename'];
+                    $i++;
+                }
+                if (count($out2)> 0) {  // if not emppty folder 
+                    $out[]["dir"]=$out2;//$folder;
+                }
+                else {
+                    $out2[$folder]="";
+                    $out[]["dir"]=$out2;
+                }
+            }
+            else
+                $out[]["file"] =  pathinfo($filename)['basename'];//$filename;
+        }*/
+    }
+    else {
+        $out[0]["Status"]="empty folder";
+        file_put_contents('../log/log_'.$logDate.'.log',"(dir.pho) ".$current_time." error 1-target dir:".$target_dir." does not exist\n", FILE_APPEND); 
+    }
+
+    function listFolderFiles($dir)
+    {
+        $fileFolderList = scandir($dir);
+        //echo '<ul class="drop" id="menu">';
+        foreach ($fileFolderList as $fileFolder) {
+            if ($fileFolder != '.' && $fileFolder != '..' && $fileFolder != '.DS_Store') {
+                if (!is_dir($dir.'/'.$fileFolder)) {
+                    //$ext = pathinfo($fileFolder, PATHINFO_EXTENSION);
+                    //if (in_array($ext, $allowed)) {
+                    //     if ( $fileFolder != '.DS_Store')
+                            echo "file:".ltrim($dir.'/'.$fileFolder, './')."\n";
+                   // }
+                } else {
+                    //echo "folder:".$dir.'/'.$fileFolder."\n";
+                    echo "folder:".ltrim($dir.'/'.$fileFolder, './')."\n";
+                }
+                if (is_dir($dir.'/'.$fileFolder)) {
+                    listFolderFiles($dir.'/'.$fileFolder);
+                }
+                //echo '</li>';
+            }
+        }
+        //echo '</ul>';
+    }
+
+//    listFolderFiles($target_dir);
+
+    
+    echo json_encode($out);
+    //file_put_contents('log_'.$logDate.'.log',"(read_companies) ".$current_time." ".print_r($array,true)."\n", FILE_APPEND); 
+?>

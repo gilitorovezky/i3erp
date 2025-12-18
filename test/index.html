@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test test</title>
+    <link
+      rel="stylesheet"
+     
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> 
+  </head>
+
+  <body>
+
+  <style type="text/css">
+
+
+    .inputTime {
+      border  			: 0;
+      outline 			: 0;
+      background-color	: inherit
+    }
+
+    .inputDate {
+	      border  			: 0;
+	      outline 			: 0;
+	      background-color	: inherit
+    }
+
+    .tg  {
+      border-collapse:collapse;
+      border-spacing:0;
+      margin:0px auto;
+      width: 80%;
+    }
+
+    .tg td{
+      border-color:black;
+      border-style:solid;
+      border-width:0px;
+      font-family:Arial, sans-serif;
+      font-size:12px;
+      overflow:hidden;
+      padding: 1px 2px;
+      word-break:normal;
+    }
+
+    .tg tr {
+       /* border-color:black; */
+       border-style:solid;
+       /* border-width:2px; */
+       font-family:Arial, sans-serif;
+       font-size:14px;
+       font-weight:normal;
+       overflow:hidden;
+       /*padding:10px 5px;*/
+       word-break:normal;
+    }
+
+    .tg tr:first-child {
+      /* border-color:black; 
+      border-style:solid; */
+      /* border-width:2px; */
+      border-bottom: 0px;
+    }
+
+    .tg tr:last-child {
+      /* border-color:black; 
+      border-style:solid; */
+      /* border-width:2px; */
+      border-top: 0px;
+    }
+
+
+    .tg .tg-0pky{
+      border-color:inherit;
+      text-align:left;
+      vertical-align:center
+    }
+    </style>
+     <br><br><br>
+    <table class="tg">
+    <colgroup>
+  
+      
+      <!---<col width="5%">
+      <col width="2%"><col width="3%">
+     <col width="2%"><col width="3%">
+      <col width="2%"><col width="1%">-->
+    </colgroup> 
+    <tbody>
+      <tr style="height:40px">
+        <td colspan=2>Lead Number</td>
+        <td colspan=1><input type="text"  size="10" maxlength="50" value="abc" ></td>
+        <td colspan=2>Date</td>
+        <td colspan=1><input type="date" size="16" class="inputDate" ></td>
+        <td colspan=1>Time</td>
+        <td colspan=1><input type="time" size="15" class="inputTime" ></td>
+        <td colspan=1>Assign To:</td>
+        <td colspan=1><input type="text"  size="13" maxlength="50" value="abc" ></td>
+        <td colspan=1>Address line 1</td>
+        <td colspan=1><input type="text"  size="15" maxlength="50" value="abc" ></td>
+        <td colspan=1>Address line 2</td>
+        <td colspan=1><input type="text"  size="5" maxlength="50" value="abc" ></td>
+        <td colspan=1>City</td>
+        <td colspan=1><input type="text"  size="15" maxlength="50" value="abc" ></td>
+        <td colspan=1>State</td>
+        <td colspan=1><input type="text"  size="10" maxlength="50" value="abc" ></td>
+        <td colspan=1>Zip</td>
+        <td colspan=1><input type="text"  size="5" maxlength="50" value="abc" ></td>
+        <td colspan=1>Files</td>
+        <td colspan=1>0</td>
+
+       </tr>
+        <tr style="height:40px">
+          <td colspan=2>Tel Number</td>
+          <td colspan=1><input type="text"  size="10" maxlength="10" value="abc" ></td>
+          <td colspan=1>email</td>
+          <td colspan=2><input type="text" size="25"  maxlength="40" value="abc" ></td>
+          <td class="" colspan=1>First Name</td>
+          <td colspan=1><input type="text"  size="13" maxlength="50" value="abc" ></td>
+          <td class="" colspan=1>Last Name</td>
+          <td colspan=1><input type="text"  size="17" maxlength="50" value="abc" ></td>
+          <td class="" colspan=1>Notes</td>
+          <td colspan=1><input type="text"  size="30" maxlength="50" value="abc" ></td>
+         
+         
+       
+      </tr>
+    </tbody>
+    </table>
+  </body>
+  <script>
+
+    const dropdown = $("#pm-dropdown");
+    const agents = [
+                { name: "Alabama", abbreviation: "AL" },
+                { name: "Alabama", abbreviation: "AL"},
+                { name: "Alaska", abbreviation: "AK"}];
+
+    // Populate the dropdown with states
+    $.each(agents, function(index, sagent) {
+      dropdown.append($("<option></option>")
+        .attr("value", agent.abbreviation)
+        .text(agent.name));
+    });
+    $('#state-dropdown option[value="California"]').attr("selected",true);
+  </script>
+</html>

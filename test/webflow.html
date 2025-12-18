@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>test test</title>
+    <link
+      rel="stylesheet"
+     
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> 
+  </head>
+
+  <body>
+
+      
+      <!---<col width="5%">
+      <col width="2%"><col width="3%">
+     <col width="2%"><col width="3%">
+      <col width="2%"><col width="1%">-->
+    </colgroup> 
+    <tbody>
+    </body>
+  <script>
+  
+  let headers = new Headers();
+
+
+headers.append('Access-Control-Allow-Origin','http://localhost:8080');
+headers.append('Access-Control-Allow-Methods','GET, POST, OPTIONS');
+headers.append('Accept', 'application/json');
+headers.append('Access-Control-Allow-Headers','Content-Type, Authorization');
+headers.append('Authorization','Bearer 2a1aea5d80df75cd7dcdd41d34a4216897ba213710617471f38d7c9edda9e887');
+
+
+const response =  fetch("https://api.webflow.com/v2/sites/67ef9d705367ea93fe7c7fd0/form_submissions", {
+  method: "GET",
+  mode: 'no-cors',
+  headers:  headers 
+  //{ "Authorization": "Bearer 2a1aea5d80df75cd7dcdd41d34a4216897ba213710617471f38d7c9edda9e887"},
+}).then(response => response.text())
+  .then(data => {
+    console.log(data); // This will log the response data to the console
+    return data;
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+
+//const body =  response.json();
+//console.log(body);
+
+
+
+  </script>
+</html>

@@ -1,0 +1,66 @@
+[13-Jan-2025 14:21:21 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[13-Jan-2025 14:21:21 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[13-Jan-2025 14:21:21 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[13-Jan-2025 14:21:21 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[13-Jan-2025 14:21:21 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[13-Jan-2025 14:21:21 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[13-Jan-2025 14:21:21 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[13-Jan-2025 14:21:21 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[13-Jan-2025 14:21:21 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[13-Jan-2025 14:21:21 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[13-Jan-2025 14:21:21 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[13-Jan-2025 14:21:21 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[13-Jan-2025 14:35:43 America/Los_Angeles] PHP Warning:  Array to string conversion in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 32
+[13-Jan-2025 14:36:22 America/Los_Angeles] PHP Warning:  Array to string conversion in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 32
+[13-Jan-2025 14:37:07 America/Los_Angeles] PHP Warning:  Array to string conversion in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 31
+[13-Jan-2025 14:37:07 America/Los_Angeles] PHP Warning:  Array to string conversion in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 33
+[13-Jan-2025 14:37:47 America/Los_Angeles] PHP Fatal error:  Uncaught TypeError: json_decode(): Argument #1 ($json) must be of type string, array given in /Users/gilitorovezky/Sites/localhost/test/mkdir.php:31
+Stack trace:
+#0 /Users/gilitorovezky/Sites/localhost/test/mkdir.php(31): json_decode(Array, true)
+#1 {main}
+  thrown in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 31
+[13-Jan-2025 14:38:18 America/Los_Angeles] PHP Warning:  Array to string conversion in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 31
+[13-Jan-2025 14:38:38 America/Los_Angeles] PHP Fatal error:  Uncaught Error: Call to undefined function var_ump() in /Users/gilitorovezky/Sites/localhost/test/mkdir.php:32
+Stack trace:
+#0 {main}
+  thrown in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 32
+[13-Jan-2025 14:38:45 America/Los_Angeles] PHP Warning:  Array to string conversion in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 32
+[13-Jan-2025 14:40:06 America/Los_Angeles] PHP Warning:  Undefined array key "systen" in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 32
+[13-Jan-2025 14:52:30 America/Los_Angeles] PHP Warning:  Undefined array key 1 in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 32
+[13-Jan-2025 14:53:21 America/Los_Angeles] PHP Warning:  Undefined array key "project_folders" in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 32
+[13-Jan-2025 14:54:54 America/Los_Angeles] PHP Fatal error:  Uncaught TypeError: json_decode(): Argument #1 ($json) must be of type string, array given in /Users/gilitorovezky/Sites/localhost/test/mkdir.php:32
+Stack trace:
+#0 /Users/gilitorovezky/Sites/localhost/test/mkdir.php(32): json_decode(Array, true)
+#1 {main}
+  thrown in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 32
+[13-Jan-2025 14:55:20 America/Los_Angeles] PHP Fatal error:  Uncaught TypeError: json_decode(): Argument #1 ($json) must be of type string, array given in /Users/gilitorovezky/Sites/localhost/test/mkdir.php:32
+Stack trace:
+#0 /Users/gilitorovezky/Sites/localhost/test/mkdir.php(32): json_decode(Array, true)
+#1 {main}
+  thrown in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 32
+[13-Jan-2025 14:55:37 America/Los_Angeles] PHP Fatal error:  Uncaught TypeError: json_decode(): Argument #1 ($json) must be of type string, array given in /Users/gilitorovezky/Sites/localhost/test/mkdir.php:32
+Stack trace:
+#0 /Users/gilitorovezky/Sites/localhost/test/mkdir.php(32): json_decode(Array, true)
+#1 {main}
+  thrown in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 32
+[13-Jan-2025 15:04:05 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 49
+[13-Jan-2025 15:04:05 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 49
+[13-Jan-2025 15:04:05 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 49
+[13-Jan-2025 15:04:05 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 49
+[13-Jan-2025 15:04:05 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 49
+[13-Jan-2025 15:04:05 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 49
+[13-Jan-2025 15:04:05 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 49
+[14-Jan-2025 13:02:30 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[14-Jan-2025 13:02:30 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[14-Jan-2025 13:02:30 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[14-Jan-2025 13:02:30 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[14-Jan-2025 13:02:30 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[14-Jan-2025 13:02:30 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[14-Jan-2025 13:02:30 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[14-Jan-2025 13:05:44 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[14-Jan-2025 13:05:44 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[14-Jan-2025 13:05:44 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[14-Jan-2025 13:05:44 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[14-Jan-2025 13:05:44 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[14-Jan-2025 13:05:44 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40
+[14-Jan-2025 13:05:44 America/Los_Angeles] PHP Warning:  mkdir(): File exists in /Users/gilitorovezky/Sites/localhost/test/mkdir.php on line 40

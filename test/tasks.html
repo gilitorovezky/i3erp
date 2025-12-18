@@ -1,0 +1,399 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Row Mover</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tbody tr:hover {
+            background-color: #e8f4f8;
+        }
+        
+        .arrow-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .arrow-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: background-color 0.2s;
+        }
+        
+        .arrow-btn:hover:not(:disabled) {
+            background: #0056b3;
+        }
+        
+        .arrow-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .arrow-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .controls {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .add-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            margin: 0 5px;
+        }
+        
+        .add-btn:hover {
+            background: #218838;
+        }
+        
+        .remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .remove-btn:hover {
+            background: #c82333;
+        }
+        
+        .row-number {
+            font-weight: bold;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Table Row Mover</h1>
+        
+        <div class="controls">
+            <button class="add-btn" onclick="addRow()">Add New Row</button>
+            <button class="add-btn" onclick="resetTable()">Reset Table</button>
+        </div>
+        
+        <table id="movableTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Position</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="row-number">1</td>
+                    <td>John Smith</td>
+                    <td>Engineering</td>
+                    <td>Senior Developer</td>
+                    <td>
+                        <div class="arrow-buttons">
+                            <button class="arrow-btn" onclick="moveRow(this, 'up')" title="Move Up">↑</button>
+                            <button class="arrow-btn" onclick="moveRow(this, 'down')" title="Move Down">↓</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeRow(this)" title="Remove Row">×</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row-number">2</td>
+                    <td>Sarah Johnson</td>
+                    <td>Marketing</td>
+                    <td>Marketing Manager</td>
+                    <td>
+                        <div class="arrow-buttons">
+                            <button class="arrow-btn" onclick="moveRow(this, 'up')" title="Move Up">↑</button>
+                            <button class="arrow-btn" onclick="moveRow(this, 'down')" title="Move Down">↓</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeRow(this)" title="Remove Row">×</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row-number">3</td>
+                    <td>Mike Davis</td>
+                    <td>Sales</td>
+                    <td>Sales Representative</td>
+                    <td>
+                        <div class="arrow-buttons">
+                            <button class="arrow-btn" onclick="moveRow(this, 'up')" title="Move Up">↑</button>
+                            <button class="arrow-btn" onclick="moveRow(this, 'down')" title="Move Down">↓</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeRow(this)" title="Remove Row">×</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row-number">4</td>
+                    <td>Lisa Wilson</td>
+                    <td>HR</td>
+                    <td>HR Specialist</td>
+                    <td>
+                        <div class="arrow-buttons">
+                            <button class="arrow-btn" onclick="moveRow(this, 'up')" title="Move Up">↑</button>
+                            <button class="arrow-btn" onclick="moveRow(this, 'down')" title="Move Down">↓</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeRow(this)" title="Remove Row">×</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row-number">5</td>
+                    <td>David Brown</td>
+                    <td>Finance</td>
+                    <td>Accountant</td>
+                    <td>
+                        <div class="arrow-buttons">
+                            <button class="arrow-btn" onclick="moveRow(this, 'up')" title="Move Up">↑</button>
+                            <button class="arrow-btn" onclick="moveRow(this, 'down')" title="Move Down">↓</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeRow(this)" title="Remove Row">×</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Main function to move rows up or down
+        function moveRow(button, direction) {
+            const row = button.closest('tr');
+            const tbody = row.parentNode;
+            
+            if (direction === 'up') {
+                const prevRow = row.previousElementSibling;
+                if (prevRow) {
+                    tbody.insertBefore(row, prevRow);
+                }
+            } else if (direction === 'down') {
+                const nextRow = row.nextElementSibling;
+                if (nextRow) {
+                    tbody.insertBefore(nextRow, row);
+                }
+            }
+            
+            // Update row numbers and button states after moving
+            updateRowNumbers();
+            updateButtonStates();
+        }
+        
+        // Update row numbers in the first column
+        function updateRowNumbers() {
+            const tbody = document.querySelector('#movableTable tbody');
+            const rows = tbody.querySelectorAll('tr');
+            
+            rows.forEach((row, index) => {
+                const numberCell = row.querySelector('.row-number');
+                if (numberCell) {
+                    numberCell.textContent = index + 1;
+                }
+            });
+        }
+        
+        // Update button states (disable up arrow for first row, down arrow for last row)
+        function updateButtonStates() {
+            const tbody = document.querySelector('#movableTable tbody');
+            const rows = tbody.querySelectorAll('tr');
+            
+            rows.forEach((row, index) => {
+                const upBtn = row.querySelector('.arrow-btn[onclick*="up"]');
+                const downBtn = row.querySelector('.arrow-btn[onclick*="down"]');
+                
+                // Disable up button for first row
+                upBtn.disabled = (index === 0);
+                
+                // Disable down button for last row
+                downBtn.disabled = (index === rows.length - 1);
+            });
+        }
+        
+        // Add a new row to the table
+        function addRow() {
+            const tbody = document.querySelector('#movableTable tbody');
+            const newRow = document.createElement('tr');
+            const rowCount = tbody.children.length + 1;
+            
+            newRow.innerHTML = `
+                <td class="row-number">${rowCount}</td>
+                <td>New Employee ${rowCount}</td>
+                <td>Department</td>
+                <td>Position</td>
+                <td>
+                    <div class="arrow-buttons">
+                        <button class="arrow-btn" onclick="moveRow(this, 'up')" title="Move Up">↑</button>
+                        <button class="arrow-btn" onclick="moveRow(this, 'down')" title="Move Down">↓</button>
+                    </div>
+                    <button class="remove-btn" onclick="removeRow(this)" title="Remove Row">×</button>
+                </td>
+            `;
+            
+            tbody.appendChild(newRow);
+            updateRowNumbers();
+            updateButtonStates();
+        }
+        
+        // Remove a row from the table
+        function removeRow(button) {
+            const row = button.closest('tr');
+            const tbody = row.parentNode;
+            
+            // Don't allow removing if it's the last row
+            if (tbody.children.length > 1) {
+                row.remove();
+                updateRowNumbers();
+                updateButtonStates();
+            } else {
+                alert('Cannot remove the last row!');
+            }
+        }
+        
+        // Reset table to initial state
+        function resetTable() {
+            const tbody = document.querySelector('#movableTable tbody');
+            tbody.innerHTML = `
+                <tr>
+                    <td class="row-number">1</td>
+                    <td>John Smith</td>
+                    <td>Engineering</td>
+                    <td>Senior Developer</td>
+                    <td>
+                        <div class="arrow-buttons">
+                            <button class="arrow-btn" onclick="moveRow(this, 'up')" title="Move Up">↑</button>
+                            <button class="arrow-btn" onclick="moveRow(this, 'down')" title="Move Down">↓</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeRow(this)" title="Remove Row">×</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row-number">2</td>
+                    <td>Sarah Johnson</td>
+                    <td>Marketing</td>
+                    <td>Marketing Manager</td>
+                    <td>
+                        <div class="arrow-buttons">
+                            <button class="arrow-btn" onclick="moveRow(this, 'up')" title="Move Up">↑</button>
+                            <button class="arrow-btn" onclick="moveRow(this, 'down')" title="Move Down">↓</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeRow(this)" title="Remove Row">×</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row-number">3</td>
+                    <td>Mike Davis</td>
+                    <td>Sales</td>
+                    <td>Sales Representative</td>
+                    <td>
+                        <div class="arrow-buttons">
+                            <button class="arrow-btn" onclick="moveRow(this, 'up')" title="Move Up">↑</button>
+                            <button class="arrow-btn" onclick="moveRow(this, 'down')" title="Move Down">↓</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeRow(this)" title="Remove Row">×</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row-number">4</td>
+                    <td>Lisa Wilson</td>
+                    <td>HR</td>
+                    <td>HR Specialist</td>
+                    <td>
+                        <div class="arrow-buttons">
+                            <button class="arrow-btn" onclick="moveRow(this, 'up')" title="Move Up">↑</button>
+                            <button class="arrow-btn" onclick="moveRow(this, 'down')" title="Move Down">↓</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeRow(this)" title="Remove Row">×</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row-number">5</td>
+                    <td>David Brown</td>
+                    <td>Finance</td>
+                    <td>Accountant</td>
+                    <td>
+                        <div class="arrow-buttons">
+                            <button class="arrow-btn" onclick="moveRow(this, 'up')" title="Move Up">↑</button>
+                            <button class="arrow-btn" onclick="moveRow(this, 'down')" title="Move Down">↓</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeRow(this)" title="Remove Row">×</button>
+                    </td>
+                </tr>
+            `;
+            updateButtonStates();
+        }
+        
+        // Initialize button states when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            updateButtonStates();
+        });
+        
+        // Alternative implementation using event delegation (more efficient for large tables)
+        /*
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('arrow-btn')) {
+                const direction = e.target.onclick.toString().includes('up') ? 'up' : 'down';
+                moveRow(e.target, direction);
+            } else if (e.target.classList.contains('remove-btn')) {
+                removeRow(e.target);
+            }
+        });
+        */
+    </script>
+</body>
+</html>

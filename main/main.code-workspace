@@ -1,0 +1,68 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../login"
+		},
+		{
+			"path": "../misc"
+		},
+		{
+			"path": "../css"
+		},
+		{
+			"path": "../scheduler"
+		},
+		{
+			"path": "../admin"
+		},
+		{
+			"path": "../tests"
+		},
+		{
+			"path": "../db"
+		},
+		{
+			"path": "../drawing"
+		},
+		{
+			"path": "../estimate"
+		},
+		{
+			"path": "../multiselect"
+		},
+		{
+			"path": "../users"
+		},
+		{
+			"path": "../handlers"
+		},
+		{
+			"path": "../progress"
+		},
+		{
+			"path": "../test"
+		},
+		{
+			"path": "../tree"
+		},
+		{
+			"path": "../fileops"
+		},
+		{
+			"path": "../estimates"
+		},
+		{
+			"path": "../customers"
+		},
+		{
+			"path": "../leads"
+		}
+	],
+	"settings": {
+		"editor.fontSize": 11,
+		"editor.fontLigatures": false
+	}
+}

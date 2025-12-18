@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/jquery-3.7.1.js"></script> <!-- for development -->
+    <title>Variable Width HTML Table</title>
+    <style>
+
+        .inputTime {
+            border  			: 0;
+            outline 			: 0;
+            background-color	: inherit
+        }
+
+        input {
+            border              : none;
+            font-size           : 12px;
+            /* width: auto; */
+        }
+
+        label {
+            font-size           : 12px;
+            font-weight         : bold;
+        }
+
+        .inputDate {
+            border  			: 0;
+            outline 			: 0;
+            background-color	: inherit
+        }
+
+        table {
+            width: 90%;
+            border-collapse: collapse;
+            margin: 0 auto;
+            /* display:inline-flex; */
+            justify-content:center
+        }
+
+        tr {
+            height: 21px;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            /* text-align: left; */
+        }
+        
+        select {
+            border: none;
+            font-size: 12px;
+        }
+        table tr:first-child {
+            border-bottom: 0px;
+        }
+
+        table tr:last-child {
+            border-top: 0px;
+        }
+
+        table .tg-0pky{
+            border-color:inherit;
+            text-align:left;
+            vertical-align:center
+        }
+        .textGrey {
+            color: grey;
+            font-size: 12px;
+        }
+        .hyperlinkLabel {
+            font-size			: 12px;
+            cursor: pointer;
+        }
+        /* Define different widths for each cell */
+        .cell-1 {width: 7%;}
+        .cell-2 {width: 9%;}
+        .cell-3 {width: 7%;}
+        .cell-4 {width: 8%;margin: 0;}
+        .cell-5 {width: 24%;}
+        .cell-6 {width: 12%;}
+        .cell-7 {width: 7%;}
+        .cell-8 {width: 4%;}
+        .cell-9 {width: 2%;}
+        .cell-10 {width: 4%;}
+        .cell-11 {width: 5%;}
+        .cell-12 {width: 3%;}
+        .cell-13 {width: 11%;}
+        .cell-14 {width: 12%;margin: 0;}
+        .cell-14{width: 24%;}
+        .cell-15 {width: 12%;}
+        .cell-16 {width: 7%;}
+        .cell-17 {width: 4%;}
+        .cell-18 {width: 2%;}
+    </style>
+</head>
+<body>
+    <div style="display: inline-block"></div><input id="inputCloudfileID" type="file" name="fileToUpload[]" multiple/>
+    <div style="display: inline-block"><label for="inputCloudfileID" class="custom-file-upload honeydow">Library Upload</label></div>
+    <div style="display: inline-block"><p id="abc">hello world</p></div>
+<h2>Leads</h2>
+
+<table>
+    <tr>
+        <td class="cell-1"><label>Lead Number: </label><label id="labelID" style="display:inline-flex;justify-content:center;width:40%">12345</label></td>
+        <td class="cell-2"><label for="dDate">Appnt Date: </label>
+            <input type="date" id="dDate" name="date" class="inputDate" required/>
+        </td>
+        <td class="cell-3"><label for="tTime">Appnt Time: </label>
+            <input type="time" id="tTime" name="time" class="inputTime" required/>
+        </td>
+       
+        <td class="cell-4"><label for="pm-dropdown">Assign To: </label>
+            <select id="pm-dropdown" style="width:66%;color: grey;"></select></td> <!--style="width:150px" -->
+    
+            
+        <td class="cell-5"><label for="addrsSlctor" >Billing Address </label>
+            <input type="checkbox" class="img_chkbox" id="addrsSlctor" style="vertical-align:middle">
+            <label for="adrsLine1">Address Line 1: </label>
+            <input type="text" id="adrsLine1" name="adrsLine1" required maxlength="50" style="width:60%"/>
+        </td>
+
+        <td class="cell-6"><label for="adrsLine2">Address Line 2: </label>
+            <input type="text" id="adrsLine2" name="adrsLine2" required maxlength="50" style="width:65%" value="apt/floor"/>
+        </td>
+        <td class="cell-7"><label for="city">City: </label>
+            <select id="city-dropdown" style="width:80%;color: grey;"></select> <!--style="width:150px" -->
+        </td>
+        <td class="cell-8"><label>State: </label><label class="textGrey">Califorina</label></td>
+        </td>
+        <td class="cell-9"><label>Files: </label><a class="hyperlinkLabel" id="allFilesID" name="allFilesID" >0</a></td>
+        </td>
+    </tr>
+</table>     
+<table>
+    <tr>
+        <td class="cell-10"><label for="leadName">First Name: </label><input type="text" id="leadName" required maxlength="50" style="width:75%"/></td>
+        <td class="cell-11"><label for="lastName">Last Name: </label><input type="text" id="lastName" required maxlength="50" style="width:80%"/></td>
+        <td class="cell-12"><label for="telNumber">Tel Number: </label><input id="telNumber" maxlength="15" name="atn" size="12" onKeyup='addDashes(this)' /></td>  <!--class="form-textbox" -->
+        <td class="cell-12"><label for="leadEmail">email: </label><input type="text" id="leadEmail" required maxlength="50" style="width:81%"/></td>
+        <td class="cell-13"><label for="notes">Notes: </label><input type="text" id="notes" required maxlength="70" style="width:93%" /></td>
+    </tr>
+</table>
+</table>
+<script>
+        function addDashes(f) {
+            var r = /(\D+)/g,
+                npa = '',
+                nxx = '',
+                last4 = '';
+            f.value = f.value.replace(r, '');
+            npa = f.value.substr(0, 3);
+            nxx = f.value.substr(3, 3);
+            last4 = f.value.substr(6, 4);
+            f.value = npa + '-' + nxx + '-' + last4;
+        }
+        const agentDropdown = $("#pm-dropdown");
+        const cityDropdown = $("#city-dropdown");
+        const agents = [
+                    { name: "Yossi"},
+                    { name: "Shlomo"},
+                    { name: "Danny"}];
+
+        const cities = [
+                { name: "San Diego"},
+                { name: "Poway"},
+                { name: "Escandido"}];
+
+        // Populate the dropdown with states
+        $.each(agents, function(index, agent) {
+            agentDropdown.append($("<option></option>")
+                    .attr("value", agent.name)
+                    .text(agent.name));
+        });
+        $.each(cities, function(index, city) {
+            cityDropdown.append($("<option></option>")
+                    .attr("value", city.name)
+                    .text(city.name));
+        });
+        $('#pm-dropdown option[value="Yossi"]').attr("selected",true);
+        $('#city-dropdown option[value="San Diego"]').attr("selected",true);
+  </script>
+</body>
+</html>

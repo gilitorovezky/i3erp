@@ -1,0 +1,48 @@
+.switch {
+    position            : relative;
+    display             : inline-block;
+    width               : 30px; /* Adjust as needed */
+    height              : 20px; /* Adjust as needed */
+}
+
+.switch input {
+    display             : none;
+}
+
+.slider {
+    position            : absolute;
+    cursor              : pointer;
+    top                 : 0;
+    left                : 0;
+    right               : 0;
+    bottom              : 0;
+    background-color    : #ccc; /* Default slider color */
+    -webkit-transition  : .4s;
+    transition          : .4s;
+    border-radius       : 35%; /* Rounded corners for iPhone look */
+}
+
+.slider:before {
+    position            : absolute;
+    content             : ""; 
+    height              : 18px;   /* 2 pixles less than switch height */
+    width               : 13px;
+    background-color    : white; 
+    border-radius       : 50%;
+    left                : 2px;
+    top                 : 1px;
+    -webkit-transition  : .4s;
+    transition          : .4s;
+}
+
+input:checked + .slider {
+    background-color    : #2196F3; /* On color (blue for iPhone-like) */
+}
+
+input:focus + .slider {
+    box-shadow          : 0 0 1px #2196F3; /* Optional focus effect */
+}
+
+input:checked + .slider:before {
+    transform           : translateX(14px); /* Move slider to the right when checked */
+}

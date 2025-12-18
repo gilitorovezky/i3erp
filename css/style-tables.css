@@ -1,0 +1,31 @@
+#pCircle{
+    /* width: 109px; */
+    height          : 100px;
+    background-color: #85e25a;
+    border-radius   : 50%;
+    display         : flex;
+    align-items     : right;
+}
+
+#pBalance{
+    width           : 100%;
+    text-align      : center;
+}
+
+.folderTable tr {
+    display         : inline-table;
+    width           : 100%
+}
+
+.folderTableTD {
+
+    width           : 25%;
+    text-align      : center;
+
+}
+/*#newRecord {
+    display : inline-block;
+    cursor : pointer;
+    font-size: 11px;
+    text-decoration:none;
+}*/

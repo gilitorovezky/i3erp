@@ -1,0 +1,27 @@
+.tree_dlg {
+
+    height          :   100%;
+    width           :   100%;
+    /*   overflow-y  :   scroll; */
+    /* overflow    : hidden;*/
+}
+
+.leftPaneTableID {
+    height          :   100%;
+    width           :   100%;
+    border-radius   :   15px;
+    border-collapse :   collapse;
+}
+
+.leftPaneTableID tr td {
+    border          :   2px solid black;
+    height          :   30%;
+    border-radius   :   15px;
+    padding         :   2px;
+}
+
+
+.leftPaneTableID tr td:hover {
+    border          :   3px solid black;
+    border-radius   :   15px;
+}

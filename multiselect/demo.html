@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pure js multiselect demo</title>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+	<!--<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" /> -->
+
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> 
+	<link href="styles/multiselect.css" rel="stylesheet"/>
+	<script src="multiselect.min.js"></script>
+	<style>
+		/* example of setting the width for multiselect */
+		#testSelect1_multiSelect {
+			 width: 100px;
+		}
+
+		#context-menu {
+        position: fixed;
+        z-index: 10000;
+        width: 150px;
+        background: #1b1a1a;
+        border-radius: 5px;
+        transform: scale(0);
+        transform-origin: top left;
+      }
+
+      #context-menu.visible {
+        transform: scale(1);
+        transition: transform 200ms ease-in-out;
+      }
+
+      #context-menu .item {
+        padding: 8px 10px;
+        font-size: 15px;
+        color: #eee;
+        cursor: pointer;
+        border-radius: inherit;
+      }
+
+      #context-menu .item:hover {
+        background: #343434;
+      }
+  
+	</style>
+</head>
+<body>
+	<div id="context-menu">
+		<div class="item">project 1001</div>
+		<div class="item">project 24001</div>
+		
+	  </div>
+  
+   
+	<div id="main" hidden >
+		<select id='testSelect1' multiple >
+			<option value='1'>file 1</option>
+			<option value='2'>file 2</option>
+			<option value='3'>file 3</option>
+			<option value='4'>file 4</option>
+			<option value='5'>file 5</option>
+		</select>
+		<div>
+		<button onclick="submit()">Submit</button>
+		<button onclick="reset()">Reset</button>
+		<!--<br>
+		Number of Selected items:<span id="result"></span> -->
+	</div>
+</div>
+
+<script>
+	const scope = document.querySelector("body");
+      const contextMenu = document.getElementById("context-menu");
+	  const normalizePozition = (mouseX, mouseY) => {
+        // ? compute what is the mouse position relative to the container element (scope)
+			let {
+			left: scopeOffsetX,
+			top: scopeOffsetY,
+			} = scope.getBoundingClientRect();
+			scopeOffsetX = scopeOffsetX < 0 ? 0 : scopeOffsetX;
+			scopeOffsetY = scopeOffsetY < 0 ? 0 : scopeOffsetY;
+		
+			const scopeX = mouseX - scopeOffsetX;
+			const scopeY = mouseY - scopeOffsetY;
+
+			// ? check if the element will go out of bounds
+			const outOfBoundsOnX =
+			scopeX + contextMenu.clientWidth > scope.clientWidth;
+
+			const outOfBoundsOnY =
+			scopeY + contextMenu.clientHeight > scope.clientHeight;
+
+			let normalizedX = mouseX;
+			let normalizedY = mouseY;
+
+			// ? normalize on X
+			if (outOfBoundsOnX) {
+			normalizedX =
+				scopeOffsetX + scope.clientWidth - contextMenu.clientWidth;
+			}
+
+			// ? normalize on Y
+			if (outOfBoundsOnY) {
+			normalizedY =
+				scopeOffsetY + scope.clientHeight - contextMenu.clientHeight;
+			}
+
+			return { normalizedX, normalizedY };
+      };
+
+
+		var myOptions = {
+                val1 : 'file 10',
+                val2 : 'file 11'
+            };
+	var mySelect = $('#testSelect1');
+	$.each(myOptions, function(val, text) {
+                mySelect.append(
+                    $('<option></option>').val(val).html(text)
+                );
+            });
+
+	$('#main').show();
+	
+	$('#testSelect1').multiselect(); // with jQuery
+	$('#testSelect1').on( "contextmenu", function() {
+  		alert( "Handler for `contextmenu` called." );
+	} );
+
+	const scope1=document.querySelector('#testSelect1');
+	if (scope1.addEventListener) {
+		scope1.addEventListener('contextmenu', function(e) {
+				alert("You've tried to open context menu"); //here you draw your own menu
+			e.preventDefault();
+		}, false);
+		} else {
+			scope.attachEvent('oncontextmenu', function() {
+			alert("You've tried to open context menu");
+			window.event.returnValue = false;
+		});
+		}
+		$('#main').bind('contextmenu',function(event){
+			if  ( (event.target.parentElement.nodeName == "LABEL") || (event.target.parentElement.nodeName == 'LI')) {
+				//alert("clicked:"+event.target.parentElement.innerText+" total selected:"+$('#testSelect1').val().length);
+				//document.getElementById("result").innerText = $('#testSelect1').val().length;
+
+				event.preventDefault();
+
+				const { clientX: mouseX, clientY: mouseY } = event;
+
+				const { normalizedX, normalizedY } = normalizePozition(mouseX, mouseY);
+
+				contextMenu.classList.remove("visible");
+
+				contextMenu.style.top = `${normalizedY+150}px`;
+				contextMenu.style.left = `${normalizedX+100}px`;
+
+				setTimeout(() => {
+				contextMenu.classList.add("visible");
+				});
+
+
+				
+			}
+			//event.target.parentElement.nodeName
+			return false;
+			});
+
+
+	/*document.multiselect('#testSelect1')
+		.setCheckBoxClick("checkboxAll", function(target, args) {
+			console.log("Checkbox 'Select All' was clicked and got value ", args.checked);
+		})
+		.setCheckBoxClick("1", function(target, args) {
+			console.log("Checkbox for item with value '1' was clicked and got value ", args.checked);
+		});*/
+
+	function submit() {
+		///document.multiselect('#testSelect1').setIsEnabled(true);
+		//document.multiselect('#testSelect1').select(1);
+		//var g=$("#testSelect1").val();
+		//document.getElementById("result").innerText = $('#testSelect1').val().length;
+		;
+	}
+
+	function reset() {
+		document.multiselect('#testSelect1').setIsEnabled(false);
+	}
+
+	scope.addEventListener("click", (e) => {
+        // ? close the menu if the user clicks outside of it
+        //if (e.target.offsetParent != contextMenu) {
+          contextMenu.classList.remove("visible");
+        //}
+      });
+</script>
+</body>

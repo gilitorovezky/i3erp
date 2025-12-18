@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Y9 Home Page</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="expires" content="0">
+		<link rel="stylesheet" href="../css/style-system.css"> <!-- main stylesheet -->
+		<link rel="stylesheet" href="../css/style-main.css"> <!-- main stylesheet -->
+		<link rel="stylesheet" href="../css/style-slider.css"> <!-- main stylesheet -->
+		<link rel="stylesheet" href="../css/style-tables.css"> <!-- tables stylesheet -->
+		<link rel="stylesheet" href="../css/style-sched.css"> 
+		<link rel="stylesheet" href="../css/style-gallery.css">
+		<link rel="stylesheet" href="../css/style-leads.css">
+		<link rel="stylesheet" href="../css/style-tree.css"> <!-- tables stylesheet -->
+		<link rel="stylesheet" href="../js/themes/default/style.min.css">
+		
+		<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script> -->
+		<script type="text/javascript" src="../js/jquery-3.7.1.js"></script> <!-- for development -->
+		<script type="text/javascript" src="../js/jquery-ui.js"></script> <!-- for development -->
+		<script type="text/javascript" src="../js/jstree.js"></script> <!-- for development -->
+		<script type="text/javascript" src="../js/js.cookie.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.caret.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/log4js.min.js" ></script>
+		<link href="../js/select2/dist/css/select2.min.css" rel="stylesheet" />
+		<script src="../js/select2/dist/js/select2.min.js"></script>
+		<link rel="stylesheet" href="../progress/css/style-prgrsbar.css" />
+	</head>
+
+	
+	<!-- onLoad="JavaScript:checkRefresh();-->
+	<body class="loggedin">
+	<!--	<div class="loader" id="loader">
+			<div class="progress-bar" id="myProgressBar">
+			  <span class="number-count" id="incrementpercentage">0%</span>
+			</div>
+		  </div>
+		<script defer src="../progress/progress.js"></script> 
+		-->
+		<!-- <div class="greeting">
+			<div class="canvas">
+				<canvas id ="canvasWelcome"> </canvas>
+			</div>
+		</div> -->	
+		<nav id="navID" class="navtop">
+			<div>
+				<img alt='Y9' src="../misc/y9-logo.png">
+				<a tabindex="1" id="welcomeNameID" class="fas fa-sign-out-alt"></a>
+				<h1></h1>
+				<a tabindex="2" id="rootID" class="fas fa-sign-out-alt"></a>	<!-- servers as home -->
+				<a tabindex="3" id="libraryID" class="fas fa-sign-out-alt"></a>
+				<a tabindex="4" id="configID" class="fas fa-sign-out-alt"></a>
+				<a tabindex="5" id="systemID" class="fas fa-sign-out-alt"></a>
+				<a tabindex="6" id="logout" class="fas fa-sign-out-alt"></a>
+			</div>
+		</nav>
+		<br> 
+		<div id="caption">
+		<table id="captionTbl" class="caption">
+			<tr id="captionRow">
+				<td style="width: 15%;"></td>
+				<td style="width: 0%;"></td> <!-- place holder-->
+				<td style="width: 10%; text-align:center" id="preWeekID"></td>
+				<td id="screen_nameTD"><a tabindex="0" hidden id="screen_name" style="font-weight: bold">Home</a></td>
+				<td id="leadsTab_nameTD"><a tabindex="0" id="leadsTab_name" style="font-weight: bold"></a></td>
+				<td class="caption label" id="exportID"></td> 
+				<td class="caption label" id="newTaskShortCutID"></td> 
+				<td class="caption label" id="savingTD"></td>
+				<td class="caption label editLabel" id="editLabel"></td>
+			</tr>
+			</table>
+		</div>
+		<!--<div >
+			for future use
+			<table id="searchDivID" style="margin: 0 auto; width:100%">
+				<tbody style="font-size:12px;text-align: center;">
+				<tr id="searchID"> 
+					<td></td>
+				</tr>
+				</tbody>
+			</table>
+		</div> -->
+
+		<div id="mainDiv"> 
+			<div id="parentDiv" class="parentDivClass"> <!-- animate"> -->
+				<div hidden class="main_menue boxShadow" id="centercellID"> 
+					<table id="main-menue">
+						<tr>
+							<td id="ul" >
+								<a tabindex="7" class="css-3d-text" id="upperLeft"></a> 
+								<a><img tabindex="8" src='../misc/plus.png' alt='plus' width='10' id="Pls-ul" height='10'></a>
+							</td>
+							<td id="ur" >
+								<div id="upperRightQuadrant">
+									<a tabindex="9" class="css-3d-text" id="upperRight"></a>
+									<a><img tabindex="10" src='../misc/plus.png' alt='plus' width='10' id="Pls-ur" height='10'></a>
+									<label class="label1" for="userFileUpload" id="fileslabel"></label> 
+									<input class="label1" type="checkbox" id="userFileUpload">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td id="ll">
+								<a tabindex="11" class="css-3d-text" id="lowerLeft" target="_blank"></a>
+								<a><img tabindex="12" src='../misc/plus.png' alt='plus' width='10' id="Pls-ll" height='10'></a>
+							</td>
+							<td id="lr">
+								<a tabindex="13" class="css-3d-text" id="lowerRight"></a>
+								<a><img tabindex="14" src='../misc/plus.png' alt='plus' width='10' id="Pls-lr" height='10'></a>
+							</td>
+						</tr>
+					</table>
+					<table class="innerCell boxShadow" id="innerCellID">
+						<tr>
+							<td id="customers" style="white-space:pre"></td>
+						</tr>
+						<tr>
+							<td id="tHalf"></td>
+						</tr>
+						<tr>
+							<td id="bHalf" style="white-space:pre"></td>
+						</tr>
+					</table>
+				</div>
+				<table hidden class="projectSummary" id="pSummaryID">
+					<tr>
+						<td>
+						<table class="innerPT">
+							<tr>
+								<td><a class ="title">Project Number</a></td>
+								<td><a class ="normal" id="jPnumber"></a></td>
+							</tr>
+							<tr>
+								<td><a class ="title">Details</a></td>
+								<td><a class ="normal" id="jDetails"></a></td>
+							</tr>
+							<tr>
+								<td><a class ="title">Project Name</a></td>
+								<td><a class ="normal" id="jName"></a></td>
+							</tr>
+							<tr>
+								<td><a class ="title">Address</a></td>
+								<td><a class ="normal" id="jAddress"></a></td>
+							</tr>
+							<tr>
+							<td><a class ="title" style="color: green;text-decoration:none">Total Payments</a></td>
+							<td><a class ="normal" id="jPayments"></a></td>
+							</tr>
+						</table>
+						</td>
+						<td>
+						<table id="innerPT_ID" class="innerPT">
+							<tbody>
+								<tr>
+									<td colspan="3"><a class ="title">Project Cost</a></td>
+									<td rowspan="5"><div id="pCircle"><div id="pBalance">Total <br></div></div></td>
+								</tr>
+								<tr>
+									<td><a id="pEJ_ID" class="title" style="text-decoration:none" href="">Employees</a></td>	
+									<td><a class="normal" id="jEmployees"></a></td>	
+								</tr>
+								<tr>
+									<td><a id="pCJ_ID" class="title" style= "text-decoration:none" href="">Sub Contractors</a></td>
+									<td><a class="normal" id="jContractos"></a></td>
+								</tr>
+								<tr>
+									<td><a id="pPrcs_ID" class="title" style= "text-decoration:none" href="">Purchases</a></td>
+									<td><a class="normal" id="jPurchases"></a><br></td>
+								</tr>
+								<tr>
+									<td class="title" style="color: green;text-decoration:none">Total Cost</td>
+									<td><a class="normal" id="jpTotalCosts"></a> <br></td>
+									<td></td>
+									<td><button type="button" id="prjAllFilesID">All files</button></td>
+								</tr>
+								<!-- </td> -->
+							</tbody>
+						</table>
+						</td>
+					</tr>
+					<tr>
+						<td class="pSummary" colspan=2>
+							<!-- <div id="psDivID" hidden class="scrollit" style="width:100%"> -->
+							<div id="psDivID" hidden> 
+							<table class="res_table2" id="result-table3">
+								<!-- place holder to display results -->
+							</table>
+							</div>
+						</td>
+					</tr>
+					<tr><td colspan="2" ><center> <input type="submit" value="Close" id="CloseBtnPsumry"></center></td></tr>
+				</table>
+			</div>
+			<div id="scrollDivID" hidden class="scrollit"> 
+				<table class ="outer-table" id="result-table1">
+				</table>
+			</div>
+			</div>
+			<div id="gallery" class="grid-gallery"></div>
+		</div>
+		<div id="newRecDiv-0">
+			<table hidden class="newRecDialg" id="addSingleRec"></table> 
+		</div>
+		
+		<div id="postScrollit"></div>
+		<dialog id="aboutDialog" class="aboutDlg"></dialog>
+		<div id="overLay" class="overLayUL"><ul class="uList" id="uListID"></ul></div>
+		<dialog id="editControl" class="editCntrlClass"></dialog>
+		<div id="fileUploadControl" class="editCntrlClass"></div>
+		<div id="estimateDlg" class="estmtDlgClass"></div>
+		<div id="floating-message" class="floating-message"></div>
+
+		<footer id="footer"></footer>
+
+		<script type="text/javascript" src="../admin/system.js"></script>		<!-- system screen-->
+		<script type="text/javascript" src="../fileops/fileops.js"></script>		<!-- -->
+		<script type="text/javascript" src="../misc/timers.js"></script>		<!-- polling Logins table-->
+		<script type="text/javascript" src="../main/readLogins.js"></script>		<!--e-->
+		<script type="text/javascript" src="../main/task.js"></script>				<!-- task mngmnt module-->
+		<script type="text/javascript" src="../users/user.js"></script>				<!-- user mngmnt module-->	
+		<script type="text/javascript" src="../users/password.js"></script>				<!-- user mngmnt module-->	
+        <script type="text/javascript" src="../admin/saveToDB.js"></script>		
+        <script type="text/javascript" src="../main/table-edits.js"></script>	
+        <script type="text/javascript" src="../misc/exportReport.js"></script>	
+        <script type="text/javascript" src="../misc/animation.js"></script>		
+        <script type="text/javascript" src="../main/nextTask.js"></script>		
+        <script type="text/javascript" src="../main/account.js"></script>		
+        <script type="text/javascript" src="../main/refreshReport.js"></script>	
+        <script type="text/javascript" src="../main/gallery.js"></script>		
+        <script type="text/javascript" src="../main/task.js"></script>			
+        <script type="text/javascript" src="../main/inputkey.js"></script> 
+		<script type="text/javascript" src="../scheduler/scheduler.js"></script>
+        <script type="text/javascript" src="../admin/configuration.js"></script>
+		<script type="text/javascript" src="../main/newrow.js"></script>
+		<script type="text/javascript" src="../search/search.js"></script>
+		<script type="text/javascript" src="../tree/tree.js"></script>
+		<script type="text/javascript" src="../estimates/estimates.js"></script>
+		<script type="text/javascript" src="../leads/leads.js"></script>
+		<script type="text/javascript" src="../customers/customers.js"></script>
+		<script type="text/javascript" src="../admin/profile.js"></script>
+        <script type="text/javascript" src="../main/mainmenu.js"></script>		
+		<script type="text/javascript" src="../handlers/handlers.js"></script>	<!-- Must be last--->
+	</body>
+</html>

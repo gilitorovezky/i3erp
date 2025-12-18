@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Y9 Construction</title>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+		<link rel="stylesheet" href="../css/style-main.css" > 
+		<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+		
+		<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+		<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+		<script type="text/javascript" src="../misc/cookies.js"></script>				<!-- -->
+		<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+		<link rel="icon" type="image/x-icon" href="../misc/y9-logo.ico">
+	</head>
+	<!--  	<body onload="checkCookie()">	-->
+	<body>
+		<div class="login">
+			<div>
+			<label style="font: 23px  black;font-style:italic">Welcome to Y9 Construction<label> 
+			</div>
+			<form action="" method="POST" onchange="return OnChange()" onsubmit="return OnSubmit()"> 
+				<label for="username">
+					<i class="fas fa-user"></i>
+				</label>
+				<input type="text" name="username" placeholder="Username" id="username" required>
+				<label for="password">
+					<i class="fas fa-lock"></i>
+				</label>
+				<input type="password" name="password" placeholder="Password" id="password" required>
+				<p id ="loginResultID" class="login_error_msg"></p>
+				<!--- <a id ="forgotPassword" class="labelFP">Forgot Password</a> -->
+				<!--<div> -->
+				<input type="submit" value="Login">
+				<!--</div> -->
+			</form>
+			<label style="font: 15px bold; color: rgba(7, 53, 239, 0.99); font-style: italic;">v2.2.4(staging)</label>
+		</div>
+	<script>
+
+	function OnChange() {
+		document.getElementById("loginResultID").innerHTML = "";
+	}
+
+	function OnSubmit()
+	{
+		let formData = new FormData();
+		console.log("Submitting username and passowrd");
+		// send the username/pasword to the server for verification
+		formData.append('username', document.getElementById("username").value);
+		formData.append('password',document.getElementById("password").value);
+		
+		fetch("authenticate.php", {
+			method : "POST", 
+			body: formData })
+			.then(response  => response.json())
+			.then((txt) 	=> {checkLogin(txt)}) // Print return message (success or failure)
+			.catch(error 	=> {
+				console.log('Error:', error);
+				document.getElementById("loginResultID").innerHTML = "Error login in";
+			return true;
+		}); 
+		return false;
+	}
+
+	function checkLogin(json) {
+
+		if (json.result != "Success")   //authentication failed
+			document.getElementById("loginResultID").innerHTML = json.description;
+		else  {	// authentication passed 
+			username = document.getElementById("username").value;  
+    		fullname = document.getElementById("username").value;
+			Cookies.set('username', document.getElementById("username").value, { expires: 365, path: '/' });
+			window.location.replace("home.html");
+		}
+	}
+
+	</script>	
+	</body>
+</html>

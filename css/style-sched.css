@@ -1,0 +1,169 @@
+
+.tbl_schedule   {
+    border-collapse       : collapse;
+    font-size             : 12px;
+    border-spacing        : 0px;
+    position              : relative;
+    visibility            : hidden;
+}
+
+.tbl_schedule td {
+  border                  : solid #1a1515 1px;
+  padding                 : 0;
+  margin                  : 0px;
+  overflow                : auto;
+  width                   : 12vw;
+}
+
+.tbl_schedule div {
+  /*resize: both;*/
+  overflow                : auto;
+  height                  : 10px;
+  margin                  : 0px;
+  padding                 : 0px;
+  border                  : 1px solid black;
+  display                 : block;
+}
+
+.tbl_schedule td div {
+  border                  : 0;
+  width                   : auto;
+  height                  : auto;
+  min-height              : 10px;
+  min-width               : 40px;
+  display                 : flex;
+  padding                 : 2px;
+  align-items             : center;
+  justify-content         : left;
+  /*background-color:#faba0a; */
+}
+
+.tbl_schedule th {
+    /*height: 40px;*/
+    border                  : thin solid #0f0e0e;
+    font-size               : 13px;
+    background-color        : #fac20b;
+    align-items             : center;
+    text-align              : center;
+}
+
+.tbl_schedule td:nth-child(1) {
+    width                   : 70px;
+    text-align              : center;
+}
+
+.tbl_schedule.active {
+  visibility                : visible;
+}
+
+/* disable the background color for saturday and sunday 
+.tbl_schedule td:last-child  {
+  background-color: #e5dddd;
+}
+
+.tbl_schedule td:nth-last-child(2) {
+ background-color: #e5dddd;
+}
+*/
+.buttons {
+    top                     : -13px;
+    position                : relative; 
+}
+
+.container textarea {
+    /*padding: 6px;*/
+    max-width               : 100%;
+    line-height             : 1.5;
+    border-radius           : 5px;
+    border                  : 1px solid #ccc;
+    box-shadow              : 1px 1px 1px #999;
+    margin-left             : 2px;
+}
+
+.container button {
+  margin-left               : .5em;
+}
+
+#loading {
+  position                  : fixed;
+  display                   : block;
+  width                     : 100%;
+  height                    : 100%;
+  top                       : 0;
+  left                      : 0;
+  text-align                : center;
+  opacity                   : 0.7;
+  background-color          : #fff;
+  z-index                   : 99;
+}
+
+#loading-txt {
+  position                  : absolute;
+  top                       : 40%;
+  left                      : 40%;
+  z-index                   : 100;
+}
+
+.nonAsgnTD {
+  background-color          : #caceee;
+}
+
+.assign {
+	font-size                 : 12px;
+	cursor                    : pointer;
+	color                     : blue;
+  font-weight               : normal
+}
+
+.tab_border {
+  border                    : 2px solid black;
+}
+
+
+.tab-td {
+  /*padding: 10px 20px;
+  border: none;*/
+  background-color          : transparent;
+  cursor                    : pointer;
+  transition                : background-color 0.3s ease;
+  width                     : 7%;
+  text-align                : center;
+  font-style                : italic;
+  border-top-left-radius    : 10px; 
+  border-top-right-radius   : 10px;
+}
+
+.tab-td:hover {
+  background-color          : #ddd;
+}
+
+.tab-td.active {
+  background-color          : #f8e1e1;
+  border-bottom             : 2px solid #007bff;
+  color                     : #007bff;
+}
+
+ .arrow-btn {
+  background                : #007bff;
+  color                     : white;
+  border                    : none;
+  padding                   : 2px 2px;
+  cursor                    : pointer;
+  border-radius             : 4px;
+  font-size                 : 10px;
+  transition                : background-color 0.2s;
+  margin                    : 2px;
+}
+        
+  .arrow-btn:hover:not(:disabled) {
+  background                : #0056b3;
+}
+  
+  .arrow-btn:disabled {
+  background                : #ccc;
+  cursor                    : not-allowed;
+}
+  
+  .arrow-btn:active {
+      transform             : scale(0.95);
+}
