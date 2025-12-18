@@ -191,7 +191,10 @@ function saveRow(moduleName,element) {
     var fullProjectName="";    // hold the full project name
     var projectSet=false;   // Flag to indicate if the screen is project related screen
     let saveUrl="../db/save_record.php"; // default save URL, changed for Scheduler
+    var headerPTR=""
 
+    if ( lastFocusedEntry.length > 0 )
+        headerPTR=lastFocusedEntry[lastFocusedEntry.length-1].header;
     windowLog.trace("Inside saveRow..module:"+moduleName+" LastScreen:"+lastScreen);
  
     headers1.push(headers[moduleName]['primaryKey']); 
@@ -221,16 +224,16 @@ function saveRow(moduleName,element) {
 
         case "Projects"         :
             
-            headers1.push("project_name");
+            //headers1.push("project_name");
 
         case "Employee Jobs"        :
         case "Sub Contractors"      :
         case "Purchases"            :
         case "Payments"             :
             rootDir=appConfig.root_projects;
-            prjName=$(row).find('[id="prjctNumberID"]').val();
-            tempRow.push(prjName); // entry 1 append the project name
-            tempRow2['prjName']=prjName;
+            //prjName=$(row).find('[id="prjctNumberID"]').val();
+            //tempRow.push(prjName); // entry 1 append the project name
+            //tempRow2['prjName']=prjName;
             break;
 
         default                 :
@@ -284,13 +287,16 @@ function saveRow(moduleName,element) {
         tempRow.push(value); // append to the array
         const tiCol=iCol+2;  // since iCol starts at 0 and the loop starts at td:gt(1), need to add 2 to the actual counter
         //const header=$('#mainHeader tr th:nth-child('+tiCol+')').html();
-        const header=$('#mainHeader th:nth-child('+(tiCol+1)+')').html();
-        $(element.closest('table').find(' thead th:nth-child('+(tiCol+1)+')')).html();
+        const header=$(element.closest('table').find(' thead th:nth-child('+(tiCol)+')')).html();
+        //$("#"+headerPTR+" thead th:nth-child('+(tiCol+1)+')'").html();
+        //$("#"+headerPTR+" thead th
+        
+        //$(element).closest('table').find(" thead th:nth-child('+(tiCol+1)+')'").html();
         //$(element).closest('table').find("thead th:nth-child('+(tiCol+1)+')').html();
         tempRow2[header]=value;
         const execludeList = ["Files", "Installer"];
 
-        const includesAnyKeyword = execludeList.some(keyword => $("#mainHeader th:eq(("+iTD.cellIndex+")").text().includes(keyword));
+        const includesAnyKeyword = execludeList.some(keyword => header.includes(keyword));
 
         if ( !includesAnyKeyword ) // skip the skip the value if the heder is in the execludeLizt
             contactAllFields += value;
@@ -317,6 +323,7 @@ function saveRow(moduleName,element) {
             projectSet=true;
             // construct the full projct name: number+company_name+cstmr_name+add+proj type+prj_mngr
             fullProjectName=tempRow[1]+"-"+tempRow[2]+"-"+tempRow[3]+"-"+tempRow[4]+"-"+tempRow[5]+"-"+tempRow[6]; // must change to a function 
+            fullProjectName=tempRow2["Project Number"]+"-"+tempRow2["Company Name"]+"-"+tempRow2["Customer Last Name"]+"-"+tempRow2["Project Type"]+"-"+tempRow2["Project Manager/Rep"]+"-"+tempRow2["Project Address"];
             tempRow.push(fullProjectName); // entry #7
             //const tToday=new Date();
             //const tempDAte=formatDateForInput(new Date()); // e.g., '2025-07-10'
