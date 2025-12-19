@@ -57,7 +57,7 @@
                 row += `<td><input tabindex="0" type="text" id="ptID" name="projectType" class="projectNameClass" value=${tempRow[index++].value}></td>`;
                 row += `<td><input tabindex="0" type="text" id="psrID" name="projectSalesRep" class="projectNameClass" value=${tempRow[index++].value}></td>`;
                 row += `<td><input tabindex="0" type="text" id="padrsID" name="projectAddress" class="projectNameClass" value=${tempRow[index++].value}></td>`;
-                row += `<td><input tabindex="0" type="text" id="allFilesID" name="allFiles" class="projectNameClass" value=${tempRow[index].value}></td>`;
+                row += `<td style="width:2%"><input tabindex="0" type="text" id="allFilesID" name="allFiles" class="projectNameClass" value="0"></td>`;
             break;
 
             case "Purchases" :
@@ -137,7 +137,7 @@
                 row += `<td><input tabindex="0" type="text" id="totalHoursID" name="totalHours" readonly class="projectNameClass" maxlength="5" value=${totalHours}></td>`;
                 row += `<td><input tabindex="0" type="text" id="ejDcrptnID" name="description" class="projectNameClass" maxlength="20" value=${description}></td>`;
                 row += `<td><input tabindex="0" type="text" id="lbrCostID" hidden name="labor_cost" class="projectNameClass" readonly value=${labor_cost}></td>`;
-                row += `<td><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
 
             break;
 
@@ -165,7 +165,7 @@
                 row += `<td><input tabindex="0" type="text" id="cjDscrptnID" name="cDscrptn" class="projectNameClass" maxlength="40" value="${descrpition}"></td>`;
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
 
             break;
 
@@ -204,7 +204,7 @@
                 row += `<td><input tabindex="0" type="text" name="notes" id="notes" class="projectNameClass" maxlength="50" value=${tempRow[index].value}></td>`;
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
 
             break;
             
@@ -217,7 +217,7 @@
                 row += `<td><input tabindex="0" type="text" name="vendorNotes" id="vNotesID" class="projectNameClass" maxlength="50" value=${tempRow[index].value}></td>`;
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
 
             break;
 
@@ -245,7 +245,7 @@
                 row += `<td><input tabindex="0" type="text" name="companyNotes" class="projectNameClass" maxlength="50" value=${tempRow[index++].value}></td>`;
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
             break;
 
             

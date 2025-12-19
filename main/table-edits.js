@@ -511,10 +511,14 @@ function saveRow(moduleName,element) {
             ret_value=(Number(JSON.parse(data).Status)==1?true:false);
             //if ( $("#screen_name").html() != "Home" &&
             //     $("#screen_name").html() != "Configuration") {
-            if ( !ret_value )
+            var msgColor ='green';
+            if ( !ret_value ) {
                 $("#saveTableLabel").html("Saving has been failed..");
-            else
+                msgColor ='red';
+            } else
                 $("#saveTableLabel").html("Saving has been successfull");
+            $("#saveTableLabel").css({'color'     :    msgColor});
+
             setTimeout(() => $("#saveTableLabel").hide(), 2000); // clear the message after 2 sec
            // }
 

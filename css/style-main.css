@@ -1104,19 +1104,19 @@ img 	{
 }
 
 .caption {
-	margin			: 0 auto; 
-	width			: 94%;
-	border-spacing	: 0px;
+	margin				: 0 auto; 
+	width				: 94%;
+	border-spacing		: 0px;
 }
 
 .caption.label {
-	width: 7%; 
-	vertical-align: bottom;
+	width				: 10%; 
+	vertical-align		: bottom;
 }
 
 .editLabel {
-	text-align		:right;
-	font-weight		: bold;
+	text-align			: right;
+	font-weight			: bold;
 }
 
 .floating-message {

@@ -1033,14 +1033,18 @@
                 }
                 else 
                     if ( charactersCount > 0 && 
-                          lastFocusedEntry.length > 0 ) {
+                         lastFocusedEntry.length > 0 && 
+                         validateEnableSaveConditions(lastFocusedEntry.length>0?lastFocusedEntry[lastFocusedEntry.length-1].module:lastScreen,
+                            lastFocusedEntry.length>0?l$("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tr:eq(1)"):$(lastScreen).closest('tr')) ) {
                         $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveNewBtn']").show();
                         $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").show();
                 }
             }
             else 
                 if ( e.key != 'Tab' && e.key != 'Shift' ) {
-                    if ( isNewRec ) {
+                    if ( isNewRec && 
+                         validateEnableSaveConditions(lastFocusedEntry.length>0?lastFocusedEntry[lastFocusedEntry.length-1].module:lastScreen,
+                            lastFocusedEntry.length>0?$("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tr:eq(1)"):$(lastScreen).closest('tr'))) {
                         $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveNewBtn']").show();
                         $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").show();
                     }
@@ -1402,10 +1406,23 @@
 
     function validateEnableSaveConditions(module,currentTR) {
 
+        var trTextInputLen=0;
         windowLog.trace("Inside validation");
+        
+        switch ( module ) {
+            case "Projects" :
+                $(currentTR).find('td:gt(1)').each(function(iCol,iTD) { // start the loop past the project number
+                    windowLog.trace("TD nodeName: "+iTD.childNodes[0].nodeName );
+                    trTextInputLen += iTD.childNodes[0].value.length;
+            });
+        }
+        
+        return trTextInputLen > 0?true:false
+        /*
+        
         if ( currentTR.find('[id="prjctNumberID"]').val() != "" ||
              currentTR.find('[id="schdlrDcrptnID"]').val() != "" )     
             return true;
         else
-            return false;
+            return false;*/
     }
