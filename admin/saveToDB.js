@@ -769,7 +769,7 @@ function saveSingleRec(recElement) {
         }
     }
     else
-        saveResult=saveRow(recElement.data.module,recElement.data.focusedElement); //$('#addSingleRec tbody tr').closest('[id='+event.data.module+']')[0]
+        saveResult=saveRow(recElement.data.module,recElement.data.focusedElement,"newRecord"); //$('#addSingleRec tbody tr').closest('[id='+event.data.module+']')[0]
 
     charactersCount=0;
 

@@ -191,10 +191,13 @@ function saveRow(moduleName,element) {
     var fullProjectName="";    // hold the full project name
     var projectSet=false;   // Flag to indicate if the screen is project related screen
     let saveUrl="../db/save_record.php"; // default save URL, changed for Scheduler
-    var headerPTR=""
+    var headerPTR="";
+    var isNewRecord=false;
 
-    if ( lastFocusedEntry.length > 0 )
+    if ( lastFocusedEntry.length > 0 ) {
         headerPTR=lastFocusedEntry[lastFocusedEntry.length-1].header;
+        isNewRecord=true;
+    }
     windowLog.trace("Inside saveRow..module:"+moduleName+" LastScreen:"+lastScreen);
  
     headers1.push(headers[moduleName]['primaryKey']); 
@@ -302,20 +305,24 @@ function saveRow(moduleName,element) {
             contactAllFields += value;
     });
   
-    entryNumber=classArray[moduleName].retEntrybyID(Number(ID));
-    if ( entryNumber >= 0 )  { // valid entry found
-        tempRow[tempRow.length-1]=classArray[moduleName].arr[entryNumber].file_uploaded; // update the file_uploaded (replace the upload file(s)) if exist
-        tempRow2["Files"] = tempRow[tempRow.length-1];
-        if ( ( classArray[moduleName].arr[entryNumber].foldername != "" ) || 
-             ( typeof classArray[moduleName].arr[entryNumber].foldername != "undefined" ) ){
-            arrObj[0].newFolderName=contactAllFields;
-            arrObj[0].subFolderName=classArray[moduleName].arr[entryNumber].foldername;
-        }
-        else
-            arrObj[0].subFolderName=contactAllFields;   // update the subFolder with the contacnation of all the record fields
+    if ( !isNewRecord ) { //if its not a new record than the entry must be found
+        entryNumber=classArray[moduleName].retEntrybyID(Number(ID));
+        //if ( entryNumber >= 0 )  { // valid entry found : exisiting record 
+            tempRow[tempRow.length-1]=classArray[moduleName].arr[entryNumber].file_uploaded; // update the file_uploaded (replace the upload file(s)) if exist
+            tempRow2["Files"] = tempRow[tempRow.length-1];
+            if ( ( classArray[moduleName].arr[entryNumber].foldername != "" ) || 
+                ( typeof classArray[moduleName].arr[entryNumber].foldername != "undefined" ) ){
+                arrObj[0].newFolderName=contactAllFields;
+                arrObj[0].subFolderName=classArray[moduleName].arr[entryNumber].foldername;
+            }
+            else
+                arrObj[0].subFolderName=contactAllFields;   // update the subFolder with the contacnation of all the record fields
+        //}
     }
     else
         arrObj[0].subFolderName=contactAllFields;   // update the subFolder with the contacnation of all the record fields
+
+    tempRow2["isNewRecord"]=isNewRecord; 
 
     switch (moduleName) {
 
@@ -348,7 +355,6 @@ function saveRow(moduleName,element) {
             var laborCost=0;
             if ( tempRow[2].length > 0 ) {  //  get the employeeID from the employeename otherwise set to -1
                 eID = ( (tempRow[2] == "" || typeof eID == "undefined")?-1:classArray["Employees"].pNames[tempRow[2]]); // if  employee name not found (partial name due to blur in the middle of editing)
-
                 if ( eID > 0 ) { // if employeeID is valid then get the hourlyrate to pass down to  save_record
                     tempRow.push(eID);
                     tempRow2["employeeID"]=eID;    
@@ -443,7 +449,6 @@ function saveRow(moduleName,element) {
                 tempRow.push("");             // push ""
                 tempRow2["vnID"]="";
             }
-
         break;
 
         case "Contractors"     :
@@ -455,7 +460,7 @@ function saveRow(moduleName,element) {
                 tempRow.push("");             // push ""
                 tempRow2["cntrctNameID"]="";
             }
-            break;
+        break;
 
         case "Scheduler"     :
 
@@ -482,11 +487,14 @@ function saveRow(moduleName,element) {
     var ret_value=false;
 
     if ( allowSave ) {
-        if ( $("#screen_name").html() != "Home" &&
+        /*if ( $("#screen_name").html() != "Home" &&
              $("#screen_name").html() != "Configuration") {
              $("#saveTableLabel").html("Saving...");
              $("#saveTableLabel").show();
-        }
+        }*/
+        $("#saveTableLabel").html("Saving...");
+        $("#saveTableLabel").show();
+
         arrObj.push(tempRow);                               // entry 3
         arrObj.push(JSON.stringify({"record":tempRow2}));   // entry 4
 
@@ -501,14 +509,14 @@ function saveRow(moduleName,element) {
             if ( lastID[moduleName] < Number(ID) ) 
                 lastID[moduleName]++;   // only here increament the ID by 1 after writting to the DB
             ret_value=(Number(JSON.parse(data).Status)==1?true:false);
-            if ( $("#screen_name").html() != "Home" &&
-                 $("#screen_name").html() != "Configuration") {
-                if ( !ret_value )
-                    $("#saveTableLabel").html("Saving has been failed..");
-                else
-                    $("#saveTableLabel").html("Saving has been successfull");
-                setTimeout(() => $("#saveTableLabel").hide(), 2000); // clear the message after 2 sec
-            }
+            //if ( $("#screen_name").html() != "Home" &&
+            //     $("#screen_name").html() != "Configuration") {
+            if ( !ret_value )
+                $("#saveTableLabel").html("Saving has been failed..");
+            else
+                $("#saveTableLabel").html("Saving has been successfull");
+            setTimeout(() => $("#saveTableLabel").hide(), 2000); // clear the message after 2 sec
+           // }
 
             windowLog.trace("Saving to DB "+(ret_value == 1?"has been successfull":"failed"));
             DelCounter++;;     // one of Two conditons to allow delete: done saving or any report length > 0  

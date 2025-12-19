@@ -1031,17 +1031,19 @@
                         $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").hide();
                     }
                 }
-                else if ( charactersCount > 0 && 
+                else 
+                    if ( charactersCount > 0 && 
                           lastFocusedEntry.length > 0 ) {
-                    $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveNewBtn']").show();
-                    $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").show();
+                        $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveNewBtn']").show();
+                        $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").show();
                 }
             }
-            else if ( e.key != 'Tab' && e.key != 'Shift' ) {
-                if ( isNewRec ) {
-                    $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveNewBtn']").show();
-                    $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").show();
-                }
+            else 
+                if ( e.key != 'Tab' && e.key != 'Shift' ) {
+                    if ( isNewRec ) {
+                        $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveNewBtn']").show();
+                        $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").show();
+                    }
             }
         //}
         windowLog.trace("keydown, ret_value:"+retValue+" charCount="+charactersCount

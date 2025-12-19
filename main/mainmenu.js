@@ -32,6 +32,12 @@ const captions = {
         "user":["Sign In","Sign Out","Gas","Upload Files"],	    // User main menue
         "handlers":[upperLeft,upperRight,lowerLeft,lowerRight]} // handlers functions
 
+const headerToTableSchema = { // look up table to match record to db schmea
+
+    "Projects": {'Project Number':'project_number','Company Name':'company_name','Customer Last Name':'project_cstmr_lastname','Project Type':'project_type','Project Manager/Rep':'project_m_contractor','Project Address':'project_address'}
+} 
+ 
+
 
 // only the first 4 do not include thead and <th></th> since these records are also showing in the project summary therefor no need delete 
 const headers = {
@@ -602,8 +608,10 @@ window.addEventListener("load", function() {
     displayMainMenue(window.location.hash.slice(1));
 
     $(".main_menue").show();
-    if (username == 'eddie')
+    if (username == 'eddie') {
         $("#prjShortCut").focus();
+        $("#savingTD").html("<a style=\"font-size : 12px;\" id=\"saveTableLabel\"></a>");
+    }
 
      $("body").delegate("#projectLbl1,#customersLbl2","contextmenu",function() {
         if (event.target.tagName === "LABEL") {
@@ -1459,7 +1467,7 @@ function prepareDisplay(display) {
     $(".main_menue").hide();
     $(".scrollit").css({'display' : "block"});
     $("#caption,#mainDiv,#result-table1").show();
-    $("#savingTD").html("<a style=\"font-size : 12px;\" id=\"saveTableLabel\"></a>");
+    //$("#savingTD").html("<a style=\"font-size : 12px;\" id=\"saveTableLabel\"></a>");
     $("#centercellID,#newTaskShortCutID").invisible();
     $("#screen_name").unbind('mouseenter mouseleave');
     //$('#screen_name').css({'cursor' : 'auto'});

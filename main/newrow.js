@@ -440,10 +440,11 @@
             switch (elementRec.target.id) {
                 case "SaveNewBtn"           :
                      if ( elementRec.type === "click" || 
-                         (elementRec.type === "keydown" && elementRec.key === "Enter") )
+                         (elementRec.type === "keydown" && elementRec.key === "Enter") ) {
                         retSave=saveAndNew(elementRec);  // saveSingleRec is wrapped inside 
-                    if ( module !== "Scheduler" )
-                        $("#SaveNewBtn,#SaveCloseBtn").hide();  // hide the two save buttons
+                        if ( module !== "Scheduler" )
+                            $("#SaveNewBtn,#SaveCloseBtn").hide();  // hide the two save buttons
+                    }
                 break;
             
                 case "SaveCloseBtn"         :
