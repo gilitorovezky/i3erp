@@ -262,9 +262,10 @@ Promise.all(requests)
         
         let returnCode=true;
 
-        windowLog.trace("Inside main-menue innerCellID  keydown:"+event.target.id+" key:"+event.key);
+        windowLog.trace("Inside main-menue innerCellID keydown ID:"+event.target.id+" key:"+event.key);
 
-        if ( event.key === "Enter" ) {
+        if ( event.key === "Enter" &&
+             lastFocusedEntry.length === 0 ) {
             returnCode = false;
 
             dispatcher(event);

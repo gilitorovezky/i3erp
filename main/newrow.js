@@ -93,7 +93,7 @@
                 index++;    
                 row += `<td><input tabindex="0" type="date" name="jobDate" id="jdID" class="inputDate" value=${tempDay}></td>`;
                 row += `<td><input tabindex="0" type="text" name="paymentMethod" id="pmID" class="projectNameClass" value=${tempRow[index++].value}></td>`;
-                row += `<td><input tabindex="0" type="text" name="referenceNumber" id="rnID" class="projectNameClass" value=${tempRow[index++].value}></td>`;
+                //row += `<td><input tabindex="0" type="text" name="referenceNumber" id="rnID" class="projectNameClass" value=${tempRow[index++].value}></td>`;
                 if ( restore ) 
                     tempDay=tempRow[index].value;
                 index++;
