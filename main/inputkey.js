@@ -41,7 +41,8 @@
         const isNewRec=e.target.closest('div').id.includes("newRecDiv");
         const digits="0123456789";
         var numOfColumns=0;//,element;
-        const SpecialChars=["ArrowRight","ArrowLeft","ArrowDown","ArrowUp","Tab","Escape","Enter","Backspace","Shift"];
+        const specialChars=["ArrowRight","ArrowLeft","ArrowDown","ArrowUp","Tab","Escape","Enter","Backspace"];
+        const metaKeys =["Shift","Meta`","Control","Delete","Insert","PageUp","PageDown","Home","End","Pause","CapsLock","NumLock","ScrollLock","F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12","PrintScreen","ContextMenu","BrowserBack","BrowserForward","BrowserRefresh","BrowserStop","BrowserSearch","BrowserFavorites","BrowserHome","VolumeMute","VolumeDown","VolumeUp","MediaNextTrack","MediaPreviousTrack","MediaStop","MediaPlayPause","LaunchMail","LaunchMediaSelect","LaunchApp1","LaunchApp2","Unidentified"];
         const screenName=$("#screen_name").html();// document.getElementById("screen_name").innerHTML;
         const rows = $(tableID+' tbody tr').length; 
         var retValue=false; // used to indicate if the typed charecter will be shown or not
@@ -49,9 +50,13 @@
         var newArr =[];
         var key = e.key; 
         var showNewEntry=true;
-        var regex=/[-a-zA-Z0-9 /!@#$%^&*()'_+={}Z\],<.>/?`~\\";:|]/g;
-        let foundChar=regex.test(key);
-        const specialChar = ( SpecialChars.indexOf(e.key) == -1 );
+        const regex=/[-a-zA-Z0-9 /!@#$%^&*()'_+={}Z\],<.>/?`~\\";:|]/g;
+        var foundChar="";
+        const specialChar = ( specialChars.indexOf(e.key) !== -1 );
+        const metaKey = ( metaKeys.indexOf(e.key) !== -1 );
+
+        if (!metaKey & !specialChar) // if not a meta key nor special key than it must be regular key
+            foundChar=regex.test(key);  
 
         windowLog.trace("TableKeyDown:("+e.currentTarget.id+") ..inside keydown,key="+e.key);
         _lastAction="";
@@ -133,8 +138,7 @@
            windowLog.trace("key dowen- calling CtrlZ");
         }
 
-        
-        foundChar = foundChar && specialChar;
+        //foundChar = foundChar && specialChar;
 
         //var selectionLength = 0;
         //if ( e.target.nodeName != "TD")
@@ -769,7 +773,8 @@
                             }
 
                             if ( e.target.value !== origText ) {
-                                    e.target.value = origText;
+                                charactersCount -= e.target.value.length; // reduce the char count
+                                e.target.value = origText;
                                 windowLog.trace("Content change detected- restore origin");
                             }
                             else
@@ -778,7 +783,7 @@
                             if ( (!e.target.id.toLowerCase().includes("date")) && 
                                     (!e.target.id.toLowerCase().includes("time")) )
                                 e.target.setSelectionRange(0,0);
-                            charactersCount=0;
+                            charactersCount += e.target.value.length; // reduce the char count
                         }
                         else
                             windowLog.trace("No content change detected- do nothing");
@@ -810,7 +815,7 @@
                         }  else {
                                 if (header != "projectScheduler") { 
                                     if (e.target.selectionStart == 0) {
-                                        currCell.children().first().css({'background-color'    : '#F7F7FC'}); // remove the highlight from the current cell  
+                                        currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell  
                                         if (( e.target.type != 'date' ) && ( e.target.type != 'time' )) {
                                             let leftMostTD = 1; // point to the 1st TD in the TR
                                             if (lastScreen == "Projects")
@@ -1031,14 +1036,27 @@
                         $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").hide();
                     }
                 }
-                else 
-                    if ( charactersCount > 0 && 
-                         lastFocusedEntry.length > 0 && 
-                         validateEnableSaveConditions(lastFocusedEntry.length>0?lastFocusedEntry[lastFocusedEntry.length-1].module:lastScreen,
-                            lastFocusedEntry.length>0?l$("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tr:eq(1)"):$(lastScreen).closest('tr')) ) {
-                        $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveNewBtn']").show();
-                        $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").show();
-                }
+                else {
+                    const selectionLen=e.target.selectionEnd - e.target.selectionStart;
+                    charactersCount -= selectionLen; // decrease the characters count by the field length`
+                    if ( e.target.value.length === selectionLen ) { // whole field selection    
+                        if ( charactersCount === 0 ) {
+                            if ( lastFocusedEntry.length > 0 ) {
+                                $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveNewBtn']").hide();
+                                $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").hide();
+                                $(lastFocusedEntry[lastFocusedEntry.length-1].currCell).closest('tr').find("a[id='allFilesID']").addClass("greyed-out")
+                            }
+                        }                        
+                    } else {
+                        if ( charactersCount > 0 && 
+                            lastFocusedEntry.length > 0 && 
+                            validateEnableSaveConditions(lastFocusedEntry.length>0?lastFocusedEntry[lastFocusedEntry.length-1].module:lastScreen,
+                                lastFocusedEntry.length>0?$("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tr:eq(1)"):$(lastScreen).closest('tr')) ) {
+                                $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveNewBtn']").show();
+                                $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").show();
+                        }
+                    }   
+                } 
             }
             else 
                 if ( e.key != 'Tab' && e.key != 'Shift' ) {
@@ -1051,8 +1069,9 @@
             }
         //}
         windowLog.trace("keydown, ret_value:"+retValue+" charCount="+charactersCount
-            
         );
+        if ( !retValue)
+            e.preventDefault();
         return retValue;
     }
 
@@ -1080,13 +1099,14 @@
                 var lastCell;
                 retValue=false;
                 charactersCount += currCell.find("input").first().val().length; // update the characters count
+                const module=$("#overLay ul").attr("data-module"); // retain the associated module
                  $("#overLay ul").empty();
                 if ( event.target.innerText !== "New Entry" ) {
                     if ( lastFocusedEntry.length === 0 ) { // overlay in prohjects or customers screen
                         $("#navID,#main-menue,#customers,#tHalf,#projectLbl,#innerCellID,#Pl,#caption,#result-table").removeClass("greyed-out");
                         lastCell=currCell;
                     }
-                    else { // overlay in Scheduler screen
+                    else { 
                         lastCell=lastFocusedEntry[lastFocusedEntry.length-1].currCell;
                         currentRecordPointer=0;
                     }
@@ -1127,7 +1147,11 @@
                     //charactersCount++; // update the charCounter to trigger saving
                     if ( ( charactersCount > 0 ) && 
                          ( lastCell.closest('div').attr('id').includes("newRecDiv") ) ) {
-                            if ( validateEnableSaveConditions(lastScreen,$(lastCell).closest('tr')) )
+                            if ( $(lastCell).children().first().attr('id') === "prjctNumberID" ) { // if the field name is not the description than its the project field
+                                //if ( $(lastCell).closest('tr').find('[id="prjctNumberID"]').val() != "" 
+                                lastCell.closest('tr').find("a[id='allFilesID']").removeClass('greyed-out'); // turn on the file button
+                            }
+                            if ( validateEnableSaveConditions(module,$(lastCell).closest('tr')) )
                                 $("#SaveNewBtn,#SaveCloseBtn").show();
                             else
                                 $("#SaveNewBtn,#SaveCloseBtn").hide();
@@ -1159,11 +1183,16 @@
             break;
 
             case "Escape"               :    // escape - just hide the list and back to the oringal cell
+                const moduleE=$("#overLay ul").attr("data-module"); // retain the associated module
                 $("#overLay ul").empty();
                 $("#addSingleRec").removeClass("greyed-out");
                 editing=false; // no more editing
                 
                 if (lastScreen != "Scheduler") { // return the focus to the cell
+                    if ( $(currCell).children().first().attr('id') === "prjctNumberID" ) { // if the field name is not the description than its the project field
+                                //if ( $(lastCell).closest('tr').find('[id="prjctNumberID"]').val() != "" 
+                            currCell.closest('tr').find("a[id='allFilesID']").addClass('greyed-out'); // turn on the file button
+                    }
                     $(currCell).children().first().val("");
                     if (( currCell.id == "prjShortCut" ) || 
                         ( currCell.id == "prjShortCutGallery") ) {  // special case of project input field 
@@ -1410,11 +1439,21 @@
         windowLog.trace("Inside validation");
         
         switch ( module ) {
+            case "Payments" :
             case "Projects" :
-                $(currentTR).find('td:gt(1)').each(function(iCol,iTD) { // start the loop past the project number
-                    windowLog.trace("TD nodeName: "+iTD.childNodes[0].nodeName );
-                    trTextInputLen += iTD.childNodes[0].value.length;
-            });
+                $(currentTR).find("td:has(:text)").each(function() { // start the loop past the project number
+                    windowLog.trace("TD nodeName: "+this.childNodes[0].nodeName );
+                    trTextInputLen += this.childNodes[0].value.length;
+                });
+
+                $(currentTR).find("td:has(input[type='date'])").find('input').each(function() {
+                    if ( this.value != today )
+                        trTextInputLen++;
+                });
+                /*$(currentTR).find('td:gt(1)').each(function() { // start the loop past the project number
+                    windowLog.trace("TD nodeName: "+this.childNodes[0].nodeName );
+                    trTextInputLen += this.childNodes[0].value.length;
+                });*/
         }
         
         return trTextInputLen > 0?true:false

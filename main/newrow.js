@@ -103,7 +103,7 @@
                     files=tempRow[index++].value;
                 else
                     files=uploadFilesMngr(0,false);  
-                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:2%"><a class="greyed-out" tabindex="0" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
 
             break;
 
@@ -217,7 +217,7 @@
                 row += `<td><input tabindex="0" type="text" name="vendorNotes" id="vNotesID" class="projectNameClass" maxlength="50" value=${tempRow[index].value}></td>`;
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:2%"><a tabindex="0" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
 
             break;
 
@@ -245,7 +245,7 @@
                 row += `<td><input tabindex="0" type="text" name="companyNotes" class="projectNameClass" maxlength="50" value=${tempRow[index++].value}></td>`;
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:2%"><a tabindex="0" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`; //class="hyperlinkLabel" 
             break;
 
             
@@ -402,7 +402,7 @@
                 out = `<thead id="mainHeader"><th></th>`;
         }
         out += headers[module]['columns']+`</thead>`; // header is already included
-        out += `<tfoot style="border-bottom:none"><tr style="border-bottom:none"><td colspan=${headers[module]['numOfCols']}>`;
+        out += `<tfoot style="border-bottom:none"><tr id = "footerRow" style="border-bottom:none"><td colspan=${headers[module]['numOfCols']}>`;
         if ( newRecordPntr === "addSingleRec" ) // show the SaveandNew only in case of single record
             out += `<center><input hidden tabindex="0" style="background-color: #93d7e0;" class='button' type="submit" value="Save & New" id="SaveNewBtn">`;
         out += `<input hidden tabindex="0" style="background-color: #a1c3f2;" class='button' type="submit" value="Save & Close" id="SaveCloseBtn">`;
@@ -437,7 +437,7 @@
                                  newRecordPntr  : newRecordPntr,
                                  focusedElement : currCell.children().first()},function(elementRec) {  // add module to the bubble record
             windowLog.trace("Inside addNewRec "+newRecordPntr+" click keydown event, module:"+elementRec.data.module+",eID:"+elementRec.data.eID+",id:"+elementRec.target.id);
-            switch (elementRec.target.id) {
+            switch ( elementRec.target.id ) {
                 case "SaveNewBtn"           :
                      if ( elementRec.type === "click" || 
                          (elementRec.type === "keydown" && elementRec.key === "Enter") ) {
@@ -448,7 +448,6 @@
                 break;
             
                 case "SaveCloseBtn"         :
-                  
                     if ( elementRec.type === "click" || 
                         (elementRec.type === "keydown" && elementRec.key === "Enter") )
                         saveResult = saveSingleRec(elementRec);	// save the record and continue like cancel to close the record
@@ -483,7 +482,11 @@
                         windowLog.trace("Inside allFilesID keydown enter");
                 break;
 
+                case "footerRow"            :
+                        windowLog.trace("Inside footerRow");
+                    break;
                 default                     :
+                if ( elementRec.target.closest('tr').id !== "footerRow" ) {
                     $(currCell).children().first().css({'background-color'    : '#F7F7FC'}); // remove the highlight from the current cell        
                     currCell=$(elementRec.target).closest('td');
                     if ( lastFocusedEntry.length > 0 )     // greater than 0 means there is a last focused entry to return to
@@ -492,6 +495,7 @@
                     $(currCell).children().first().css({'background-color'    : '#90e9e9'}); // highlight the editing field
                     if ( elementRec.type === "keydown" ) 
                         TblKeyDown(elementRec);
+                }
             }
         });
 

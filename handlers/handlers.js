@@ -202,7 +202,6 @@ Promise.all(requests)
                     //newTaskDate = $($(this).closest("div").find('[id="unAssgnTskDateID"]'))[0].defaultValue;
                 }
                 
-                
                 //if ( $(e.target).closest('td')[0].id == "unAssigned" )
                 //    windowLog.trace("Unassigned task detected");
                 
@@ -568,7 +567,7 @@ Promise.all(requests)
         }
     });
 
-    $("#fileUploadControl,#estimateDlg").on('click',function(event)    {
+    $("#estimateDlg").on('click',function(event)    { //#fileUploadControl,
 
         windowLog.trace("Inside flieUpload and estimateDlg handler:"+event.target.id);
         
@@ -618,8 +617,8 @@ Promise.all(requests)
                         $("#new"+pane+"Btn").addClass("button").prop("disabled",true); // Gil // enable all new lead/estimate/project button
                     });
                     $("#cstmrUploadFileID").addClass("button").prop("disabled",false);
-                } else
-                    $("#result-table1,#result-table").removeClass("greyed-out");
+                } /*else
+                    $("#result-table1,#result-table").removeClass("greyed-out");*/
             break;
 
             case "resetFormID"      :
@@ -892,6 +891,8 @@ Promise.all(requests)
             case "cstmrShortCut"        :
                 $("#prjShortCut").val("");
                 $('#overLay ul').empty();
+                $("#"+e.target.id).focus();
+                $("#overLay ul").attr('data-module',"");
             break;
 
             case "inputfileID"          :
@@ -911,6 +912,7 @@ Promise.all(requests)
 
             case "bHalf"                :
             case "tHalf"                :
+                $("#"+e.target.id).find('input').focus();
 
                 /*if (username === 'eddie') { //only Eddie could access
                     switch ( window.location.hash ) {
