@@ -189,7 +189,9 @@ function uploadFilesMngr(isFiles,isPrjSet,ID) {  // 1st parameter is a flag that
     var fileupload="";
 
     if ( !isFiles )
-        fileupload= `<button tabindex="0" id="allFilesID" type="button" class="button2">Upload file(s)</button>`; //disable the upload if project is unset
+        //fileupload= `<button tabindex="0" id="allFilesID" type="button" class="button2">Upload file(s)</button>`; //disable the upload if project is unset
+        fileupload= `Upload file(s)`; //disable the upload if project is unset
+
     else    
         fileupload='<select tabindex="0" id="selectFiles" class="filesSelect button-view"><option value="uploadFiles">Upload Files</option><option value="showFiles">Show Files</option></select>';
 
