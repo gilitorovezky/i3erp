@@ -78,7 +78,7 @@
                     tempDay=tempRow[index].value;
                 index++;
                 row += `<td><input tabindex="0" type="text" id="invcDscrptnID" name="Description" class="projectNameClass" maxlength="40" value=${tempRow[index].value}></td>`;
-                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:8%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
             break;
 
             case "Payments" :
@@ -103,7 +103,7 @@
                     files=tempRow[index++].value;
                 else
                     files=uploadFilesMngr(0,false);  
-                row += `<td style="width:2%"><a class="greyed-out" tabindex="0" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:8%"><a class="greyed-out" tabindex="0" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
 
             break;
 
