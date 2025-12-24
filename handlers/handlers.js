@@ -111,7 +111,7 @@ Promise.all(requests)
             const new_event_id=$("#uListID li")[currentRecordPointer];
             windowLog.trace("New event id: "+new_event_id.id);
             //currCell.children().first().val(new_event_id.innerText);
-            currCell.find("input").val(new_event_id.innerText);
+            currCell.find("input").first().val(new_event_id.innerText);
         }
         //$('#overLay ul li')[0].focus();
         //event.currentTarget.id
