@@ -191,11 +191,11 @@ function saveRow(moduleName,element) {
     var fullProjectName="";    // hold the full project name
     var projectSet=false;   // Flag to indicate if the screen is project related screen
     let saveUrl="../db/save_record.php"; // default save URL, changed for Scheduler
-    var headerPTR="";
+    //var headerPTR="";
     var isNewRecord=false;
 
     if ( lastFocusedEntry.length > 0 ) {
-        headerPTR=lastFocusedEntry[lastFocusedEntry.length-1].header;
+        //headerPTR=lastFocusedEntry[lastFocusedEntry.length-1].header;
         isNewRecord=true;
     }
     windowLog.trace("Inside saveRow..module:"+moduleName+" LastScreen:"+lastScreen);
@@ -262,41 +262,49 @@ function saveRow(moduleName,element) {
     arrObj.push({"tableName"    :   headers[moduleName]['tableName']}); // entry 2
     // Start the loop over the TD from the 2nd TD, the first TD (pos 0) is the del icon, the 2nd TD(pos 1) is with two inputs
     var contactAllFields=ID+"-";    // every folder starts with the unique ID to differntiate 
-    $(row).find('td:gt(0)').each(function(iCol,iTD) {   //$(this).find('td:gt(1)').each(function(iCol,iTD) {   
-        var value=0;
-        if ( iTD.childElementCount > 0 ) {
-            switch ( iTD.childNodes[0].nodeName ) {
+    const tTable=element.closest('table');
+    $(row).find('td:gt(0)').has(":text").each(function() { //} $(row).find('td:gt(0)').each(function(iCol) {   //$(this).find('td:gt(1)').each(function(iCol,iTD) {   
+        const value=this.childNodes[0].value;
+        //var value=0;
+        //var value = this.childNodes[0].value;
+        /*if ( this.childElementCount > 0 ) {
+            switch ( this.childNodes[0].nodeName ) {
                 case "INPUT"    :
                 case "TEXTAREA" :
-                    if (iTD.childNodes[0].value == "IsActive")       
-                        value = iTD.childNodes[0].checked==false?"0":"1";
+                case "SELECT"   :
+                    if ( this.childNodes[0].value == "IsActive")       
+                        value = this.childNodes[0].checked==false?"0":"1";
                     else 
-                        value = iTD.childNodes[0].value;
+                        value = this.childNodes[0].value;
                 break;
 
-                case "SELECT"   :
-                    value=iTD.childNodes[0].value;
+                
+                //    value=this.childNodes[0].value;
                     break
 
                 default:
-                    value=iTD.childNodes[0].innerText;
+                    value=this.childNodes[0].innerText;
             }   
         }
         else {
             windowLog.trace("childElementount is Zero");
-            value=iTD.innerText;
-        }
-        windowLog.trace("SRow,headerID:"+iTD.childNodes[0].id+" value:"+value);
+            value=this.innerText;
+        }*/
+        windowLog.trace("SRow,headerID:"+this.childNodes[0].id+" value:"+value);
         tempRow.push(value); // append to the array
-        const tiCol=iCol+2;  // since iCol starts at 0 and the loop starts at td:gt(1), need to add 2 to the actual counter
+        //const tiCol=iCol+2;  // since iCol starts at 0 and the loop starts at td:gt(1), need to add 2 to the actual counter
         //const header=$('#mainHeader tr th:nth-child('+tiCol+')').html();
-        const header=$(element.closest('table').find(' thead th:nth-child('+(tiCol)+')')).html();
+        
+        //const header=$(element.closest('table').find(' thead th:nth-child('+((this.cellIndex)+1)+')')).html();
+        const header=$(tTable.find(' thead th:nth-child('+((this.cellIndex)+1)+')')).html();
+        tempRow2[header]=value;
+        //const header=$(element.closest('table').find(' thead th:nth-child('+(tiCol)+')')).html();
         //$("#"+headerPTR+" thead th:nth-child('+(tiCol+1)+')'").html();
         //$("#"+headerPTR+" thead th
         
         //$(element).closest('table').find(" thead th:nth-child('+(tiCol+1)+')'").html();
         //$(element).closest('table').find("thead th:nth-child('+(tiCol+1)+')').html();
-        tempRow2[header]=value;
+        
         const execludeList = ["Files", "Installer"];
 
         const includesAnyKeyword = execludeList.some(keyword => header.includes(keyword));
@@ -305,6 +313,13 @@ function saveRow(moduleName,element) {
             contactAllFields += value;
     });
   
+    $(row).find("td:has(input[type='date'])").each(function() { //} $(row).find('td:gt(0)').each(function(iCol) {   //$(this).find('td:gt(1)').each(function(iCol,iTD) {   
+        //var value=0;
+        //var value = this.childNodes[0].value;
+        const header=$(tTable.find(' thead th:nth-child('+((this.cellIndex)+1)+')')).html();
+        tempRow2[header]=this.childNodes[0].value;
+    });
+
     if ( !isNewRecord ) { //if its not a new record than the entry must be found
         entryNumber=classArray[moduleName].retEntrybyID(Number(ID));
         //if ( entryNumber >= 0 )  { // valid entry found : exisiting record 
