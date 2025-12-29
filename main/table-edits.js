@@ -208,6 +208,7 @@ function saveRow(moduleName,element) {
         headers1.push($(this).text());
     });
     row=element.closest('tr');  // get the tr of the focused element
+    targetTR=row;
 
     const idName=headers[moduleName]['primaryKey'];
 
@@ -246,7 +247,7 @@ function saveRow(moduleName,element) {
             break;     
     }
 
-    if ( typeof ID == "undefined") {
+    if ( typeof ID === "undefined") {
         ID = -1;
         windowLog.trace("saveRow exception: ID is undefined");
     }
@@ -254,12 +255,21 @@ function saveRow(moduleName,element) {
     tempRow.push(ID);   // entry 0 append the primary key to the record
     tempRow2['ID']=ID;
 
-    arrObj.push({"moduleName"   :   moduleName,     // entry 0
+    arrObj["entry0"]= {"moduleName"    :   moduleName,     // entry 0
+                       "subFolderName" :   "",   // will be updated later with the contactanation of all the fields record
+                       "newFolderName" :   "",
+                       "tableName"     :   headers[moduleName]['tableName'],
+                       "rootDir"       :   rootDir,
+                       "headers"       :   headerToTableSchema[moduleName]};
+
+    /*arrObj.push({"moduleName"   :   moduleName,     // entry 0
                  "subFolderName":   "",   // will be updated later with the contactanation of all the fields record
                  "newFolderName":   "",
-                 "rootDir"      :   rootDir});
-    arrObj.push({"headers"      :   headers1});     // entry 1 for future use, currently the heaaders are taken hard look up table in save_table2 modulke
-    arrObj.push({"tableName"    :   headers[moduleName]['tableName']}); // entry 2
+                 "rootDir"      :   rootDir}); */
+    //arrObj.push({"headers"      :   headers1});     // entry 1 for future use, currently the headers are taken hard look up table in save_table2 modulke
+    //arrObj.push({"headers2"     :   headerToTableSchema[moduleName]}); // entry 2 - mapping of header to table schema
+
+    //arrObj.push({"tableName"    :   headers[moduleName]['tableName']}); // entry 2
     // Start the loop over the TD from the 2nd TD, the first TD (pos 0) is the del icon, the 2nd TD(pos 1) is with two inputs
     var contactAllFields=ID+"-";    // every folder starts with the unique ID to differntiate 
     const tTable=element.closest('table');
@@ -309,9 +319,13 @@ function saveRow(moduleName,element) {
 
         const includesAnyKeyword = execludeList.some(keyword => header.includes(keyword));
 
-        if ( !includesAnyKeyword ) // skip the skip the value if the heder is in the execludeLizt
+        if ( !includesAnyKeyword ) // skip the value if the header is in the execludeLizt
             contactAllFields += value;
     });
+
+    //$(row).find("td:has(a[data-files])").each(function() {});
+
+     tempRow2["Files"]=Number($(row).find("a[id='allFilesID']").attr("data-files"))
   
     $(row).find("td:has(input[type='date'])").each(function() { //} $(row).find('td:gt(0)').each(function(iCol) {   //$(this).find('td:gt(1)').each(function(iCol,iTD) {   
         //var value=0;
@@ -334,8 +348,8 @@ function saveRow(moduleName,element) {
                 arrObj[0].subFolderName=contactAllFields;   // update the subFolder with the contacnation of all the record fields
         //}
     }
-    else
-        arrObj[0].subFolderName=contactAllFields;   // update the subFolder with the contacnation of all the record fields
+    //else
+    //    arrObj[0].subFolderName=contactAllFields;   // update the subFolder with the contacnation of all the record fields
 
     tempRow2["isNewRecord"]=isNewRecord; 
 
@@ -510,14 +524,17 @@ function saveRow(moduleName,element) {
         $("#saveTableLabel").html("Saving...");
         $("#saveTableLabel").show();
 
-        arrObj.push(tempRow);                               // entry 3
-        arrObj.push(JSON.stringify({"record":tempRow2}));   // entry 4
+        arrObj["entry1"]=JSON.stringify({"record":tempRow2});   
 
         $.ajax({             // save the record to the DB
                 url         : saveUrl,//"../db/save_record.php",
-                method      : "POST",
-                data        : {postData:arrObj},
-                dataType    : "text",
+                type      : "POST",
+                data        : {postData:arrObj["entry0"],
+                               //headers:headers1,
+                               //tableName:headers[moduleName]['tableName'],
+                               //record:arrObj["entry3"],
+                               record:arrObj["entry1"]},
+                dataType    : "json",
                 async       : false
         })
         .done(function (data) { 

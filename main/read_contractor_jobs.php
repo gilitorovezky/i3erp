@@ -39,7 +39,7 @@
                                             "description"        => $row["description"],
                                             "payment_amount"     => $row["payment_amount"],
                                             "date_paid"          => $row["date_paid"],
-                                            "checknumber_cnf"    => $row["checknumber_cnf"],
+                                            "payment_number"    => $row["payment_number"],
                                             "job_date"           => $row["job_date"],
                                             "file_uploaded"      => $row["file_uploaded"],
                                             "images_json"        => $row["images_json"],

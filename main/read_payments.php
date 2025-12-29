@@ -29,7 +29,7 @@
                 $ret_recs[$i] =  array("payment_id"         =>  $row["payment_id"],
                                        //"customer_name"     =>  $row["customer_name"],
                                        "project_number"     =>  $row["project_number"],                                      
-                                       "checknumber_cnf"    =>  $row["checknumber_cnf"],
+                                       "payment_number"    =>  $row["payment_number"],
                                        "payment_amount"     =>  $row["payment_amount"],
                                        "payment_date"       =>  $row["payment_date"],
                                        "description"        =>  $row["description"],

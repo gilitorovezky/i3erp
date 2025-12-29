@@ -103,7 +103,7 @@
                     files=tempRow[index++].value;
                 else
                     files=uploadFilesMngr(0,false);  
-                row += `<td style="width:8%"><a class="greyed-out" tabindex="0" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:8%"><a class="greyed-out" tabindex="0" id="allFilesID" data-files="0" style="text-decoration:none;font-size:12px">${files}</a></td>`;
 
             break;
 

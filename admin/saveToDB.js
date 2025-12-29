@@ -200,7 +200,7 @@ function appendRecord(module,record,record2) {  // record2 will be used i nthe f
                 classArray[module].arr[entryN].payment_amount  = record[2];
                 classArray[module].arr[entryN].payment_date    = record[3];
                 classArray[module].arr[entryN].payment_method  = record[4];
-                classArray[module].arr[entryN].checknumber_cnf = record[5];
+                classArray[module].arr[entryN].payment_number = record[5];
                 classArray[module].arr[entryN].description     = record[6];
                 classArray[module].arr[entryN].file_uploaded   = record[7];
                 classArray[module].arr[entryN].foldername      = record[8];
@@ -213,7 +213,7 @@ function appendRecord(module,record,record2) {  // record2 will be used i nthe f
                     payment_amount  :   record[2],
                     payment_date    :   record[3],
                     payment_method  :   record[4], 
-                    checknumber_cnf :   record[5],
+                    payment_number :   record[5],
                     description     :   record[6],
                     file_uploaded   :   record[7],
                     foldername      :   record[8],
@@ -237,7 +237,7 @@ function appendRecord(module,record,record2) {  // record2 will be used i nthe f
                 classArray[module].arr[entrySC].contractor_name = record[2];
                 classArray[module].arr[entrySC].job_date        = record[3];
                 classArray[module].arr[entrySC].payment_amount  = record[4];
-                classArray[module].arr[entrySC].checknumber_cnf = record[5];
+                classArray[module].arr[entrySC].payment_number = record[5];
                 classArray[module].arr[entrySC].date_paid       = record[6];
                 classArray[module].arr[entrySC].description     = record[7];
                 classArray[module].arr[entrySC].employee_id     = tempeID;
@@ -251,7 +251,7 @@ function appendRecord(module,record,record2) {  // record2 will be used i nthe f
                     contractor_name :   record[2],
                     job_date        :   record[3],
                     payment_amount  :   record[4],
-                    checknumber_cnf :   record[5],
+                    payment_number :   record[5],
                     date_paid       :   record[6],
                     description     :   record[7],
                     employee_id     :   tempeID,

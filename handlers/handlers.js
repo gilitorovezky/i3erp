@@ -605,7 +605,7 @@ Promise.all(requests)
                 //$("#result-table1").removeClass("greyed-out");
                 charactersCount=0;
                 $(".editCntrlClass").hide();
-                if ( $("#aboutDialog").is(":visible") === true ) {   // only apply when the customers dialog is open
+                if ( $("#aboutDialog").is(":visible") ) {   // only apply when the customers dialog is open
                     let cID=$("#customerTblID").find('[id="customer_id"]').text();//$("#"+headers["Customers"]['primaryKey']).text();
                     const cEnnry=classArray["Customers"].arr.findIndex(t => t.customer_id == cID);
                     if ( Number(classArray["Customers"].arr[cEnnry].file_uploaded) ) { // if there are any files than add the option to show the files 
@@ -1433,7 +1433,7 @@ Promise.all(requests)
 
         windowLog.trace("Inside uploadFilesCheckBoxHandler");
         oldfile=[];	// reset the oldfiles array
-        if (document.getElementById("userFileUpload").checked == true)  	// in case file uploaded has been selected
+        if ( document.getElementById("userFileUpload").checked )  	// in case file uploaded has been selected
             showFileUpload(e.target,"userJobUpload","fileUploadControl",""); // add parent folder
         //else
         //    document.getElementById("uploadFilesID").hidden=true; // unhide the new record screen

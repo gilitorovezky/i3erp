@@ -1,4 +1,6 @@
 <?php
+    header('Content-Type: application/json; charset=utf-8');
+
     require_once "db_connect.php";
     require_once "../fileops/atomFS.php";
     date_default_timezone_set("America/Los_Angeles");
@@ -19,15 +21,12 @@
                         "new_vendor_name"   => "No input argument found");
     } else 
         if ( mysqli_connect_errno() == 0 ) { // no error from the DB
-            $return_code=1;
-            $post_body=$_POST["postData"];
-            file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 0-Rec:".print_r($post_body[0],true)."\n", FILE_APPEND); 
+            
             $table_headers=array();
             $sqlArray=array();
-            // all fields much match the db structure and headers!!!!
-            $table_headers["payments"]=array("payment_id","project_number","payment_amount","payment_date","payment_method","checknumber_cnf","description","file_uploaded","foldername"); // Remove customer name per Eyal 6/29
+            $table_headers["payments"]=array("payment_id","project_number","payment_amount","payment_date","payment_method","payment_number","description","file_uploaded","foldername"); // Remove customer name per Eyal 6/29
             $table_headers["purchases"]=array("invoice_id","project_number","vendor_name","invoice_number","invoice_amount","invoice_date","payment_method","invoice_desc","file_uploaded","foldername");
-            $table_headers["contractor_jobs"]=array("task_id","project_number","contractor_name","job_date","payment_amount","checknumber_cnf","date_paid","description","file_uploaded","foldername");
+            $table_headers["contractor_jobs"]=array("task_id","project_number","contractor_name","job_date","payment_amount","payment_number","date_paid","description","file_uploaded","foldername");
             $table_headers["employee_jobs"]=array("task_id","project_number","employee_fname","job_date","job_signin","lunch_signin","lunch_signout","job_signout","total_hours","description","labor_cost","file_uploaded","foldername");// not shopw gas Eyal 04-11
             $table_headers["projects"]=array("project_id","project_number","company_name","project_cstmr_lastname","project_type","project_m_contractor",
                                             "project_address","file_uploaded","project_name",
@@ -53,31 +52,35 @@
                 FROM purchases GROUP BY project_number) invcs ON prjct.project_name = invcs.project_number
                 SET prjct.project_total_purchases = invcs.total";
 
+            $return_code=1;
+            $post_body=($_POST["postData"]);
+            $arrayJson=json_decode($_POST["record"]); 
             $rowCount = count($post_body); 
-            $moduleName = strtolower($post_body[0]["moduleName"]);
-
-            $newFolderName=$post_body[0]["newFolderName"];
-            $rootDir=strtolower($post_body[0]["rootDir"]);  // root dir of the projects
-            $headers = $post_body[1]["headers"];
-            $headersCount = count($post_body[1]["headers"]);
+            file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 1-post_body:".print_r(($post_body),true). "row count:".$rowCount."\n", FILE_APPEND); 
+            file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 1.1-record:".print_r(($arrayJson),true)."\n", FILE_APPEND); 
+           
+            $moduleName = strtolower($post_body["moduleName"]);
+            $newFolderName=$post_body["newFolderName"];
+            $rootDir=strtolower($post_body["rootDir"]);  // root dir of the projects
+            $headers = $post_body["headers"];
+            $headersCount = count($post_body["headers"]);
             
-            $tableName = $post_body[2]["tableName"];
-            $arrayJson = json_decode($post_body[4]);    // tempRow2 in JS
-            $row_number=3; // skip the first 3 entries: module and headers
+            $tableName = $post_body["tableName"];
+            //$arrayJson = json_decode($post_body[4]);    // tempRow2 in JS
+            //$row_number=3; // skip the first 3 entries: module and headers
 
             file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 2-module:".$moduleName." Table:".$tableName." rowCount:".$rowCount." headersCount:".$headersCount."\n", FILE_APPEND); 
-            file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 2.1:header-".print_r($headers,true)."\n", FILE_APPEND); 
-            file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 2.2:row(".$row_number."):".print_r($post_body[$row_number],true)."\n", FILE_APPEND); 
-            file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 2.3:row(".$row_number."):".print_r($arrayJson->record,true)."\n", FILE_APPEND); 
+            
+            //file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 2.3:row(".$row_number."):".print_r($arrayJson->record,true)."\n", FILE_APPEND); 
 
             $old_ProjectName = "";
             $new_project_name = "";
-            $project_id = $arrayJson->record->ID;//$post_body[$row_number][0];
-            
+            $project_id = $arrayJson->record->ID;
+            file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 2.1:header-".print_r($headers,true)." project_id:".$project_id."\n", FILE_APPEND); 
             $project_created_date="";
             // Special case only Projects - checking if the new name is same as the last name cause project names could be changed.
-            // if yes, then retain the old name to update across all tables
-            if ( $moduleName == "projects" ) {
+            
+            if ( $moduleName == "projects" ) {  // if yes, then retain the old name to update across all tables
                 //$new_project_name=$arrayJson->record->projectname;//$post_body[$row_number][8];
                 $old_ProjectName = $arrayJson->record->projectname; // retain the old name to update across all tables
                 file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 2.3.5-found project_name:".$old_ProjectName."\n", FILE_APPEND);
@@ -113,11 +116,17 @@
 
             // main replace statement to update the called table
             $sql_st = "REPLACE INTO $tableName SET ";
-            for ($cell=0; $cell<$headersCount; $cell++) { // Go over the headers to construct the sql
-                $new_value = str_replace("'","\'", $post_body[$row_number][$cell]); // escaping the field to support ' and "
-                $sql_st .= $table_headers[$tableName][$cell]."='".$new_value."',";
+            //for ($cell=0; $cell<$headersCount; $cell++) { // Go over the headers to construct the sql
+            foreach ($headers as $index => $header) {
+                file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 2.8-header index:".$index." header value:".$header."\n", FILE_APPEND);
+                
+            //file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 2.9-S:".$prjNumber."\n", FILE_APPEND);
+                $new_value = str_replace("'","\'", $arrayJson->record->$index); // escaping the field to support ' and "
+            //$sql_st .= $table_headers[$tableName][$cell]."='".$new_value."',";
+                $sql_st .= $header."='".$new_value."',";
             }
-
+            //}
+            
             switch ($moduleName) {
                 
                 case "projects"            :
@@ -157,7 +166,7 @@
                         $project_name = str_replace("'","\'", $arrayJson->record->prjName); //  $post_body[$row_number][1]); // escaping the project name to support ' and "
                         $sql_st=$sqlArray[$moduleName];
                         file_put_contents('../log/log_'.$logDate.'.log',"(save_record) ".$current_time." info 4.1-sql_st:".$sql_st."\n", FILE_APPEND);
-                        if ( $project_name != "") {
+                        if ( $project_name != "" ) {
                             if (mysqli_query($con,$sql_st)) {
                                 file_put_contents('../log/log_'.$logDate.'.log',"(save_record) ".$current_time." info 4.2-sql_st:".$sql_st." # of affct rows:".mysqli_affected_rows($con)."\n", FILE_APPEND);
                                 // retrieve the most updated values to return to the app

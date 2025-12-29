@@ -34,7 +34,8 @@ const captions = {
 
 const headerToTableSchema = { // look up table to match record to db schmea
 
-    "Projects": {'Project Number':'project_number','Company Name':'company_name','Customer Last Name':'project_cstmr_lastname','Project Type':'project_type','Project Manager/Rep':'project_m_contractor','Project Address':'project_address'}
+    "Projects": {'Project Number':'project_number','Company Name':'company_name','Customer Last Name':'project_cstmr_lastname','Project Type':'project_type','Project Manager/Rep':'project_m_contractor','Project Address':'project_address','Files':'file_uploaded'},
+    "Payments": {'Project Number':'project_number','Payment Amount':'payment_amount','Payment Date':'payment_date','Payment Method':'payment_method','Payment Number':'payment_number','Description':'description','Files':'file_uploaded'},
 } 
  
 
@@ -582,7 +583,7 @@ window.addEventListener("load", function() {
         logout();
     }
     
-    if ( pageAccessedByReload == true ) {
+    if ( pageAccessedByReload  ) {
 
         //username=Cookies.get('username');
         windowLog.trace("screen name:"+window.location.hash);
@@ -1678,7 +1679,7 @@ function displayPaymentResults(projectNumber,targetDisplay) {
             out += `<td><input type="text" id="pymntAmntID" name="paymentAmount" class="projectNameClass" value=${eArray[i].payment_amount}></td>`;
             out += `<td><input type="date" id="pymntDateID" name="paymentDate" class="inputDate" value=${eArray[i].payment_date}></td>`;
             out += `<td><input type="text" id="pymntMthdID" name="paymentMethod" class="projectNameClass" value="${eArray[i].payment_method}"></td>`;
-            out += `<td><input type="text" id="pymntNumberID" name="checkNumberCNF" maxlength="20" class="projectNameClass" value='${eArray[i].checknumber_cnf}'></td>`;
+            out += `<td><input type="text" id="pymntNumberID" name="checkNumberCNF" maxlength="20" class="projectNameClass" value='${eArray[i].payment_number}'></td>`;
             out += `<td><input type="text" id="paymntDrscnID" name="Description" class="projectNameClass" value="${eArray[i].description}"></td>`;
             out += outFiles;
             out += `</tr>`;
@@ -1688,7 +1689,7 @@ function displayPaymentResults(projectNumber,targetDisplay) {
         else {
             out += `<tr>`;
             out += `<td>${eArray[i].payment_amount}</td>`;
-            out += `<td>${eArray[i].checknumber_cnf}</td>`;
+            out += `<td>${eArray[i].payment_number}</td>`;
             var jsDate=sql2JSDate(eArray[i].payment_date,0);
             out += `<td>${jsDate}</td>`;
             out += `<td>${eArray[i].payment_method}</td>`;
@@ -2012,7 +2013,7 @@ function displayContractorJobsResults(projectNumber,targetDisplay) {
                     else
                         out += `<td><input tabindex="0" type="text" id="pymntID" name="payment" class="projectNameClass" value=""></td>`;
 
-                    out += `<td><input tabindex="0" type="text" id="chkNmbrID" name="checknumber" class="projectNameClass" maxlength="20" value="${cArray[i].checknumber_cnf}"></td>`;
+                    out += `<td><input tabindex="0" type="text" id="chkNmbrID" name="checknumber" class="projectNameClass" maxlength="20" value="${cArray[i].payment_number}"></td>`;
                     out += `<td><input tabindex="0" type="date" id="jobPymntDateID" name="jobPaymentDate" class="inputDate" value=${cArray[i].date_paid}></td>`;
                     out += `<td><input tabindex="0" type="text" id="cjDscrptnID" name="cDscrptn" class="projectNameClass" maxlength="40" value="${cArray[i].description}"></td>`;
                     fileupload=uploadFilesMngr(Number(cArray[i].file_uploaded),(cArray[i].project_number != ""));
@@ -2026,7 +2027,7 @@ function displayContractorJobsResults(projectNumber,targetDisplay) {
                     out += `<td>${cArray[i].contractor_name}</td>`;
                     out += `<td>${cArray[i].job_date}</td>`;
                     out += `<td>${cArray[i].payment_amount}</td>`;
-                    out += `<td>${cArray[i].checknumber_cnf}</td>`;
+                    out += `<td>${cArray[i].payment_number}</td>`;
                     out += `<td>${cArray[i].date_paid}</td>`;
                     out += `<td>${cArray[i].description}</td>`;
                     out += `<td style="width:2%">${fileUpload}</td>`;

@@ -22,7 +22,7 @@ function fileOps(data) {
             async       : false,
             success		: function(result) {
                 var ref = $('#jstree').jstree(true);
-                if ( result.Status == true ) {     // true means the operation was a success
+                if ( result.Status ) {     // true means the operation was a success
                     retCode=refreshTree(msg.destTree,$('input[name=opRadio]:checked').val(),"f_"+result.fileName);
                     windowLog.trace("fileOps:"+$('input[name=opRadio]:checked').val()+" obj-"+result.fileName+" result:"+retCode);
                 }
