@@ -253,7 +253,7 @@ function saveRow(moduleName,element) {
     }
 
     tempRow.push(ID);   // entry 0 append the primary key to the record
-    tempRow2['ID']=ID;
+    tempRow2[headers[moduleName]['primaryKey']] = ID;
 
     arrObj["entry0"]= {"moduleName"    :   moduleName,     // entry 0
                        "subFolderName" :   "",   // will be updated later with the contactanation of all the fields record

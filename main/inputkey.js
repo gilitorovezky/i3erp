@@ -442,16 +442,16 @@
                     
                     for (let i = 0; i < listLength; i++) {
                         if ( tableID != "#customerTblID" ) {
-                            if (( e.target.id != "prjTreeID" ) || 
-                                ( ( e.target.id == "prjTreeID" ) && 
-                                  ( $("#jName").html() != newArr[i] )))  // do not include the same project number in the list
+                            if (( e.target.id !== "prjTreeID" ) || 
+                                ( ( e.target.id === "prjTreeID" ) && 
+                                  ( $("#jName").html() !== newArr[i] )))  // do not include the same project number in the list
                                                                             // to void copy/move to the same project
                                 outList += `<li tabindex="0" id="focusableElement-${newArr[i]}">${newArr[i]}</li>`;
                         }
                         else 
                             //         outList += `<li tabindex="-1" id="focusableElement-`+classArray["Customers"].arr[Number(newArr[i])].customer_id+`"`+">"+classArray["Customers"].arr[Number(newArr[i])].customer_first_name+`</li>`;
                         //    outList +=`<li tabindex="-1" id="focusableElement-`+classArray["Customers"].arr[Number(newArr[i])].customer_id+`"`+">"+classArray["Customers"].cNames[Number(newArr[i])]+`</li>`;                      
-                            outList +=`<li tabindex="0" id="focusableElement-`+classArray["Customers"].cNames.findIndex(x => x === newArr[i])+`"`+">"+newArr[i]+`</li>`;                      
+                            outList += `<li tabindex="0" id="focusableElement-`+classArray["Customers"].cNames.findIndex(x => x === newArr[i])+`"`+">"+newArr[i]+`</li>`;                      
                     }
                     
                     /*switch ( header ) {
@@ -462,7 +462,7 @@
 
                     }*/
 
-                    if ( e.target.id == "prjShortCutGallery") 
+                    if ( e.target.id === "prjShortCutGallery") 
                         $("#MoveBtn").prop("disabled",false); // enable the move button
     
                 } else {
@@ -573,8 +573,8 @@
                                         newEntry($(currCell).closest('td'),currCell.closest("table").find('[id="mainHeader"]').find(" tr th:eq("+currCell.index()+")").text()); 
                                     } else {
                                         e.target.value=$('#overLay ul li').first().text();
-                                        if ( e.target.name == "projectNumber" &&
-                                            lastScreen == "Scheduler" &&
+                                        if ( e.target.name === "projectNumber" &&
+                                            lastScreen === "Scheduler" &&
                                             e.target.closest('tr').id === "unAssignElementsTR" &&
                                             $(e.target).closest('td').find('[id^="activeEmplListID"]').val() !== "" &&
                                             $(e.target).closest('td').find('[id^="unAssgnTskDateID"]').val() !== "") { // if the field name is not the description than its the project field
@@ -583,7 +583,11 @@
                                         }
                                     }
                                 }
-                                $("#overLay ul").empty(); //$('.uList').text("");
+                                $("#overLay ul").empty();
+                                if ( lastFocusedEntry.length > 0) {
+                                    $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr).removeClass("greyed-out");
+                                    $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr).css("opacity",'1.0');
+                                }
                                 editing=false;
                             }
                             windowLog.trace("Prevent default6");
@@ -592,29 +596,26 @@
                         else {
                             if (tableID != "#customerTblID") {    
                                 currCell.children().first().css({'background-color'    : '#F7F7FC'}); // remove the highlight from the current cell              
-                                if ( ( e.target.type != 'date' ) && 
-                                        ( e.target.type !== 'time' ) &&
-                                        ( screenName    !== "Scheduler") ) {
+                                if ( ( e.target.type !== 'date' ) && 
+                                     ( e.target.type !== 'time' ) &&
+                                     ( lastScreen    !== "Scheduler") ) {
                                         if (e.target.closest('td') !== $(tableID+' tbody tr:last td:last')[0]) { // is this the last TD in the table
                                             if ( ( e.target.closest('td').cellIndex < numOfColumns ) ) {   // Not end of the row
-                                            
                                                 currCell = currCell.next();              // Move one cell to the right
                                                 active++;
                                             }
                                             else {
-                                                let leftMostTD = 1; // focus on the 1st TD
-                                                if (lastScreen == "Projects")
-                                                    leftMostTD = 2; // focus on the 2nd TD(skip the projct number)
-                                            
-                                                currCell = currCell.closest('tr').next().find('td:nth-child('+leftMostTD+')');    // point to the next cell in the next TR
-                                                active += 2;   // Position the active to the first new cell at the new row
+                                                active = 1; // focus on the 1st TD
+                                                if (lastScreen === "Projects")
+                                                    active = 2; // focus on the 2nd TD(skip the projct number)
+                                                currCell = currCell.closest('tr').next().find('td:nth-child('+active+')');    // point to the next cell in the next TR
                                             }
                                         } 
                                         else { // reached the end of the table 
                                             windowLog.trace("End of table");
                                             //let firstElement = 1;
                                             if ( lastScreen !== "Projects" && 
-                                                tableID != "#addSingleRec" ) {
+                                            tableID != "#addSingleRec" ) {
                                                 addNewRow(tableID,$("#screen_name").html(),rows,0);
                                                 active += 2;  // poition the active on the first ld next to project name
                                                 currCell = currCell.closest('tr').next().find('td:nth-child(1)'); // move to the 1st cell in the next row
@@ -1039,6 +1040,16 @@
                 else {
                     const selectionLen=e.target.selectionEnd - e.target.selectionStart;
                     charactersCount -= selectionLen; // decrease the characters count by the field length`
+                    if ( validateEnableSaveConditions(lastFocusedEntry.length>0?lastFocusedEntry[lastFocusedEntry.length-1].module:lastScreen,
+                        (lastFocusedEntry.length>0?$("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tr:eq(1)"):$(lastScreen).closest('tr')) ) ) {
+                                $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveNewBtn']").show();
+                                $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").show();
+                    } else  {
+                        $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveNewBtn']").hide();
+                        $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").hide();
+                        $(lastFocusedEntry[lastFocusedEntry.length-1].currCell).closest('tr').find("a[id='allFilesID']").addClass("greyed-out")
+                    }
+                    /*
                     if ( e.target.value.length === selectionLen ) { // whole field selection    
                         if ( charactersCount === 0 ) {
                             if ( lastFocusedEntry.length > 0 ) {
@@ -1055,7 +1066,7 @@
                                 $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveNewBtn']").show();
                                 $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").show();
                         }
-                    }   
+                    }   */
                 } 
             }
             else 
@@ -1163,7 +1174,6 @@
                         $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr).removeClass("greyed-out");
                         $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr).css("opacity",'1.0');
                     }
-                   
                 } 
                 else {
                     if ( lastFocusedEntry.length === 0 ) { // overlay in prohjects or customers screen
@@ -1436,11 +1446,20 @@
     function validateEnableSaveConditions(module,currentTR) {
 
         var trTextInputLen=0;
-        windowLog.trace("Inside validation");
+        var retCode=true;
+        
+        windowLog.trace("Inside validation("+module+")");
         
         switch ( module ) {
             case "Payments" :
+        
+                retCode= (currentTR.find('[id="paID"]').val().length>0 &&
+                          currentTR.find('[id="pmID"]').val().length>0 &&
+                          currentTR.find('[id="pnID"]').val().length>0)?true:false;
+                
             case "Projects" :
+                retCode = currentTR.find('[id="prjctNumberID"]').val().length>0?true && retCode :false;
+
                 $(currentTR).find("td:has(:text)").each(function() { // start the loop past the project number
                     windowLog.trace("TD nodeName: "+this.childNodes[0].nodeName );
                     trTextInputLen += this.childNodes[0].value.length;
@@ -1456,7 +1475,7 @@
                 });*/
         }
         
-        return trTextInputLen > 0?true:false
+        return trTextInputLen>0?trTextInputLen&&retCode:false;
         /*
         
         if ( currentTR.find('[id="prjctNumberID"]').val() != "" ||

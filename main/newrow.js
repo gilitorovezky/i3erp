@@ -97,7 +97,7 @@
                 if ( restore ) 
                     tempDay=tempRow[index].value;
                 index++;
-                row += `<td><input tabindex="0" type="text" id="cnCNFID" name="checkNumberCNF" class="projectNameClass" value=${tempRow[index].value}></td>`;
+                row += `<td><input tabindex="0" type="text" id="pnID" name="checkNumberCNF" class="projectNameClass" value=${tempRow[index].value}></td>`;
                 row += `<td><input tabindex="0" type="text" id="pDscrptnID" name="pDscrptn" class="projectNameClass" maxlength="40" value=${tempRow[index].value}></td>`;
                 if ( restore )
                     files=tempRow[index++].value;
