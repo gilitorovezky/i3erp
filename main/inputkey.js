@@ -58,7 +58,7 @@
         if (!metaKey & !specialChar) // if not a meta key nor special key than it must be regular key
             foundChar=regex.test(key);  
 
-        windowLog.trace("TableKeyDown:("+e.currentTarget.id+") ..inside keydown,key="+e.key);
+        windowLog.trace("TableKeyDown: ("+e.currentTarget.id+") ..inside keydown,key="+e.key);
         _lastAction="";
         //=customerPanes.filter(u => tableID.toLowerCase().includes(u.toLowerCase())) // if the active table is in customers
         if ( (tableID == "#LeadsTableWrap") || (tableID == "#customerTblID") ) {  // special case when the input data is not tabular but a dialouge
@@ -548,11 +548,11 @@
                     break;
 
                     case "Tab"          : 
-                        windowLog.trace("Inside Tab- charCount:"+charactersCount);
+                        windowLog.trace("Inside Tab charCount:"+charactersCount);
                         retValue=true;
                         _lastAction="tab";
-                        if ($('#overLay ul li').length > 0) { // search box has more than one entry than switch to the search box to allow moving up and down
-                            if ($('#overLay ul li').length > 1) {
+                        if ( $('#overLay ul li').length > 0 ) { // search box has more than one entry than switch to the search box to allow moving up and down
+                            if ( $('#overLay ul li').length > 1 ) {
                                 $('#overLay ul li').first().focus(); // focus to the first element in the list
                                 //document.getElementById($('#overLay ul li')[0].id).focus();
                                 //$("#"+$('#overLay ul li')[0].id).focus();
@@ -574,17 +574,17 @@
                                     } else {
                                         e.target.value=$('#overLay ul li').first().text();
                                         if ( e.target.name === "projectNumber" &&
-                                            lastScreen === "Scheduler" &&
-                                            e.target.closest('tr').id === "unAssignElementsTR" &&
-                                            $(e.target).closest('td').find('[id^="activeEmplListID"]').val() !== "" &&
-                                            $(e.target).closest('td').find('[id^="unAssgnTskDateID"]').val() !== "") { // if the field name is not the description than its the project field
-                                            windowLog.trace("Enable assign");
-                                            $(e.target).closest('td').find('[id="assignID"]').show();
+                                             lastScreen === "Scheduler" &&
+                                             e.target.closest('tr').id === "unAssignElementsTR" &&
+                                             $(e.target).closest('td').find('[id^="activeEmplListID"]').val() !== "" &&
+                                             $(e.target).closest('td').find('[id^="unAssgnTskDateID"]').val() !== "") { // if the field name is not the description than its the project field
+                                             windowLog.trace("Enable assign");
+                                             $(e.target).closest('td').find('[id="assignID"]').show();
                                         }
                                     }
                                 }
                                 $("#overLay ul").empty();
-                                if ( lastFocusedEntry.length > 0) {
+                                if ( lastFocusedEntry.length > 0 ) {
                                     $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr).removeClass("greyed-out");
                                     $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr).css("opacity",'1.0');
                                 }
@@ -594,19 +594,19 @@
                             e.preventDefault(); // prevent any further TAB
                         } 
                         else {
-                            if (tableID != "#customerTblID") {    
-                                currCell.children().first().css({'background-color'    : '#F7F7FC'}); // remove the highlight from the current cell              
+                            if ( tableID !== "#customerTblID" ) {    
+                                currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell              
                                 if ( ( e.target.type !== 'date' ) && 
                                      ( e.target.type !== 'time' ) &&
                                      ( lastScreen    !== "Scheduler") ) {
-                                        if (e.target.closest('td') !== $(tableID+' tbody tr:last td:last')[0]) { // is this the last TD in the table
+                                        if ( e.target.closest('td') !== $(tableID+' tbody tr:last td:last')[0] ) { // is this the last TD in the table
                                             if ( ( e.target.closest('td').cellIndex < numOfColumns ) ) {   // Not end of the row
                                                 currCell = currCell.next();              // Move one cell to the right
                                                 active++;
                                             }
                                             else {
                                                 active = 1; // focus on the 1st TD
-                                                if (lastScreen === "Projects")
+                                                if ( lastScreen === "Projects" )
                                                     active = 2; // focus on the 2nd TD(skip the projct number)
                                                 currCell = currCell.closest('tr').next().find('td:nth-child('+active+')');    // point to the next cell in the next TR
                                             }
@@ -615,10 +615,10 @@
                                             windowLog.trace("End of table");
                                             //let firstElement = 1;
                                             if ( lastScreen !== "Projects" && 
-                                            tableID != "#addSingleRec" ) {
-                                                addNewRow(tableID,$("#screen_name").html(),rows,0);
-                                                active += 2;  // poition the active on the first ld next to project name
-                                                currCell = currCell.closest('tr').next().find('td:nth-child(1)'); // move to the 1st cell in the next row
+                                                 tableID !== "#addSingleRec" ) {
+                                                 addNewRow(tableID,$("#screen_name").html(),rows,0);
+                                                 active = 1;  // poition the active on the first ld next to project name
+                                                 currCell = currCell.closest('tr').next().find('td:nth-child(1)'); // move to the 1st cell in the next row
                                             }
                                             else {                                               
                                                 active = 2;
@@ -634,9 +634,9 @@
                                 retValue = true;
                             }
                             if ( charactersCount > 0 &&
-                                origText != e.target.value &&
-                                !isNewRec ) 
-                                saveRetValue=save(e.target,1);    // call save handler with override set to true
+                                 origText !== e.target.value &&
+                                 !isNewRec ) 
+                                 saveRetValue=save(e.target,1);    // call save handler with override set to true
                         }
                     break;
 
@@ -816,7 +816,7 @@
                         }  else {
                                 if (header != "projectScheduler") { 
                                     if (e.target.selectionStart == 0) {
-                                        currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell  
+                                        currCell.children().first().css({'background-color'    : '#'}); // remove the highlight from the current cell  
                                         if (( e.target.type != 'date' ) && ( e.target.type != 'time' )) {
                                             let leftMostTD = 1; // point to the 1st TD in the TR
                                             if (lastScreen == "Projects")
@@ -869,7 +869,7 @@
                             if ( e.target.value.length == e.target.selectionStart ) { // only move one cell right if the cursor at the end of the field
                                 if (( e.target.type != 'date' ) && 
                                     ( e.target.type != 'time' )) {
-                                    currCell.children().first().css({'background-color'    : '#F7F7FC'}); // remove the highlight from the current cell
+                                    currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell
                                     if (e.target.closest('td') != $(tableID+' tbody tr:last td:last-child')[0]) {
                                         if ( (currCell.index() < numOfColumns) )    // Not end of the row    
                                             currCell = currCell.next();             // Move one cell to the right
@@ -925,7 +925,7 @@
                                 }*/
                             } else {
                                 if (( e.target.type != 'date' ) && ( e.target.type != 'time' )) {
-                                    currCell.children().first().css({'background-color'    : '#F7F7FC'}); // remove the highlight from the current cell      
+                                    currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell      
                                     if ( e.target.closest('tr').rowIndex  > 1) {  // only move up if this is not the first row
                                         currCell = currCell.closest('tr').prev().find('td:nth-child('+currCell.index()+')');   
                                         active -= numOfColumns;
@@ -973,7 +973,7 @@
                                         //lastID[$("#screen_name").html()]++;   // only here increament the ID by 1
                                         addNewRow(tableID,screenName,rows,0); 
                                     }
-                                    currCell.children().first().css({'background-color'    : '#F7F7FC'}); // remove the highlight from the current cell                        
+                                    currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell                        
                                     //currCell=currCell.closest('tr').next().find('td:nth-child('+currCell.index()+')'); // the TD at the next row straight below
                                     currCell=currCell.closest('tr').next().find('td:nth-child('+$(e.target).closest('td').index()+')'); // the TD at the next row straight below
                                     currCell.children().first().css({'background-color'    : '#aadef0ff'}); // highlight the new current cell
