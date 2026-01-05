@@ -487,14 +487,16 @@
                     break;
                 default                     :
                 if ( elementRec.target.closest('tr').id !== "footerRow" ) {
-                    $(currCell).children().first().css({'background-color'    : '#F7F7FC'}); // remove the highlight from the current cell        
+                    $(currCell).children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell        
                     currCell=$(elementRec.target).closest('td');
                     if ( lastFocusedEntry.length > 0 )     // greater than 0 means there is a last focused entry to return to
                         lastFocusedEntry[lastFocusedEntry.length-1].currCell=currCell; // update the currCell with the last focused entry
-                    $(currCell).children().first().focus();
                     $(currCell).children().first().css({'background-color'    : '#90e9e9'}); // highlight the editing field
-                    if ( elementRec.type === "keydown" ) 
+                    if ( elementRec.type === "keydown" && elementRec.target.type !== "date" ) {
+                        $(currCell).children().first().focus();
+                        
                         TblKeyDown(elementRec);
+                    }
                 }
             }
         });
