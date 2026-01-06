@@ -24,7 +24,7 @@
             
             $table_headers=array();
             $sqlArray=array();
-            $table_headers["payments"]=array("payment_id","project_number","payment_amount","payment_date","payment_method","payment_number","description","file_uploaded","foldername"); // Remove customer name per Eyal 6/29
+            // $table_headers["payments"]=array("payment_id","project_number","payment_amount","payment_date","payment_method","payment_number","description","file_uploaded","foldername"); // Remove customer name per Eyal 6/29
             $table_headers["purchases"]=array("invoice_id","project_number","vendor_name","invoice_number","invoice_amount","invoice_date","payment_method","invoice_desc","file_uploaded","foldername");
             $table_headers["contractor_jobs"]=array("task_id","project_number","contractor_name","job_date","payment_amount","payment_number","date_paid","description","file_uploaded","foldername");
             $table_headers["employee_jobs"]=array("task_id","project_number","employee_fname","job_date","job_signin","lunch_signin","lunch_signout","job_signout","total_hours","description","labor_cost","file_uploaded","foldername");// not shopw gas Eyal 04-11
@@ -64,6 +64,7 @@
             $rootDir=strtolower($post_body["rootDir"]);  // root dir of the projects
             $headers = $post_body["headers"];
             $headersCount = count($post_body["headers"]);
+            $keyName=$post_body["keyName"];
             
             $tableName = $post_body["tableName"];
             //$arrayJson = json_decode($post_body[4]);    // tempRow2 in JS
@@ -75,8 +76,10 @@
 
             $old_ProjectName = "";
             $new_project_name = "";
-            $project_id = $arrayJson->record->ID;
-            file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 2.1:header-".print_r($headers,true)." project_id:".$project_id."\n", FILE_APPEND); 
+            //$project_id = $arrayJson->record->ID;
+            file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 2.1:header-".print_r($headers,true)." keyName:".$keyName." value:".$arrayJson->record->$keyName."\n", FILE_APPEND); 
+            //file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 2.1:header-".print_r($headers,true)."\n", FILE_APPEND);
+
             $project_created_date="";
             // Special case only Projects - checking if the new name is same as the last name cause project names could be changed.
             
@@ -86,6 +89,8 @@
                 file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 2.3.5-found project_name:".$old_ProjectName."\n", FILE_APPEND);
 
                 if ( $arrayJson->record->isNewRecord != true ) {
+                    
+                    $project_id = $arrayJson->record->$keyName;
                     file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 2.4-new project name:".$new_project_name." is not a new record\n", FILE_APPEND);
                     $sql_st = "SELECT project_name from projects where project_id = '$project_id'";
                     file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 2.5-sql_st:".$sql_st."\n", FILE_APPEND);
@@ -162,8 +167,8 @@
                     case "sub contractors"          :
                     case "purchases"                :
 
-                        $subFolderName=$post_body[0]["subFolderName"];
-                        $project_name = str_replace("'","\'", $arrayJson->record->prjName); //  $post_body[$row_number][1]); // escaping the project name to support ' and "
+                        $subFolderName=$post_body["subFolderName"];
+                        $project_name = str_replace("'","\'", $arrayJson->record->{'Project Number'}); //  $post_body[$row_number][1]); // escaping the project name to support ' and "
                         $sql_st=$sqlArray[$moduleName];
                         file_put_contents('../log/log_'.$logDate.'.log',"(save_record) ".$current_time." info 4.1-sql_st:".$sql_st."\n", FILE_APPEND);
                         if ( $project_name != "" ) {
@@ -214,7 +219,7 @@
                         $projectNumber=$arrayJson->record->prjName; //$post_body[$row_number][1];
                         $fullname = $arrayJson->record->{'Full Name'};//$post_body[$row_number][2]; // get the fullname from the record
                         $task_time = $arrayJson->record->{'Job Date'}; //$post_body[$row_number][3] ; //." ".$post_body[$row_number][4].":00"; // get the task time
-                        $totalLaborTime = $post_body[$row_number][8];
+                        $totalLaborTime = $post_body[8];
                         $notes = $arrayJson->record->Description; //$post_body[$row_number][9];
                         $hourly_rate = $arrayJson->record->hourlyrate; //$post_body[$row_number][13];
                         //file_put_contents('../log/log_'.$logDate.'.log',"(save_record) ".$current_time." info .6-creating new subflder:", FILE_APPEND);

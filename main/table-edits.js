@@ -258,6 +258,7 @@ function saveRow(moduleName,element) {
     arrObj["entry0"]= {"moduleName"    :   moduleName,     // entry 0
                        "subFolderName" :   "",   // will be updated later with the contactanation of all the fields record
                        "newFolderName" :   "",
+                       "keyName"       :   headers[moduleName]['primaryKey'],
                        "tableName"     :   headers[moduleName]['tableName'],
                        "rootDir"       :   rootDir,
                        "headers"       :   headerToTableSchema[moduleName]};
@@ -333,7 +334,7 @@ function saveRow(moduleName,element) {
         const header=$(tTable.find(' thead th:nth-child('+((this.cellIndex)+1)+')')).html();
         tempRow2[header]=this.childNodes[0].value;
     });
-
+    arrObj["entry0"].subFolderName=contactAllFields;   // update the subFolder with the contacnation of all the record fields// set default`
     if ( !isNewRecord ) { //if its not a new record than the entry must be found
         entryNumber=classArray[moduleName].retEntrybyID(Number(ID));
         //if ( entryNumber >= 0 )  { // valid entry found : exisiting record 
@@ -341,11 +342,11 @@ function saveRow(moduleName,element) {
             tempRow2["Files"] = tempRow[tempRow.length-1];
             if ( ( classArray[moduleName].arr[entryNumber].foldername != "" ) || 
                 ( typeof classArray[moduleName].arr[entryNumber].foldername != "undefined" ) ){
-                arrObj[0].newFolderName=contactAllFields;
-                arrObj[0].subFolderName=classArray[moduleName].arr[entryNumber].foldername;
+                arrObj["entry0"].newFolderName=contactAllFields;
+                arrObj["entry0"].subFolderName=classArray[moduleName].arr[entryNumber].foldername;
             }
-            else
-                arrObj[0].subFolderName=contactAllFields;   // update the subFolder with the contacnation of all the record fields
+            //else
+            //    arrObj[0].subFolderName=contactAllFields;   // update the subFolder with the contacnation of all the record fields
         //}
     }
     //else
@@ -540,7 +541,7 @@ function saveRow(moduleName,element) {
         .done(function (data) { 
             if ( lastID[moduleName] < Number(ID) ) 
                 lastID[moduleName]++;   // only here increament the ID by 1 after writting to the DB
-            ret_value=(Number(JSON.parse(data).Status)==1?true:false);
+            ret_value=(Number(data.Status) > 0?true:false);
             //if ( $("#screen_name").html() != "Home" &&
             //     $("#screen_name").html() != "Configuration") {
             var msgColor ='green';
@@ -560,29 +561,29 @@ function saveRow(moduleName,element) {
             if ( projectSet && (fullProjectName != "") ) { // perform the next paragraph only if projectSet is true;
                 var prjID=Projects.retEntrybyID(tempRow[1].split("-")[0]); // get the Project Index of the name. the projectID is not neccesarily the Project Index. 
                 // in case of a new project, prjid will not be found since it happens in append record that called later. 
-                if (( prjID != -1) && (Object.keys(JSON.parse(data)).length > 1) ) {    // only updste the corresponding fields for a valid prjID and any return value
+                if ( prjID !== -1 && Object.keys(data.length > 1) ) {    // only updste the corresponding fields for a valid prjID and any return value
                     entryNumber=Number(classArray[moduleName].retEntrybyID(Number(ID)));
                     if ( entryNumber >= 0)
                         classArray[moduleName].arr[entryNumber].foldername = contactAllFields;   // update the current foldername with the new one 
                     switch(moduleName) {
                         case "Employee Jobs"    :
-                            Projects.arrProjects[prjID].project_total_empl_cost=Number(JSON.parse(data).totalLabor);
+                            Projects.arrProjects[prjID].project_total_empl_cost=Number(data.totalLabor);
                         break;
 
                         case "Payments"         :
-                            Projects.arrProjects[prjID].project_total_payments=Number(JSON.parse(data).totalPayment);
+                            Projects.arrProjects[prjID].project_total_payments=Number(data.totalPayment);
                         break;
 
                         case "Sub Contractors"  :
-                            Projects.arrProjects[prjID].project_total_cntrc_cost=Number(JSON.parse(data).totalCntrc_cost);
+                            Projects.arrProjects[prjID].project_total_cntrc_cost=Number(data.totalCntrc_cost);
                         break;
                         
                         case "Purchases"        :
-                            Projects.arrProjects[prjID].project_total_purchases=Number(JSON.parse(data).totalPurchases);
+                            Projects.arrProjects[prjID].project_total_purchases=Number(data.totalPurchases);
                         break;
                     }
                 }
-                windowLog.trace("project:"+fullProjectName+" PrjID:"+(prjID == -1?"not":prjID)+" found,data length:"+Object.keys(JSON.parse(data)).length);
+                windowLog.trace("project:"+fullProjectName+" PrjID:"+(prjID == -1?"not":prjID)+" found,data length:"+Object.keys(data).length);
             }
             //newRecord=false;
         })
@@ -644,8 +645,8 @@ function saveCustomer(element) {
         dataType	: "text",
         async       : false
     }).done(function (data) {      
-        const ret_value=(Number(JSON.parse(data).Status)==1?true:false);
-        windowLog.trace("Saving to DB "+(ret_value == 1?"succesfully":"failed"));
+        const ret_value=(Number(data).Status > 0?true:false);
+        windowLog.trace("Saving to DB "+(ret_value === true?"succesfully":"failed"));
         if ( cNumber == -1) {   // existing record
             cstmrToSave["file_uploaded"] = 0;
             cstmrToSave["images_json"] = "";

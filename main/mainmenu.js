@@ -35,7 +35,7 @@ const captions = {
 const headerToTableSchema = { // look up table to match record to db schmea
 
     "Projects": {'Project Number':'project_number','Company Name':'company_name','Customer Last Name':'project_cstmr_lastname','Project Type':'project_type','Project Manager/Rep':'project_m_contractor','Project Address':'project_address','Files':'file_uploaded'},
-    "Payments": {'Payment ID':'payment_id','Project Number':'project_number','Payment Amount':'payment_amount','Payment Date':'payment_date','Payment Method':'payment_method','Payment Number':'payment_number','Description':'description','Files':'file_uploaded'},
+    "Payments": {'payment_id':'payment_id','Project Number':'project_number','Payment Amount':'payment_amount','Payment Date':'payment_date','Payment Method':'payment_method','Payment Number':'payment_number','Description':'description','Files':'file_uploaded'},
 } 
  
 
