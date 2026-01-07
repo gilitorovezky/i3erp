@@ -397,7 +397,7 @@ Promise.all(requests)
 
     $("#aboutDialog,#fileUploadControl").on('click',function(event)    {
 
-        windowLog.trace("Inside about/File Dialog click:"+event.target.id);
+        windowLog.trace("Inside about/file Dialog click:"+event.target.id);
 
         //currCell=$(event.target).closest('td'); // Identify the TD
         //setCellFocus();
@@ -492,12 +492,12 @@ Promise.all(requests)
                     //const out = ;
                     $("#EstimatesPane").html(headers["Estimates"]["columns"]);
                 newEstimate(event);
-                break;
+            break;
                 
             case "newLeadsBtn"           :
                 newLead();
                 currCell = $("#LeadsPane tr:last td:nth-child(2)").first();
-                break;
+            break;
 
             case "newProjectsBtn"        :
                 const idToPane={"newLeadsBtn":"Leads","newEstimatesBtn":"Estimates","newProjectsBtn":"Projects"};
@@ -515,7 +515,7 @@ Promise.all(requests)
                 currCell.children().first().focus();
                // else
                //     addNewRow("#"+$(event.target).parents('table')[0].id,handlerToPane[event.target.id],$(event.target).parents('table')[0].rows.length,false);
-                break;
+            break;
             
             case "prjctNumberID"        :
                 //if ( lastScreen == "Customers" ) { // just aas a precausion 
@@ -547,20 +547,20 @@ Promise.all(requests)
                         showFileUpload(event.target,headers[idToTable[event.target.id]['module']]["callType"],"fileUploadControl",lastScreen);
                 }
                 
-                break;
+            break;
 
             case "selectFiles"      :
                 windowLog.trace("Uploadfile option:"+$("#selectFiles :selected").val());
-                break;
+            break;
 
             case "adrsLine2"        :
                 if ( event.target.value === "apt/floor" )
                     event.target.value = "";    // reset the field to allow typing
 
-                break;
+            break;
 
             case "notes"           :
-                break;
+            break;
 
             case "closeFileUpload" :
                 windowLog.trace("aboutDLG: close DLG");
@@ -573,7 +573,11 @@ Promise.all(requests)
                 $(this).hide();
                 currCell.children().first().focus();
                 //$(currCell).closest('table').removeClass("greyed-out");
-                break;
+            break;
+
+            case "submitFilesID"    :
+                onSubmitUploadFiles(); 
+            break;
 
             default                 :
                 if ( event.target.id.includes("focusableElement") ) {
