@@ -108,12 +108,20 @@
   background-color          : #caceee;
 }
 
-.assign {
+.assign:hover {
 	font-size                 : 12px;
 	cursor                    : pointer;
 	color                     : blue;
   font-weight               : normal
 }
+
+.assign {
+	font-size                 : 12px;
+	cursor                    : none;
+	color                     : black;
+  font-weight               : normal
+}
+
 
 .tab_border {
   border                    : 2px solid black;
