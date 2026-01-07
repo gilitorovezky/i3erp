@@ -195,28 +195,28 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
 
             const entryN=classArray[module].retEntrybyID(record[0]);
             if ( !isNewRecord ) {
-                classArray[module].arr[recordID].payment_id      = record[0];
-                classArray[module].arr[recordID].project_number  = record[1];
-                classArray[module].arr[recordID].payment_amount  = record[2];
-                classArray[module].arr[recordID].payment_date    = record[3];
-                classArray[module].arr[recordID].payment_method  = record[4];
-                classArray[module].arr[recordID].payment_number  = record[5];
-                classArray[module].arr[recordID].description     = record[6];
-                classArray[module].arr[recordID].file_uploaded   = record[7];
-                classArray[module].arr[recordID].foldername      = record[8];
+                classArray[module].arr[recordID].payment_id      = record2["payment_id"];
+                classArray[module].arr[recordID].project_number  = record2["Project Number"];
+                classArray[module].arr[recordID].payment_amount  = record2["Payment Amount"];
+                classArray[module].arr[recordID].payment_date    = record2["Payment Date"];
+                classArray[module].arr[recordID].payment_method  = record2["Payment Method"];
+                classArray[module].arr[recordID].payment_number  = record2["Payment Number"];
+                classArray[module].arr[recordID].description     = record2["Description"];
+                classArray[module].arr[recordID].file_uploaded   = record2["Files"];
+                classArray[module].arr[recordID].foldername      = record2["Folder Name"];
                 //classArray[module].arr.splice(entryNumber,1);     // remove the item then add new/updted record          
             }
             else {
                 classArray[module].arr.push({
-                    payment_id      :   record[0],
-                    project_number  :   record[1],
-                    payment_amount  :   record[2],
-                    payment_date    :   record[3],
-                    payment_method  :   record[4], 
-                    payment_number :   record[5],
-                    description     :   record[6],
-                    file_uploaded   :   record[7],
-                    foldername      :   record[8],
+                    payment_id      :   record2["payment_id"],
+                    project_number  :   record2["Project Number"],
+                    payment_amount  :   record2["Payment Amount"],
+                    payment_date    :   record2["Payment Date"],
+                    payment_method  :   record2["Payment Method"], 
+                    payment_number  :   record2["Payment Number"],
+                    description     :   record2["Description"],
+                    file_uploaded   :   record2["Files"],
+                    foldername      :   record2["Folder Name"],
                     images_json     :   ""
                 });
             }
@@ -238,7 +238,7 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
                 classArray[module].arr[entrySC].contractor_name = record[2];
                 classArray[module].arr[entrySC].job_date        = record[3];
                 classArray[module].arr[entrySC].payment_amount  = record[4];
-                classArray[module].arr[entrySC].payment_number = record[5];
+                classArray[module].arr[entrySC].payment_number  = record[5];
                 classArray[module].arr[entrySC].date_paid       = record[6];
                 classArray[module].arr[entrySC].description     = record[7];
                 classArray[module].arr[entrySC].employee_id     = tempeID;
@@ -252,7 +252,7 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
                     contractor_name :   record[2],
                     job_date        :   record[3],
                     payment_amount  :   record[4],
-                    payment_number :   record[5],
+                    payment_number  :   record[5],
                     date_paid       :   record[6],
                     description     :   record[7],
                     employee_id     :   tempeID,
