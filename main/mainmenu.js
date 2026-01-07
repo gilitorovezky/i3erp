@@ -669,29 +669,28 @@ $(document).ready( function() {
     $("#overLay ul").attr('data-module',"");
     $("#welcomeNameID").html("Welcome Back, "+username);
 
-
     if ( typeof username != "undefined" ) {
         uid=Cookies.get('uid');
 
-        $.ajax({url     : "../main/read_config.php",
-            method		: "GET",
-            dataType	: "json",
-            async       : false,  
-            success		: function(data) {  
-            if ( ( data != '' ) && 
-                    ( Number(data[0].Status) > 0 ) ) {
-                    initConfig(data);
-                    windowLog.trace("event listner load");
-                }
-                else {
-                    windowLog.warn("error loading configurtions, exit");
-                    logout();
-                }
-            },
-            error     	: (function (jqxhr, textStatus, error ) {
-                windowLog.trace("Load schedule failed:"+textStatus + ", " + error);
-                logout();})
-        });
+    $.ajax({url     : "../main/read_config.php",
+        method		: "GET",
+        dataType	: "json",
+        async       : false,  
+        success		: function(data) {  
+        if ( ( data != '' ) && 
+                ( Number(data[0].Status) > 0 ) ) {
+                initConfig(data);
+                windowLog.trace("event listner load");
+            }
+            else {
+                windowLog.warn("error loading configurtions, exit");
+                logout();
+            }
+        },
+        error     	: (function (jqxhr, textStatus, error ) {
+            windowLog.trace("Load schedule failed:"+textStatus + ", " + error);
+            logout();})
+    });
 
     windowLog.trace("Inside document ready");
 
