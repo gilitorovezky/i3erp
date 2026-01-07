@@ -194,10 +194,9 @@ function saveRow(moduleName,element) {
     //var headerPTR="";
     var isNewRecord=false;
 
-    if ( lastFocusedEntry.length > 0 ) {
-        //headerPTR=lastFocusedEntry[lastFocusedEntry.length-1].header;
+    if ( lastFocusedEntry.length > 0 ) 
         isNewRecord=true;
-    }
+    
     windowLog.trace("Inside saveRow..module:"+moduleName+" LastScreen:"+lastScreen);
  
     headers1.push(headers[moduleName]['primaryKey']); 
@@ -405,9 +404,9 @@ function saveRow(moduleName,element) {
             }
             $(targetTR).find('[name^="labor_cost"]')[0].value=laborCost // reset the labor cost
 //            $(element.parentNode).parent().find('[name^="labor_cost"]')[0].value=laborCost // reset the labor cost
-            tempRow[10]=laborCost;
-            tempRow.push(eID);
-            tempRow.push(hourlyrate);    
+            //tempRow[10]=laborCost;
+            //tempRow.push(eID);
+            //tempRow.push(hourlyrate);    
             tempRow2["employeeID"]=eID
             tempRow2["hourlyrate"]=hourlyrate;
             tempRow2["laborcost"]=laborCost;
@@ -555,9 +554,10 @@ function saveRow(moduleName,element) {
             setTimeout(() => $("#saveTableLabel").hide(), 2000); // clear the message after 2 sec
            // }
 
-            windowLog.trace("Saving to DB "+(ret_value == 1?"has been successfull":"failed"));
-            DelCounter++;;     // one of Two conditons to allow delete: done saving or any report length > 0  
-            appendRecord(moduleName,tempRow,tempRow2); // update the corresponding record int he cach 
+            windowLog.trace("Saving to DB "+(ret_value?"has been successfull":"failed"));
+            DelCounter++;;     // one of Two conditons to allow delete: done saving or any report length > 0
+            const recordPntr=classArray[module].retEntrybyID(ID);
+            appendRecord(moduleName,tempRow,tempRow2,isNewRecord,recordPntr); // update the corresponding record int he cache 
             if ( projectSet && (fullProjectName != "") ) { // perform the next paragraph only if projectSet is true;
                 var prjID=Projects.retEntrybyID(tempRow[1].split("-")[0]); // get the Project Index of the name. the projectID is not neccesarily the Project Index. 
                 // in case of a new project, prjid will not be found since it happens in append record that called later. 

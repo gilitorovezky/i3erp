@@ -86,9 +86,9 @@ let Monday = new Date();	// Holds the first Monday of the current week
     $("#newTaskShortCutID").visible();
   
     //document.getElementById("saveTableLabel").hidden=false; //disabled per Eyal 6/29
-    if ( ( Tasks.intervalEJID == 0 ) &&
+    if ( ( Tasks.intervalEJID === 0 ) &&
          ( Object.keys(Tasks.noneClosedDailyTasks).length > 0 ) ) {
-        windowLog.trace("Set the clock to pollingTasks:"+appConfig.tsPolling_Interval*1000*60);
+        //windowLog.trace("Set the clock to pollingTasks:"+appConfig.tsPolling_Interval*1000*60);
         Tasks.intervalEJID=window.setInterval(function() {
           refreshReportCallBack();
         }, appConfig.tsPolling_Interval*1000*60);
@@ -149,9 +149,9 @@ let Monday = new Date();	// Holds the first Monday of the current week
         tomorrow.setDate(tomorrow.getDate() + 1)
     }
     out +=`</thead><tbody class="thover">`;    
-    activeEmplArr=classArray['Employees'].arr.filter((x) => x.is_active == "1");      // array for all the assigned tasks  (employeeID = -1)
+    activeEmplArr=classArray['Employees'].arr.filter((x) => x.is_active === "1");      // array for all the assigned tasks  (employeeID = -1)
 
-    let unAssignedTasksArr=Tasks.arrTasks.filter( (x) => ( ( x.employee_id == 0 || Number(x.is_assigned) == 0 ) ) );
+    let unAssignedTasksArr=Tasks.arrTasks.filter( (x) => ( ( x.employee_id === 0 || Number(x.is_assigned) === 0 ) ) );
 
     unAssignedTasksArr.sort((a, b) => {
       // Convert date strings to Date objects if they are not already
@@ -162,14 +162,14 @@ let Monday = new Date();	// Holds the first Monday of the current week
     //const numOfTasks=assignedTasksArr.length;
     
 
-    // filter only the tasks for emplyee id ==3 and a specifc date .. much faster than today 
-    //Tasks.arrTasks.filter((x) => x.employee_id == "3").filter((x) => x.task_date.split(" ")[0] == "2024-05-01")
+    // filter only the tasks for emplyee id ====3 and a specifc date .. much faster than today 
+    //Tasks.arrTasks.filter((x) => x.employee_id ==== "3").filter((x) => x.task_date.split(" ")[0] ==== "2024-05-01")
     for (var employee=0; employee < activeEmplArr.length; employee++) {  // Loop over the list of active employees 
       div_counter_arr[employee][0]=activeEmplArr[employee].fullname//classArray['Employees'].arr[employee].fullname;
 
       var addEmpls=`<select id="activeEmplListID"><option value="`+activeEmplArr[employee].fullname+`">`+activeEmplArr[employee].fullname+`</option>`;  // build the active employee drop down menue
       var addEmplsHidden=`&nbsp&nbsp<select hidden id="activeEmplListID"><option value="`+activeEmplArr[employee].fullname+`">`+activeEmplArr[employee].fullname+`</option>`;   // build the active employe drop down menue
-      const activeEmplys= classArray["Employees"].arr.filter((x) => (x.is_active == "1" && x.fullname != activeEmplArr[employee].fullname)).map((x) => `<option value="${x.fullname}">${x.fullname}</option>`);
+      const activeEmplys= classArray["Employees"].arr.filter((x) => (x.is_active === "1" && x.fullname != activeEmplArr[employee].fullname)).map((x) => `<option value="${x.fullname}">${x.fullname}</option>`);
       addEmpls += `<option value="unassigned" style="font-weight: bold;">UA</option>`;
       addEmpls += activeEmplys +`</select>`;
       if ( Tasks.unAssignedCount >= appConfig.unAsgnCounter )
@@ -189,7 +189,7 @@ let Monday = new Date();	// Holds the first Monday of the current week
       let tomorrow= new Date(Monday);   // Calculate the current Monday
       const startWeek = formatDateForInput(new Date(Monday));
       const endWeek = formatDateForInput(new Date(Monday.getFullYear(),Monday.getMonth(),Monday.getDate()+6));
-      let weeklyAssignedTasksArr=assignedTasksArr.filter((x) => ( (x.task_date.split(" ")[0] >= startWeek) && (x.task_date.split(" ")[0] <= endWeek) && x.employee_id == employeeID));
+      let weeklyAssignedTasksArr=assignedTasksArr.filter((x) => ( (x.task_date.split(" ")[0] >= startWeek) && (x.task_date.split(" ")[0] <= endWeek) && x.employee_id === employeeID));
       const numOfTasks=weeklyAssignedTasksArr.length; // num of tasks of the empoloyee for the displayed week
       if ( numOfTasks > 1 ) {
         weeklyAssignedTasksArr.sort((a, b) => { // sort the tasks by date so any "processed" task will be removed from the list for efficiency
@@ -211,7 +211,7 @@ let Monday = new Date();	// Holds the first Monday of the current week
           var taskCounter=0;  // internal counter of tasks per day per employee
           
           for ( var task=0; task < numOfTasks; task++ ) { 
-            if ( tomorrow.toLocaleDateString('en-CA') == weeklyAssignedTasksArr[task].task_date.split(" ")[0] ) { // check if the task is for the current day
+            if ( tomorrow.toLocaleDateString('en-CA') === weeklyAssignedTasksArr[task].task_date.split(" ")[0] ) { // check if the task is for the current day
               if (found) {    // not the first element, then need to add 
                 
                 windowLog.trace("Additional tasks.. task #:"+(task)+" taskID:"+weeklyAssignedTasksArr[task].task_id);
@@ -233,7 +233,7 @@ let Monday = new Date();	// Holds the first Monday of the current week
                 weeklyAssignedTasksArr[task].inid=inid;
                   
                 out += `<td id="assigned"><div id="rootElement" style="display:block">`; 
-                if ( weeklyAssignedTasksArr[task].task_status == "open" )
+                if ( weeklyAssignedTasksArr[task].task_status === "open" )
                   out += `<div id=${divid} >`;
                 else
                   out += `<div id=${divid} class="container">`;
@@ -246,18 +246,18 @@ let Monday = new Date();	// Holds the first Monday of the current week
                   out += `<img tabindex="0" src='../misc/file.png' alt='file' width='10' height='10' id="allFilesID">&nbsp`;
                   out += `<button tabindex="0" hidden class="arrow-btn" id="moveUPTask" title="Move Up">↑</button>`;
                   out += `<button tabindex="0" hidden class="arrow-btn" id="moveDownTask" title="Move Down">↓</button>`;
-                  if ( weeklyAssignedTasksArr[task].task_status == "open" )
+                  if ( weeklyAssignedTasksArr[task].task_status === "open" )
                     out += `<p tabindex="0" id="editTaskID" class="assign">Edit</p>`;
                   
                   out += `</div></div>`;  // Wrapping up buttons and projectname
-                  if ( weeklyAssignedTasksArr[task].task_status == "open") 
+                  if ( weeklyAssignedTasksArr[task].task_status === "open") 
                     out += `<div id=${tx_id}>`;
                   else
                     out += `<div id=${tx_id} class="greyed-out">`; // if the task hs in progress or closed, disable editing
 
                   //out += `<div id=${tx_id}>
                   out += `<textarea tabindex="0" name='schdPrjctDscrptn' rows='2' cols='40' class="txtaClass" style="border:2px solid ${color}">${task_descr}</textarea>`;
-                  //if ( assignedTasksArr[task].task_status == "open" ) // do not show Assign unlesss the task in open Gil Gil
+                  //if ( assignedTasksArr[task].task_status === "open" ) // do not show Assign unlesss the task in open Gil Gil
                   //  out +=`<p id="assignID"  class="assign">&nbsp&nbsp Edit</p>`;
 
                   out += `</div>`;
@@ -306,13 +306,13 @@ let Monday = new Date();	// Holds the first Monday of the current week
             const iDivid="div"+iSuffix;
             var addEmpls=`&nbsp&nbsp<select id="activeEmplListID">`;
             if ( unAssignedTasksArr[unAssgnElement].employee_name != "unassigned" ) {
-              var tActiveEmplys = classArray["Employees"].arr.filter((x) => x.is_active == "1").filter((x) => x.fullname !=  unAssignedTasksArr[unAssgnElement].employee_name ).map((x) => x.fullname );            
+              var tActiveEmplys = classArray["Employees"].arr.filter((x) => x.is_active === "1").filter((x) => x.fullname !=  unAssignedTasksArr[unAssgnElement].employee_name ).map((x) => x.fullname );            
               tActiveEmplys.unshift( unAssignedTasksArr[unAssgnElement].employee_name ); // add to the top the employee_name to apears top at the select dropdown
               const activeEmplys = tActiveEmplys.map((x) => `<option value="${x}">${x}</option>`);
               addEmpls += activeEmplys+`<option value="unassigned" style="font-weight: bold;">UA</option></select>`;
             } else {
                 addEmpls += `<option value="unassigned" style="font-weight: bold;">UA</option>`; // first add the UA
-                const tActiveEmplys = classArray["Employees"].arr.filter((x) => x.is_active == "1").map((x) => `<option value="${x.fullname}">${x.fullname}</option>`);
+                const tActiveEmplys = classArray["Employees"].arr.filter((x) => x.is_active === "1").map((x) => `<option value="${x.fullname}">${x.fullname}</option>`);
                 addEmpls += tActiveEmplys +`</select>`;
             }
 
@@ -363,7 +363,7 @@ let Monday = new Date();	// Holds the first Monday of the current week
         windowLog.trace("Inside unAssgnTskDateID change event(scheduler), new date value="+this.value);
         $("#result-table").removeClass("greyed-out");
         if ( this.value != "") {  // non empty date
-          if ( this.closest('tr').id == "unAssignElementsTR" ) {  // show the assign  
+          if ( this.closest('tr').id === "unAssignElementsTR" ) {  // show the assign  
               let firstParentDivWithText = $(this).parents('div').filter(function() {
                 return this.id.includes("div-"+$(this).closest('tr').index()+"-"+($(this).closest('td').index()-1));
               }).first().next();
@@ -379,7 +379,7 @@ let Monday = new Date();	// Holds the first Monday of the current week
               else
                 $(this).closest("div").parent().next().find('[id="assignID"]').hide();
         } else {
-          if ( this.closest('tr').id == "unAssignElementsTR" ) { // if the date is not empty then hide the save buttons
+          if ( this.closest('tr').id === "unAssignElementsTR" ) { // if the date is not empty then hide the save buttons
             const firstParentDivWithText = $(this).parents('div').filter(function() {
               return this.id.includes("div-"+$(this).closest('tr').index()+"-"+($(this).closest('td').index()-1));
             }).first().next();
@@ -389,7 +389,7 @@ let Monday = new Date();	// Holds the first Monday of the current week
         const taskID = $(this).parents('div').filter(function() {
                 return this.id.includes("div-"+$(this).closest('tr').index()+"-"+($(this).closest('td').index()-1));
               }).first().find('[name="taskID"]').val();
-        const resultT = Tasks.arrTasks.findIndex(t => t.task_id == taskID);
+        const resultT = Tasks.arrTasks.findIndex(t => t.task_id === taskID);
        
         const tToday=new Date();
         Tasks.arrTasks[resultT].task_date = this.value+" "+tToday.getHours()+":"+String(tToday.getMinutes()).padStart(2,'0')+":" + String(tToday.getSeconds()).padStart(2,'0');
@@ -459,7 +459,7 @@ let Monday = new Date();	// Holds the first Monday of the current week
    
     var addEmpls=`&nbsp&nbsp<select id="activeEmplListID"><option value="unassigned" style="font-weight: bold;">UA</option>`;  // build the active employee drop down menue
     var addEmplsHidden=`&nbsp&nbsp<select hidden id="activeEmplListID"><option value="unassigned" style="font-weight: bold;">UA</option>`;  // build the active employe drop down menue
-    const activeEmplys= classArray["Employees"].arr.filter((x) => x.is_active == "1").map((x) => `<option value="${x.fullname}">${x.fullname}</option>`);
+    const activeEmplys= classArray["Employees"].arr.filter((x) => x.is_active === "1").map((x) => `<option value="${x.fullname}">${x.fullname}</option>`);
     addEmpls += activeEmplys+`</select>`;
     addEmplsHidden += `</select>`;
     addEmpls=addEmpls.replace(/\,/g, '');
@@ -502,7 +502,7 @@ let Monday = new Date();	// Holds the first Monday of the current week
         tID=Tasks.arrTasks[task].task_id; 
         pName=Tasks.arrTasks[task].project_name;
         tDescription=Tasks.arrTasks[task].task_description;
-        if ( Tasks.arrTasks[task].task_status == "open" )
+        if ( Tasks.arrTasks[task].task_status === "open" )
           localOut = `<div id="rootElement" style="display:block"><div id=${div_id+(node_counter+1)} class='container'>`;
         else
           localOut = `<div id="rootElement" style="display:block"><div id=${div_id+(node_counter+1)} class='container greyed-out'>`;
@@ -527,7 +527,7 @@ let Monday = new Date();	// Holds the first Monday of the current week
       localOut += `</div>`; // wrapping up buttons and projectnumber
       localOut += `</div>`; // wrapping up container
       if ( task > 0) {
-        if ( Tasks.arrTasks[task].task_status == "open")               
+        if ( Tasks.arrTasks[task].task_status === "open")               
           localOut += `<div id=${tx_id+(node_counter+1)}>`;
         else
           localOut += `<div id=${tx_id+(node_counter+1)} class="greyed-out">`; // if the task is NOT in open status
@@ -590,7 +590,7 @@ let Monday = new Date();	// Holds the first Monday of the current week
 
     windowLog.trace("Inside delElement...");
     if ( $('#editCBID').is(":checked")  || 
-        promptFlag == "promptOveride" ) {
+        promptFlag === "promptOveride" ) {
 
       if ( promptFlag != "promptOveride" ) {  // show the confirmation msg unbless override is on
         exportDialog=document.getElementById("aboutDialog");
@@ -631,11 +631,11 @@ let Monday = new Date();	// Holds the first Monday of the current week
           const entry=Tasks.arrTasks.findIndex(x => Number(x.task_id) === task_id);
 
           if (entry >= 0) {// just as a precausion , it should not happen
-            if ( Tasks.arrTasks[entry].is_assigned == "1") {
+            if ( Tasks.arrTasks[entry].is_assigned === "1") {
               div_counter_arr[row][col+1]--;  // update the element array counter
               const assngEntry=assignedTasksArr.findIndex(x => Number(x.task_id) === task_id);
               assignedTasksArr.splice(assngEntry, 1);    // delete the entry from the assigned tasks
-              if ( div_counter_arr[Number(row)][Number(col)+1] == 0) {  // asking to remove the last element then just clear the fields
+              if ( div_counter_arr[Number(row)][Number(col)+1] === 0) {  // asking to remove the last element then just clear the fields
                 $("#txdiv"+coordinates+node_counter).children().first().val("");
                 $("#in"+coordinates+node_counter).val("");  
                 $("#div"+coordinates+node_counter).find('#unAssgnTskDateID').hide();  // hide the assign date and the assign name 
@@ -710,7 +710,7 @@ function saveScheduler(element,overideAssignment,newTask) { // Save the element 
       return this.id.includes("div-"+iRow+"-"+iCol);
     }).first();*/
     let taskTime=dummyDate; // init 
-    if ( $(element).closest('tr').attr('id') == 'unAssignElementsTR' ) { // we are at the unassighned
+    if ( $(element).closest('tr').attr('id') === 'unAssignElementsTR' ) { // we are at the unassighned
      /* taskTime=formatDateForInput(new Date($('#result-table thead tr th:nth-child('+(iCol+1)+')').text()))+" "+currentTime;
       textArea=$("#txdiv"+element.id.substring(element.id.indexOf('-'))).find('[name="schdPrjctDscrptn"]').val()*/
 
@@ -736,14 +736,14 @@ function saveScheduler(element,overideAssignment,newTask) { // Save the element 
    
       //if ( ($(this).val().length > 0) || (textArea.length > 0 ) ) { // if input or txt area are not empty
   
-      //if ($(this).val() == "") // the project nuber became empty, change the border to black
+      //if ($(this).val() === "") // the project nuber became empty, change the border to black
       //  bColor = "black"
       //else
       //  bColor ="red";
       //$(this).css({'border':'2px solid '+bColor}); // color the border in red to mark as open
       //$("#txdiv"+this.id.slice(2)).find('textarea[name="schdPrjctDscrptn"]').css({'border':'2px solid '+bColor}); // color thhe border in red to mark as open
-      /*if (( $(this).val() == "" ) && // if both fields are now empty, hide the date and the select element
-          ( textArea == "" )) {      // otherwise show the two elements 
+      /*if (( $(this).val() === "" ) && // if both fields are now empty, hide the date and the select element
+          ( textArea === "" )) {      // otherwise show the two elements 
         $(this).closest("div").find('#unAssgnTskDateID').hide();
         $(this).closest("div").find('#activeEmplListID').hide();
       }
@@ -765,7 +765,7 @@ function saveScheduler(element,overideAssignment,newTask) { // Save the element 
       if (tDate < maxDate)
           maxDate = new Date(tDate);*/
       if ( task_id > 0 ) {
-        let resultT = Tasks.arrTasks.findIndex(t => t.task_id == task_id);
+        let resultT = Tasks.arrTasks.findIndex(t => t.task_id === task_id);
         if (resultT != -1) {  // if task exist then update the details
           windowLog.trace("Task exist: input_id:"+input_id+" task_id:"+task_id+" prj name:"+projectName+" text:"+textArea); 
           Tasks.arrTasks[resultT].task_description=textArea;
@@ -786,7 +786,7 @@ function saveScheduler(element,overideAssignment,newTask) { // Save the element 
                           "seq_number"     : seq_number,
                           "new_task"        : newTask,
                           "file_uploaded"  : 0, // default value
-                          "is_assigned"    : (overideAssignment==true?1:0)
+                          "is_assigned"    : (overideAssignment===true?1:0)
                         });
       anyRec=true;
       origText="";
@@ -797,7 +797,7 @@ function saveScheduler(element,overideAssignment,newTask) { // Save the element 
     let hourlyRate = 0;
    
     if ( employeeName != "unassigned" ) { // if the employee is not selected then do not save
-        const entry=classArray["Employees"].arr.findIndex(t => t.fullname == employeeName);
+        const entry=classArray["Employees"].arr.findIndex(t => t.fullname === employeeName);
         hourlyRate = classArray["Employees"].arr[entry].hourlyrate;
     }
 
@@ -817,8 +817,8 @@ function saveScheduler(element,overideAssignment,newTask) { // Save the element 
             success   : (function(data) {
               retValue = true;
               if (data != '') { // data is not null only when a new task is created and task_id has been assigned by the DB (AI)
-                windowLog.trace("Saving schedule to the db has been "+(data[0].Status == 1?"succesfull":"failed"));
-                if ( data[0].Status == 1 ) {
+                windowLog.trace("Saving schedule to the db has been "+(data[0].Status === 1?"succesfull":"failed"));
+                if ( data[0].Status === 1 ) {
                   $("#saveTableLabel").html("Saving has been successfull");
                   $("#saveTableLabel").css("color", "green");
                 }
@@ -833,7 +833,7 @@ function saveScheduler(element,overideAssignment,newTask) { // Save the element 
                   $("#"+data[ret].input_id).closest("div").find('#unAssgnTskDateID').show(); // show the date element
                   $("#"+data[ret].input_id).closest("div").find('#activeEmplListID').show(); // show the employee drop down element
                   lastID["Employee Jobs"]=Number(data[ret].task_id)+1;  // update lastID array so next EJ task will start from the right entry
-                  let resultT = Tasks.arrTasks.findIndex(t => t.task_id == data[ret].task_id);
+                  let resultT = Tasks.arrTasks.findIndex(t => t.task_id === data[ret].task_id);
                   if (resultT != -1)    // if task_id exist then just update the entry
                       windowLog.trace("Project found- do nothing");
                   else { // new task then add to the task array
@@ -859,7 +859,7 @@ function saveScheduler(element,overideAssignment,newTask) { // Save the element 
                         seq_number        :   Number(initd.split('-')[3])
                     });
                   }
-                  if ( new Date().toDateString() == $("table thead tr th").eq($("#"+data[ret].input_id).closest('td').index()).html() ) 
+                  if ( new Date().toDateString() === $("table thead tr th").eq($("#"+data[ret].input_id).closest('td').index()).html() ) 
                     Tasks.noneClosedDailyTasks[data[ret].task_id+"-"]="open"; // add the new task only for today
                 }*/
               } else {
@@ -881,7 +881,7 @@ function addUnassignedTask(element) { // Show the scheduler table
     
     var newTD=""; 
     var addEmpls=`&nbsp&nbsp<select id="activeEmplListID">`;
-    var tActiveEmplys = classArray["Employees"].arr.filter((x) => x.is_active == "1").filter((x) => x.fullname != element.employee_name).map((x) => x.fullname);
+    var tActiveEmplys = classArray["Employees"].arr.filter((x) => x.is_active === "1").filter((x) => x.fullname != element.employee_name).map((x) => x.fullname);
     if ( element.employee_name != "unassigned") // no need to add unassigned cuse it added below as the last element
       tActiveEmplys.unshift(element.employee_name); // add to the top the installer name to appears top at the select dropdown
     else
@@ -894,7 +894,7 @@ function addUnassignedTask(element) { // Show the scheduler table
       addEmpls += activeEmplys;
     addEmpls += `</select>`;
 
-    //const unAsgnCounter = Tasks.arrTasks.filter( (x) => ( ( x.employee_id == 0 || Number(x.is_assigned) == 0 ) ) ).length;
+    //const unAsgnCounter = Tasks.arrTasks.filter( (x) => ( ( x.employee_id === 0 || Number(x.is_assigned) === 0 ) ) ).length;
   
     const iSuffix=`-${$("#result-table tr:last").index()}-${$("#result-table tr:last td:last").index()}-1`;  
     const iNid="in"+iSuffix;
@@ -937,7 +937,7 @@ function addUnassignedTask(element) { // Show the scheduler table
       windowLog.trace("Inside unAssgnTskDateID change event(scheduler-unAssigned), new date value="+this.value);
       $("#result-table").removeClass("greyed-out");
       if ( this.value != "") {  // non empty date
-        if ( this.closest('tr').id == "unAssignElementsTR" ) {  // show the assign  
+        if ( this.closest('tr').id === "unAssignElementsTR" ) {  // show the assign  
           let firstParentDivWithText = $(this).parents('div').filter(function() {
                 return this.id.includes("div-"+$(this).closest('tr').index()+"-"+($(this).closest('td').index()-1));
               }).first().next();
@@ -954,7 +954,7 @@ function addUnassignedTask(element) { // Show the scheduler table
             $(this).closest("div").parent().next().find('[id="assignID"]').hide();*/
         }
       } else {
-        if ( this.closest('tr').id == "unAssignElementsTR" ) { // if the date is not empty then hide the save buttons
+        if ( this.closest('tr').id === "unAssignElementsTR" ) { // if the date is not empty then hide the save buttons
             const firstParentDivWithText = $(this).parents('div').filter(function() {
               return this.id.includes("div-"+$(this).closest('tr').index()+"-"+($(this).closest('td').index()-1));
             }).first().next();
@@ -964,7 +964,7 @@ function addUnassignedTask(element) { // Show the scheduler table
       const taskID = $(this).parents('div').filter(function() {
                 return this.id.includes("div-"+$(this).closest('tr').index()+"-"+($(this).closest('td').index()-1));
               }).first().find('[name="taskID"]').val();
-      const resultT = Tasks.arrTasks.findIndex(t => t.task_id == taskID);
+      const resultT = Tasks.arrTasks.findIndex(t => t.task_id === taskID);
       Tasks.arrTasks[resultT].task_date = this.value+" "+formatCurrentTime(new Date());
 
       return saveScheduler(this,0,true);
@@ -987,7 +987,7 @@ function addUnassignedTask(element) { // Show the scheduler table
     msg.data.name=$(event).closest('td').find('[id="activeEmplListID"]').val();
     msg.data.taskDescription=$(event).closest('td').find('textarea[name="schdPrjctDscrptn"]').val();
     msg.data.projectNumber=$(event).closest('td').find('input[name="projectNumber"]').val();
-    msg.data.taskIX=Tasks.arrTasks.findIndex(t => t.task_id == msg.data.taskID );
+    msg.data.taskIX=Tasks.arrTasks.findIndex(t => t.task_id === msg.data.taskID );
 
     assignTaskHandler(msg);
   }

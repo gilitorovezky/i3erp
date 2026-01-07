@@ -13,6 +13,7 @@ let files2show=""; 	// global variable to hold the list of images to pass to the
 var deletedRow2=[];	// temp array to save the cell content
 var deleteOnce=false;
 var classArray=[];
+var Tasks;
 let isZoom = false;
 var today=date.getFullYear()+"-"+(("0" + (date.getMonth()+1)).slice(-2))+"-"+(("0"+date.getDate()).slice(-2)); 
 
@@ -296,7 +297,7 @@ class genesisClass {
             lastID[moduleName]=Number(inArray[0].maxID);
 
         if (Object.keys(inArray).length > 1) { 		// GT 1 since there will be always 1 entry for the retrn result
-            windowLog.trace("Initialzing "+moduleName+"...");
+            windowLog.trace("Initializing "+moduleName+"...");
             Object.keys(inArray).forEach( (key) => { //copy the return data from the DB into the class array
                 this.arr.push(inArray[key]);
             } );
@@ -526,23 +527,25 @@ $(window).on("load", function() {
 
 window.addEventListener("load", function() {
 
-    windowLog.trace("event listner load");
-    username=Cookies.get('username');
+    
+    /*username=Cookies.get('username');
     fullname = username;
     $("#overLay ul").attr('data-module',"");
-    $("#welcomeNameID").html("Welcome Back, "+username);
+    $("#welcomeNameID").html("Welcome Back, "+username);*/
     //$("#saveTableLabel").hide();
     if ( typeof username != "undefined" ) {
         uid=Cookies.get('uid');
 
-        $.ajax({url     : "../main/read_config.php",
+        /*$.ajax({url     : "../main/read_config.php",
             method		: "GET",
             dataType	: "json",
             async       : false,  
             success		: function(data) {  
               if ( ( data != '' ) && 
-                    ( Number(data[0].Status) > 0 ) )
+                    ( Number(data[0].Status) > 0 ) ) {
                     initConfig(data);
+                    windowLog.trace("event listner load");
+                }
                 else {
                     windowLog.warn("error loading configurtions, exit");
                     logout();
@@ -551,7 +554,7 @@ window.addEventListener("load", function() {
             error     	: (function (jqxhr, textStatus, error ) {
                 windowLog.trace("Load schedule failed:"+textStatus + ", " + error);
                 logout();})
-        });
+        });*/
 
         $.ajax({url         : "../main/read_employees.php",
                 method		: "POST",
@@ -605,8 +608,8 @@ window.addEventListener("load", function() {
             break;    
         }
     }
-    screenNumber = window.location.hash.slice(1);
-    displayMainMenue(window.location.hash.slice(1));
+    screenNumber = "home";//window.location.hash.slice(1);
+    displayMainMenue("home"); //window.location.hash.slice(1));
 
     $(".main_menue").show();
     if (username == 'eddie') {
@@ -660,6 +663,35 @@ window.addEventListener("load", function() {
 let assignedTasksArr;   // global array that holds all assgined tasks
 
 $(document).ready( function() {
+
+    username=Cookies.get('username');
+    fullname = username;
+    $("#overLay ul").attr('data-module',"");
+    $("#welcomeNameID").html("Welcome Back, "+username);
+
+
+    if ( typeof username != "undefined" ) {
+        uid=Cookies.get('uid');
+
+        $.ajax({url     : "../main/read_config.php",
+            method		: "GET",
+            dataType	: "json",
+            async       : false,  
+            success		: function(data) {  
+            if ( ( data != '' ) && 
+                    ( Number(data[0].Status) > 0 ) ) {
+                    initConfig(data);
+                    windowLog.trace("event listner load");
+                }
+                else {
+                    windowLog.warn("error loading configurtions, exit");
+                    logout();
+                }
+            },
+            error     	: (function (jqxhr, textStatus, error ) {
+                windowLog.trace("Load schedule failed:"+textStatus + ", " + error);
+                logout();})
+        });
 
     windowLog.trace("Inside document ready");
 
@@ -732,6 +764,29 @@ $(document).ready( function() {
             }
         );
 
+      $.ajax({url         : "../main/read_contractors.php",
+                method		: "POST",
+                //data      	: {calltype:username},
+                dataType	: "json",
+                async       : false,  
+                success		: function(data) {  
+                    if ( ( data != '' ) && 
+                         ( Number(data[0].Status) > 0 ) ) {
+                       classArray["Contractors"] = new classType2(data,"Contractors",2); 
+                       classArray["Contractors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
+                        classArray["Contractors"].pNames[key.name.toString()]=key.contractor_id; 
+                    })
+                    windowLog.trace("Load all Contractors completed succesfully("+(classArray["Contractors"].arr.length)+")");
+                    }
+                    else 
+                        windowLog.trace("error loading contractors, exit");
+                },
+                error     	: (function (jqxhr, textStatus, error ) {
+                    windowLog.trace("Load contractors failed:"+textStatus + ", " + error);
+                    windowLog.warn('Error: 5', error);
+                })
+        });
+        /*
         fetch("../main/read_contractors.php")
             .then(res 	  => res.json())
             .then((data)  => { 
@@ -745,7 +800,7 @@ $(document).ready( function() {
                 windowLog.warn('Error: 5', error);
                 logout();
             }
-        );
+        ); */
 
         fetch("../main/read_vendors.php")
             .then(res 	  => res.json())
@@ -920,18 +975,16 @@ $(document).ready( function() {
             dataType	: "json",
             async       : false,  
             success		: function(tasks) {
-                if ((tasks != '')) {
+                if ( tasks !== '' ) {
                     //windowLog.trace("Load all tasks completed succesfully");
                     Tasks = new classTasks(tasks); // create Tasks class
                     classArray["Scheduler"] = Tasks;
-                   
-                    //lastID["Scheduler"]=Tasks.nextTaskID;
-                    windowLog.trace("Set the clock to pollingTasks:"+appConfig.tsPolling_Interval*1000*60);
                     Tasks.intervalEJID=window.setInterval(function() {
                         refreshReportCallBack();
                     }, appConfig.tsPolling_Interval*1000*60);
-                    windowLog.trace("Load all Tasks succesfully("+classArray["Scheduler"].arr.length+")");
-                    assignedTasksArr=Tasks.arrTasks.filter((x) => ( ( x.employee_id > 0) && ( Number(x.is_assigned) == 1 ) && ( classArray["Employees"].arr[classArray["Employees"].arr.findIndex(t => t.employee_id == x.employee_id)].is_active == "1" ) ));
+                    windowLog.trace("All Tasks loaded succesfully("+classArray["Scheduler"].arr.length+")");
+                    windowLog.trace("Set the clock to pollingTasks:"+appConfig.tsPolling_Interval*1000*60);
+                    assignedTasksArr=Tasks.arrTasks.filter((x) => ( ( x.employee_id > 0) && ( Number(x.is_assigned) === 1 ) && ( classArray["Employees"].arr[classArray["Employees"].arr.findIndex(t => t.employee_id === x.employee_id)].is_active === "1" ) ));
 
                 } else	{
                     windowLog.trace("error loading tasks, exit");
@@ -950,7 +1003,7 @@ $(document).ready( function() {
                 dataType	: "json",
                 async       : false,  
                 success		: function(data) {
-                    if (( data != '' ) &&
+                    if (( data !== '' ) &&
                         ( Number(data[0].Status) > 0 ))  {        
                         classArray["Employee Jobs"] = new classType1(data,"Employee Jobs",1);
                         classArray["Employee Jobs"].isTotalCost=false;
@@ -977,7 +1030,7 @@ $(document).ready( function() {
             windowLog.trace("Zoom out");
         }
         if ( pageAccessedByReload )
-            displayMainMenue(window.location.hash.slice(1)); // home or config
+            displayMainMenue("home"); // home or config (window.location.hash.slice(1)
     }
     else {
         $('img[id^=Pls]').remove();
@@ -988,7 +1041,7 @@ $(document).ready( function() {
     }
 
     $("#ul, #ur, #ll, #lr").addClass("homeScreen");
-});
+}}) ;
 
 function checkRefresh() {
     switch ( event.currentTarget.performance.navigation.type ) {

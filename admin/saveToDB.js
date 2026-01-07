@@ -41,7 +41,7 @@ function sortByyDate(a,b){
 
 }
 
-function appendRecord(module,record,record2) {  // record2 will be used i nthe future
+function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 will be used i nthe future
     
     windowLog.trace("Inside appendRecord to "+module);
 
@@ -63,10 +63,10 @@ function appendRecord(module,record,record2) {  // record2 will be used i nthe f
 
             if ( classArray["Employee Jobs"].arr.length > 0 )  { // if just edit then delete the record follow by adding a new one
                 let entryNumber=classArray["Employee Jobs"].retEntrybyID(taskID);
-                if ( entryNumber >= 0 ) { // save the record specific felds
-                    jc=classArray["Employee Jobs"].arr[entryNumber].job_closed;
-                    ij=classArray["Employee Jobs"].arr[entryNumber].images_json;
-                    classArray["Employee Jobs"].arr.splice(entryNumber,1);     // remove the old record 
+                if ( recordID >= 0 ) { // save the record specific felds
+                    jc=classArray["Employee Jobs"].arr[recordID].job_closed;
+                    ij=classArray["Employee Jobs"].arr[recordID].images_json;
+                    classArray["Employee Jobs"].arr.splice(recordID,1);     // remove the old record 
                 }
             }
            
@@ -94,7 +94,7 @@ function appendRecord(module,record,record2) {  // record2 will be used i nthe f
             }); 
   
             let resultT = Tasks.arrTasks.findIndex(t => t.task_id == taskID);
-            if (resultT != -1)  // task exist then delete the record (changes made to the record), follow by adding new one
+            if ( isNewRecord )  // task exist then delete the record (changes made to the record), follow by adding new one
                 Tasks.arrTasks.splice(resultT,1);     // remove the old record 
             else {
                 if (( employeeName != "" ) && // look for an existing task to update the seq number
@@ -141,7 +141,7 @@ function appendRecord(module,record,record2) {  // record2 will be used i nthe f
             });*/
 
             // update Task properties
-            if (resultT != -1) {
+            if ( isNewRecord ) {
             //if (entryNumber != -1) {
                 windowLog.trace("Updating new employee name at the tasks table(old):"+Tasks.arrTasks[resultT].employee_name+" new:"+record[2]);
                 windowLog.trace("Updating new description at tasks table(old):"+Tasks.arrTasks[resultT].task_description+" new:"+description);
@@ -157,17 +157,17 @@ function appendRecord(module,record,record2) {  // record2 will be used i nthe f
         case "Purchases"        :
 
             let entry1=classArray[module].retEntrybyID(record[0]);
-            if (entry1 != -1) {
-                classArray[module].arr[entry1].invoice_id      = record[0];
-                classArray[module].arr[entry1].project_number  = record[1];
-                classArray[module].arr[entry1].vendor_name     = record[2];
-                classArray[module].arr[entry1].invoice_number  = record[3];
-                classArray[module].arr[entry1].invoice_amount  = record[4];
-                classArray[module].arr[entry1].invoice_date    = record[5];
-                classArray[module].arr[entry1].payment_method  = record[6];
-                classArray[module].arr[entry1].invoice_desc    = record[7];
-                classArray[module].arr[entry1].file_uploaded   = record[8];
-                classArray[module].arr[entry1].foldername      = record[9];
+            if ( !isNewRecord ) {
+                classArray[module].arr[recordID].invoice_id      = record[0];
+                classArray[module].arr[recordID].project_number  = record[1];
+                classArray[module].arr[recordID].vendor_name     = record[2];
+                classArray[module].arr[recordID].invoice_number  = record[3];
+                classArray[module].arr[recordID].invoice_amount  = record[4];
+                classArray[module].arr[recordID].invoice_date    = record[5];
+                classArray[module].arr[recordID].payment_method  = record[6];
+                classArray[module].arr[recordID].invoice_desc    = record[7];
+                classArray[module].arr[recordID].file_uploaded   = record[8];
+                classArray[module].arr[recordID].foldername      = record[9];
                 //classArray[module].arr.splice(entryNumber,1);     // remove the item then add new/updted record
             }
             else { // record not found then add 
@@ -194,16 +194,16 @@ function appendRecord(module,record,record2) {  // record2 will be used i nthe f
         case "Payments"         :
 
             const entryN=classArray[module].retEntrybyID(record[0]);
-            if ( entryN != -1 ) {
-                classArray[module].arr[entryN].payment_id      = record[0];
-                classArray[module].arr[entryN].project_number  = record[1];
-                classArray[module].arr[entryN].payment_amount  = record[2];
-                classArray[module].arr[entryN].payment_date    = record[3];
-                classArray[module].arr[entryN].payment_method  = record[4];
-                classArray[module].arr[entryN].payment_number = record[5];
-                classArray[module].arr[entryN].description     = record[6];
-                classArray[module].arr[entryN].file_uploaded   = record[7];
-                classArray[module].arr[entryN].foldername      = record[8];
+            if ( !isNewRecord ) {
+                classArray[module].arr[recordID].payment_id      = record[0];
+                classArray[module].arr[recordID].project_number  = record[1];
+                classArray[module].arr[recordID].payment_amount  = record[2];
+                classArray[module].arr[recordID].payment_date    = record[3];
+                classArray[module].arr[recordID].payment_method  = record[4];
+                classArray[module].arr[recordID].payment_number  = record[5];
+                classArray[module].arr[recordID].description     = record[6];
+                classArray[module].arr[recordID].file_uploaded   = record[7];
+                classArray[module].arr[recordID].foldername      = record[8];
                 //classArray[module].arr.splice(entryNumber,1);     // remove the item then add new/updted record          
             }
             else {
@@ -228,10 +228,11 @@ function appendRecord(module,record,record2) {  // record2 will be used i nthe f
         case "Sub Contractors" :
 
             var tempeID=-1;
+            const entrySC=classArray[module].retEntrybyID(record[0]);
+
             if ( record[2] != "" )  // if Contractor name is not null
                 tempeID=classArray["Contractors"].pNames[record[2]];
-            const entrySC=classArray[module].retEntrybyID(record[0]);
-            if ( entrySC >= 0 ) {
+            if ( !isNewRecord ) {
                 classArray[module].arr[entrySC].task_id         = record[0];
                 classArray[module].arr[entrySC].project_number  = record[1];
                 classArray[module].arr[entrySC].contractor_name = record[2];
@@ -269,7 +270,7 @@ function appendRecord(module,record,record2) {  // record2 will be used i nthe f
                           
             if ( classArray[module].arr.length > 0 ) { // if just edit then delete the record and later add a new one
                  const entryE=classArray[module].retEntrybyID(record[0]);
-                if (entryE != -1) {
+                if ( !isNewRecord ) {
                     classArray[module].arr.splice(entryE,1);      
                     delete classArray[module].pNames[record[1]];        // remove the item from the pNames array
                     classArray["Employees"].colors[record2["fullname"]]=record2["profile_color"]; // add the color to the colors array
@@ -299,7 +300,7 @@ function appendRecord(module,record,record2) {  // record2 will be used i nthe f
         case "Contractors"      :
 
             const entryC=classArray[module].retEntrybyID(record[0]);
-            if ( entryC >= 0 ) {
+            if ( !isNewRecord ) {
                 classArray[module].arr[entryC].contractor_id   =  record[0];      
                 classArray[module].arr[entryC].name            =  record[1];
                 classArray[module].arr[entryC].notes           =  record[2];
@@ -329,7 +330,7 @@ function appendRecord(module,record,record2) {  // record2 will be used i nthe f
         case "Vendors"          :
 
             const entryV=classArray[module].retEntrybyID(record[0]);
-            if (entryV != -1) {
+            if ( !isNewRecord ) {
                 classArray[module].arr[entryV].vendor_id       =  record[0];       
                 classArray[module].arr[entryV].vendor_name     =  record[1];      
                 classArray[module].arr[entryV].vendor_address  =  record[2];      
@@ -361,7 +362,7 @@ function appendRecord(module,record,record2) {  // record2 will be used i nthe f
         case "Companies"        :
 
             const entryCM=classArray[module].retEntrybyID(record[0]);
-            if (entryCM != -1) {
+            if ( !isNewRecord ) {
                 classArray[module].arr[entryCM].company_id      =  record[0];       
                 classArray[module].arr[entryCM].company_name    =  record[1];
                 classArray[module].arr[entryCM].notes           =  record[2];
@@ -428,7 +429,7 @@ function appendRecord(module,record,record2) {  // record2 will be used i nthe f
         case "Hourly Rate"      :  
 
            const entryHR=classArray["Employees"].retEntrybyID(record[3]);
-            if (entryHR != -1) 
+            if ( !isNewRecord ) 
                 classArray["Employees"].arr[entryHR].hourlyrate=record[1]; // update the HR to the latest value
             
         break;
@@ -438,7 +439,7 @@ function appendRecord(module,record,record2) {  // record2 will be used i nthe f
             const prjName=record[1]+"-"+record[2]+"-"+record[3]+"-"+record[4]+"-"+record[5]+"-"+record[6];  // must change to a function
             const entryP=Projects.retEntrybyID(record[1]); // get the array entry corresponding to the project_number
 
-            if ( entryP != -1 ) { // just to be safe
+            if ( !isNewRecord ) { // just to be safe
                 const oldPrjName=Projects.arrProjects[entryP].project_name;
                 let entryP;
                 Tasks.arrTasks.map(function(record,index) {
@@ -513,7 +514,7 @@ function appendRecord(module,record,record2) {  // record2 will be used i nthe f
 
             //let entry=record.customer_number; 
             const entry=classArray["Customers"].arr.findIndex(t => t.customer_id == record.customer_id);
-            if ( entry != -1) { // exisitng customer
+            if ( !isNewRecord ) { // exisitng customer
                 classArray[module].arr[entry].customer_first_name=record.customer_first_name;
                 classArray[module].arr[entry].customer_last_name=record.customer_last_name;
                 classArray[module].arr[entry].customer_address_line1=record.customer_address_line1;
@@ -566,7 +567,7 @@ function appendRecord(module,record,record2) {  // record2 will be used i nthe f
             case "Scheduler"    :
                 let tEntry=Tasks.arrTasks.findIndex(t => t.task_id == record2["ID"]);
                 const cTime=date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();  // current time 
-                if ( tEntry == -1 )  { // existing task?
+                if ( tEntry === -1 )  { // existing task?
                    
                     Tasks.arrTasks.push({
                             employee_id       :   record2["employeeID"],//classArray['Employees'].pNames[record2["Installer"]],  // empID is taken from the employee.pNames array

@@ -13,7 +13,7 @@
         // allow to restore only if any rec was deleted, no other rec has been restored and the user is at the deleted screen    
         if ( (deletedRow2.length > 0) && 
              (!deleteOnce) && 
-             (deletedRow2[deletedRow2.length-1][0].screenName == $("#screen_name").html()) ) { // only restore the last record
+             (deletedRow2[deletedRow2.length-1][0].screenName === $("#screen_name").html()) ) { // only restore the last record
             //ctrlZ = true;   // flag to idicate to undo only if ctrlZ is true
             const rowNum=deletedRow2[deletedRow2.length-1][2].rowNumber
             //addNewRow("#result-table",lastScreen,rowNum,1); // restre the last deleted row
@@ -61,7 +61,7 @@
         windowLog.trace("TableKeyDown: ("+e.currentTarget.id+") ..inside keydown,key="+e.key);
         _lastAction="";
         //=customerPanes.filter(u => tableID.toLowerCase().includes(u.toLowerCase())) // if the active table is in customers
-        if ( (tableID == "#LeadsTableWrap") || (tableID == "#customerTblID") ) {  // special case when the input data is not tabular but a dialouge
+        if ( (tableID === "#LeadsTableWrap") || (tableID === "#customerTblID") ) {  // special case when the input data is not tabular but a dialouge
             numOfColumns=$(e.target).closest("div").find("input").length;
             //element='td';
             const innText=$(tableID+" label[for='"+e.target.id+"']")[0].innerText;
@@ -133,7 +133,7 @@
                 }
             }
        
-        if (e.key == 'z' && e.ctrlKey) {
+        if (e.key === 'z' && e.ctrlKey) {
            CtrlZ();
            windowLog.trace("key dowen- calling CtrlZ");
         }
@@ -170,7 +170,7 @@
 
                 case "Tel Number"       :
                     retValue=false;
-                    if ( (( digits.indexOf(e.key) != -1 ) || ( e.key == "Backspace" ))) {   //only allow digits
+                    if ( (( digits.indexOf(e.key) != -1 ) || ( e.key === "Backspace" ))) {   //only allow digits
                         retValue=true;
                         isList=charactersCount > 0?true: false;
                     }
@@ -289,8 +289,8 @@
                         windowLog.trace("Inside keyDown, turninig on Editing");
                         $(e.target).closest('div').find('[id="editTaskID"]').show();
                     }
-                    if ( e.target.closest('tr').id == "unAssignElementsTR" &&
-                            e.target.value.length == 0 ) // if projectName is empty and the task is in the unAssigned then remove the assign
+                    if ( e.target.closest('tr').id === "unAssignElementsTR" &&
+                            e.target.value.length === 0 ) // if projectName is empty and the task is in the unAssigned then remove the assign
                             $(e.target).closest('td').find('[id="assignID"]').hide();
                   
                 break;
@@ -298,7 +298,7 @@
                 case "Zip"                  :
                     showNewEntry=false; // do not allow new entry
                     retValue=false;
-                    if ( (( digits.indexOf(e.key) != -1 ) || ( e.key == "Backspace" )))    //only allow digits
+                    if ( (( digits.indexOf(e.key) != -1 ) || ( e.key === "Backspace" )))    //only allow digits
                         retValue=true;
                     else
                         windowLog.trace("Zip - Invalid character");
@@ -317,13 +317,13 @@
                     }
                         
                     retValue=true; // default
-                    if (( isDigit ) || ( e.key == "-" ) || ( e.key == "." ) || ( e.key == "Backspace" )) { // Allow digits,backspoace and .
-                        if ( (( e.target.value.indexOf(".") != -1 ) && ( e.key == "." ))  ||    // not allow more than one .
-                            (( e.target.value.length == 0 ) && ( e.key == "." )) ||            // not allow . if string is empty
-                            (( e.key == "-" ) && (header == "Invoice Amount") && (e.target.selectionStart == 0) && (e.target.value.indexOf("-") != -1)) || 
-                            (( e.key == "-" ) && (header == "Invoice Amount") && (e.target.selectionStart > 0)) ||
-                            (( e.key == "-" ) && (header == "Payment Amount") && (e.target.selectionStart == 0) && (e.target.value.indexOf("-") != -1)) || 
-                            (( e.key == "-" ) && (header == "Payment Amount") && (e.target.selectionStart > 0)) ) // allow only single minus at 1st place
+                    if (( isDigit ) || ( e.key === "-" ) || ( e.key === "." ) || ( e.key === "Backspace" )) { // Allow digits,backspoace and .
+                        if ( (( e.target.value.indexOf(".") != -1 ) && ( e.key === "." ))  ||    // not allow more than one .
+                            (( e.target.value.length === 0 ) && ( e.key === "." )) ||            // not allow . if string is empty
+                            (( e.key === "-" ) && (header === "Invoice Amount") && (e.target.selectionStart === 0) && (e.target.value.indexOf("-") != -1)) || 
+                            (( e.key === "-" ) && (header === "Invoice Amount") && (e.target.selectionStart > 0)) ||
+                            (( e.key === "-" ) && (header === "Payment Amount") && (e.target.selectionStart === 0) && (e.target.value.indexOf("-") != -1)) || 
+                            (( e.key === "-" ) && (header === "Payment Amount") && (e.target.selectionStart > 0)) ) // allow only single minus at 1st place
                         retValue=false;
                     }
                     else
@@ -362,7 +362,7 @@
                     
                 }
                
-                if ( e.key == "Backspace" ) // in case of a backspace trim the last character 
+                if ( e.key === "Backspace" ) // in case of a backspace trim the last character 
                     text = text.substring(0, text.length - 1);
                 else  
                     text += e.key;     // append the new charcter to the en
@@ -512,12 +512,12 @@
                 //$('#overLay').hide();
                 if ( lastScreen  !== "Scheduler" ) {
                     let leftMostTD = 1; // not allowed to go left beyond the 1st TD
-                    if (lastScreen == "Projects")
+                    if (lastScreen === "Projects")
                         leftMostTD = 2; // not allowed to go left beyond the 2nd TD  
                     // if lower left most TD - do nothing
                     if ( e.target.closest('td') != $(tableID+' tbody tr:first td:nth-child('+leftMostTD+')')[0] ) { 
                         // if not left most cell in the TR
-                        if ( (e.target.closest('td')) == $(e.target).closest('tr').find('td:nth-child('+leftMostTD+')')[0] )
+                        if ( (e.target.closest('td')) === $(e.target).closest('tr').find('td:nth-child('+leftMostTD+')')[0] )
                             currCell=currCell.closest('tr').prev().find('td:nth-child(' + (numOfColumns)+ ')'); // focus on the right most cell at the previous row
                         else 
                             currCell=currCell.prev();
@@ -534,11 +534,11 @@
                 switch (e.key) {
                     case "Backspace"    :
                         retValue = true;
-                        //if (charactersCount == 0)
+                        //if (charactersCount === 0)
                         //    origText = e.target.value ; // save the origText only at the first keystroke
                         
-                        if ( ( e.target.value.length == 1 ) )  {    // 1 means single chars left and with backspace it will delete /*( e.target.value.length == 0 ) ||*/
-                                /*if ( e.target.value.length == 1 )*/  // 1 means this is the last charachter so the backspace will remove it
+                        if ( ( e.target.value.length === 1 ) )  {    // 1 means single chars left and with backspace it will delete /*( e.target.value.length === 0 ) ||*/
+                                /*if ( e.target.value.length === 1 )*/  // 1 means this is the last charachter so the backspace will remove it
                             editing = false;
                             charactersCount=0;
                             $("#overLay ul").empty();
@@ -564,7 +564,7 @@
                                 //e.target=$('#overLay ul li').first()[0]; // set the target to the first element in the list
                             }
                             else { // only one entry left in the list than act as enter
-                                if ( lastScreen == "Customers" ) {
+                                if ( lastScreen === "Customers" ) {
                                     const cstmNumber=classArray["Customers"].cNames.findIndex(x => x === $('#overLay ul li').first().text());
                                     updateCustomerPane(Number(classArray["Customers"].arr[cstmNumber].customer_id));
                                 } else {
@@ -866,16 +866,16 @@
                             retValue=false;
                         } 
                         else {
-                            if ( e.target.value.length == e.target.selectionStart ) { // only move one cell right if the cursor at the end of the field
-                                if (( e.target.type != 'date' ) && 
-                                    ( e.target.type != 'time' )) {
+                            if ( e.target.value.length === e.target.selectionStart ) { // only move one cell right if the cursor at the end of the field
+                                if (( e.target.type !== 'date' ) && 
+                                    ( e.target.type !== 'time' )) {
                                     currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell
-                                    if (e.target.closest('td') != $(tableID+' tbody tr:last td:last-child')[0]) {
+                                    if (e.target.closest('td') !== $(tableID+' tbody tr:last td:last-child')[0]) {
                                         if ( (currCell.index() < numOfColumns) )    // Not end of the row    
                                             currCell = currCell.next();             // Move one cell to the right
                                         else {
                                             let leftMostTD = 1; // point to the 1st TD in the next row
-                                            if (lastScreen == "Projects")
+                                            if (lastScreen === "Projects")
                                                 leftMostTD = 2; // point to the 2nd TD in the next row (skipping the project number)  
                                             currCell=currCell.closest('tr').next().find('td:nth-child('+leftMostTD+')'); 
                                         }
@@ -1079,8 +1079,7 @@
                     }
             }
         //}
-        windowLog.trace("keydown, ret_value:"+retValue+" charCount="+charactersCount
-        );
+        windowLog.trace("keydown, ret_value:"+retValue+" charCount="+charactersCount);
         if ( !retValue)
             e.preventDefault();
         return retValue;

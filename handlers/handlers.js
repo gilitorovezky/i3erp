@@ -88,6 +88,24 @@ Promise.all(requests)
         return false;
     }
 
+
+    $('body').on('keydown', function(event) {
+
+        windowLog.trace("Inside minDiv keydown ID:"+event.target.id+" key:"+event.key);
+         const isCtrlShift = (event.ctrlKey || event.metaKey) && event.shiftKey;
+    
+        // Check if the 'S' key is pressed. Use event.code for modern browsers.
+        if (isCtrlShift && event.code === 'KeyV') {
+            event.preventDefault(); // Prevent the browser's default action (e.g., save page, screenshot)
+            
+            console.log('Ctrl + Shift + S pressed! Custom action here.');
+            alert('Custom Save Action Executed!');
+            
+            // Place your custom logic here (e.g., save data via AJAX)
+        }
+    });
+
+
     $('#overLay').on("click",function(event) {
 
         windowLog.trace("Inside overLay Click");
@@ -332,7 +350,6 @@ Promise.all(requests)
 
         }
     }
-
 
     $("body").delegate('#captionRow',"keydown", function(event) {
 
@@ -678,7 +695,8 @@ Promise.all(requests)
 
     $("body").delegate("#prjShortCut,#cstmrShortCut","keydown",function(event) {
         windowLog.trace("Invoking keydown handler(id):"+this.id);
-        if ( !(event.currentTarget.closest('table').id === "innerCellID" && event.key === "Tab" ) ||
+        const inValidKey=event.ctrlKey || event.metaKey || event.key === "Tab" || event.key == "Alt"; //|| exceptionKeys(event.key);
+        if ( !(event.currentTarget.closest('table').id === "innerCellID" &&  inValidKey) ||
               $('#overLay ul li').length > 1 )
             TblKeyDown(event);
     });

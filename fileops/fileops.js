@@ -203,7 +203,7 @@ function closeFileUploadScreen() {
     $("#fileUploadControl").hide();
     $("#fileUploadControl").html("");
     $("#main-menue").removeClass("greyed-out");
-
+    
 }
 
 
