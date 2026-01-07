@@ -33,13 +33,85 @@ const captions = {
         "user":["Sign In","Sign Out","Gas","Upload Files"],	    // User main menue
         "handlers":[upperLeft,upperRight,lowerLeft,lowerRight]} // handlers functions
 
-const headerToTableSchema = { // look up table to match record to db schmea
+const headerToDBFieldLookup = { // look up table to match record to db schmea
 
     "Projects": {'Project Number':'project_number','Company Name':'company_name','Customer Last Name':'project_cstmr_lastname','Project Type':'project_type','Project Manager/Rep':'project_m_contractor','Project Address':'project_address','Files':'file_uploaded'},
     "Payments": {'payment_id':'payment_id','Project Number':'project_number','Payment Amount':'payment_amount','Payment Date':'payment_date','Payment Method':'payment_method','Payment Number':'payment_number','Description':'description','Files':'file_uploaded'},
 } 
  
-
+const nametoIDLookup = {
+    "Project Number":       {"name":'projectNumber',
+                             "id":'prjctNumberID',
+                             "header":'Project Number',
+                             "dbField":'project_number',
+                             "modules":{'Projects':{"display":"yes"},
+                                        'Payments':{"display":"yes"}},
+                             "mandatory":true},
+    "Company Name":         {"name":'companyName',
+                             "id":'companyNameID',
+                             "header":'Company Name',
+                             "dbField":'company_name',
+                             "modules":{'Projects':{"display":"yes"},
+                                        'Payments':{"display":"yes"}},
+                             "mandatory":true},
+    "Customer Last Name":   {"name":'customerLastName',
+                             "id":'customerLastNameID',
+                             "header":'Customer Last Name',
+                             "modules":{'Projects':{"display":"yes"},
+                                        'Payments':{"display":"yes"}},
+                             "mandatory":true},
+    "Project Type":         {"name":'projectType',
+                             "id":'projectTypeID',
+                             "header":'Project Type',
+                             "modules":{'Projects':{"display":"yes"}},
+                             "mandatory":true},
+    "Project Manager/Rep":  {"name":'projectManagerRep',
+                             "id":'projectManagerRepID',
+                             "header":'Project Manager/Rep',
+                             "modules":{'Projects':{"display":"yes"}},
+                             "mandatory":true},
+    "Project Address":      {"name":'projectAddress',
+                             "id":'projectAddressID',
+                             "header":'Project Address',
+                             "modules":{'Projects':{"display":"yes"}},
+                             "mandatory":true},
+    "Payment Amount":       {"name":'paymentAmount',
+                             "id":'paID',
+                             "header":'Payment Amount',
+                             "modules":{'Payments':{"display":"yes"}},
+                             "mandatory":true},
+    "Payment Date":         {"name":'paymentDate',
+                             "id":'paymentDateID',
+                             "header":'Payment Date',
+                             "modules":{'Payments':{"display":"yes"}},
+                             "mandatory":true},
+    "Payment Method":       {"name":'paymentMethod',    
+                             "id":'pmID',
+                             "header":'Payment Method',
+                             "modules":{'Payments':{"display":"yes"}},
+                             "mandatory":true},
+    "Payment Number":       {"name":'paymentNumber',
+                             "id":'pnID',
+                             "header":'Payment Number',
+                             "modules":{'Payments':{"display":"yes"}},
+                             "mandatory":true},
+    "Files":                {"name":'file_uploaded',
+                             "id":'file_uploaded',
+                             "header":'Project Number',
+                             "modules":{'Projects':{"display":"yes"},
+                                        'Payments':{"display":"yes"},
+                                        'Employee Jobs':{"display":"yes"},
+                                        'Purchases':{"display":"yes"},
+                                        'Sub Contractors':{"display":"yes"},
+                                        'Vendors':{"display":"yes"},
+                                        'Companies':{"display":"yes"},
+                                        'Contractors':{"display":"yes"},
+                                        'Employees':{"display":"yes"},
+                                        'Customers':{"display":"yes"},
+                                        'Estimates':{"display":"yes"},
+                                        'Scheduler':{"display":"yes"}},
+                             "mandatory":false}
+}; // look up table to match names to their IDs
 
 // only the first 4 do not include thead and <th></th> since these records are also showing in the project summary therefor no need delete 
 const headers = {
@@ -1552,13 +1624,13 @@ function prepareProjectRecords2Display(inputArr) {
         // ( username == "eddie") ) {    // only show projects for the associated with the PM or Eddie
         outArr += `<tr>`;
         outArr += `<td></td>`; // pleace holder for delete image
-        outArr += `<td><input tabindex="0" type="text" name="projectNumber" id="prjctNumberID" class="projectNameClass" value="${inputArr[i].project_number}" size="44" maxlength="50">`;
+        outArr += `<td><input tabindex="0" class="projectNameClass" type="text" id="prjctNumberID" name="projectNumber" value="${inputArr[i].project_number}" size="44" maxlength="50">`;
         outArr += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="projectID" value=${inputArr[i].project_id}></td>`;
-        outArr += `<td><input tabindex="0" type="text" name="companyName" id="cnID" class="projectNameClass" value="${inputArr[i].company_name}"></td>`;
-        outArr += `<td><input tabindex="0" type="text" name="customerLastName" id="clnID" class="projectNameClass" value="${inputArr[i].project_cstmr_lastname}"></td>`;
-        outArr += `<td><input tabindex="0" type="text" name="projectType" id="ptID" class="projectNameClass" value="${inputArr[i].project_type}"></td>`;
-        outArr += `<td><input tabindex="0" type="text" name="projectSalesRep" id="psrID" class="projectNameClass" value="${inputArr[i].project_m_contractor}"></td>`;
-        outArr += `<td><input tabindex="0" type="text" name="projectAddress" id="paddrID" class="projectNameClass" value='${inputArr[i].project_address}'"></td>`;
+        outArr += `<td><input tabindex="0" class="projectNameClass" type="text" name="companyName" id="cnID" value="${inputArr[i].company_name}"></td>`;
+        outArr += `<td><input tabindex="0" class="projectNameClass" type="text" name="customerLastName" id="clnID" value="${inputArr[i].project_cstmr_lastname}"></td>`;
+        outArr += `<td><input tabindex="0" class="projectNameClass" type="text" name="projectType" id="ptID" value="${inputArr[i].project_type}"></td>`;
+        outArr += `<td><input tabindex="0" class="projectNameClass" type="text" name="projectSalesRep" id="psrID" value="${inputArr[i].project_m_contractor}"></td>`;
+        outArr += `<td><input tabindex="0" class="projectNameClass" type="text" name="projectAddress" id="paddrID" value='${inputArr[i].project_address}'"></td>`;
         fileupload=uploadFilesMngr(Number(inputArr[i].file_uploaded,(inputArr[i].project_number != "")));
         outArr += `<td>${fileupload}</td>`;
         outArr += `</tr>`;

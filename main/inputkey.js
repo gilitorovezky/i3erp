@@ -515,6 +515,7 @@
                     if (lastScreen === "Projects")
                         leftMostTD = 2; // not allowed to go left beyond the 2nd TD  
                     // if lower left most TD - do nothing
+                    currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell      
                     if ( e.target.closest('td') != $(tableID+' tbody tr:first td:nth-child('+leftMostTD+')')[0] ) { 
                         // if not left most cell in the TR
                         if ( (e.target.closest('td')) === $(e.target).closest('tr').find('td:nth-child('+leftMostTD+')')[0] )
@@ -523,6 +524,7 @@
                             currCell=currCell.prev();
                         active--;  
                         currCell.children().first().focus();	// focus on the first input!!
+                        currCell.children().first().css({'background-color'    : '#aadef0ff'}); // remove the highlight from the current cell        
                     }
                     windowLog.trace("Prevent default5");
                     e.preventDefault(); // prevent any further ShiftTAB
@@ -1047,7 +1049,8 @@
                     } else  {
                         $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveNewBtn']").hide();
                         $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").hide();
-                        $(lastFocusedEntry[lastFocusedEntry.length-1].currCell).closest('tr').find("a[id='allFilesID']").addClass("greyed-out")
+                        $(lastFocusedEntry[lastFocusedEntry.length-1].currCell).closest('tr').find("a[id='allFilesID']").addClass("greyed-out");
+                        $(lastFocusedEntry[lastFocusedEntry.length-1].currCell).closest('tr').find("a[id='allFilesID']").removeClass('assign'); // turn on the file button
                     }
                     /*
                     if ( e.target.value.length === selectionLen ) { // whole field selection    
@@ -1160,6 +1163,7 @@
                             if ( $(lastCell).children().first().attr('id') === "prjctNumberID" ) { // if the field name is not the description than its the project field
                                 //if ( $(lastCell).closest('tr').find('[id="prjctNumberID"]').val() != "" 
                                 lastCell.closest('tr').find("a[id='allFilesID']").removeClass('greyed-out'); // turn on the file button
+                                lastCell.closest('tr').find("a[id='allFilesID']").addClass('assign'); // turn on the file button
                             }
                             if ( validateEnableSaveConditions(module,$(lastCell).closest('tr')) )
                                 $("#SaveNewBtn,#SaveCloseBtn").show();
@@ -1201,6 +1205,7 @@
                     if ( $(currCell).children().first().attr('id') === "prjctNumberID" ) { // if the field name is not the description than its the project field
                                 //if ( $(lastCell).closest('tr').find('[id="prjctNumberID"]').val() != "" 
                             currCell.closest('tr').find("a[id='allFilesID']").addClass('greyed-out'); // turn on the file button
+                            currCell.closest('tr').find("a[id='allFilesID']").removeClass('assign'); // turn on the file button
                     }
                     $(currCell).children().first().val("");
                     if (( currCell.id == "prjShortCut" ) || 
@@ -1451,15 +1456,25 @@
         
         switch ( module ) {
             case "Payments" :
-        
-                retCode= (currentTR.find('[id="paID"]').val().length>0 &&
-                          currentTR.find('[id="pmID"]').val().length>0 &&
-                          currentTR.find('[id="pnID"]').val().length>0)?true:false;
+                retCode = ( currentTR.find('[id="prjctNumberID"]').val().length>0 && 
+                            currentTR.find('[id="paID"]').val().length>0 &&
+                            currentTR.find('[id="pmID"]').val().length>0 &&
+                            currentTR.find('[id="pnID"]').val().length>0)?true:false;
+                break;
+
+            case "Scheduler" :
+                retCode = ( currentTR.find('[id="prjctNumberID"]').val().length>0 || 
+                            currentTR.find('[id="schdlrDcrptnID"]').val().length>0 )?true:false;
+                break;
                 
             case "Projects" :
-                retCode = currentTR.find('[id="prjctNumberID"]').val().length>0?true && retCode :false;
+                retCode = ( currentTR.find('[name="companytName"]').val().length>0 && 
+                            currentTR.find('[name="customerLastName"]').val().length>0 &&
+                            currentTR.find('[name="projectType"]').val().length>0 &&
+                            currentTR.find('[name="projectManagerRep"]').val().length>0 &&
+                            currentTR.find('[name="projectAddress"]').val().length>0)?true:false;
 
-                $(currentTR).find("td:has(:text)").each(function() { // start the loop past the project number
+                /*$(currentTR).find("td:has(:text)").each(function() { // start the loop past the project number
                     windowLog.trace("TD nodeName: "+this.childNodes[0].nodeName );
                     trTextInputLen += this.childNodes[0].value.length;
                 });
@@ -1467,14 +1482,14 @@
                 $(currentTR).find("td:has(input[type='date'])").find('input').each(function() {
                     if ( this.value != today )
                         trTextInputLen++;
-                });
+                });*/
                 /*$(currentTR).find('td:gt(1)').each(function() { // start the loop past the project number
                     windowLog.trace("TD nodeName: "+this.childNodes[0].nodeName );
                     trTextInputLen += this.childNodes[0].value.length;
                 });*/
         }
         
-        return trTextInputLen>0?trTextInputLen&&retCode:false;
+        return retCode;
         /*
         
         if ( currentTR.find('[id="prjctNumberID"]').val() != "" ||
