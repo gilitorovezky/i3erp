@@ -260,7 +260,7 @@ function saveRow(moduleName,element) {
                        "keyName"       :   headers[moduleName]['primaryKey'],
                        "tableName"     :   headers[moduleName]['tableName'],
                        "rootDir"       :   rootDir,
-                       "headers"       :   headerToTableSchema[moduleName]};
+                       "headers"       :   headerToDBFieldLookup[moduleName]};
 
     /*arrObj.push({"moduleName"   :   moduleName,     // entry 0
                  "subFolderName":   "",   // will be updated later with the contactanation of all the fields record
@@ -418,7 +418,8 @@ function saveRow(moduleName,element) {
         case "Payments"         :
             fullProjectName=tempRow[1];
             projectSet=true;    // set the projectSet flag to true for Purchases and all of EJ, Payments and SC
-            tempRow.push(contactAllFields); // push the employee_id that saved in the table hidden
+            //tempRow.push(contactAllFields); // push the employee_id that saved in the table hidden
+            tempRow2["Folder Name"]=contactAllFields;
         break;
 
         case "Employees"        :
@@ -556,8 +557,8 @@ function saveRow(moduleName,element) {
 
             windowLog.trace("Saving to DB "+(ret_value?"has been successfull":"failed"));
             DelCounter++;;     // one of Two conditons to allow delete: done saving or any report length > 0
-            const recordPntr=classArray[module].retEntrybyID(ID);
-            appendRecord(moduleName,tempRow,tempRow2,isNewRecord,recordPntr); // update the corresponding record int he cache 
+            const entryPntr=classArray[moduleName].retEntrybyID(ID);
+            appendRecord(moduleName,tempRow,tempRow2,isNewRecord,entryPntr); // update the corresponding record int he cache 
             if ( projectSet && (fullProjectName != "") ) { // perform the next paragraph only if projectSet is true;
                 var prjID=Projects.retEntrybyID(tempRow[1].split("-")[0]); // get the Project Index of the name. the projectID is not neccesarily the Project Index. 
                 // in case of a new project, prjid will not be found since it happens in append record that called later. 
