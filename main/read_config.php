@@ -11,22 +11,23 @@
         $paramters=mysqli_query($con,$sql_st);
         file_put_contents('../log/log_'.$logDate.'.log', "(read_config) ".$current_time." info 2-Num of rows:".$paramters->num_rows."\n", FILE_APPEND); 
         if ( $paramters->num_rows > 0 ) {
-            $row = mysqli_fetch_assoc($paramters);
-            $ret_recs[1] =  array("environment"                     =>  $row["environment"],
-                                  "debug_level"                     =>  $row["debug_level"],
-                                  "logins_polling_interval"         =>  $row["logins_polling_interval"],
-                                  "newTask_polling_interval"        =>  $row["newTask_polling_interval"],
-                                  "taskStatus_polling_interval"     =>  $row["taskStatus_polling_interval"],
-                                  "app_version"                     =>  $row["app_version"],
-                                  "db_version"                      =>  $row["db_version"],
-                                  "maxUploadFileSize"               =>  $row["maxUploadFileSize"],
-                                  "maxUAtasksInRow"                 =>  $row["maxUAtasksInRow"],
-                                  "maxUArows"                       =>  $row["maxUArows"]
+             $row = mysqli_fetch_assoc($paramters);
+             $ret_recs[1] =  array("environment"                     =>  $row["environment"],
+                                   "debug_level"                     =>  $row["debug_level"],
+                                   "logins_polling_interval"         =>  $row["logins_polling_interval"],
+                                   "newTask_polling_interval"        =>  $row["newTask_polling_interval"],
+                                   "taskStatus_polling_interval"     =>  $row["taskStatus_polling_interval"],
+                                   "app_version"                     =>  $row["app_version"],
+                                   "db_version"                      =>  $row["db_version"],
+                                   "maxUploadFileSize"               =>  $row["maxUploadFileSize"],
+                                   "maxUAtasksInRow"                 =>  $row["maxUAtasksInRow"],
+                                   "maxUArows"                       =>  $row["maxUArows"],
+                                   "masterModuleAttributes"          =>  $row["masterModuleAttributes"]
                                 );
             
             file_put_contents('../log/log_'.$logDate.'.log', "(read_config) ".$current_time." info 3-".print_r($ret_recs[1],true)."\n", FILE_APPEND); 
         }
-        $ret_recs[0] = array("Status" => 1);  // Need to returfor new employeesn 
+        $ret_recs[0] = array("Status" => 1);  // Need to return for new employees
        
     } else {
         file_put_contents('../log/log_'.$logDate.'.log',"(read_config) ".$current_time." error 1-sql connect error:".mysqli_connect_errno()."\n", FILE_APPEND); 
