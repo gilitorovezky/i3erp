@@ -64,7 +64,7 @@
                 
                 row += `<td><input tabindex="0" type="text" name="projectName" id="prjctNumberID" class="projectNameClass" maxlength="200" value='${tempRow[3].Name}'>`;
                 row += `<input type="hidden" id='${headers['Purchases']['primaryKey']}' name="invoiceID" value=${ID}></td>`;
-                row += `<td><input tabindex="0" type="text" id="vendorNameID" name="vendorName" id="vnID" class="projectNameClass" maxlength="20" value='${tempRow[index++].value}'></td>`;
+                row += `<td><input tabindex="0" type="text" id="vendorNameID" name="vendorName" id="vendorID" class="projectNameClass" maxlength="20" value='${tempRow[index++].value}'></td>`;
                 row += `<td><input tabindex="0" type="text" name="invoiceNumber" id="invceNmbrID" class="projectNameClass" maxlength="40" value=${tempRow[index].value}></td>`;
                 amount='';
                 if ( restore ) // undo the fields nnly if ctrlZ was down
@@ -77,7 +77,7 @@
                 if ( restore )
                     tempDay=tempRow[index].value;
                 index++;
-                row += `<td><input tabindex="0" type="text" id="invcDscrptnID" name="Description" class="projectNameClass" maxlength="40" value=${tempRow[index].value}></td>`;
+                row += `<td><input tabindex="0" type="text" id="dscrptnID" name="description" class="projectNameClass" maxlength="40" value=${tempRow[index].value}></td>`;
                 row += `<td style="width:8%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
             break;
 
@@ -91,7 +91,7 @@
                      amount=tempRow[++index].value;
                 row += `<td ><input type="text" name="paymentAmount" id="paID" class="projectNameClass" value=${amount}></td>`;
                 index++;    
-                row += `<td><input tabindex="0" type="date" name="jobDate" id="jdID" class="inputDate" value=${tempDay}></td>`;
+                row += `<td><input tabindex="0" type="date" name="jobDate" id="paymentDateID" class="inputDate" value=${tempDay}></td>`;
                 row += `<td><input tabindex="0" type="text" name="paymentMethod" id="pmID" class="projectNameClass" value=${tempRow[index++].value}></td>`;
                 //row += `<td><input tabindex="0" type="text" name="referenceNumber" id="rnID" class="projectNameClass" value=${tempRow[index++].value}></td>`;
                 if ( restore ) 
@@ -211,7 +211,7 @@
             case "Vendors" :
                 //if ( restore )                    
                 //    ID= tempRow[4].ID;
-                row += `<td><input tabindex="0" type="text" name="vendorName" id="vnID" class="projectNameClass" maxlength="50" value='${tempRow[3].Name}'>`;
+                row += `<td><input tabindex="0" type="text" name="vendorName" id="vendorID" class="projectNameClass" maxlength="50" value='${tempRow[3].Name}'>`;
                 row += `<input type="hidden" id='${headers['Vendors']['primaryKey']}' name="vendorID" value=${ID}></td>`;
                 row += `<td><input tabindex="0" type="text" name="vendorAddress" id="vaID" class="projectNameClass" maxlength="50" value=${tempRow[index++].value}></td>`;
                 row += `<td><input tabindex="0" type="text" name="vendorNotes" id="vNotesID" class="projectNameClass" maxlength="50" value=${tempRow[index].value}></td>`;

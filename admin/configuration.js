@@ -204,7 +204,7 @@
             for (var i = 0; i < length; i++) { //loop throu the return msg , starting from 1 since 0 is for the return message                    
                 out += `<tr>`;
                 out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="DeleteImage" alt='plus' width='10' height='10'></td>`;
-                out += `<td><input tabindex="0" type="text" name="vendorName" id="vnID" class="projectNameClass" maxlength="20" value="${eArray[i].vendor_name}">`;
+                out += `<td><input tabindex="0" type="text" name="vendorName" id="vendorID" class="projectNameClass" maxlength="20" value="${eArray[i].vendor_name}">`;
                 out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="employeeID" value=${eArray[i].vendor_id}></td>`;
                 out += `<td><input tabindex="0" type="text" name="vendorAddress" id="vaID" class="projectNameClass" maxlength="40" value='${eArray[i].vendor_address}'></td>`;
                 out += `<td><input tabindex="0" type="text" name="vendorNotes" id="vNotesID" class="projectNameClass" maxlength="50" value="${eArray[i].notes}"></td>`;

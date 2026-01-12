@@ -471,13 +471,13 @@ function saveRow(moduleName,element) {
         break;
 
         case "Vendors"          :
-            if ( element.id == "vnID" ) {      // save the origText only if the updated field is the vendor name
+            if ( element.id === "vendorID" ) {      // save the origText only if the updated field is the vendor name
                 tempRow.push(origText);          // oush the orig company name
-                tempRow2["vnID"]=origText;
+                tempRow2["vendorID"]=origText;
             }
             else {
                 tempRow.push("");             // push ""
-                tempRow2["vnID"]="";
+                tempRow2["vendorID"]="";
             }
         break;
 

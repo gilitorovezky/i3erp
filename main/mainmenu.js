@@ -352,6 +352,7 @@ class classConfig {
         this.estimates_dir=this.root+fldrs.system.estimates;
         this.maxUAtasksInRow=arrConfig[1].maxUAtasksInRow;
         this.maxUArows=arrConfig[1].maxUArows;
+        this.masterModuleAttributes=JSON.parse(arrConfig[1].masterModuleAttributes)
     }
 }
 
