@@ -1453,6 +1453,15 @@
         var retCode=true;
         
         windowLog.trace("Inside validation("+module+")");
+        for (const [key, value] of Object.entries(headerToDBFieldLookup[module])) {
+            if ( Object.keys(nametoIDLookup[key].modules).includes(module) ) { // {
+                if ( nametoIDLookup[key]["modules"][module]["display"]) { // only if the field is displayed
+                    retCode=retCode && currentTR.find('[id=' + nametoIDLookup[key].id + ']').val().length>0;
+                }
+            }
+                console.log("Found")
+             console.log(`${key}: ${value}`);
+        }
         
         switch ( module ) {
             case "Payments" :
@@ -1498,3 +1507,18 @@
         else
             return false;*/
     }
+
+/*
+    // If you need to search by value frequently, create a reverse index
+const obj = { name: 'John', age: 30, city: 'NYC' };
+
+// Build reverse lookup (value -> key)
+const reverseMap = new Map();
+for (const [key, value] of Object.entries(obj)) {
+    reverseMap.set(value, key);
+}
+
+// O(1) lookup by value
+console.log(reverseMap.get('John')); // 'name'
+console.log(reverseMap.get(30));     // 'age'
+// */
