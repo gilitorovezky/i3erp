@@ -37,6 +37,9 @@ const headerToDBFieldLookup = { // look up table to match record to db schmea
 
     "Projects": {'Project Number':'project_number','Company Name':'company_name','Customer Last Name':'project_cstmr_lastname','Project Type':'project_type','Project Manager/Rep':'project_m_contractor','Project Address':'project_address','Files':'file_uploaded'},
     "Payments": {'Project Number':'project_number','Payment Amount':'payment_amount','Payment Date':'payment_date','Payment Method':'payment_method','Payment Number':'payment_number','Description':'description','Files':'file_uploaded'},
+    "Sub Contractors": {'Contractor Name':'contractor_name','Job Date':'job_date','Payment Amount':'payment_amount','Check number':'check_number','Date paid':'date_paid','Description':'description','Files':'file_uploaded'},
+    "Employee Jobs": {'Full Name':'full_name','Job Date':'job_date','Job SignIn':'job_signin_time','Lunch SignIn':'lunch_signin_time','Lunch SignOut':'lunch_signout_time','Job SignOut':'job_signout_time','Total Hours':'total_hours','Description':'description','Total cost':'total_cost','Files':'file_uploaded'},
+    "Purchases": {'Project Number':'project_number','Vendor':'vendor_name','Invoice Number':'invoice_number','Invoice Amount':'invoice_amount','Invoice Date':'invoice_date','Payment Method':'payment_method','Description':'description','Files':'file_uploaded'},
 } 
  
 const nametoIDLookup = {
@@ -44,89 +47,147 @@ const nametoIDLookup = {
                              "id":"prjctNumberID",
                              "header":"Project Number",
                              "dbField":"project_number",
-                             "modules":{"Projects":{"display":true},
-                                        "Payments":{"display":true}},
-                             "mandatory":true},
+                             "modules":{"Projects":{"display":true,
+                                                    "mandatory":true},
+                                        "Payments":{"display":true,
+                                                    "mandatory":true}}},
+
+    "Project Address":      {"name":"projectAddress",
+                             "id":"projectAddressID",
+                             "header":"Project Address",
+                             "dbField":"project_address",
+                             "modules":{"Projects":{"display":true,
+                                                    "mandatory":true}}},
+
     "Company Name":         {"name":"companyName",
                              "id":"companyNameID",
                              "header":"Company Name",
                              "dbField":"company_name",
-                             "modules":{"Projects":{"display":true},
-                                        "Payments":{"display":true}},
-                             "mandatory":true},
+                             "modules":{"Projects":{"display":true,
+                                                    "mandatory":true},
+                                        "Payments":{"display":true,
+                                                    "mandatory":true}}},
+
     "Customer Last Name":   {"name":"customerLastName",
                              "id":"customerLastNameID",
                              "header":"Customer Last Name",
-                             "modules":{"Projects":{"display":true},
-                                        "Payments":{"display":true}},
-                             "mandatory":true},
+                             "modules":{"Projects":{"display":true,
+                                                    "mandatory":true},
+                                        "Payments":{"display":true,
+                                                    "mandatory":true}}},
+
     "Project Type":         {"name":"projectType",
                              "id":"projectTypeID",
                              "header":"Project Type",
-                             "modules":{"Projects":{"display":true}},
-                             "mandatory":true},
+                             "modules":{"Projects":{"display":true,
+                                                    "mandatory":true}}},
+
     "Project Manager/Rep":  {"name":"projectManagerRep",
-                             "id":"projectManagerRepID",
+                             "id":"projectSalesRepID",
                              "header":"Project Manager/Rep",
-                             "modules":{"Projects":{"display":true}},
-                             "mandatory":true},
+                             "modules":{"Projects":{"display":true,
+                                                    "mandatory":true}}},
+
     "Project Address":      {"name":"projectAddress",
                              "id":"projectAddressID",
                              "header":"Project Address",
-                             "modules":{"Projects":{"display":true}},
-                             "mandatory":true},
+                             "modules":{"Projects":{"display":true,
+                                                    "mandatory":true}}},
+
     "Payment Amount":       {"name":"paymentAmount",
                              "id":"paID",
                              "header":"Payment Amount",
-                             "modules":{"Payments":{"display":true}},
-                             "mandatory":true},
+                             "modules":{"Payments":{"display":true,
+                                                    "mandatory":true}}},
+
+    /*"Project Sales Rep":    {"name":"projectSalesRep",
+                             "id":"projectSalesRepID",
+                             "header":"Project Sales Rep",
+                             "modules":{"Projects":{"display":true,
+                                                    "mandatory":true}}},*/
+
     "Payment Date":         {"name":"paymentDate",
                              "id":"paymentDateID",
                              "header":"Payment Date",
-                             "modules":{"Payments":{"display":true}},
-                             "mandatory":true},
+                             "modules":{"Payments":{"display":true,
+                                                    "mandatory":true}}},
+
     "Payment Method":       {"name":"paymentMethod",    
                              "id":"pmID",
                              "header":"Payment Method",
-                             "modules":{"Payments":{"display":true}},
-                             "mandatory":true},
+                             "modules":{"Payments":{"display":true,
+                                                    "mandatory":true}}},
+
     "Payment Number":       {"name":"paymentNumber",
                              "id":"pnID",
                              "header":"Payment Number",
-                             "modules":{"Payments":{"display":true}},
-                             "mandatory":true},
+                             "modules":{"Payments":{"display":true,
+                                                    "mandatory":true}}},
+
     "Description":          {"name":"description",
-                            "id":"file_uploaded",
-                            "header":"Files",
-                            "modules":{"Projects":{"display":true},
-                                       "Payments":{"display":true},
-                                        "Employee Jobs":{"display":true},
-                                        "Purchases":{"display":true},
-                                        "Sub Contractors":{"display":true},
-                                        "Vendors":{"display":true},
-                                        "Companies":{"display":true},
-                                        "Contractors":{"display":true},
-                                        "Employees":{"display":true},
-                                        "Customers":{"display":true},
-                                        "Estimates":{"display":true},
-                                        "Scheduler":{"display":true}},
-                                        "mandatory":false},
-     "Files":                {"name":"file_uploaded",
-                             "id":"file_uploaded",
+                             "id":"descriptionID",
                              "header":"Files",
-                             "modules":{"Projects":{"display":true},
-                                        "Payments":{"display":true},
-                                        "Employee Jobs":{"display":true},
-                                        "Purchases":{"display":true},
-                                        "Sub Contractors":{"display":true},
-                                        "Vendors":{"display":true},
-                                        "Companies":{"display":true},
-                                        "Contractors":{"display":true},
-                                        "Employees":{"display":true},
-                                        "Customers":{"display":true},
-                                        "Estimates":{"display":true},
-                                        "Scheduler":{"display":true}},
-                                        "mandatory":false}}; // look up table to match names to their IDs
+                             "modules":{"Projects":{"display":true,
+                                                    "mandatory":false},
+                                       "Payments":{"display":true,
+                                                   "mandatory":false},
+                                        "Employee Jobs":{"display":true,
+                                                         "mandatory":false},
+                                        "Purchases":{"display":true,
+                                                     "mandatory":false},
+                                        "Sub Contractors":{"display":true,
+                                                           "mandatory":false},
+                                        "Vendors":{"display":true,
+                                                   "mandatory":false},
+                                        "Companies":{"display":true,
+                                                    "mandatory":false},
+                                        "Contractors":{"display":true,
+                                                       "mandatory":false},
+                                        "Employees":{"display":true,
+                                                     "mandatory":false},
+                                        "Customers":{"display":true ,
+                                                      "mandatory":false},
+                                        "Estimates":{"display":true,
+                                                      "mandatory":false},
+                                        "Contractors":{"display":true,
+                                                       "mandatory":false}}},
+     "Full Name":           {"name":"fullName",
+                             "id":"fullNameID",
+                             "header":"Full Name",
+                             "dbField":"full_name",
+                             "modules":{"Employee Jobs":{"display":true,
+                                                         "mandatory":true},
+                                        "Contractors":{"display":true,
+                                                       "mandatory":true},
+                                        "Employees":{"display":true,
+                                                     "mandatory":true}}},
+     "Files":               {"name":"file_uploaded",
+                              "id":"allFilesID",
+                              "header":"Files",
+                              "modules":{"Projects":{"display":true,
+                                                     "mandatory":false},
+                                         "Payments":{"display":true,
+                                                     "mandatory":false},
+                                         "Employee Jobs":{"display":true,
+                                                          "mandatory":false},
+                                         "Purchases":{"display":true,
+                                                      "mandatory":false},
+                                         "Sub Contractors":{"display":true,
+                                                            "mandatory":false},
+                                         "Vendors":{"display":true,
+                                                    "mandatory":false},
+                                         "Companies":{"display":true,
+                                                      "mandatory":false},
+                                         "Contractors":{"display":true,
+                                                        "mandatory":false},
+                                         "Employees":{"display":true,
+                                                      "mandatory":false},
+                                         "Customers":{"display":true,
+                                                      "mandatory":false},
+                                         "Estimates":{"display":true,
+                                                      "mandatory":false},
+                                         "Scheduler":{"display":true,
+                                                      "mandatory":false}}}}; // look up table to match names to their IDs
 
 // only the first 4 do not include thead and <th></th> since these records are also showing in the project summary therefor no need delete 
 const headers = {
@@ -1642,11 +1703,11 @@ function prepareProjectRecords2Display(inputArr) {
         outArr += `<td></td>`; // pleace holder for delete image
         outArr += `<td><input tabindex="0" class="projectNameClass" type="text" id="prjctNumberID" name="projectNumber" value="${inputArr[i].project_number}" size="44" maxlength="50">`;
         outArr += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="projectID" value=${inputArr[i].project_id}></td>`;
-        outArr += `<td><input tabindex="0" class="projectNameClass" type="text" name="companyName" id="cnID" value="${inputArr[i].company_name}"></td>`;
-        outArr += `<td><input tabindex="0" class="projectNameClass" type="text" name="customerLastName" id="clnID" value="${inputArr[i].project_cstmr_lastname}"></td>`;
-        outArr += `<td><input tabindex="0" class="projectNameClass" type="text" name="projectType" id="ptID" value="${inputArr[i].project_type}"></td>`;
-        outArr += `<td><input tabindex="0" class="projectNameClass" type="text" name="projectSalesRep" id="psrID" value="${inputArr[i].project_m_contractor}"></td>`;
-        outArr += `<td><input tabindex="0" class="projectNameClass" type="text" name="projectAddress" id="paddrID" value='${inputArr[i].project_address}'"></td>`;
+        outArr += `<td><input tabindex="0" class="projectNameClass" type="text" name="companyName" id="companyNameID" value="${inputArr[i].company_name}"></td>`;
+        outArr += `<td><input tabindex="0" class="projectNameClass" type="text" name="customerLastName" id="customerLastNameID" value="${inputArr[i].project_cstmr_lastname}"></td>`;
+        outArr += `<td><input tabindex="0" class="projectNameClass" type="text" name="projectType" id="projectTypeID" value="${inputArr[i].project_type}"></td>`;
+        outArr += `<td><input tabindex="0" class="projectNameClass" type="text" name="projectSalesRep" id="projectSalesRepID" value="${inputArr[i].project_m_contractor}"></td>`;
+        outArr += `<td><input tabindex="0" class="projectNameClass" type="text" name="projectAddress" id="projectAddressID" value='${inputArr[i].project_address}'"></td>`;
         fileupload=uploadFilesMngr(Number(inputArr[i].file_uploaded,(inputArr[i].project_number != "")));
         outArr += `<td>${fileupload}</td>`;
         outArr += `</tr>`;
@@ -1695,10 +1756,10 @@ function displayProjects(projectManager) {
             out += `<td></td>`; // pleace holder for delete image
             out += `<td tabindex="0"><input type="text" name="projectNumber" id="prjctNumberID" class="projectNameClass"value="${passedArray[i].project_number}" size="44" maxlength="50">`;
             out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="projectID" value=${passedArray[i].project_id}></td>`;
-            out += `<td tabindex="0"><input type="text" name="companyName" id="cnID" class="projectNameClass" value="${Projects.arrProjects[i].company_name}"></td>`;
-            out += `<td tabindex="0"><input type="text" name="customerLastName" id="clnID" class="projectNameClass" value="${passedArray[i].project_cstmr_lastname}"></td>`;
-            out += `<td tabindex="0"><input type="text" name="projectType" id="ptID" class="projectNameClass" value="${passedArray[i].project_type}"></td>`;
-            out += `<td tabindex="0"><input type="text" name="projectSalesRep" id="psrID" class="projectNameClass" value="${passedArray[i].project_m_contractor}"></td>`;
+            out += `<td tabindex="0"><input type="text" name="companyName" id="companyNameID" class="projectNameClass" value="${Projects.arrProjects[i].company_name}"></td>`;
+            out += `<td tabindex="0"><input type="text" name="customerLastName" id="customerLastNameID" class="projectNameClass" value="${passedArray[i].project_cstmr_lastname}"></td>`;
+            out += `<td tabindex="0"><input type="text" name="projectType" id="projectTypeID" class="projectNameClass" value="${passedArray[i].project_type}"></td>`;
+            out += `<td tabindex="0"><input type="text" name="projectSalesRep" id="projectSalesRepID" class="projectNameClass" value="${passedArray[i].project_m_contractor}"></td>`;
             out += `<td tabindex="0"><input type="text" name="projectAddress" id="paddrID" class="projectNameClass" value='${passedArray[i].project_address}'"></td>`;
             fileupload=uploadFilesMngr(Number(pArray[i].file_uploaded));
             out += `<td style="width:2%">${fileupload}</td>`;
@@ -1820,7 +1881,7 @@ function displayPaymentResults(projectNumber,targetDisplay) {
             out += `<td><input type="date" id="pymntDateID" name="paymentDate" class="inputDate" value=${eArray[i].payment_date}></td>`;
             out += `<td><input type="text" id="pymntMthdID" name="paymentMethod" class="projectNameClass" value="${eArray[i].payment_method}"></td>`;
             out += `<td><input type="text" id="pymntNumberID" name="checkNumberCNF" maxlength="20" class="projectNameClass" value='${eArray[i].payment_number}'></td>`;
-            out += `<td><input type="text" id="paymntDrscnID" name="Description" class="projectNameClass" value="${eArray[i].description}"></td>`;
+            out += `<td><input type="text" id="paymntDrscompanyNameID" name="Description" class="projectNameClass" value="${eArray[i].description}"></td>`;
             out += outFiles;
             out += `</tr>`;
             if ( eArray[i].payment_amount != "")
@@ -1929,7 +1990,7 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
 
                 out += `<td><input tabindex="0" type="text" id="prjctNumberID" name="projectName" class="projectNameClass" size="44" maxlength="50" value="${eArray[i].project_number}">`;
                 out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="taskID" value=${eArray[i].task_id}></td>`;
-                out += `<td><input tabindex="0" type="text" id="fullnameID" name="fullName" class="projectNameClass" maxlength="30" value="${eArray[i].employee_fname}"></td>`;
+                out += `<td><input tabindex="0" type="text" id="fullNameID" name="fullName" class="projectNameClass" maxlength="30" value="${eArray[i].employee_fname}"></td>`;
                 out += `<td><input tabindex="0" type="date" id="jobDateID" name="jobDate" class="inputDate" value=${jsDate}></td>`;
                 out += `<td><input tabindex="0" type="time" id="jobSignInTimeID" name="jobSigninTime" class="inputTime" value=${jobSignIn}></td>`; 
                 lunchSigninTime =  "&nbsp";

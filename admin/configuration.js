@@ -145,7 +145,7 @@
                 //  out += `<td><a href=""><img src='../misc/minus-2.jpg' value="DeleteImage" alt='plus' width='10' height='10' onclick="return deleteRow(event);"></a></td>`;
                 //out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="DeleteImage" alt='plus' width='10' height='10'></td>`;
                 out += `<td></td>`;
-                out += `<td><input tabindex="0" type="text" name="fullname" id="fullnameID" class="projectNameClass" maxlength="30" value="${eArray[i].fullname}">`;
+                out += `<td><input tabindex="0" type="text" name="fullname" id="fullNameID" class="projectNameClass" maxlength="30" value="${eArray[i].fullname}">`;
                 out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="employeeID" value=${eArray[i].employee_id}>`;
                 out += `<input type="color" id="emplColorInput" class="emplColor" value=${classArray["Employees"].colors[eArray[i].fullname]}></td>`;
                 out += `<td><input type="text" name="employmentType" class="projectNameClass" maxlength="20" value='${eArray[i].employment_type}'></td>`;

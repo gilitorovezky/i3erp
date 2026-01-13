@@ -221,7 +221,7 @@ function saveRow(moduleName,element) {
 
         case "Employees"        :
             headers1.push("startdate");
-            tempRow2['fullname']=$(targetTR).find('[id="fullnameID"]').val();
+            tempRow2['fullname']=$(targetTR).find('[id="fullNameID"]').val();
             tempRow2["password"]=$(targetTR).find('[name="password"]').val();;
             break;
 
@@ -424,7 +424,7 @@ function saveRow(moduleName,element) {
 
         case "Employees"        :
             
-            if ( $(targetTR).find('[id="fullnameID"]').val() != ""  &&
+            if ( $(targetTR).find('[id="fullNameID"]').val() != ""  &&
                  $(targetTR).find('[name="password"]').val() != "" )  { // only save if the employee name nd Password are at least entered
                 //tempRow[$('#mainHeader').find('th:contains("Password")').index()]=""; // mask the password 
                 //tempRow2["Password"]="";
@@ -438,7 +438,7 @@ function saveRow(moduleName,element) {
                     tempRow2["is_newEmployee"]="0";
                     tempRow.push(classArray["Employees"].arr[classArray["Employees"].retEntrybyID(ID)].startdate);  // push the start date which is today
                     tempRow2["startdate"]=classArray["Employees"].arr[classArray["Employees"].retEntrybyID(ID)].startdate;
-                    tempRow2["profile_color"]=classArray["Employees"].colors[$(targetTR).find('[id="fullnameID"]').val()];
+                    tempRow2["profile_color"]=classArray["Employees"].colors[$(targetTR).find('[id="fullNameID"]').val()];
                 }
                 if (element.name == "hourlyRate") {
                     tempRow.push("newRate");

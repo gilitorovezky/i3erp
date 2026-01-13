@@ -887,10 +887,10 @@ Promise.all(requests)
 
             case "newProject"           :
                 $("#main-menue,#navID,#projects,#tHalf,#innerCellID").addClass("greyed-out");
-                $("#overLay ul").attr('data-module',"Project Number");
+                $("#overLay ul").attr('data-module',"Projects");
                 $('img[id^="Pls"]').removeClass("greyed-out");
                 addNewRec("Projects",e.target,"addSingleRec");
-                $("#overLay ul").attr('data-module',"");
+                //$("#overLay ul").attr('data-module',"");
             break;
             
             case "estimates"            :

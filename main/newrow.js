@@ -52,11 +52,11 @@
                     row += `<td><input type="text" id="prjctNumberID" name="projectNumber" class="projectNameClass" value=${newPrjNumber}>`;
                 }
                 row += `<input type="hidden" id='${headers['Projects']['primaryKey']}' name="projectID" value=${ID}></td>`; 
-                row += `<td><input tabindex="0" type="text" id="cnID" name="companytName" class="projectNameClass" value=${tempRow[index++].value}></td>`;
-                row += `<td><input tabindex="0" type="text" id="clnID" name="customerLastName" class="projectNameClass" value=${tempRow[index++].value}></td>`;
-                row += `<td><input tabindex="0" type="text" id="ptID" name="projectType" class="projectNameClass" value=${tempRow[index++].value}></td>`;
-                row += `<td><input tabindex="0" type="text" id="psrID" name="projectSalesRep" class="projectNameClass" value=${tempRow[index++].value}></td>`;
-                row += `<td><input tabindex="0" type="text" id="padrsID" name="projectAddress" class="projectNameClass" value=${tempRow[index++].value}></td>`;
+                row += `<td><input tabindex="0" type="text" id="companyNameID" name="companytName" class="projectNameClass" value=${tempRow[index++].value}></td>`;
+                row += `<td><input tabindex="0" type="text" id="customerLastNameID" name="customerLastName" class="projectNameClass" value=${tempRow[index++].value}></td>`;
+                row += `<td><input tabindex="0" type="text" id="projectTypeID" name="projectType" class="projectNameClass" value=${tempRow[index++].value}></td>`;
+                row += `<td><input tabindex="0" type="text" id="projectSalesRepID" name="projectSalesRep" class="projectNameClass" value=${tempRow[index++].value}></td>`;
+                row += `<td><input tabindex="0" type="text" id="projectAddressID" name="projectAddress" class="projectNameClass" value=${tempRow[index++].value}></td>`;
                 row += `<td style="width:2%"><input tabindex="0" type="text" id="allFilesID" name="allFiles" class="projectNameClass" value="0"></td>`;
             break;
 
@@ -77,7 +77,7 @@
                 if ( restore )
                     tempDay=tempRow[index].value;
                 index++;
-                row += `<td><input tabindex="0" type="text" id="dscrptnID" name="description" class="projectNameClass" maxlength="40" value=${tempRow[index].value}></td>`;
+                row += `<td><input tabindex="0" type="text" id="descriptionID" name="description" class="projectNameClass" maxlength="40" value=${tempRow[index].value}></td>`;
                 row += `<td style="width:8%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
             break;
 
@@ -98,7 +98,7 @@
                     tempDay=tempRow[index].value;
                 index++;
                 row += `<td><input tabindex="0" type="text" id="pnID" name="checkNumberCNF" class="projectNameClass" value=${tempRow[index].value}></td>`;
-                row += `<td><input tabindex="0" type="text" id="pDscrptnID" name="pDscrptn" class="projectNameClass" maxlength="40" value=${tempRow[index].value}></td>`;
+                row += `<td><input tabindex="0" type="text" id="descriptionID" name="pDscrptn" class="projectNameClass" maxlength="40" value=${tempRow[index].value}></td>`;
                 if ( restore )
                     files=tempRow[index++].value;
                 else
@@ -111,7 +111,7 @@
 
                 row += `<td><input tabindex="0" type="text" id="prjctNumberID" name="projectName" class="projectNameClass" maxlength="200" value='${tempRow[3].Name}'>`;
                 row += `<input type="hidden" id='${headers['Employee Jobs']['primaryKey']}' name="taskID" value=${ID}></td>`;
-                row += `<td><input tabindex="0" type="text" id="fullnameID" name="fullName" class="projectNameClass" maxlength="30" value=${tempRow[index++].value}></td>`;
+                row += `<td><input tabindex="0" type="text" id="fullNameID" name="fullName" class="projectNameClass" maxlength="30" value=${tempRow[index++].value}></td>`;
                 if ( restore ) 
                     tempDay=tempRow[index++].value;
 
@@ -135,7 +135,7 @@
                 row += `<td><input tabindex="0" type="time" id="lunchSignOutTimeID" name="lunchSignOut" class="inputTime" value=${lunchSignOutTime}"></td>`;
                 row += `<td><input tabindex="0" type="time" id="jobSignOutTimeID" name="jobSignOut" class="inputTime" value=${jobSignOutTime} ></td>`;
                 row += `<td><input tabindex="0" type="text" id="totalHoursID" name="totalHours" readonly class="projectNameClass" maxlength="5" value=${totalHours}></td>`;
-                row += `<td><input tabindex="0" type="text" id="ejDcrptnID" name="description" class="projectNameClass" maxlength="20" value=${description}></td>`;
+                row += `<td><input tabindex="0" type="text" id="descriptionID" name="description" class="projectNameClass" maxlength="20" value=${description}></td>`;
                 row += `<td><input tabindex="0" type="text" id="lbrCostID" hidden name="labor_cost" class="projectNameClass" readonly value=${labor_cost}></td>`;
                 row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
 
@@ -162,7 +162,7 @@
                 var descrpition="";
                 if ( restore ) 
                     descrpition=tempRow[index++].value;
-                row += `<td><input tabindex="0" type="text" id="cjDscrptnID" name="cDscrptn" class="projectNameClass" maxlength="40" value="${descrpition}"></td>`;
+                row += `<td><input tabindex="0" type="text" id="descriptionID" name="cDscrptn" class="projectNameClass" maxlength="40" value="${descrpition}"></td>`;
                 if ( restore ) 
                     files=tempRow[index].value;
                 row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
@@ -171,7 +171,7 @@
 
             case "Employees" :
 
-                row += `<td><input tabindex="0" type="text" name="fulltName" id="fullnameID" class="projectNameClass" maxlength="25" value='${tempRow[3].Name}'>`;
+                row += `<td><input tabindex="0" type="text" name="fulltName" id="fullNameID" class="projectNameClass" maxlength="25" value='${tempRow[3].Name}'>`;
                 row += `<input type="hidden" id='${headers['Employees']['primaryKey']}' name="employeeID" value=${ID}>`;
                 row += `<input tabindex="0" type="color" id="emplColorInput" class="emplColor" value="#ffffff"></td>`;
                 row += `<td><input tabindex="0" type="text" name="employmentType" id="etID" class="projectNameClass" maxlength="10" value=${tempRow[index++].value}></td>`;
@@ -199,7 +199,7 @@
             
             case "Contractors" :
                 
-                row += `<td><input tabindex="0" type="text" name="Name" id="fullnameID" class="projectNameClass" maxlength="25" value='${tempRow[3].Name}'>`;
+                row += `<td><input tabindex="0" type="text" name="Name" id="fullNameID" class="projectNameClass" maxlength="25" value='${tempRow[3].Name}'>`;
                 row += `<input type="hidden" id='${headers['Contractors']['primaryKey']}' name="contractorID" value=${ID}></td>`;                
                 row += `<td><input tabindex="0" type="text" name="notes" id="notes" class="projectNameClass" maxlength="50" value=${tempRow[index].value}></td>`;
                 if ( restore ) 

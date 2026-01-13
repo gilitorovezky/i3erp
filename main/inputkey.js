@@ -1106,6 +1106,11 @@
                 $('img[id^="Pls"]').removeClass("greyed-out");
                 currentRecordPointer=0;
                 event.target.innerText=""; // reset the value
+                if ( lastFocusedEntry.length > 0) {
+                    $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr).removeClass("greyed-out");
+                    $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr).css("opacity",'1.0');
+                    lastCell=lastFocusedEntry[lastFocusedEntry.length-1].currCell;
+                }
             break;
 
             case "Enter":	
@@ -1426,7 +1431,7 @@
         const totalHours=$(e.parentNode).parent().find('[name^="totalHours"]').val();
         const hours=Number(totalHours.split(".")[0]);
         const mins=Number(totalHours.split(".")[1]);
-        windowLog.trace("hours:"+hours+" mins:"+mins);
+        windowLog.log("calculate Labor,hours:"+hours+" mins:"+mins);
         if ( hours > 8 ) {
             hourLabor = 8*hr;   // calculate first 8 hours using default hrate
             windowLog.trace("standard hours labor:"+hourLabor);
@@ -1455,21 +1460,23 @@
         windowLog.trace("Inside validation("+module+")");
         for (const [key, value] of Object.entries(headerToDBFieldLookup[module])) {
             if ( Object.keys(nametoIDLookup[key].modules).includes(module) ) { // {
-                if ( nametoIDLookup[key]["modules"][module]["display"]) { // only if the field is displayed
+                windowLog.trace("validating:"+`${key}: ${value}`);
+
+                if ( nametoIDLookup[key]["modules"][module]["mandatory"] )  // only if the field is mandatory to show the save
                     retCode=retCode && currentTR.find('[id=' + nametoIDLookup[key].id + ']').val().length>0;
-                }
+                else
+                    windowLog.trace("validating: Field ${key} is not mandatory");
             }
-                console.log("Found")
-             console.log(`${key}: ${value}`);
+            
         }
         
         switch ( module ) {
-            case "Payments" :
+           /* case "Payments" :
                 retCode = ( currentTR.find('[id="prjctNumberID"]').val().length>0 && 
                             currentTR.find('[id="paID"]').val().length>0 &&
                             currentTR.find('[id="pmID"]').val().length>0 &&
                             currentTR.find('[id="pnID"]').val().length>0)?true:false;
-                break;
+                break;*/
 
             case "Scheduler" :
                 retCode = ( currentTR.find('[id="prjctNumberID"]').val().length>0 || 
@@ -1477,11 +1484,11 @@
                 break;
                 
             case "Projects" :
-                retCode = ( currentTR.find('[name="companytName"]').val().length>0 && 
+                /*retCode = ( currentTR.find('[name="companytName"]').val().length>0 && 
                             currentTR.find('[name="customerLastName"]').val().length>0 &&
                             currentTR.find('[name="projectType"]').val().length>0 &&
                             currentTR.find('[name="projectManagerRep"]').val().length>0 &&
-                            currentTR.find('[name="projectAddress"]').val().length>0)?true:false;
+                            currentTR.find('[name="projectAddress"]').val().length>0)?true:false; */
 
                 /*$(currentTR).find("td:has(:text)").each(function() { // start the loop past the project number
                     windowLog.trace("TD nodeName: "+this.childNodes[0].nodeName );
