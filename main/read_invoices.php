@@ -23,7 +23,7 @@
         if ( $employee_job->num_rows >0 ) {
             $i=1;
             while ($row = mysqli_fetch_assoc($employee_job)) { 
-                $maxID=max($maxID,$row["invoice_id"]);
+                $maxID=max($maxID,$row["purchase_id"]);
                 $ret_recs[$i] =  array( "vendor_name"       =>  $row["vendor_name"],
                                         "invoice_number"    =>  $row["invoice_number"],
                                         "invoice_amount"    =>  $row["invoice_amount"],
@@ -31,7 +31,7 @@
                                         "payment_method"    =>  $row["payment_method"],
                                         "project_number"    =>  $row["project_number"],
                                         "invoice_desc"      =>  $row["invoice_desc"],
-                                        "invoice_id"        =>  $row["invoice_id"],
+                                        "purchase_id"        =>  $row["purchase_id"],
                                         "file_uploaded"     =>  $row["file_uploaded"],
                                         "images_json"       =>  $row["images_json"],
                                         "foldername"        =>  $row["foldername"]);

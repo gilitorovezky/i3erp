@@ -158,11 +158,11 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
 
             let entry1=classArray[module].retEntrybyID(record[0]);
             if ( !isNewRecord ) {
-                classArray[module].arr[recordID].invoice_id      = record[0];
+                classArray[module].arr[recordID].purchase_id      = record[0];
                 classArray[module].arr[recordID].project_number  = record[1];
                 classArray[module].arr[recordID].vendor_name     = record[2];
                 classArray[module].arr[recordID].invoice_number  = record[3];
-                classArray[module].arr[recordID].invoice_amount  = record[4];
+                classArray[module].arr[recordID].purchase_amount  = record[4];
                 classArray[module].arr[recordID].invoice_date    = record[5];
                 classArray[module].arr[recordID].payment_method  = record[6];
                 classArray[module].arr[recordID].invoice_desc    = record[7];
@@ -172,11 +172,11 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
             }
             else { // record not found then add 
                 classArray[module].arr.push({
-                    invoice_id      :   record[0],
+                    purchase_id      :   record[0],
                     project_number  :   record[1],
                     vendor_name     :   record[2],
                     invoice_number  :   record[3],
-                    invoice_amount  :   record[4],
+                    purchase_amount  :   record[4],
                     invoice_date    :   record[5],
                     payment_method  :   record[6],
                     invoice_desc    :   record[7],

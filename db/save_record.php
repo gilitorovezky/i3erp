@@ -25,7 +25,7 @@
             $table_headers=array();
             $sqlArray=array();
             // $table_headers["payments"]=array("payment_id","project_number","payment_amount","payment_date","payment_method","payment_number","description","file_uploaded","foldername"); // Remove customer name per Eyal 6/29
-            $table_headers["purchases"]=array("invoice_id","project_number","vendor_name","invoice_number","invoice_amount","invoice_date","payment_method","invoice_desc","file_uploaded","foldername");
+            $table_headers["purchases"]=array("purchase_id","project_number","vendor_name","invoice_number","purchase_amount","invoice_date","payment_method","invoice_desc","file_uploaded","foldername");
             $table_headers["contractor_jobs"]=array("task_id","project_number","contractor_name","job_date","payment_amount","payment_number","date_paid","description","file_uploaded","foldername");
             $table_headers["employee_jobs"]=array("task_id","project_number","employee_fname","job_date","job_signin","lunch_signin","lunch_signout","job_signout","total_hours","description","labor_cost","file_uploaded","foldername");// not shopw gas Eyal 04-11
             $table_headers["projects"]=array("project_id","project_number","company_name","project_cstmr_lastname","project_type","project_m_contractor",
@@ -48,7 +48,7 @@
                 FROM contractor_jobs GROUP BY project_number) cntr_jbs ON prjct.project_name = cntr_jbs.project_number
                 SET prjct.project_total_cntrc_cost = cntr_jbs.total";
 
-            $sqlArray["purchases"]="UPDATE projects prjct INNER JOIN (SELECT project_number,SUM(IF(invoice_amount='', 0.0,CAST(invoice_amount AS decimal(20,2)))) as total 
+            $sqlArray["purchases"]="UPDATE projects prjct INNER JOIN (SELECT project_number,SUM(IF(purchase_amount='', 0.0,CAST(purchase_amount AS decimal(20,2)))) as total 
                 FROM purchases GROUP BY project_number) invcs ON prjct.project_name = invcs.project_number
                 SET prjct.project_total_purchases = invcs.total";
 
@@ -415,7 +415,7 @@
                                 $return_code = -9;
                             }
 
-                            $sql_st = "UPDATE projects prjct INNER JOIN (SELECT project_number,SUM(IF(invoice_amount='', 0.0,CAST(invoice_amount AS decimal(20,2)))) as total FROM purchases GROUP BY project_number) invcs ON prjct.project_name = invcs.project_number
+                            $sql_st = "UPDATE projects prjct INNER JOIN (SELECT project_number,SUM(IF(purchase_amount='', 0.0,CAST(purchase_amount AS decimal(20,2)))) as total FROM purchases GROUP BY project_number) invcs ON prjct.project_name = invcs.project_number
                                         SET prjct.project_total_purchases = invcs.total";
                             if (mysqli_query($con,$sql_st))
                                 file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 24-Update succesfully project total invocies\n", FILE_APPEND);

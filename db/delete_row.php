@@ -23,7 +23,7 @@
             
             $sqlArray["payments"]="UPDATE projects SET project_total_payments = project_total_payments - (SELECT payment_amount FROM payments where payment_id = '$ID') where project_name = '$Name'";
             $sqlArray["sub contractors"]="UPDATE projects SET project_total_cntrc_cost = project_total_cntrc_cost - (SELECT payment_amount FROM contractor_jobs where task_id = '$ID') where project_name = '$Name'";
-            $sqlArray["purchases"]="UPDATE projects SET project_total_purchases = project_total_purchases - (SELECT CAST(invoice_amount AS UNSIGNED) FROM purchases where invoice_id = '$ID') where project_name = '$Name'";
+            $sqlArray["purchases"]="UPDATE projects SET project_total_purchases = project_total_purchases - (SELECT CAST(purchase_amount AS UNSIGNED) FROM purchases where purchase_id = '$ID') where project_name = '$Name'";
             $sqlArray["employee jobs"]="UPDATE projects SET project_total_empl_cost = project_total_empl_cost - (SELECT labor_cost FROM employee_jobs where task_id = '$ID') where project_name = '$Name'";
             $sqlArray["vendors"]="SELECT CURRENT_DATE";
             $sqlArray["contractors"]="SELECT CURRENT_DATE";

@@ -1102,15 +1102,22 @@
 
                 retValue=false;
                 $("#overLay ul").empty();
-                $("#navID,#main-menue,#customers,#tHalf").removeClass("greyed-out");
-                $('img[id^="Pls"]').removeClass("greyed-out");
+               
                 currentRecordPointer=0;
-                event.target.innerText=""; // reset the value
                 if ( lastFocusedEntry.length > 0) {
                     $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr).removeClass("greyed-out");
                     $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr).css("opacity",'1.0');
                     lastCell=lastFocusedEntry[lastFocusedEntry.length-1].currCell;
                 }
+                else {
+                    event.target.innerText=""; // reset the value
+                    $('img[id^="Pls"]').removeClass("greyed-out");
+                    $("#navID,#main-menue,#customers,#tHalf").removeClass("greyed-out");
+                    lastCell=currCell;
+                }
+                lastCell.find("input").focus();//$(lastCell).children().first().focus();// focus on the first input!!; // return focus to the launching cell
+                editing=false; // no more editing
+
             break;
 
             case "Enter":	

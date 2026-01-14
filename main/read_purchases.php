@@ -23,25 +23,25 @@
         if ( $employee_job->num_rows >0 ) {
             $i=1;
             while ($row = mysqli_fetch_assoc($employee_job)) { 
-                $maxID=max($maxID,$row["invoice_id"]);
-                $ret_recs[$i] =  array( "vendor_name"       =>  $row["vendor_name"],
-                                        "invoice_number"    =>  $row["invoice_number"],
-                                        "invoice_amount"    =>  $row["invoice_amount"],
-                                        "invoice_date"      =>  $row["invoice_date"],
-                                        "payment_method"    =>  $row["payment_method"],
-                                        "project_number"    =>  $row["project_number"],
-                                        "invoice_desc"      =>  $row["invoice_desc"],
-                                        "invoice_id"        =>  $row["invoice_id"],
-                                        "file_uploaded"     =>  $row["file_uploaded"],
-                                        "images_json"       =>  $row["images_json"],
-                                        "foldername"        =>  $row["foldername"]);
+                $maxID=max($maxID,$row["purchase_id"]);
+                $ret_recs[$i] =  array("vendor_name"       =>  $row["vendor_name"],
+                                       "purchase_number"   =>  $row["purchase_number"],
+                                       "purchase_amount"   =>  $row["purchase_amount"],
+                                       "purchase_date"     =>  $row["purchase_date"],
+                                       "payment_method"    =>  $row["payment_method"],
+                                       "project_number"    =>  $row["project_number"],
+                                       "purchase_desc"     =>  $row["description"],
+                                       "purchase_id"       =>  $row["purchase_id"],
+                                       "file_uploaded"     =>  $row["file_uploaded"],
+                                       "images_json"       =>  $row["images_json"],
+                                       "foldername"        =>  $row["foldername"]);
                
                 file_put_contents('../log/log_'.$logDate.'.log', "(read_purchases) ".$current_time." info 3-record #".$i." ".print_r($ret_recs[$i++],true)."\n", FILE_APPEND); 
             }
         }
         $ret_recs[0]=array("Status" => 1,
-                           "maxID"  => $maxID);  // Need to returfor new employeesn   
-        mysqli_close($con);   // Close DB connectin
+                           "maxID"  => $maxID);  // Need to return for new employees   
+        mysqli_close($con);   // Close DB connection
     } else {
         file_put_contents('../log/log_'.$logDate.'.log', "(read_purchases) ".$current_time." error -1\n", FILE_APPEND); 
         $ret_recs[0] = array("Status"  => -1, // fail

@@ -39,7 +39,7 @@ const headerToDBFieldLookup = { // look up table to match record to db schmea
     "Payments": {'Project Number':'project_number','Payment Amount':'payment_amount','Payment Date':'payment_date','Payment Method':'payment_method','Payment Number':'payment_number','Description':'description','Files':'file_uploaded'},
     "Sub Contractors": {'Contractor Name':'contractor_name','Job Date':'job_date','Payment Amount':'payment_amount','Check Number':'check_number','Date Paid':'date_paid','Description':'description','Files':'file_uploaded'},
     "Employee Jobs": {'Full Name':'full_name','Job Date':'job_date','Job SignIn':'job_signin_time','Lunch SignIn':'lunch_signin_time','Lunch SignOut':'lunch_signout_time','Job SignOut':'job_signout_time','Total Hours':'total_hours','Description':'description','Total Cost':'total_cost','Files':'file_uploaded'},
-    "Purchases": {'Project Number':'project_number','Vendor':'vendor_name','Invoice Number':'invoice_number','Invoice Amount':'invoice_amount','Invoice Date':'invoice_date','Purchase Method':'purchase_method','Description':'description','Files':'file_uploaded'},
+    "Purchases": {'Project Number':'project_number','Vendor':'vendor_name','Purchase Number':'invoice_number','Purchase Amount':'purchase_amount','Purchase Date':'invoice_date','Purchase Method':'purchase_method','Description':'description','Files':'file_uploaded'},
 } 
  
 const nametoIDLookup = {
@@ -196,8 +196,8 @@ const nametoIDLookup = {
                              "modules":{"Purchases":{"display":true,
                                                      "mandatory":true}}},
 
-    "Invoice Method":       {"name":"invoiceMethod",
-                             "id":"invoiceMethodID",
+    "Purchase Method":       {"name":"purchaseMethod",
+                             "id":"purchaseMethodID",
                              "header":"Purchase Method",
                              "modules":{"Purchases":{"display":true,
                                                      "mandatory":true}}},
@@ -290,7 +290,7 @@ const nametoIDLookup = {
 const headers = {
     "Home":{hash:'home',callBack:home,tableName:'home',sn:1},
     "Employee Jobs":{hash:'empljbs',callBack:upperLeft,callType:"generalUpload",sn:"home",columns:'<th style="width:4%">Full Name</th><th>Job Date</th><th style="width:4%">Job SignIn</th><th style="width:4%">Lunch SignIn</th><th>Lunch SignOut</th><th>Job SignOut</th><th>Total Hours</th><th style="width:15%">Description</th><th style="width:2%">Total Cost</th><th style="width:100px">Files</th>',numOfCols:12,showInPrj:true,primaryKey:'task_id',tableName:'employee_jobs',params:0},
-    "Purchases":{hash:'prchs',callBack:upperRight,callType:"generalUpload",sn:"home",columns:'<th>Vendor</th><th>Invoice Number</th><th>Invoice Amount</th><th>Invoice Date</th><th>Invoice Method</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'invoice_id',tableName:'purchases',params:0},
+    "Purchases":{hash:'prchs',callBack:upperRight,callType:"generalUpload",sn:"home",columns:'<th>Vendor</th><th>Purchase Number</th><th>Purchase Amount</th><th>Purchase Date</th><th>Purchase Method</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'purchase_id',tableName:'purchases',params:0},
     "Payments":{hash:'pymnts',callBack:lowerLeft,callType:"generalUpload",sn:"home",columns:'<th>Payment Amount</th><th>Payment Date</th><th>Payment Method</th><th>Payment Number</th><th>Description</th><th>Files</th>',numOfCols:8,showInPrj:true,primaryKey:'payment_id',tableName:'payments',params:0},
     "Sub Contractors":{hash:'sbcntrcj',callBack:lowerRight,callType:"generalUpload",sn:"home",columns:'<th>Contractor Name</th><th>Job Date</th><th>Payment Amount</th><th>Check Number</th><th>Date Paid</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'task_id',tableName:'contractor_jobs',params:0},
     "Projects":{hash:'dprjct',callBack:projects,callType:"generalUpload",sn:"aux",columns:'<thead class="mainHeaderClass" id="mainHeader"><th></th><th>Project Number</th><th>Company Name</th><th>Customer Last Name</th><th>Project Type</th><th>Project Manager/Rep</th><th>Project Address</th><th>Files</th></tr></thead>',numOfCols:8,showInPrj:false,primaryKey:'project_id',tableName:'projects',params:0},
@@ -2397,22 +2397,22 @@ function displayPurchaseResults(projectNumber,targetDisplay) {
                 out += `<tr>`;
                 out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="DeleteImage" alt='plus' width='10' height='10'></td>`;
                 out += `<td><input tabindex="0" type="text" id="prjctNumberID" name="projectNumber" class="projectNameClass" size="44" maxlength="50" value="${pArray[i].project_number}">`;
-                //out += `<input type="hidden" id="invoiceID" name="invoiceID" value=${pArray[i].invoice_id}></td>`;
-                out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="invoiceID" value=${pArray[i].invoice_id}></td>`;
+                //out += `<input type="hidden" id="invoiceID" name="invoiceID" value=${pArray[i].purchase_id}></td>`;
+                out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="invoiceID" value=${pArray[i].purchase_id}></td>`;
                 out += `<td><input tabindex="0" type="text" id="vendorNameID" name="vendorName" class="projectNameClass" value='${pArray[i].vendor_name}'></td>`;
                 out += `<td><input tabindex="0" type="text" id="invoiceNumberID" name="invoiceNumber" class="projectNameClass" maxlength="40" value=${pArray[i].invoice_number}></td>`;
-                out += `<td><input tabindex="0" type="text" id="invoiceAmountID" name="invoiceAmount" class="projectNameClass" value=${pArray[i].invoice_amount}></td>`;
+                out += `<td><input tabindex="0" type="text" id="invoiceAmountID" name="invoiceAmount" class="projectNameClass" value=${pArray[i].purchase_amount}></td>`;
                 out += `<td><input tabindex="0" type="date" id="invoiceDateID" name="invoiceDate" class="inputDate" value=${pArray[i].invoice_date}></td>`;
                 out += `<td><input tabindex="0" type="text" id="invoiceMethodID" name="invoiceMethod" class="projectNameClass" value='${pArray[i].payment_method}'></td>`;
                 out += `<td><input tabindex="0" type="text" id="descriptionID" name="Description" class="projectNameClass" maxlength="40" value='${pArray[i].invoice_desc}'></td>`;
                 out += outFiles+`</tr>`;
-                if ( pArray[i].invoice_amount != "")
-                    sumOfInvoices += Number(pArray[i].invoice_amount);
+                if ( pArray[i].purchase_amount != "")
+                    sumOfInvoices += Number(pArray[i].purchase_amount);
             }
             else {	// display is the project summary
                 out += `<td>${pArray[i].vendor_name}</td>`;
                 out += `<td>${pArray[i].invoice_number}</td>`;
-                out += `<td>${pArray[i].invoice_amount}</td>`;
+                out += `<td>${pArray[i].purchase_amount}</td>`;
                 var jsDate=sql2JSDate(pArray[i].invoice_date,0);
                 out += `<td>${jsDate}</td>`;
                 out += `<td>${pArray[i].payment_method}</td>`;
