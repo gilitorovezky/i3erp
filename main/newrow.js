@@ -65,14 +65,14 @@
                 row += `<td><input tabindex="0" type="text" name="projectName" id="prjctNumberID" class="projectNameClass" maxlength="200" value='${tempRow[3].Name}'>`;
                 row += `<input type="hidden" id='${headers['Purchases']['primaryKey']}' name="invoiceID" value=${ID}></td>`;
                 row += `<td><input tabindex="0" type="text" id="vendorNameID" name="vendorName" id="vendorID" class="projectNameClass" maxlength="20" value='${tempRow[index++].value}'></td>`;
-                row += `<td><input tabindex="0" type="text" name="invoiceNumber" id="invceNmbrID" class="projectNameClass" maxlength="40" value=${tempRow[index].value}></td>`;
+                row += `<td><input tabindex="0" type="text" name="invoiceNumber" id="invoiceNumberID" class="projectNameClass" maxlength="40" value=${tempRow[index].value}></td>`;
                 amount='';
                 if ( restore ) // undo the fields nnly if ctrlZ was down
                     amount=tempRow[++index].value;
                 index++;
-                row += `<td><input tabindex="0" type="text" id="invceAmtID" name="invoiceAmount" class="projectNameClass" maxlength="10" value=${amount}></td>`;
+                row += `<td><input tabindex="0" type="text" id="invoiceAmountID" name="invoiceAmount" class="projectNameClass" maxlength="10" value=${amount}></td>`;
                 row += `<td><input tabindex="0" type="date" id="invoiceDateID" name="invoiceDate" class="inputDate" value=${tempDay}></td>`;
-                row += `<td><input tabindex="0" type="text" id="invoiceMthdID" name="invoiceMethod" class="projectNameClass" "maxlength="20" value=${tempRow[index++].value}></td>`;
+                row += `<td><input tabindex="0" type="text" id="invoiceMethodID" name="invoiceMethod" class="projectNameClass" "maxlength="20" value=${tempRow[index++].value}></td>`;
 
                 if ( restore )
                     tempDay=tempRow[index].value;
@@ -89,10 +89,10 @@
                 var amount='';
                 if ( restore ) 
                      amount=tempRow[++index].value;
-                row += `<td ><input type="text" name="paymentAmount" id="paID" class="projectNameClass" value=${amount}></td>`;
+                row += `<td ><input type="text" name="paymentAmount" id="paymentAmountID" class="projectNameClass" value=${amount}></td>`;
                 index++;    
-                row += `<td><input tabindex="0" type="date" name="jobDate" id="paymentDateID" class="inputDate" value=${tempDay}></td>`;
-                row += `<td><input tabindex="0" type="text" name="paymentMethod" id="pmID" class="projectNameClass" value=${tempRow[index++].value}></td>`;
+                row += `<td><input tabindex="0" type="date" name="jobDate" id="jobPaymentDateID" class="inputDate" value=${tempDay}></td>`;
+                row += `<td><input tabindex="0" type="text" name="paymentMethod" id="paymentMethodID" class="projectNameClass" value=${tempRow[index++].value}></td>`;
                 //row += `<td><input tabindex="0" type="text" name="referenceNumber" id="rnID" class="projectNameClass" value=${tempRow[index++].value}></td>`;
                 if ( restore ) 
                     tempDay=tempRow[index].value;
@@ -145,7 +145,7 @@
 
                 row += `<td><input tabindex="0" type="text" id="prjctNumberID" name="projectNumber" class="projectNameClass" value=${tempRow[index++].value}>`;
                 row += `<input type="hidden" id='${headers['Sub Contractors']['primaryKey']}' name="taskID" value=${ID}></td>`;
-                row += `<td><input tabindex="0" type="text" id="cntrcNameID" name="ContractorName"class="projectNameClass" value='${tempRow[3].Name}'></td>`;
+                row += `<td><input tabindex="0" type="text" id="contractorNameID" name="ContractorName" class="projectNameClass" value='${tempRow[3].Name}'></td>`;
                 if ( restore)
                     tempDay=tempRow[index++].value;
                 row += `<td><input tabindex="0" type="date" id="jobDateID" class="inputDate" name="jobDate" value=${tempDay}></td>`;
@@ -153,19 +153,19 @@
                 var amount='';
                 if ( restore ) 
                     amount=tempRow[++index].value;
-                row += `<td><input tabindex="0" type="text" id="pymntID" name="paymentAmount"class="projectNameClass" value=${amount}></td>`;
+                row += `<td><input tabindex="0" type="text" id="paymentID" name="paymentAmount" class="projectNameClass" value=${amount}></td>`;
                 index++;
-                row += `<td><input tabindex="0" type="text" id="chkNmbrID" name="checknumber" class="projectNameClass" value=${tempRow[index++].value}></td>`;
+                row += `<td><input tabindex="0" type="text" id="checkNumberID" name="checknumber" class="projectNameClass" value=${tempRow[index++].value}></td>`;
                 if ( restore)
                     tempDay=tempRow[index++].value;
-                row += `<td><input tabindex="0" type="date" class="inputDate" id="jobPymntDateID" name="datePaid" value=${tempDay}></td>`;
+                row += `<td><input tabindex="0" type="date" id="jobPaymentDateID" name="jobPaymentDate" class="inputDate" value=${tempDay}></td>`;
                 var descrpition="";
                 if ( restore ) 
                     descrpition=tempRow[index++].value;
-                row += `<td><input tabindex="0" type="text" id="descriptionID" name="cDscrptn" class="projectNameClass" maxlength="40" value="${descrpition}"></td>`;
+                row += `<td><input tabindex="0" type="text" id="descriptionID" name="description" class="projectNameClass" maxlength="40" value="${descrpition}"></td>`;
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:2%"><a tabindex="0" id="allFilesID" class="hyperlinkLabel" style="text-decoration:none;font-size:12px">${files}</a></td>`;
 
             break;
 

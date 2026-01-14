@@ -337,7 +337,6 @@ Promise.all(requests)
                 $("[id=editTaskID").removeClass("greyed-out").prop("disabled",false);   // enable all Edit task button since this actin turn on the global Edit flag downstream
                 $("#main-menue,#navID,#tHalf,#innerCellID,#Pl,#caption,#result-table").addClass("greyed-out");
                 addNewRec("Scheduler",event.target,"addSingleRec");
-                
             break;
 
             case "previousWeekID"   :
@@ -348,6 +347,10 @@ Promise.all(requests)
                 updateWeek(+7);
             break;
 
+            case "isTCID"           :
+                const arrChkBox = document.getElementsByName("labor_cost");
+                $(arrChkBox).toggle();
+            break;
         }
     }
 

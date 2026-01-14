@@ -315,7 +315,7 @@
                         windowLog.trace("Digit found");
                         isDigit=1;
                     }
-                        
+
                     retValue=true; // default
                     if (( isDigit ) || ( e.key === "-" ) || ( e.key === "." ) || ( e.key === "Backspace" )) { // Allow digits,backspoace and .
                         if ( (( e.target.value.indexOf(".") != -1 ) && ( e.key === "." ))  ||    // not allow more than one .
@@ -1454,19 +1454,19 @@
 
     function validateEnableSaveConditions(module,currentTR) {
 
-        var trTextInputLen=0;
+        //var trTextInputLen=0;
         var retCode=true;
         
         windowLog.trace("Inside validation("+module+")");
         for (const [key, value] of Object.entries(headerToDBFieldLookup[module])) {
-            if ( Object.keys(nametoIDLookup[key].modules).includes(module) ) { // {
+            //if ( Object.keys(nametoIDLookup[key].modules).includes(module) ) { // {
                 windowLog.trace("validating:"+`${key}: ${value}`);
 
                 if ( nametoIDLookup[key]["modules"][module]["mandatory"] )  // only if the field is mandatory to show the save
                     retCode=retCode && currentTR.find('[id=' + nametoIDLookup[key].id + ']').val().length>0;
                 else
-                    windowLog.trace("validating: Field ${key} is not mandatory");
-            }
+                    windowLog.trace(`validating: Field: ${key} is not mandatory`);
+            //}
             
         }
         
@@ -1474,7 +1474,7 @@
            /* case "Payments" :
                 retCode = ( currentTR.find('[id="prjctNumberID"]').val().length>0 && 
                             currentTR.find('[id="paID"]').val().length>0 &&
-                            currentTR.find('[id="pmID"]').val().length>0 &&
+                            currentTR.find('[id="paymentMethodID"]').val().length>0 &&
                             currentTR.find('[id="pnID"]').val().length>0)?true:false;
                 break;*/
 

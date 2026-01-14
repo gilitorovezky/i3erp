@@ -18,7 +18,7 @@ function resetRecord(parentTable,start) {
             case "Invoice Date"     :
             case "Payment Date"     :   
             case "Hourly Rate Date" :  
-            case "Date paid"        :   
+            case "Date Paid"        :   
                 value=today;
                 break;
 
@@ -90,7 +90,7 @@ function deleteRow(event) {
                 case "Payment Amount"   : // applicablee to constactor_jobs and payments screen
                     const paymentAmount=$("#result-table"+' tr:nth-child('+rowNumber+') td:nth-child('+(iTD)+')').children().first().val();
                     
-                    if ( lastScreen == "Payments")
+                    if ( lastScreen === "Payments")
                         Projects.arrProjects[prjID].project_total_payments-=Number(paymentAmount);
                     else // constructor_jobs
                         Projects.arrProjects[prjID].project_total_cntrc_cost-=Number(paymentAmount);
@@ -98,7 +98,7 @@ function deleteRow(event) {
             }
         }
         if ( TD.childElementCount > 0 ) {
-            if ( TD.childNodes[0].nodeName == 'INPUT' ) // special case to get value property         
+            if ( TD.childNodes[0].nodeName === 'INPUT' ) // special case to get value property         
                 value=TD.childNodes[0].value;
             else 
                 value=TD.childNodes[0].innerText;

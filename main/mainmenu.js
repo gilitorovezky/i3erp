@@ -37,8 +37,8 @@ const headerToDBFieldLookup = { // look up table to match record to db schmea
 
     "Projects": {'Project Number':'project_number','Company Name':'company_name','Customer Last Name':'project_cstmr_lastname','Project Type':'project_type','Project Manager/Rep':'project_m_contractor','Project Address':'project_address','Files':'file_uploaded'},
     "Payments": {'Project Number':'project_number','Payment Amount':'payment_amount','Payment Date':'payment_date','Payment Method':'payment_method','Payment Number':'payment_number','Description':'description','Files':'file_uploaded'},
-    "Sub Contractors": {'Contractor Name':'contractor_name','Job Date':'job_date','Payment Amount':'payment_amount','Check number':'check_number','Date paid':'date_paid','Description':'description','Files':'file_uploaded'},
-    "Employee Jobs": {'Full Name':'full_name','Job Date':'job_date','Job SignIn':'job_signin_time','Lunch SignIn':'lunch_signin_time','Lunch SignOut':'lunch_signout_time','Job SignOut':'job_signout_time','Total Hours':'total_hours','Description':'description','Total cost':'total_cost','Files':'file_uploaded'},
+    "Sub Contractors": {'Contractor Name':'contractor_name','Job Date':'job_date','Payment Amount':'payment_amount','Check Number':'check_number','Date Paid':'date_paid','Description':'description','Files':'file_uploaded'},
+    "Employee Jobs": {'Full Name':'full_name','Job Date':'job_date','Job SignIn':'job_signin_time','Lunch SignIn':'lunch_signin_time','Lunch SignOut':'lunch_signout_time','Job SignOut':'job_signout_time','Total Hours':'total_hours','Description':'description','Total Cost':'total_cost','Files':'file_uploaded'},
     "Purchases": {'Project Number':'project_number','Vendor':'vendor_name','Invoice Number':'invoice_number','Invoice Amount':'invoice_amount','Invoice Date':'invoice_date','Payment Method':'payment_method','Description':'description','Files':'file_uploaded'},
 } 
  
@@ -50,7 +50,9 @@ const nametoIDLookup = {
                              "modules":{"Projects":{"display":true,
                                                     "mandatory":true},
                                         "Payments":{"display":true,
-                                                    "mandatory":true}}},
+                                                    "mandatory":true},
+                                        "Purchases":{"display":true,
+                                                     "mandatory":true}}},
 
     "Project Address":      {"name":"projectAddress",
                              "id":"projectAddressID",
@@ -92,13 +94,21 @@ const nametoIDLookup = {
                              "id":"projectAddressID",
                              "header":"Project Address",
                              "modules":{"Projects":{"display":true,
-                                                    "mandatory":true}}},
+                                                    "mandatory":true}}}, 
 
     "Payment Amount":       {"name":"paymentAmount",
-                             "id":"paID",
+                             "id":"paymentAmountID",
                              "header":"Payment Amount",
                              "modules":{"Payments":{"display":true,
-                                                    "mandatory":true}}},
+                                                    "mandatory":true},
+                                        "Sub Contractors":{"display":true,
+                                                   "mandatory":false}}},
+
+    "Date Paid":            {"name":"datePaid",
+                             "id":"jobPymntDateID",
+                             "header":"Date Paid",
+                             "modules":{"Sub Contractors":{"display":true,
+                                                   "mandatory":false}}},
 
     /*"Project Sales Rep":    {"name":"projectSalesRep",
                              "id":"projectSalesRepID",
@@ -106,14 +116,59 @@ const nametoIDLookup = {
                              "modules":{"Projects":{"display":true,
                                                     "mandatory":true}}},*/
 
-    "Payment Date":         {"name":"paymentDate",
-                             "id":"paymentDateID",
+    "Payment Date":         {"name":"jobPaymentDate",
+                             "id":"jobPaymentDateID",
                              "header":"Payment Date",
                              "modules":{"Payments":{"display":true,
                                                     "mandatory":true}}},
 
+    "Job Date":             {"name":"jobDate",
+                             "id":"jobDateID",
+                             "header":"Job Date",
+                             "modules":{"Sub Contractors":{"display":true,
+                                                           "mandatory":true},
+                                        "Employee Jobs":{"display":true,
+                                                         "mandatory":true}}},
+
+    "Job SignIn":           {"name":"jobSigninTime",
+                             "id":"jobSignInTimeID",
+                             "header":"Job SignIn",
+                             "modules":{"Employee Jobs":{"display":true,
+                                                         "mandatory":false}}},
+
+    "Job SignOut":          {"name":"jobSignoutTime",
+                             "id":"jobSignOutTimeID",
+                             "header":"Job SignOut",
+                             "modules":{"Employee Jobs":{"display":true,
+                                                         "mandatory":false}}},
+
+    "Lunch SignIn":         {"name":"lunchSigninTime",
+                             "id":"lunchSignInTimeID",
+                             "header":"Lunch SignIn",
+                             "modules":{"Employee Jobs":{"display":true,
+                                                         "mandatory":false}}},
+
+    "Total Hours":         {"name":"totalHours",
+                            "id":"totalHoursID",
+                            "header":"Total Hours",
+                            "modules":{"Employee Jobs":{"display":true,
+                                                        "mandatory":false}}},
+
+
+    "Total Cost":         {"name":"totalCost",
+                            "id":"lbrCostID",
+                            "header":"Total Cost",
+                            "modules":{"Employee Jobs":{"display":true,
+                                                        "mandatory":false}}},
+
+    "Lunch SignOut":        {"name":"lunchSignoutTime",
+                             "id":"lunchSignOutTimeID",
+                             "header":"Lunch SignOut",
+                             "modules":{"Employee Jobs":{"display":true,
+                                                         "mandatory":false  }}},
+                                                            
     "Payment Method":       {"name":"paymentMethod",    
-                             "id":"pmID",
+                             "id":"paymentMethodID",
                              "header":"Payment Method",
                              "modules":{"Payments":{"display":true,
                                                     "mandatory":true}}},
@@ -124,12 +179,54 @@ const nametoIDLookup = {
                              "modules":{"Payments":{"display":true,
                                                     "mandatory":true}}},
 
+    "Invoice Number":       {"name":"invoiceNumber",
+                             "id":"invoiceNumberID",
+                             "header":"Invoice Number",
+                             "modules":{"Purchases":{"display":true,
+                                                     "mandatory":true}}},
+    "Invoice Date":         {"name":"invoiceDate",
+                             "id":"invoiceDateID",
+                             "header":"Invoice Date",
+                             "modules":{"Purchases":{"display":true,
+                                                     "mandatory":false}}},
+
+    "Invoice Amount":       {"name":"invoiceAmount",
+                             "id":"invoiceAmountID",
+                             "header":"Invoice Amount",
+                             "modules":{"Purchases":{"display":true,
+                                                     "mandatory":true}}},
+
+    "Payment Method":       {"name":"invoiceMethod",
+                             "id":"invoiceMethodID",
+                             "header":"Purchase Method",
+                             "modules":{"Purchases":{"display":true,
+                                                     "mandatory":true}}},
+ 
+    "Contractor Name":      {"name":"contractorName",
+                             "id":"contractorNameID",
+                             "header":"Contractor Name",
+                             "modules":{"Sub Contractors":{"display":true,
+                                                           "mandatory":true}}},
+                                                           
+    "Check Number":         {"name":"checkNumber",
+                             "id":"checkNumberID",
+                             "header":"Check Number",
+                             "modules":{"Sub Contractors":{"display":true,
+                                                           "mandatory":true}}},
+
+                                                          
+    "Vendor":               {"name":"vendorName",
+                             "id":"vendorNameID",
+                             "header":"Vendor",
+                             "modules":{"Purchases":{"display":true,
+                                                     "mandatory":true}}},
+
     "Description":          {"name":"description",
                              "id":"descriptionID",
                              "header":"Files",
                              "modules":{"Projects":{"display":true,
                                                     "mandatory":false},
-                                       "Payments":{"display":true,
+                                        "Payments":{"display":true,
                                                    "mandatory":false},
                                         "Employee Jobs":{"display":true,
                                                          "mandatory":false},
@@ -192,10 +289,10 @@ const nametoIDLookup = {
 // only the first 4 do not include thead and <th></th> since these records are also showing in the project summary therefor no need delete 
 const headers = {
     "Home":{hash:'home',callBack:home,tableName:'home',sn:1},
-    "Employee Jobs":{hash:'empljbs',callBack:upperLeft,callType:"generalUpload",sn:"home",columns:'<th style="width:4%">Full Name</th><th>Job Date</th><th style="width:4%">Job SignIn</th><th style="width:4%">Lunch SignIn</th><th>Lunch SignOut</th><th>Job SignOut</th><th>Total Hours</th><th style="width:15%">Description</th><th style="width:2%">Total cost</th><th style="width:100px">Files</th>',numOfCols:12,showInPrj:true,primaryKey:'task_id',tableName:'employee_jobs',params:0},
+    "Employee Jobs":{hash:'empljbs',callBack:upperLeft,callType:"generalUpload",sn:"home",columns:'<th style="width:4%">Full Name</th><th>Job Date</th><th style="width:4%">Job SignIn</th><th style="width:4%">Lunch SignIn</th><th>Lunch SignOut</th><th>Job SignOut</th><th>Total Hours</th><th style="width:15%">Description</th><th style="width:2%">Total Cost</th><th style="width:100px">Files</th>',numOfCols:12,showInPrj:true,primaryKey:'task_id',tableName:'employee_jobs',params:0},
     "Purchases":{hash:'prchs',callBack:upperRight,callType:"generalUpload",sn:"home",columns:'<th>Vendor</th><th>Invoice Number</th><th>Invoice Amount</th><th>Invoice Date</th><th>Payment Method</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'invoice_id',tableName:'purchases',params:0},
     "Payments":{hash:'pymnts',callBack:lowerLeft,callType:"generalUpload",sn:"home",columns:'<th>Payment Amount</th><th>Payment Date</th><th>Payment Method</th><th>Payment Number</th><th>Description</th><th>Files</th>',numOfCols:8,showInPrj:true,primaryKey:'payment_id',tableName:'payments',params:0},
-    "Sub Contractors":{hash:'sbcntrcj',callBack:lowerRight,callType:"generalUpload",sn:"home",columns:'<th>Contractor Name</th><th>Job Date</th><th>Payment Amount</th><th>Check number</th><th>Date paid</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'task_id',tableName:'contractor_jobs',params:0},
+    "Sub Contractors":{hash:'sbcntrcj',callBack:lowerRight,callType:"generalUpload",sn:"home",columns:'<th>Contractor Name</th><th>Job Date</th><th>Payment Amount</th><th>Check Number</th><th>Date Paid</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'task_id',tableName:'contractor_jobs',params:0},
     "Projects":{hash:'dprjct',callBack:projects,callType:"generalUpload",sn:"aux",columns:'<thead class="mainHeaderClass" id="mainHeader"><th></th><th>Project Number</th><th>Company Name</th><th>Customer Last Name</th><th>Project Type</th><th>Project Manager/Rep</th><th>Project Address</th><th>Files</th></tr></thead>',numOfCols:8,showInPrj:false,primaryKey:'project_id',tableName:'projects',params:0},
     "Scheduler":{hash:'schdlr',callBack:scheduler,callType:"schedulerUpload",columns:'<th style="width:5%">Job Date</th><th style="width:15%">Description</th><th>Installer</th><th>Files</th></tr></thead>',numOfCols:6,showInPrj:true,primaryKey:'task_id',tableName:'task_list',sn:"home",params:0}, // sn=screennumber
     "Vendors":{hash:'vndrs',callBack:upperRight,callType:"generalUpload",sn:"config",columns:'<th>Vendor Name</th><th>Vendor Address</th><th>Notes</th><th style="width:100px">Files</th>',numOfCols:5,showInPrj:false,primaryKey:'vendor_id',tableName:'vendors',params:0},
@@ -1877,11 +1974,11 @@ function displayPaymentResults(projectNumber,targetDisplay) {
             out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="DeleteImage" alt='plus' width='10' height='10'></td>`;
             out += `<td><input tabindex="0" type="text" name="projectNumber" class="projectNameClass" value="${eArray[i].project_number}" size="44" maxlength="50">`;
             out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="payment" value=${eArray[i].payment_id}></td>`;
-            out += `<td><input type="text" id="pymntAmntID" name="paymentAmount" class="projectNameClass" value=${eArray[i].payment_amount}></td>`;
-            out += `<td><input type="date" id="pymntDateID" name="paymentDate" class="inputDate" value=${eArray[i].payment_date}></td>`;
-            out += `<td><input type="text" id="pymntMthdID" name="paymentMethod" class="projectNameClass" value="${eArray[i].payment_method}"></td>`;
-            out += `<td><input type="text" id="pymntNumberID" name="checkNumberCNF" maxlength="20" class="projectNameClass" value='${eArray[i].payment_number}'></td>`;
-            out += `<td><input type="text" id="paymntDrscompanyNameID" name="Description" class="projectNameClass" value="${eArray[i].description}"></td>`;
+            out += `<td><input type="text" id="paymentID" name="paymentAmount" class="projectNameClass" value=${eArray[i].payment_amount}></td>`;
+            out += `<td><input type="date" id="paymentDateID" name="paymentDate" class="inputDate" value=${eArray[i].payment_date}></td>`;
+            out += `<td><input type="text" id="paymentMethodID" name="paymentMethod" class="projectNameClass" value="${eArray[i].payment_method}"></td>`;
+            out += `<td><input type="text" id="checkNumberID" name="checkNumberCNF" maxlength="20" class="projectNameClass" value='${eArray[i].payment_number}'></td>`;
+            out += `<td><input type="text" id="descriptionID" name="Description" class="projectNameClass" value="${eArray[i].description}"></td>`;
             out += outFiles;
             out += `</tr>`;
             if ( eArray[i].payment_amount != "")
@@ -1960,7 +2057,7 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
         if (targetDisplay == "#result-table1") {
             
             var tempOut = '<a class="hyperlinkLabel" id="exportDialogueID" onclick="return exportDlgReport(event)">&nbsp Export Report</a><dialog id="exportDateRangeDialog"></dialog>';
-            tempOut += '<a class="hyperlinkLabel" id="ejTotalCostID"><label for="isTC" class="label1">&nbsp Show Total Cost<input type="checkbox" id="isTC" name="checked" value="no" class="checkboxes"/></label></a>';
+            tempOut += '<a class="hyperlinkLabel" id="ejTotalCostID"><label for="isTCID" class="label1">&nbsp Show Total Cost<input type="checkbox" id="isTCID" name="checked" value="no" class="checkboxes"/></label></a>';
             $("#exportID").html(tempOut);
             $("#exportID").show();
             out += `<thead id="mainHeader"><tr><th></th><th class="pmClass">Project Number</th>`; 
@@ -1993,17 +2090,17 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
                 out += `<td><input tabindex="0" type="text" id="fullNameID" name="fullName" class="projectNameClass" maxlength="30" value="${eArray[i].employee_fname}"></td>`;
                 out += `<td><input tabindex="0" type="date" id="jobDateID" name="jobDate" class="inputDate" value=${jsDate}></td>`;
                 out += `<td><input tabindex="0" type="time" id="jobSignInTimeID" name="jobSigninTime" class="inputTime" value=${jobSignIn}></td>`; 
-                lunchSigninTime =  "&nbsp";
+                lunchSigninTime =  ""; //"&nbsp";
                 if  ( ( eArray[i].lunch_signin != "00:00:00" ) &&
                       ( eArray[i].lunch_signin != null ) )
                     lunchSigninTime = eArray[i].lunch_signin.slice(-8,-3);
                 out += `<td><input tabindex="0" type="time" id="lunchSignInTimeID" name="lunchSignin" class="inputTime" value=${lunchSigninTime}></td>`; 
-                lunchSignoutTime =  "&nbsp";
+                lunchSignoutTime =  ""; //"&nbsp";
                 if  ( ( eArray[i].lunch_signout != "00:00:00" ) && 
                         ( eArray[i].lunch_signout != null ) )
                     lunchSignoutTime = eArray[i].lunch_signout.slice(-8,-3); 
                 out += `<td><input tabindex="0" type="time" id="lunchSignOutTimeID" name="lunchSignOut" class="inputTime" value=${lunchSignoutTime}></td>`;
-                jobSignoutTime = "&nbsp";
+                jobSignoutTime = ""; //"&nbsp";
                 if  ( ( eArray[i].job_signout != "00:00:00" ) &&
                         ( eArray[i].job_signout != null ))
                     jobSignoutTime = eArray[i].job_signout.slice(-8,-3);
@@ -2018,7 +2115,7 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
                 else
                     description = eArray[i].description;
 
-                out += `<td><textarea tabindex="0" id="ejDrscnIID" name="description" class="projectNameClass notesClass" rows="1" cols="33">${description}</textarea></td>`;
+                out += `<td><textarea tabindex="0" id="descriptionID" name="description" class="projectNameClass notesClass" rows="1" cols="33">${description}</textarea></td>`;
                 out += `<td><input tabindex="0" type="text" id="lbrCostID" hidden name="labor_cost" class="projectNameClass" readonly value="${eArray[i].labor_cost}"></td>`;
                 if ( eArray[i].labor_cost !=  "" )
                     sumofJobs += Number(eArray[i].labor_cost);
@@ -2075,13 +2172,13 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
         }
         $('.scrollit').scrollTop($('.scrollit').prop("scrollHeight"));
 
-        $("#isTC").change(function() {
+        /*$("#isTCID").change(function() {
             
             var arrChkBox = document.getElementsByName("labor_cost");
             $(arrChkBox).toggle();
 
             return false;
-        });
+        });*/
         
         $('[id^="jobSign"]').unbind("change");      // just in case unbind the old to avoid doubkle handlers
         $('[id^="jobSign"]').change(function(event) {
@@ -2214,9 +2311,9 @@ function displayContractorJobsResults(projectNumber,targetDisplay) {
                     else
                         out += `<td><input tabindex="0" type="text" id="pymntID" name="payment" class="projectNameClass" value=""></td>`;
 
-                    out += `<td><input tabindex="0" type="text" id="chkNmbrID" name="checknumber" class="projectNameClass" maxlength="20" value="${cArray[i].payment_number}"></td>`;
-                    out += `<td><input tabindex="0" type="date" id="jobPymntDateID" name="jobPaymentDate" class="inputDate" value=${cArray[i].date_paid}></td>`;
-                    out += `<td><input tabindex="0" type="text" id="cjDscrptnID" name="cDscrptn" class="projectNameClass" maxlength="40" value="${cArray[i].description}"></td>`;
+                    out += `<td><input tabindex="0" type="text" id="checkNumberID" name="checknumber" class="projectNameClass" maxlength="20" value="${cArray[i].payment_number}"></td>`;
+                    out += `<td><input tabindex="0" type="date" id="paymentDate" name="jobPaymentDate" class="inputDate" value=${cArray[i].date_paid}></td>`;
+                    out += `<td><input tabindex="0" type="text" id="descriptionID" name="description" class="projectNameClass" maxlength="40" value="${cArray[i].description}"></td>`;
                     fileupload=uploadFilesMngr(Number(cArray[i].file_uploaded),(cArray[i].project_number != ""));
                     out += `<td>${fileupload}</td>`;
                     out += `</tr>`;
@@ -2303,11 +2400,11 @@ function displayPurchaseResults(projectNumber,targetDisplay) {
                 //out += `<input type="hidden" id="invoiceID" name="invoiceID" value=${pArray[i].invoice_id}></td>`;
                 out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="invoiceID" value=${pArray[i].invoice_id}></td>`;
                 out += `<td><input tabindex="0" type="text" id="vendorNameID" name="vendorName" class="projectNameClass" value='${pArray[i].vendor_name}'></td>`;
-                out += `<td><input tabindex="0" type="text" id="invceNmbrID" name="invoiceNumber" class="projectNameClass" maxlength="40" value=${pArray[i].invoice_number}></td>`;
-                out += `<td><input tabindex="0" type="text" id="invceAmtID" name="invoiceAmount" class="projectNameClass" value=${pArray[i].invoice_amount}></td>`;
+                out += `<td><input tabindex="0" type="text" id="invoiceNumberID" name="invoiceNumber" class="projectNameClass" maxlength="40" value=${pArray[i].invoice_number}></td>`;
+                out += `<td><input tabindex="0" type="text" id="invoiceAmountID" name="invoiceAmount" class="projectNameClass" value=${pArray[i].invoice_amount}></td>`;
                 out += `<td><input tabindex="0" type="date" id="invoiceDateID" name="invoiceDate" class="inputDate" value=${pArray[i].invoice_date}></td>`;
-                out += `<td><input tabindex="0" type="text" id="invoiceMthdID" name="invoiceMethod" class="projectNameClass" value='${pArray[i].payment_method}'></td>`;
-                out += `<td><input tabindex="0" type="text" id="invcDscrptnID" name="Description" class="projectNameClass" maxlength="40" value='${pArray[i].invoice_desc}'></td>`;
+                out += `<td><input tabindex="0" type="text" id="invoiceMethodID" name="invoiceMethod" class="projectNameClass" value='${pArray[i].payment_method}'></td>`;
+                out += `<td><input tabindex="0" type="text" id="descriptionID" name="Description" class="projectNameClass" maxlength="40" value='${pArray[i].invoice_desc}'></td>`;
                 out += outFiles+`</tr>`;
                 if ( pArray[i].invoice_amount != "")
                     sumOfInvoices += Number(pArray[i].invoice_amount);
