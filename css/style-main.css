@@ -829,7 +829,8 @@ div.circle {
 }
 
 .hyperlinkLabel:hover {
-	color 				: rgb(255, 0, 234);
+	color 				: blue;
+	text-decoration		: underline;
 	font-size			: 12px;
 	cursor				: pointer;
 }
