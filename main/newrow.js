@@ -64,15 +64,15 @@
                 
                 row += `<td><input tabindex="0" type="text" name="projectName" id="prjctNumberID" class="projectNameClass" maxlength="200" value='${tempRow[3].Name}'>`;
                 row += `<input type="hidden" id='${headers['Purchases']['primaryKey']}' name="purchaseID" value=${ID}></td>`;
-                row += `<td><input tabindex="0" type="text" id="purcvhaseNameID" name="purchaseName" id="purchaseID" class="projectNameClass" maxlength="20" value='${tempRow[index++].value}'></td>`;
+                row += `<td><input tabindex="0" type="text" id="vendorNameID" name="vendorName" class="projectNameClass" maxlength="20" value='${tempRow[index++].value}'></td>`;
                 row += `<td><input tabindex="0" type="text" name="purchaseNumber" id="purchaseNumberID" class="projectNameClass" maxlength="40" value=${tempRow[index].value}></td>`;
                 amount='';
                 if ( restore ) // undo the fields nnly if ctrlZ was down
                     amount=tempRow[++index].value;
                 index++;
-                row += `<td><input tabindex="0" type="text" id="AmountID" name="invoiceAmount" class="projectNameClass" maxlength="10" value=${amount}></td>`;
-                row += `<td><input tabindex="0" type="date" id="invoiceDateID" name="invoiceDate" class="inputDate" value=${tempDay}></td>`;
-                row += `<td><input tabindex="0" type="text" id="${headers['Purchases']['columns'][4]['id']}" name="${headers['Purchases']['columns'][4]['name']}" class="${headers['Purchases']['columns'][4]['class']}" "maxlength="${headers['Purchases']['columns'][4]['maxlength']}" value=${tempRow[index++].value}></td>`;
+                row += `<td><input tabindex="0" type="text" id="purchaseAmountID" name="purchaseAmount" class="projectNameClass" maxlength="10" value=${amount}></td>`;
+                row += `<td><input tabindex="0" type="date" id="purchaseDateID" name="purchaseDate" class="inputDate" value=${tempDay}></td>`;
+                row += `<td><input tabindex="0" type="text" id="purchaseMethodID" name="purchaseMethod" class="projectNameClass" maxlength="10" value=${tempRow[index++].value}></td>`;
                 if ( restore )
                     tempDay=tempRow[index].value;
                 index++;

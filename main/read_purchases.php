@@ -11,9 +11,9 @@
     if ( mysqli_connect_errno() == 0 ) {
 
         if ( $projectNumber =='all' )
-            $sql_st= "SELECT * FROM purchases order by invoice_date ASC";
+            $sql_st= "SELECT * FROM purchases order by purchase_date ASC";
         else     
-            $sql_st= "SELECT * FROM purchases where project_number = '$projectNumber' order by invoice_date ASC";
+            $sql_st= "SELECT * FROM purchases where project_number = '$projectNumber' order by purchase_date ASC";
         //echo $sql_st;
         $employee_job=mysqli_query($con,$sql_st);
         file_put_contents('../log/log_'.$logDate.'.log', "(read_purchases) ".$current_time."info 2-Num of rows: ".$employee_job->num_rows."\n", FILE_APPEND); 
@@ -28,7 +28,7 @@
                                        "purchase_number"   =>  $row["purchase_number"],
                                        "purchase_amount"   =>  $row["purchase_amount"],
                                        "purchase_date"     =>  $row["purchase_date"],
-                                       "payment_method"    =>  $row["payment_method"],
+                                       "purchase_method"   =>  $row["purchase_method"],
                                        "project_number"    =>  $row["project_number"],
                                        "purchase_desc"     =>  $row["description"],
                                        "purchase_id"       =>  $row["purchase_id"],

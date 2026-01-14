@@ -161,11 +161,11 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
                 classArray[module].arr[recordID].purchase_id      = record[0];
                 classArray[module].arr[recordID].project_number  = record[1];
                 classArray[module].arr[recordID].vendor_name     = record[2];
-                classArray[module].arr[recordID].invoice_number  = record[3];
+                classArray[module].arr[recordID].purchase_number  = record[3];
                 classArray[module].arr[recordID].purchase_amount  = record[4];
-                classArray[module].arr[recordID].invoice_date    = record[5];
-                classArray[module].arr[recordID].payment_method  = record[6];
-                classArray[module].arr[recordID].invoice_desc    = record[7];
+                classArray[module].arr[recordID].purchase_date    = record[5];
+                classArray[module].arr[recordID].purchase_method  = record[6];
+                classArray[module].arr[recordID].description     = record[7];
                 classArray[module].arr[recordID].file_uploaded   = record[8];
                 classArray[module].arr[recordID].foldername      = record[9];
                 //classArray[module].arr.splice(entryNumber,1);     // remove the item then add new/updted record

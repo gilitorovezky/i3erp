@@ -39,7 +39,7 @@ const headerToDBFieldLookup = { // look up table to match record to db schmea
     "Payments": {'Project Number':'project_number','Payment Amount':'payment_amount','Payment Date':'payment_date','Payment Method':'payment_method','Payment Number':'payment_number','Description':'description','Files':'file_uploaded'},
     "Sub Contractors": {'Contractor Name':'contractor_name','Job Date':'job_date','Payment Amount':'payment_amount','Check Number':'check_number','Date Paid':'date_paid','Description':'description','Files':'file_uploaded'},
     "Employee Jobs": {'Full Name':'full_name','Job Date':'job_date','Job SignIn':'job_signin_time','Lunch SignIn':'lunch_signin_time','Lunch SignOut':'lunch_signout_time','Job SignOut':'job_signout_time','Total Hours':'total_hours','Description':'description','Total Cost':'total_cost','Files':'file_uploaded'},
-    "Purchases": {'Project Number':'project_number','Vendor':'vendor_name','Purchase Number':'invoice_number','Purchase Amount':'purchase_amount','Purchase Date':'invoice_date','Purchase Method':'purchase_method','Description':'description','Files':'file_uploaded'},
+    "Purchases": {'Project Number':'project_number','Vendor':'vendor_name','Purchase Number':'purchase_number','Purchase Amount':'purchase_amount','Purchase Date':'purchase_date','Purchase Method':'purchase_method','Description':'description','Files':'file_uploaded'},
 } 
  
 const nametoIDLookup = {
@@ -108,7 +108,7 @@ const nametoIDLookup = {
                              "id":"jobPymntDateID",
                              "header":"Date Paid",
                              "modules":{"Sub Contractors":{"display":true,
-                                                   "mandatory":false}}},
+                                                           "mandatory":false}}},
 
     /*"Project Sales Rep":    {"name":"projectSalesRep",
                              "id":"projectSalesRepID",
@@ -179,20 +179,20 @@ const nametoIDLookup = {
                              "modules":{"Payments":{"display":true,
                                                     "mandatory":true}}},
 
-    "Invoice Number":       {"name":"invoiceNumber",
-                             "id":"invoiceNumberID",
-                             "header":"Invoice Number",
+    "Purchase Number":       {"name":"purchaseNumber",
+                             "id":"purchaseNumberID",
+                             "header":"Purchase Number",
                              "modules":{"Purchases":{"display":true,
                                                      "mandatory":true}}},
-    "Invoice Date":         {"name":"invoiceDate",
-                             "id":"invoiceDateID",
-                             "header":"Invoice Date",
+    "Purchase Date":         {"name":"purchaseDate",
+                             "id":"purchaseDateID",
+                             "header":"Purchase Date",
                              "modules":{"Purchases":{"display":true,
                                                      "mandatory":false}}},
 
-    "Invoice Amount":       {"name":"invoiceAmount",
-                             "id":"invoiceAmountID",
-                             "header":"Invoice Amount",
+    "Purchase Amount":       {"name":"purchaseAmount",
+                             "id":"purchaseAmountID",
+                             "header":"Purchase Amount",
                              "modules":{"Purchases":{"display":true,
                                                      "mandatory":true}}},
 
@@ -213,7 +213,6 @@ const nametoIDLookup = {
                              "header":"Check Number",
                              "modules":{"Sub Contractors":{"display":true,
                                                            "mandatory":true}}},
-
                                                           
     "Vendor":               {"name":"vendorName",
                              "id":"vendorNameID",
@@ -2403,7 +2402,7 @@ function displayPurchaseResults(projectNumber,targetDisplay) {
                 out += `<td><input tabindex="0" type="text" id="invoiceNumberID" name="invoiceNumber" class="projectNameClass" maxlength="40" value=${pArray[i].invoice_number}></td>`;
                 out += `<td><input tabindex="0" type="text" id="invoiceAmountID" name="invoiceAmount" class="projectNameClass" value=${pArray[i].purchase_amount}></td>`;
                 out += `<td><input tabindex="0" type="date" id="invoiceDateID" name="invoiceDate" class="inputDate" value=${pArray[i].invoice_date}></td>`;
-                out += `<td><input tabindex="0" type="text" id="invoiceMethodID" name="invoiceMethod" class="projectNameClass" value='${pArray[i].payment_method}'></td>`;
+                out += `<td><input tabindex="0" type="text" id="invoiceMethodID" name="invoiceMethod" class="projectNameClass" value='${pArray[i].purchase_method}'></td>`;
                 out += `<td><input tabindex="0" type="text" id="descriptionID" name="Description" class="projectNameClass" maxlength="40" value='${pArray[i].invoice_desc}'></td>`;
                 out += outFiles+`</tr>`;
                 if ( pArray[i].purchase_amount != "")
@@ -2411,12 +2410,12 @@ function displayPurchaseResults(projectNumber,targetDisplay) {
             }
             else {	// display is the project summary
                 out += `<td>${pArray[i].vendor_name}</td>`;
-                out += `<td>${pArray[i].invoice_number}</td>`;
+                out += `<td>${pArray[i].purchase_number}</td>`;
                 out += `<td>${pArray[i].purchase_amount}</td>`;
-                var jsDate=sql2JSDate(pArray[i].invoice_date,0);
+                var jsDate=sql2JSDate(pArray[i].purchase_date,0);
                 out += `<td>${jsDate}</td>`;
-                out += `<td>${pArray[i].payment_method}</td>`;
-                out += `<td>${pArray[i].invoice_desc}</td>`;
+                out += `<td>${pArray[i].purchase_method}</td>`;
+                out += `<td>${pArray[i].description}</td>`;
                 out += outFiles+`</tr>`;
             }
         }    

@@ -22,9 +22,10 @@
     } else 
         if ( mysqli_connect_errno() == 0 ) { // no error from the DB
             
-            $table_headers=array();
-            $sqlArray=array();
+            /*$table_headers=array();*/
+            
             // $table_headers["payments"]=array("payment_id","project_number","payment_amount","payment_date","payment_method","payment_number","description","file_uploaded","foldername"); // Remove customer name per Eyal 6/29
+            /*
             $table_headers["purchases"]=array("purchase_id","project_number","vendor_name","invoice_number","purchase_amount","invoice_date","payment_method","invoice_desc","file_uploaded","foldername");
             $table_headers["contractor_jobs"]=array("task_id","project_number","contractor_name","job_date","payment_amount","payment_number","date_paid","description","file_uploaded","foldername");
             $table_headers["employee_jobs"]=array("task_id","project_number","employee_fname","job_date","job_signin","lunch_signin","lunch_signout","job_signout","total_hours","description","labor_cost","file_uploaded","foldername");// not shopw gas Eyal 04-11
@@ -39,7 +40,8 @@
             $table_headers["hourlyrate_history"]=array("hr_id","hourlyrate","effective_date","employee_id");
             $table_headers["companies"]=array("company_id","company_name","notes","file_uploaded","foldername");
             $table_headers["task_list"]=array("task_id","project_name","task_date","task_description","employee_name","file_uploaded");
-            
+            */
+            $sqlArray=array();
             $sqlArray["payments"]="UPDATE projects prjct INNER JOIN (SELECT project_number, SUM(IF(payment_amount='', 0.0,CAST(payment_amount AS decimal(20,2)))) as total 
                 FROM payments GROUP BY project_number) pymnt ON prjct.project_name = pymnt.project_number 
                 SET prjct.project_total_payments = pymnt.total";
@@ -49,8 +51,8 @@
                 SET prjct.project_total_cntrc_cost = cntr_jbs.total";
 
             $sqlArray["purchases"]="UPDATE projects prjct INNER JOIN (SELECT project_number,SUM(IF(purchase_amount='', 0.0,CAST(purchase_amount AS decimal(20,2)))) as total 
-                FROM purchases GROUP BY project_number) invcs ON prjct.project_name = invcs.project_number
-                SET prjct.project_total_purchases = invcs.total";
+                FROM purchases GROUP BY project_number) prchs ON prjct.project_name = prchs.project_number
+                SET prjct.project_total_purchases = prchs.total";
 
             $return_code=1;
             $post_body=($_POST["postData"]);
