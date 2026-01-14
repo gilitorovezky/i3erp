@@ -120,7 +120,7 @@
             }
 
             // main replace statement to update the called table
-            $sql_st = "REPLACE INTO $tableName SET $keyName=$arrayJson->record->$keyName, "; // add the primary key as field zero
+            $sql_st = "REPLACE INTO $tableName SET ".$keyName."='".$arrayJson->record->$keyName."', "; // add the primary key as field zero
             //for ($cell=0; $cell<$headersCount; $cell++) { // Go over the headers to construct the sql
             foreach ($headers as $index => $header) {
                 file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 2.8-header index:".$index." header value:".$header."\n", FILE_APPEND);
