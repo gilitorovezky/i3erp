@@ -39,7 +39,7 @@ const headerToDBFieldLookup = { // look up table to match record to db schmea
     "Payments": {'Project Number':'project_number','Payment Amount':'payment_amount','Payment Date':'payment_date','Payment Method':'payment_method','Payment Number':'payment_number','Description':'description','Files':'file_uploaded'},
     "Sub Contractors": {'Contractor Name':'contractor_name','Job Date':'job_date','Payment Amount':'payment_amount','Check Number':'check_number','Date Paid':'date_paid','Description':'description','Files':'file_uploaded'},
     "Employee Jobs": {'Full Name':'full_name','Job Date':'job_date','Job SignIn':'job_signin_time','Lunch SignIn':'lunch_signin_time','Lunch SignOut':'lunch_signout_time','Job SignOut':'job_signout_time','Total Hours':'total_hours','Description':'description','Total Cost':'total_cost','Files':'file_uploaded'},
-    "Purchases": {'Project Number':'project_number','Vendor':'vendor_name','Invoice Number':'invoice_number','Invoice Amount':'invoice_amount','Invoice Date':'invoice_date','Payment Method':'payment_method','Description':'description','Files':'file_uploaded'},
+    "Purchases": {'Project Number':'project_number','Vendor':'vendor_name','Invoice Number':'invoice_number','Invoice Amount':'invoice_amount','Invoice Date':'invoice_date','Purchase Method':'purchase_method','Description':'description','Files':'file_uploaded'},
 } 
  
 const nametoIDLookup = {
@@ -196,7 +196,7 @@ const nametoIDLookup = {
                              "modules":{"Purchases":{"display":true,
                                                      "mandatory":true}}},
 
-    "Payment Method":       {"name":"invoiceMethod",
+    "Invoice Method":       {"name":"invoiceMethod",
                              "id":"invoiceMethodID",
                              "header":"Purchase Method",
                              "modules":{"Purchases":{"display":true,
@@ -290,7 +290,7 @@ const nametoIDLookup = {
 const headers = {
     "Home":{hash:'home',callBack:home,tableName:'home',sn:1},
     "Employee Jobs":{hash:'empljbs',callBack:upperLeft,callType:"generalUpload",sn:"home",columns:'<th style="width:4%">Full Name</th><th>Job Date</th><th style="width:4%">Job SignIn</th><th style="width:4%">Lunch SignIn</th><th>Lunch SignOut</th><th>Job SignOut</th><th>Total Hours</th><th style="width:15%">Description</th><th style="width:2%">Total Cost</th><th style="width:100px">Files</th>',numOfCols:12,showInPrj:true,primaryKey:'task_id',tableName:'employee_jobs',params:0},
-    "Purchases":{hash:'prchs',callBack:upperRight,callType:"generalUpload",sn:"home",columns:'<th>Vendor</th><th>Invoice Number</th><th>Invoice Amount</th><th>Invoice Date</th><th>Payment Method</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'invoice_id',tableName:'purchases',params:0},
+    "Purchases":{hash:'prchs',callBack:upperRight,callType:"generalUpload",sn:"home",columns:'<th>Vendor</th><th>Invoice Number</th><th>Invoice Amount</th><th>Invoice Date</th><th>Invoice Method</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'invoice_id',tableName:'purchases',params:0},
     "Payments":{hash:'pymnts',callBack:lowerLeft,callType:"generalUpload",sn:"home",columns:'<th>Payment Amount</th><th>Payment Date</th><th>Payment Method</th><th>Payment Number</th><th>Description</th><th>Files</th>',numOfCols:8,showInPrj:true,primaryKey:'payment_id',tableName:'payments',params:0},
     "Sub Contractors":{hash:'sbcntrcj',callBack:lowerRight,callType:"generalUpload",sn:"home",columns:'<th>Contractor Name</th><th>Job Date</th><th>Payment Amount</th><th>Check Number</th><th>Date Paid</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'task_id',tableName:'contractor_jobs',params:0},
     "Projects":{hash:'dprjct',callBack:projects,callType:"generalUpload",sn:"aux",columns:'<thead class="mainHeaderClass" id="mainHeader"><th></th><th>Project Number</th><th>Company Name</th><th>Customer Last Name</th><th>Project Type</th><th>Project Manager/Rep</th><th>Project Address</th><th>Files</th></tr></thead>',numOfCols:8,showInPrj:false,primaryKey:'project_id',tableName:'projects',params:0},
