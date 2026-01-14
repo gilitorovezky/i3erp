@@ -1109,6 +1109,15 @@ img 	{
 	border-spacing		: 0px;
 }
 
+.caption tr td {
+	vertical-align		: middle;
+    white-space			: nowrap;
+}
+
+.center-cell {
+            text-align: center;
+        }
+
 .caption.label {
 	width				: 10%; 
 	vertical-align		: bottom;

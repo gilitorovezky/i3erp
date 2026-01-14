@@ -2057,7 +2057,7 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
         if (targetDisplay == "#result-table1") {
             
             var tempOut = '<a class="hyperlinkLabel" id="exportDialogueID" onclick="return exportDlgReport(event)">&nbsp Export Report</a><dialog id="exportDateRangeDialog"></dialog>';
-            tempOut += '<a class="hyperlinkLabel" id="ejTotalCostID"><label for="isTCID" class="label1">&nbsp Show Total Cost<input type="checkbox" id="isTCID" name="checked" value="no" class="checkboxes"/></label></a>';
+            tempOut += '<a id="ejTotalCostID"><label for="isTCID" class="label1">&nbsp Show Total Cost<input type="checkbox" id="isTCID" name="checked" value="no" class="checkboxes"/></label></a>';
             $("#exportID").html(tempOut);
             $("#exportID").show();
             out += `<thead id="mainHeader"><tr><th></th><th class="pmClass">Project Number</th>`; 

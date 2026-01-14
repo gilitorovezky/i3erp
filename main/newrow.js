@@ -116,9 +116,8 @@
                     tempDay=tempRow[index++].value;
 
                 row += `<td><input tabindex="0" type="date" name="Date" id="jobDateID" class="inputDate" value=${tempDay}>`;
-                var lunchSignInTime,lunchSignOutTime,jobSignOutTime="&nbsp:&nbsp";
                 var totalHours = "0.00";
-                var description="";
+                var description="",localCurrentTime="",lunchSignInTime="",files="",jobSignOutTime="",lunchSignOutTime="";
                 var labor_cost = "0.0";
                 if ( restore ) {
                     localCurrentTime=tempRow[index++].value;
@@ -131,9 +130,9 @@
                     files=tempRow[index++].value;
                 }
                 row += `<td><input tabindex="0" type="time" id="jobSignInTimeID" name="jobSigninTime" class="inputTime" value=${localCurrentTime}></td>`;
-                row += `<td><input tabindex="0" type="time" id="lunchSignInTimeID" name="lunchSignin" class="inputTime" value=${lunchSignInTime}"></td>`;
-                row += `<td><input tabindex="0" type="time" id="lunchSignOutTimeID" name="lunchSignOut" class="inputTime" value=${lunchSignOutTime}"></td>`;
-                row += `<td><input tabindex="0" type="time" id="jobSignOutTimeID" name="jobSignOut" class="inputTime" value=${jobSignOutTime} ></td>`;
+                row += `<td><input tabindex="0" type="time" id="lunchSignInTimeID" name="lunchSignin" class="inputTime" value=${lunchSignInTime}></td>`;
+                row += `<td><input tabindex="0" type="time" id="lunchSignOutTimeID" name="lunchSignOut" class="inputTime" value=${lunchSignOutTime}></td>`;
+                row += `<td><input tabindex="0" type="time" id="jobSignOutTimeID" name="jobSignOut" class="inputTime" value=${jobSignOutTime}></td>`;
                 row += `<td><input tabindex="0" type="text" id="totalHoursID" name="totalHours" readonly class="projectNameClass" maxlength="5" value=${totalHours}></td>`;
                 row += `<td><input tabindex="0" type="text" id="descriptionID" name="description" class="projectNameClass" maxlength="20" value=${description}></td>`;
                 row += `<td><input tabindex="0" type="text" id="lbrCostID" hidden name="labor_cost" class="projectNameClass" readonly value=${labor_cost}></td>`;
