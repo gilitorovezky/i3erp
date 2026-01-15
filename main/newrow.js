@@ -57,7 +57,7 @@
                 row += `<td><input tabindex="0" type="text" id="projectTypeID" name="projectType" class="projectNameClass" value=${tempRow[index++].value}></td>`;
                 row += `<td><input tabindex="0" type="text" id="projectSalesRepID" name="projectSalesRep" class="projectNameClass" value=${tempRow[index++].value}></td>`;
                 row += `<td><input tabindex="0" type="text" id="projectAddressID" name="projectAddress" class="projectNameClass" value=${tempRow[index++].value}></td>`;
-                row += `<td style="width:2%"><input tabindex="0" type="text" id="allFilesID" name="allFiles" class="projectNameClass" value="0"></td>`;
+                row += `<td style="width:2%"><input tabindex="0" type="text" id="allFilesID" data-files="0" name="allFiles" class="projectNameClass" value="0"></td>`;
             break;
 
             case "Purchases" :
@@ -77,7 +77,7 @@
                     tempDay=tempRow[index].value;
                 index++;
                 row += `<td><input tabindex="0" type="text" id="descriptionID" name="description" class="projectNameClass" maxlength="40" value=${tempRow[index].value}></td>`;
-                row += `<td style="width:8%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:8%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" data-files="0" style="text-decoration:none;font-size:12px">${files}</a></td>`;
             break;
 
             case "Payments" :
@@ -135,7 +135,7 @@
                 row += `<td><input tabindex="0" type="text" id="totalHoursID" name="totalHours" readonly class="projectNameClass" maxlength="5" value=${totalHours}></td>`;
                 row += `<td><input tabindex="0" type="text" id="descriptionID" name="description" class="projectNameClass" maxlength="20" value=${description}></td>`;
                 row += `<td><input tabindex="0" type="text" id="lbrCostID" hidden name="labor_cost" class="projectNameClass" readonly value=${labor_cost}></td>`;
-                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" data-files="0" style="text-decoration:none;font-size:12px">${files}</a></td>`;
 
             break;
 
@@ -163,7 +163,7 @@
                 row += `<td><input tabindex="0" type="text" id="descriptionID" name="description" class="projectNameClass" maxlength="40" value="${descrpition}"></td>`;
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td style="width:2%"><a tabindex="0" id="allFilesID" class="hyperlinkLabel" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:2%"><a tabindex="0" id="allFilesID" data-files="0" class="hyperlinkLabel" style="text-decoration:none;font-size:12px">${files}</a></td>`;
 
             break;
 
@@ -191,7 +191,7 @@
                     files=tempRow[index].value;
                 else
                     files=uploadFilesMngr(0,false);  
-                row += `<td><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td><a tabindex="0" class="hyperlinkLabel" id="allFilesID" data-files="0" style="text-decoration:none;font-size:12px">${files}</a></td>`;
 
             break;
             
@@ -202,7 +202,7 @@
                 row += `<td><input tabindex="0" type="text" name="notes" id="notes" class="projectNameClass" maxlength="50" value=${tempRow[index].value}></td>`;
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" data-files="0" style="text-decoration:none;font-size:12px">${files}</a></td>`;
 
             break;
             
@@ -215,7 +215,7 @@
                 row += `<td><input tabindex="0" type="text" name="vendorNotes" id="vNotesID" class="projectNameClass" maxlength="50" value=${tempRow[index].value}></td>`;
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td style="width:2%"><a tabindex="0" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:2%"><a tabindex="0" id="allFilesID" data-files="0" style="text-decoration:none;font-size:12px">${files}</a></td>`;
 
             break;
 
@@ -243,7 +243,7 @@
                 row += `<td><input tabindex="0" type="text" name="companyNotes" class="projectNameClass" maxlength="50" value=${tempRow[index++].value}></td>`;
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td style="width:2%"><a tabindex="0" id="allFilesID" style="text-decoration:none;font-size:12px">${files}</a></td>`; //class="hyperlinkLabel" 
+                row += `<td style="width:2%"><a tabindex="0" id="allFilesID" data-files="0" class="hyperlinkLabel" style="text-decoration:none;font-size:12px">${files}</a></td>`; //class="hyperlinkLabel" 
             break;
 
             

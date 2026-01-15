@@ -306,7 +306,7 @@
 
                 case "Payment Amount"       :
                 case "Hourly Rate"          :
-                case "Invoice Amount"       :
+                case "Purchase Amount"      :
                 case "Total Hours"          :
                 case "estimateAmountID"     :
                     showNewEntry=false; // do not allow new entry

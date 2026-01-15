@@ -230,6 +230,7 @@ function saveRow(moduleName,element) {
             //headers1.push("project_name");
 
         case "Employee Jobs"        :
+            // add job signin job signout lunch signin lunchsignout 
         case "Sub Contractors"      :
         case "Purchases"            :
         case "Payments"             :
@@ -325,7 +326,7 @@ function saveRow(moduleName,element) {
 
     //$(row).find("td:has(a[data-files])").each(function() {});
 
-     tempRow2["Files"]=Number($(row).find("a[id='allFilesID']").attr("data-files"))
+    tempRow2["Files"]=Number($(row).find("a[id='allFilesID']").attr("data-files"))
   
     $(row).find("td:has(input[type='date'])").each(function() { //} $(row).find('td:gt(0)').each(function(iCol) {   //$(this).find('td:gt(1)').each(function(iCol,iTD) {   
         //var value=0;
