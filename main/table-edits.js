@@ -328,12 +328,19 @@ function saveRow(moduleName,element) {
 
     tempRow2["Files"]=Number($(row).find("a[id='allFilesID']").attr("data-files"))
   
-    $(row).find("td:has(input[type='date'])").each(function() { //} $(row).find('td:gt(0)').each(function(iCol) {   //$(this).find('td:gt(1)').each(function(iCol,iTD) {   
-        //var value=0;
-        //var value = this.childNodes[0].value;
+    $(row).find("td:has(input[type='date'])").each(function() {
         const header=$(tTable.find(' thead th:nth-child('+((this.cellIndex)+1)+')')).html();
         tempRow2[header]=this.childNodes[0].value;
     });
+
+    $(row).find("td:has(input[type='time'])").each(function() {
+        const header=$(tTable.find(' thead th:nth-child('+((this.cellIndex)+1)+')')).html();
+        var value = "0.00"
+        if ( this.childNodes[0].value.length > 0 )
+            value=this.childNodes[0].value;
+        tempRow2[header]=value;
+    });
+
     arrObj["entry0"].subFolderName=contactAllFields;   // update the subFolder with the contacnation of all the record fields// set default`
     if ( !isNewRecord ) { //if its not a new record than the entry must be found
         entryNumber=classArray[moduleName].retEntrybyID(Number(ID));
