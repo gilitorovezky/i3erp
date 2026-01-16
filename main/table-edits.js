@@ -418,6 +418,7 @@ function saveRow(moduleName,element) {
             tempRow2["employeeID"]=eID
             tempRow2["hourlyrate"]=hourlyrate;
             tempRow2["laborcost"]=laborCost;
+            tempRow2["projectID"]=Projects.retEntrybyID(tempRow2["Project Number"].split("-")[0]);
             
         case "Sub Contractors"  :
             if ( tempRow[4] == "") // if payment_amount is eempty then set the field to 0.00

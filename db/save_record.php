@@ -216,17 +216,27 @@
                     break;
                         
                     case "employee jobs"            :
+                        $subFolderName=$post_body["subFolderName"];
+                        $project_name = str_replace("'","\'", $arrayJson->record->{'Project Number'}); //  $post_body[$row_number][1]); // escaping the project name to support ' and "
+
                         $employee_id = $arrayJson->record->employeeID; //$post_body[$row_number][12]; // only in employee_jobs, the employee_id is the last field in the record
-                        $taskID = $arrayJson->record->ID; //$post_body[$row_number][0];
-                        $projectNumber=$arrayJson->record->prjName; //$post_body[$row_number][1];
+                        $taskID = $arrayJson->record->$keyName; //$post_body[$row_number][0];
+                        $projectNumber=$arrayJson->record->{'Project Number'}; //$post_body[$row_number][1];
+                        $project_id = $arrayJson->record->projectID; //$post_body[$row_number][14];
                         $fullname = $arrayJson->record->{'Full Name'};//$post_body[$row_number][2]; // get the fullname from the record
                         $task_time = $arrayJson->record->{'Job Date'}; //$post_body[$row_number][3] ; //." ".$post_body[$row_number][4].":00"; // get the task time
-                        $totalLaborTime = $post_body[8];
+                        $totalLaborTime = $arrayJson->record->{'Total Hours'}; //$post_body[$row_number][7];
                         $notes = $arrayJson->record->Description; //$post_body[$row_number][9];
                         $hourly_rate = $arrayJson->record->hourlyrate; //$post_body[$row_number][13];
                         //file_put_contents('../log/log_'.$logDate.'.log',"(save_record) ".$current_time." info .6-creating new subflder:", FILE_APPEND);
-                        if ( $projectNumber != "")  // create new dir 
-                            $retCode=atomFS("mkdir","",$rootDir.$projectNumber."/".$moduleName."/".$project_id,"","");
+                        if ( $projectNumber != "") { // create new dir 
+                            if ( $subFolderName != $newFolderName && // is it same record but different record fields
+                                    $newFolderName != "" ) 
+                                    $retCode=atomFS("rendir",$rootDir.$project_name."/".$moduleName."/".$subFolderName,"","",$rootDir.$project_name."/".$moduleName."/".$newFolderName); // rename from sub to new 
+                                
+                                else // no need to rename just create a new folder
+                                    $retCode=atomFS("mkdir","",$rootDir.$project_name."/".$moduleName."/".$subFolderName,"","");
+                        }
                         file_put_contents('../log/log_'.$logDate.'.log',"(save_record) ".$current_time." info 5-full name:".$fullname." eID:".$employee_id." taskID:".$taskID." laborTime:".$totalLaborTime." hr-rate:".$hourly_rate."\n", FILE_APPEND);
                         $project_name = str_replace("'","\'",$projectNumber); // escaping the field to support ' 
                         $sql_st="SELECT task_status from task_list where task_id = '$taskID'"; // get the task status, if task is in signin or closed than the submison is u other wise, m
@@ -239,7 +249,7 @@
                             else { // task not exist - add new one using replace
                                 $prjNumber=explode('-',$project_name); // extract the project number from the project name
                                 $prjNumber = $prjNumber[0];
-                                $sql_st="REPLACE INTO task_list SET task_id='$taskID',task_status='open',project_number='$prjNumber',project_name='$project_name',task_description='$notes',employee_id='$employee_id',employee_name='$fullname',task_date='$task_time',seq='1'";
+                                $sql_st="REPLACE INTO task_list SET task_id='$taskID',task_status='open',project_number='$prjNumber',project_name='$project_name',task_description='$notes',employee_id='$employee_id',employee_name='$fullname',task_date='$task_time',seq_number='1'";
                                 file_put_contents('../log/log_'.$logDate.'.log',"(save_record) ".$current_time." info 5.2-adding a new task to task_list sql_st:".$sql_st."\n", FILE_APPEND);
                             }
                         

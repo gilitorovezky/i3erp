@@ -62,7 +62,7 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
             var ij = "";
 
             if ( classArray["Employee Jobs"].arr.length > 0 )  { // if just edit then delete the record follow by adding a new one
-                let entryNumber=classArray["Employee Jobs"].retEntrybyID(taskID);
+                //let entryNumber=classArray["Employee Jobs"].retEntrybyID(taskID);
                 if ( recordID >= 0 ) { // save the record specific felds
                     jc=classArray["Employee Jobs"].arr[recordID].job_closed;
                     ij=classArray["Employee Jobs"].arr[recordID].images_json;
@@ -76,56 +76,56 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
             classArray["Employee Jobs"].arr.push({
                 task_id         :   taskID,
                 employee_id     :   tempeID,
-                project_number  :   record[1],
+                project_number  :   record2['Project Number'],
                 employee_fname  :   employeeName,
-                job_date        :   record[3],
-                job_signin      :   record[4]+":00", // adding seconds to comply wiht sql date format hh:ss:mm
-                lunch_signin    :   record[5]+":00", // adding seconds to comply wiht sql date format hh:ss:mm
-                lunch_signout   :   record[6]+":00", // adding seconds to comply wiht sql date format hh:ss:mm
-                job_signout     :   record[7]+":00", // adding seconds to comply wiht sql date format hh:ss:mm
-                total_hours     :   record[8],
+                job_date        :   record2['Job Date'],
+                job_signin      :   record2['Job SignIn']+":00", // adding seconds to comply wiht sql date format hh:ss:mm
+                lunch_signin    :   record2['Lunch SignIn']+":00", // adding seconds to comply wiht sql date format hh:ss:mm
+                lunch_signout   :   record2['Lunch Sign Out']+":00", // adding seconds to comply wiht sql date format hh:ss:mm
+                job_signout     :   record2['Job SignOut']+":00", // adding seconds to comply wiht sql date format hh:ss:mm
+                total_hours     :   record2['Total Hours'],
                 //gas             :   record[7], // not shopw gas Eyal 04-11
-                file_uploaded   :   record[11],
+                file_uploaded   :   record2['Files'],
                 images_json     :   ij,
                 job_closed      :   jc,
                 description     :   description,
-                labor_cost      :   record[10],
-                foldername      :   record[12]
+                labor_cost      :   record2['laborcost'],
+                foldername      :   record2['Folder Name']
             }); 
   
             let resultT = Tasks.arrTasks.findIndex(t => t.task_id == taskID);
-            if ( isNewRecord )  // task exist then delete the record (changes made to the record), follow by adding new one
-                Tasks.arrTasks.splice(resultT,1);     // remove the old record 
-            else {
+            if ( !isNewRecord )  // task exist then delete the record (changes made to the record), follow by adding new one
+                //Tasks.arrTasks.splice(resultT,1);     // remove the old record 
+            //else {
                 if (( employeeName != "" ) && // look for an existing task to update the seq number
                     ( record[3] != "" ) ) {
                         Tasks.arrTasks.map(function(rec) {
-                        if (( rec.employee_name == employeeName) && 
-                            rec.task_date.split(" ")[0] == record[3] ) {
+                        if (( rec.employee_name === employeeName) && 
+                            rec.task_date.split(" ")[0] === record[3] ) {
                                 seqNumber = rec.seq_number;
-                                if ( rec.inid != 0) {
+                                if ( rec.inid !== 0) {
                                     const arrayInid=rec.inid.split("-");
                                     inid = arrayInid[0]+"-"+arrayInid[1]+"-"+arrayInid[2]+"-"+(Number(arrayInid[3])+1);    // Increament the inid by 1
                                 }
                             }
                         });
                 }
-            }
+            //}
 
-            if ( ( record[4] != "" ) && ( record[7] != "" ) )   // if both sign in and signout fields are populated
+            if ( ( record2['Job SignOut'] !== "0.00" ) && ( record2['Job SignIn'] !== "0.00" ) )   // if both sign in and signout fields are populated
                 taskStatus = "closed";
             else
-                if ( record[4] != "" )
+                if ( record2['Job SignIn'] !== "0.00" )
                     taskStatus = "signin";
 
-            // add the new task to the schduler
+            // add the new task to the scheduler
             Tasks.arrTasks.push({
                 employee_id       :   tempeID,  // tempID is taken from the employee.pNames array, if employeename is not empty
                 employee_name     :   employeeName,
                 project_address   :   "",
-                project_name      :   record[1],
-                project_number    :   record[1].split('-',1)[0],  //projectNumber;,
-                task_date         :   record[3],
+                project_name      :   record2['Project Number'],
+                project_number    :   record2['Project Number'].split('-',1)[0],  //projectNumber;,
+                task_date         :   record2['Job Date']+" "+record2['Job SignIn']+":00",
                 task_description  :   description,
                 task_id           :   taskID,
                 task_status       :   taskStatus,
@@ -141,14 +141,14 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
             });*/
 
             // update Task properties
-            if ( isNewRecord ) {
+            if ( !isNewRecord ) {
             //if (entryNumber != -1) {
                 windowLog.trace("Updating new employee name at the tasks table(old):"+Tasks.arrTasks[resultT].employee_name+" new:"+record[2]);
                 windowLog.trace("Updating new description at tasks table(old):"+Tasks.arrTasks[resultT].task_description+" new:"+description);
-                windowLog.trace("Updating new task date at tasks table(old):"+Tasks.arrTasks[resultT].task_date +" new:"+record[3]+" "+record[4]);
+                windowLog.trace("Updating new task date at tasks table(old):"+Tasks.arrTasks[resultT].task_date +" new:"+record2['Job Date']+" "+record2['Job SignIn']);
                 Tasks.arrTasks[resultT].task_description = description;
-                Tasks.arrTasks[resultT].employee_name = record[2]; 
-                Tasks.arrTasks[resultT].task_date = record[3]+" "+record[4]+":00";
+                Tasks.arrTasks[resultT].employee_name = record2['Full Name']; 
+                Tasks.arrTasks[resultT].task_date = record2['Job Date']+" "+record2['Job SignIn']+":00";
                 Tasks.arrTasks[resultT].employee_id=tempeID;
             }
            
@@ -193,7 +193,7 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
 
         case "Payments"         :
 
-            const entryN=classArray[module].retEntrybyID(record[0]);
+            //const entryN=classArray[module].retEntrybyID(record[0]);
             if ( !isNewRecord ) {
                 classArray[module].arr[recordID].payment_id      = record2["payment_id"];
                 classArray[module].arr[recordID].project_number  = record2["Project Number"];
