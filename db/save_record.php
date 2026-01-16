@@ -21,26 +21,7 @@
                         "new_vendor_name"   => "No input argument found");
     } else 
         if ( mysqli_connect_errno() == 0 ) { // no error from the DB
-            
-            /*$table_headers=array();*/
-            
-            // $table_headers["payments"]=array("payment_id","project_number","payment_amount","payment_date","payment_method","payment_number","description","file_uploaded","foldername"); // Remove customer name per Eyal 6/29
-            /*
-            $table_headers["purchases"]=array("purchase_id","project_number","vendor_name","invoice_number","purchase_amount","invoice_date","payment_method","invoice_desc","file_uploaded","foldername");
-            $table_headers["contractor_jobs"]=array("task_id","project_number","contractor_name","job_date","payment_amount","payment_number","date_paid","description","file_uploaded","foldername");
-            $table_headers["employee_jobs"]=array("task_id","project_number","employee_fname","job_date","job_signin","lunch_signin","lunch_signout","job_signout","total_hours","description","labor_cost","file_uploaded","foldername");// not shopw gas Eyal 04-11
-            $table_headers["projects"]=array("project_id","project_number","company_name","project_cstmr_lastname","project_type","project_m_contractor",
-                                            "project_address","file_uploaded","project_name",
-                                            "project_details","project_total_empl_cost","project_total_cntrc_cost",
-                                            "project_total_purchases","project_total_payments","file_uploaded");
-            $table_headers["employees"]=array("employee_id","fullname","employment_type","hourlyrate","hourlyrate_effective_date","is_active",'password',"file_uploaded","startdate");
-            $table_headers["vendors"]=array("vendor_id","vendor_name","vendor_address","notes","file_uploaded","foldername");
-            //$table_headers["contractors"]=array("contractor_id","name","address1","address2","zipcode","city","state","notes"); 
-            $table_headers["contractors"]=array("contractor_id","name","notes","file_uploaded","foldername");
-            $table_headers["hourlyrate_history"]=array("hr_id","hourlyrate","effective_date","employee_id");
-            $table_headers["companies"]=array("company_id","company_name","notes","file_uploaded","foldername");
-            $table_headers["task_list"]=array("task_id","project_name","task_date","task_description","employee_name","file_uploaded");
-            */
+        
             $sqlArray=array();
             $sqlArray["payments"]="UPDATE projects prjct INNER JOIN (SELECT project_number, SUM(IF(payment_amount='', 0.0,CAST(payment_amount AS decimal(20,2)))) as total 
                 FROM payments GROUP BY project_number) pymnt ON prjct.project_name = pymnt.project_number 
@@ -79,7 +60,7 @@
             $old_ProjectName = "";
             $new_project_name = "";
             //$project_id = $arrayJson->record->ID;
-            file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 2.1:header-".print_r($headers,true)." keyName:".$keyName." value:".$arrayJson->record->$keyName."\n", FILE_APPEND); 
+            //file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 2.1:header-".print_r($headers,true)." keyName:".$keyName." value:".$arrayJson->record->$keyName."\n", FILE_APPEND); 
             //file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 2.1:header-".print_r($headers,true)."\n", FILE_APPEND);
 
             $project_created_date="";
@@ -126,14 +107,11 @@
             //for ($cell=0; $cell<$headersCount; $cell++) { // Go over the headers to construct the sql
             foreach ($headers as $index => $header) {
                 file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 2.8-header index:".$index." header value:".$header."\n", FILE_APPEND);
-                
-            //file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 2.9-S:".$prjNumber."\n", FILE_APPEND);
-                $new_value = str_replace("'","\'", $arrayJson->record->$index); // escaping the field to support ' and "
-            //$sql_st .= $table_headers[$tableName][$cell]."='".$new_value."',";
+                $new_value = str_replace("'","\'", $arrayJson->record->{'project_id'}); // escaping the field to support ' and "
                 $sql_st .= $header."='".$new_value."',";
             }
             //}
-            
+          
             switch ($moduleName) {
                 
                 case "projects"            :
@@ -157,7 +135,8 @@
                     break;
 
                 default:
-                    $sql_st = substr($sql_st, 0, -1);   // remove the last char ","
+                    $sql_st .= "foldername='".$arrayJson->record->{'Folder Name'}."'"; // add the folder name at the end
+                    //$sql_st = substr($sql_st, 0, -1);   // remove the last char ","
             }
             file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 3.2-sql_st:".$sql_st."\n", FILE_APPEND);
             if (mysqli_query($con,$sql_st)) {

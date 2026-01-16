@@ -366,7 +366,7 @@ function saveRow(moduleName,element) {
         case "Projects":
             projectSet=true;
             // construct the full projct name: number+company_name+cstmr_name+add+proj type+prj_mngr
-            fullProjectName=tempRow[1]+"-"+tempRow[2]+"-"+tempRow[3]+"-"+tempRow[4]+"-"+tempRow[5]+"-"+tempRow[6]; // must change to a function 
+            //fullProjectName=tempRow[1]+"-"+tempRow[2]+"-"+tempRow[3]+"-"+tempRow[4]+"-"+tempRow[5]+"-"+tempRow[6]; // must change to a function 
             fullProjectName=tempRow2["Project Number"]+"-"+tempRow2["Company Name"]+"-"+tempRow2["Customer Last Name"]+"-"+tempRow2["Project Type"]+"-"+tempRow2["Project Manager/Rep"]+"-"+tempRow2["Project Address"];
             tempRow.push(fullProjectName); // entry #7
             //const tToday=new Date();

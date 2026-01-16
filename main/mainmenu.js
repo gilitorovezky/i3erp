@@ -37,7 +37,7 @@ const headerToDBFieldLookup = { // look up table to match record to db schmea
 
     "Projects": {'Project Number':'project_number','Company Name':'company_name','Customer Last Name':'project_cstmr_lastname','Project Type':'project_type','Project Manager/Rep':'project_m_contractor','Project Address':'project_address','Files':'file_uploaded'},
     "Payments": {'Project Number':'project_number','Payment Amount':'payment_amount','Payment Date':'payment_date','Payment Method':'payment_method','Payment Number':'payment_number','Description':'description','Files':'file_uploaded'},
-    "Sub Contractors": {'Contractor Name':'contractor_name','Job Date':'job_date','Payment Amount':'payment_amount','Check Number':'check_number','Date Paid':'date_paid','Description':'description','Files':'file_uploaded'},
+    "Sub Contractors": {'Contractor Name':'contractor_name','Job Date':'job_date','Payment Amount':'payment_amount','Payment Number':'payment_number','Date Paid':'date_paid','Description':'description','Files':'file_uploaded'},
     "Employee Jobs": {'Full Name':'employee_fname','Job Date':'job_date','Job SignIn':'job_signin','Lunch SignIn':'lunch_signin','Lunch SignOut':'lunch_signout','Job SignOut':'job_signout','Total Hours':'total_hours','Description':'description','Total Cost':'total_cost','Files':'file_uploaded'},
     "Purchases": {'Project Number':'project_number','Vendor':'vendor_name','Purchase Number':'purchase_number','Purchase Amount':'purchase_amount','Purchase Date':'purchase_date','Purchase Method':'purchase_method','Description':'description','Files':'file_uploaded'},
 } 
@@ -174,10 +174,12 @@ const nametoIDLookup = {
                                                     "mandatory":true}}},
 
     "Payment Number":       {"name":"paymentNumber",
-                             "id":"pnID",
+                             "id":"paymentNumberID",
                              "header":"Payment Number",
                              "modules":{"Payments":{"display":true,
-                                                    "mandatory":true}}},
+                                                    "mandatory":true},
+                                        "Sub Contractors":{"display":true,
+                                                           "mandatory":true}}},
 
     "Purchase Number":       {"name":"purchaseNumber",
                              "id":"purchaseNumberID",
@@ -205,12 +207,6 @@ const nametoIDLookup = {
     "Contractor Name":      {"name":"contractorName",
                              "id":"contractorNameID",
                              "header":"Contractor Name",
-                             "modules":{"Sub Contractors":{"display":true,
-                                                           "mandatory":true}}},
-                                                           
-    "Check Number":         {"name":"checkNumber",
-                             "id":"checkNumberID",
-                             "header":"Check Number",
                              "modules":{"Sub Contractors":{"display":true,
                                                            "mandatory":true}}},
                                                           
@@ -291,7 +287,7 @@ const headers = {
     "Employee Jobs":{hash:'empljbs',callBack:upperLeft,callType:"generalUpload",sn:"home",columns:'<th style="width:4%">Full Name</th><th>Job Date</th><th style="width:4%">Job SignIn</th><th style="width:4%">Lunch SignIn</th><th>Lunch SignOut</th><th>Job SignOut</th><th>Total Hours</th><th style="width:15%">Description</th><th style="width:2%">Total Cost</th><th style="width:100px">Files</th>',numOfCols:12,showInPrj:true,primaryKey:'task_id',tableName:'employee_jobs',params:0},
     "Purchases":{hash:'prchs',callBack:upperRight,callType:"generalUpload",sn:"home",columns:'<th>Vendor</th><th>Purchase Number</th><th>Purchase Amount</th><th>Purchase Date</th><th>Purchase Method</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'purchase_id',tableName:'purchases',params:0},
     "Payments":{hash:'pymnts',callBack:lowerLeft,callType:"generalUpload",sn:"home",columns:'<th>Payment Amount</th><th>Payment Date</th><th>Payment Method</th><th>Payment Number</th><th>Description</th><th>Files</th>',numOfCols:8,showInPrj:true,primaryKey:'payment_id',tableName:'payments',params:0},
-    "Sub Contractors":{hash:'sbcntrcj',callBack:lowerRight,callType:"generalUpload",sn:"home",columns:'<th>Contractor Name</th><th>Job Date</th><th>Payment Amount</th><th>Check Number</th><th>Date Paid</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'task_id',tableName:'contractor_jobs',params:0},
+    "Sub Contractors":{hash:'sbcntrcj',callBack:lowerRight,callType:"generalUpload",sn:"home",columns:'<th>Contractor Name</th><th>Job Date</th><th>Payment Amount</th><th>Payment Number</th><th>Date Paid</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'task_id',tableName:'contractor_jobs',params:0},
     "Projects":{hash:'dprjct',callBack:projects,callType:"generalUpload",sn:"aux",columns:'<thead class="mainHeaderClass" id="mainHeader"><th></th><th>Project Number</th><th>Company Name</th><th>Customer Last Name</th><th>Project Type</th><th>Project Manager/Rep</th><th>Project Address</th><th>Files</th></tr></thead>',numOfCols:8,showInPrj:false,primaryKey:'project_id',tableName:'projects',params:0},
     "Scheduler":{hash:'schdlr',callBack:scheduler,callType:"schedulerUpload",columns:'<th style="width:5%">Job Date</th><th style="width:15%">Description</th><th>Installer</th><th>Files</th></tr></thead>',numOfCols:6,showInPrj:true,primaryKey:'task_id',tableName:'task_list',sn:"home",params:0}, // sn=screennumber
     "Vendors":{hash:'vndrs',callBack:upperRight,callType:"generalUpload",sn:"config",columns:'<th>Vendor Name</th><th>Vendor Address</th><th>Notes</th><th style="width:100px">Files</th>',numOfCols:5,showInPrj:false,primaryKey:'vendor_id',tableName:'vendors',params:0},
@@ -2310,7 +2306,7 @@ function displayContractorJobsResults(projectNumber,targetDisplay) {
                     else
                         out += `<td><input tabindex="0" type="text" id="pymntID" name="payment" class="projectNameClass" value=""></td>`;
 
-                    out += `<td><input tabindex="0" type="text" id="checkNumberID" name="checknumber" class="projectNameClass" maxlength="20" value="${cArray[i].payment_number}"></td>`;
+                    out += `<td><input tabindex="0" type="text" id="paymentNumberID" name="paymentNumber" class="projectNameClass" maxlength="20" value="${cArray[i].payment_number}"></td>`;
                     out += `<td><input tabindex="0" type="date" id="paymentDate" name="jobPaymentDate" class="inputDate" value=${cArray[i].date_paid}></td>`;
                     out += `<td><input tabindex="0" type="text" id="descriptionID" name="description" class="projectNameClass" maxlength="40" value="${cArray[i].description}"></td>`;
                     fileupload=uploadFilesMngr(Number(cArray[i].file_uploaded),(cArray[i].project_number != ""));

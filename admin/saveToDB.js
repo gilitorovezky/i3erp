@@ -156,33 +156,33 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
 
         case "Purchases"        :
 
-            let entry1=classArray[module].retEntrybyID(record[0]);
+            //let entry1=classArray[module].retEntrybyID(record[0]);
             if ( !isNewRecord ) {
-                classArray[module].arr[recordID].purchase_id      = record[0];
-                classArray[module].arr[recordID].project_number  = record[1];
-                classArray[module].arr[recordID].vendor_name     = record[2];
-                classArray[module].arr[recordID].purchase_number  = record[3];
-                classArray[module].arr[recordID].purchase_amount  = record[4];
-                classArray[module].arr[recordID].purchase_date    = record[5];
-                classArray[module].arr[recordID].purchase_method  = record[6];
-                classArray[module].arr[recordID].description     = record[7];
-                classArray[module].arr[recordID].file_uploaded   = record[8];
-                classArray[module].arr[recordID].foldername      = record[9];
+                classArray[module].arr[recordID].purchase_id      = record2["purchase_id"];
+                classArray[module].arr[recordID].project_number  = record2["project_number"];
+                classArray[module].arr[recordID].vendor_name     = record2["vendor_name"];
+                classArray[module].arr[recordID].purchase_number  = record2["purchase_number"];
+                classArray[module].arr[recordID].purchase_amount  = record2["purchase_amount"];
+                classArray[module].arr[recordID].purchase_date    = record2["purchase_date"];
+                classArray[module].arr[recordID].purchase_method  = record2["purchase_method"];
+                classArray[module].arr[recordID].description     = record2["description"];
+                classArray[module].arr[recordID].file_uploaded   = record2["file_uploaded"];
+                classArray[module].arr[recordID].foldername      = record2["foldername"];
                 //classArray[module].arr.splice(entryNumber,1);     // remove the item then add new/updted record
             }
             else { // record not found then add 
                 classArray[module].arr.push({
-                    purchase_id      :   record[0],
-                    project_number  :   record[1],
-                    vendor_name     :   record[2],
-                    invoice_number  :   record[3],
-                    purchase_amount  :   record[4],
-                    invoice_date    :   record[5],
-                    payment_method  :   record[6],
-                    invoice_desc    :   record[7],
-                    file_uploaded   :   record[8],
-                    folderrname     :   record[9],
-                    images_json     :   ""});
+                    purchase_id      :   record2["purchase_id"],
+                    project_number   :   record2["project_number"],
+                    vendor_name      :   record2["vendor_name"],
+                    invoice_number   :   record2["invoice_number"],
+                    purchase_amount  :   record2["purchase_amount"],
+                    invoice_date     :   record2["invoice_date"],
+                    payment_method   :   record2["payment_method"],
+                    invoice_desc     :   record2["invoice_desc"],
+                    file_uploaded    :   record2["file_uploaded"],
+                    folderrname      :   record2["folderrname"],
+                    images_json      :   ""});
                     
             }
             classArray["Purchases"].arr.sort(function(a,b) {
@@ -195,6 +195,7 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
 
             //const entryN=classArray[module].retEntrybyID(record[0]);
             if ( !isNewRecord ) {
+                //const recordID=classArray[module].retEntrybyID(record[0]);
                 classArray[module].arr[recordID].payment_id      = record2["payment_id"];
                 classArray[module].arr[recordID].project_number  = record2["Project Number"];
                 classArray[module].arr[recordID].payment_amount  = record2["Payment Amount"];
@@ -228,36 +229,37 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
         case "Sub Contractors" :
 
             var tempeID=-1;
-            const entrySC=classArray[module].retEntrybyID(record[0]);
+            
 
             if ( record[2] != "" )  // if Contractor name is not null
                 tempeID=classArray["Contractors"].pNames[record[2]];
             if ( !isNewRecord ) {
-                classArray[module].arr[entrySC].task_id         = record[0];
-                classArray[module].arr[entrySC].project_number  = record[1];
-                classArray[module].arr[entrySC].contractor_name = record[2];
-                classArray[module].arr[entrySC].job_date        = record[3];
-                classArray[module].arr[entrySC].payment_amount  = record[4];
-                classArray[module].arr[entrySC].payment_number  = record[5];
-                classArray[module].arr[entrySC].date_paid       = record[6];
-                classArray[module].arr[entrySC].description     = record[7];
-                classArray[module].arr[entrySC].employee_id     = tempeID;
-                classArray[module].arr[entrySC].file_uploaded   = record[8];
-                classArray[module].arr[entrySC].foldername      = record[9];
+                //const entrySC=classArray[module].retEntrybyID(record[0]);
+                classArray[module].arr[recordID].task_id         = record2['task_id'];
+                classArray[module].arr[recordID].project_number  = record2["Project Number"];
+                classArray[module].arr[recordID].contractor_name = record2["Contractor Name"];
+                classArray[module].arr[recordID].job_date        = record2['Job Date'];
+                classArray[module].arr[recordID].payment_amount  = record2['payment Amount'];
+                classArray[module].arr[recordID].payment_number  = record2["Payment Number"];
+                classArray[module].arr[recordID].date_paid       = record2['date Paid'];
+                classArray[module].arr[recordID].description     = record2['Description'];
+                classArray[module].arr[recordID].employee_id     = tempeID;
+                classArray[module].arr[recordID].file_uploaded   = record["Files"];
+                classArray[module].arr[recordID].foldername      = record2['folder Name'];
             }
             else {
                 classArray[module].arr.push({
-                    task_id         :   record[0],
-                    project_number  :   record[1],
-                    contractor_name :   record[2],
-                    job_date        :   record[3],
-                    payment_amount  :   record[4],
-                    payment_number  :   record[5],
-                    date_paid       :   record[6],
-                    description     :   record[7],
+                    task_id         :   record2['task_id'],
+                    project_number  :   record2["Project Number"],
+                    contractor_name :   record2["Contractor Name"],
+                    job_date        :   record2['Job Date'],
+                    payment_amount  :   record2['payment Amount'],
+                    payment_number  :   record2["Payment Number"],
+                    date_paid       :   record2['date Paid'],
+                    description     :   record2['Description'],
                     employee_id     :   tempeID,
-                    file_uploaded   :   record[8],
-                    foldername      :   record[9],
+                    file_uploaded   :   record["Files"],
+                    foldername      :   record2['folder Name'],
                     images_json     :   ""
                 });
             }
@@ -269,7 +271,7 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
         case "Employees"        :
                           
             if ( classArray[module].arr.length > 0 ) { // if just edit then delete the record and later add a new one
-                 const entryE=classArray[module].retEntrybyID(record[0]);
+                const entryE=classArray[module].retEntrybyID(record[0]);
                 if ( !isNewRecord ) {
                     classArray[module].arr.splice(entryE,1);      
                     delete classArray[module].pNames[record[1]];        // remove the item from the pNames array
@@ -279,40 +281,40 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
                     classArray["Employees"].colors[record2["fullname"]]=record2["profile_color"]; // add the color to the colors array
             }
             classArray[module].arr.push({
-                employee_id     :   record[0],
+                employee_id     :   record2['employee_id'],
                 username        :   "",
-                fullname        :   record[1],
-                hourlyrate      :   record[3],
-                is_active       :   record[5],
-                employment_type :   record[2],
-                effective_date  :   record[4],
-                password        :   record[6],
-                file_uploaded   :   record[7],
-                startdate       :   record[8],
+                fullname        :   record2["fullname"],
+                hourlyrate      :   record2["hourly_rate"],
+                is_active       :   record2["is_active"],
+                employment_type :   record2["employment_type"],
+                effective_date  :   record2["effective_date"],
+                password        :   record2["password"],
+                file_uploaded   :   record["Files"],
+                startdate       :   record2["start_date"],
                 profile_color   :   record2["profile_color"],
                 images_json     :   ""
             });
             //classArray[module].arr.sort((firstItem, secondItem) => firstItem.effective_date - secondItem.effective_date);
-            classArray[module].pNames[record[1]]=record[0];
+            classArray[module].pNames[record2["fullname"]]=record2["employee_id"];
             
         break;
 
         case "Contractors"      :
 
-            const entryC=classArray[module].retEntrybyID(record[0]);
             if ( !isNewRecord ) {
-                classArray[module].arr[entryC].contractor_id   =  record[0];      
-                classArray[module].arr[entryC].name            =  record[1];
-                classArray[module].arr[entryC].notes           =  record[2];
-                classArray[module].arr[entryC].file_uploaded   =  record[3];
-                delete classArray[module].pNames[record[1]];       // remove the item from the pNames array
+                //const entryC=classArray[module].retEntrybyID(record[0]);
+                classArray[module].arr[recordID].contractor_id   =  record2["contractor_id"];
+                classArray[module].arr[recordID].name            =  record2["name"];
+                classArray[module].arr[recordID].notes           =  record2["notes"];
+                classArray[module].arr[recordID].file_uploaded   =  record2["file_uploaded"];
+                delete classArray[module].pNames[record2["name"]];       // remove the item from the pNames array
             }
             else {
                 classArray[module].arr.push({
-                    contractor_id   :   record[0],
-                    name            :   record[1],
-                    notes           :   record[2],
-                    file_uploaded   :   record[3],
+                    contractor_id   :   record2["contractor_id"],
+                    name            :   record2["name"],
+                    notes           :   record2["notes"],
+                    file_uploaded   :   record2["file_uploaded"],
                     images_json     :   ""
                 });
             }
@@ -328,28 +330,27 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
         break;
 
         case "Vendors"          :
-
-            const entryV=classArray[module].retEntrybyID(record[0]);
+          
             if ( !isNewRecord ) {
-                classArray[module].arr[entryV].vendor_id       =  record[0];       
-                classArray[module].arr[entryV].vendor_name     =  record[1];      
-                classArray[module].arr[entryV].vendor_address  =  record[2];      
-                classArray[module].arr[entryV].notes           =  record[3];
-                classArray[module].arr[entryV].file_uploaded   =  record[4];
-                delete classArray[module].pNames[record[1]];        // remove the item from the pNames array
+                //const entryV=classArray[module].retEntrybyID(record[0]);
+                classArray[module].arr[recordID].vendor_id       =  record2["vendor_id"];       
+                classArray[module].arr[recordID].vendor_name     =  record2["vendor_name"];      
+                classArray[module].arr[recordID].vendor_address  =  record2["vendor_address"];      
+                classArray[module].arr[recordID].notes           =  record2["notes"];
+                classArray[module].arr[recordID].file_uploaded   =  record2["file_uploaded"];
+                delete classArray[module].pNames[record2["vendor_name"]];        // remove the item from the pNames array
             }
             else {
                 classArray[module].arr.push({
-                    vendor_id       :   record[0],
-                    vendor_name     :   record[1],
-                    vendor_address  :   record[2],
-                    notes           :   record[3],
-                    file_uploaded   :   record[4],
+                    vendor_id       :   record2["vendor_id"],
+                    vendor_name     :   record2["vendor_name"],
+                    vendor_address  :   record2["vendor_address"],
+                    notes           :   record2["notes"],
+                    file_uploaded   :   record2["file_uploaded"],
                     images_json     :   ""
                 });
             }
-            classArray[module].pNames[record[1]]=record[0];
-
+            classArray[module].pNames[record2["vendor_name"]]=record[0];
             windowLog.trace("Updating new vendor name in the Purchases(purchases) table");
             classArray["Purchases"].arr.forEach(element => {
                 if ( element.vendor_name  == record[5]) {  // entry 4 holds the original contractor name, tempRow[1[] holds the new contractor name]
@@ -361,25 +362,25 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
 
         case "Companies"        :
 
-            const entryCM=classArray[module].retEntrybyID(record[0]);
             if ( !isNewRecord ) {
-                classArray[module].arr[entryCM].company_id      =  record[0];       
-                classArray[module].arr[entryCM].company_name    =  record[1];
-                classArray[module].arr[entryCM].notes           =  record[2];
-                classArray[module].arr[entryCM].file_uploaded   =  record[3];
-                classArray[module].arr[entryCM].images_json     =  record[4];               
-                delete classArray[module].pNames[record[1]];    // remove the item from the pNames array        
+                //const entryCM=classArray[module].retEntrybyID(record[0]);
+                classArray[module].arr[recordID].company_id      =  record2["company_id"];       
+                classArray[module].arr[recordID].company_name    =  record2["company_name"];
+                classArray[module].arr[recordID].notes           =  record2["notes"];
+                classArray[module].arr[recordID].file_uploaded   =  record2["file_uploaded"];
+                classArray[module].arr[recordID].images_json     =  record2["images_json"];               
+                delete classArray[module].pNames[record2["company_name"]];    // remove the item from the pNames array        
             }
             else {
                 classArray[module].arr.push({
-                    company_id      :   record[0],
-                    company_name    :   record[1],
-                    notes           :   record[2],
-                    file_uploaded   :   record[3],
+                    company_id      :   record2["company_id"],
+                    company_name    :   record2["company_name"],
+                    notes           :   record2["notes"],
+                    file_uploaded   :   record2["file_uploaded"],
                     images_json     :   "" 
                 });
             }
-            classArray[module].pNames[record[1]]=record[0];
+            classArray[module].pNames[record2["company_name"]]=record[0];
 
             windowLog.trace("Updating new project name in the Purchases(purchases) table");
             if ( record[4] != "" ) {
@@ -428,58 +429,59 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
 
         case "Hourly Rate"      :  
 
-           const entryHR=classArray["Employees"].retEntrybyID(record[3]);
-            if ( !isNewRecord ) 
+           
+            if ( !isNewRecord ) {
+                const entryHR=classArray["Employees"].retEntrybyID(record[3]);
                 classArray["Employees"].arr[entryHR].hourlyrate=record[1]; // update the HR to the latest value
+            }
             
         break;
 
         case "Projects"         :
             // project_number+companyname+customerlastname+project_type+project_manager+project_addre3ss
-            const prjName=record[1]+"-"+record[2]+"-"+record[3]+"-"+record[4]+"-"+record[5]+"-"+record[6];  // must change to a function
-            const entryP=Projects.retEntrybyID(record[1]); // get the array entry corresponding to the project_number
+            const prjName=record2["projectname"];//record[1]+"-"+record[2]+"-"+record[3]+"-"+record[4]+"-"+record[5]+"-"+record[6];  // must change to a function
 
             if ( !isNewRecord ) { // just to be safe
                 const oldPrjName=Projects.arrProjects[entryP].project_name;
-                let entryP;
+                var entryP=Projects.retEntrybyID(record2["Project Number"]); // get the array entry corresponding to the project_number
                 Tasks.arrTasks.map(function(record,index) {
-                    if ( record.project_name == oldPrjName )
+                    if ( record.project_name === oldPrjName )
                         entryP=index;
                 });
-                if ( entryP != -1 ) {   // project_name found now update woth the new project name
+                //if ( entryP !== -1 ) {   // project_name found now update woth the new project name
                     windowLog.trace("Updating new project name at tasks table(old):"+Tasks.arrTasks[entryNumber].project_name+" new:"+prjName);
                     Tasks.arrTasks[entryP].project_name=prjName;
-                }
+                //}
 
                 classArray["Employee Jobs"].arr.map(function(record,index) {
-                    if ( record.project_number == oldPrjName ) {
+                    if ( record.project_number === oldPrjName ) {
                         classArray["Employee Jobs"].arr[index].project_number = prjName;
                         windowLog.trace("Updating new project name at Employee Jobse(old):"+classArray["Employee Jobs"].arr[index].project_number +" new:"+prjName);
                     }
                 });
 
                 classArray["Payments"].arr.map(function(record,index) {
-                    if ( record.project_number == oldPrjName ) {
+                    if ( record.project_number === oldPrjName ) {
                         classArray["Payments"].arr[index].project_number = prjName;
                         windowLog.trace("Updating new project name at Payments(old):"+classArray["Payments"].arr[index].project_number +" new:"+prjName);
                     }
                 });
 
                 classArray["Purchases"].arr.map(function(record,index) {
-                    if ( record.project_number == oldPrjName ) {
+                    if ( record.project_number === oldPrjName ) {
                         classArray["Purchases"].arr[index].project_number = prjName;
                         windowLog.trace("Updating new project name at Purchases(old):"+classArray["Purchases"].arr[index].project_number +" new:"+prjName);
                     }
                 });
  
                 const tEntryy=Projects.pNames.indexOf(Projects.arrProjects[entry].project_name); // get the id of the old prj name before override 
-                Projects.arrProjects[entryP].project_id              = record[0];
-                Projects.arrProjects[entryP].project_number          = record[1];
-                Projects.arrProjects[entryP].company_name            = record[2];
-                Projects.arrProjects[entryP].project_m_contractor    = record[5];
-                Projects.arrProjects[entryP].project_cstmr_lastname  = record[3];
-                Projects.arrProjects[entryP].project_type            = record[4];
-                Projects.arrProjects[entryP].project_address         = record[6];
+                Projects.arrProjects[entryP].project_id              = record2["project_id"];
+                Projects.arrProjects[entryP].project_number          = record2["Project Number"];
+                Projects.arrProjects[entryP].company_name            = record2["Company Name"];
+                Projects.arrProjects[entryP].project_m_contractor    = record2["Project Manager"];
+                Projects.arrProjects[entryP].project_cstmr_lastname  = record2["Customer Last Name"];
+                Projects.arrProjects[entryP].project_type            = record2["Project Type"];
+                Projects.arrProjects[entryP].project_address         = record2["Project Address"];
                 Projects.arrProjects[entryP].project_name            = prjName;  
                 Projects.arrProjects[entryP].project_details         = '';
                 
@@ -490,15 +492,15 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
             }
              else {
                 Projects.arrProjects.push({
-                    project_id              :   record[0],         
-                    project_number          :   record[1],
-                    company_name            :   record[2],
-                    project_m_contractor    :   record[5],
-                    project_cstmr_lastname  :   record[3],
-                    project_type            :   record[4],
-                    project_address         :   record[6],
+                    project_id              :   record2["project_id"],         
+                    project_number          :   record2["Project Number"],
+                    company_name            :   record2["Company Name"],
+                    project_m_contractor    :   record2["Project Manager/Rep"],
+                    project_cstmr_lastname  :   record2["Customer Last Name"],
+                    project_type            :   record2["Project Type"],
+                    project_address         :   record2["Project Address"],
                     project_name            :   prjName,   
-                    project_details         :   '',
+                    project_details         :   "",
                     project_total_empl_cost :   '0.00',
                     project_total_cntrc_cost:   '0.00',
                     project_total_purchases :   '0.00',
@@ -513,20 +515,20 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
         case "Customers"    :
 
             //let entry=record.customer_number; 
-            const entry=classArray["Customers"].arr.findIndex(t => t.customer_id == record.customer_id);
+            //const entry=classArray["Customers"].arr.findIndex(t => t.customer_id == record.customer_id);
             if ( !isNewRecord ) { // exisitng customer
-                classArray[module].arr[entry].customer_first_name=record.customer_first_name;
-                classArray[module].arr[entry].customer_last_name=record.customer_last_name;
-                classArray[module].arr[entry].customer_address_line1=record.customer_address_line1;
-                classArray[module].arr[entry].customer_address_line2=record.customer_address_line2;
-                classArray[module].arr[entry].customer_city=record.customer_city;
-                classArray[module].arr[entry].customer_state=record.customer_state;
-                classArray[module].arr[entry].customer_zip=record.customer_zip;
-                classArray[module].arr[entry].customer_email=record.customer_email;
-                classArray[module].arr[entry].customer_tel_number=record.customer_tel_number;
-                classArray[module].arr[entry].customer_notes=record.customer_notes;
-                classArray[module].arr[entry].customer_id=record.customer_id;
-                classArray[module].cNames[entry]=buildCstmrSearchString(record);
+                classArray[module].arr[recordID].customer_first_name=record.customer_first_name;
+                classArray[module].arr[recordID].customer_last_name=record.customer_last_name;
+                classArray[module].arr[recordID].customer_address_line1=record.customer_address_line1;
+                classArray[module].arr[recordID].customer_address_line2=record.customer_address_line2;
+                classArray[module].arr[recordID].customer_city=record.customer_city;
+                classArray[module].arr[recordID].customer_state=record.customer_state;
+                classArray[module].arr[recordID].customer_zip=record.customer_zip;
+                classArray[module].arr[recordID].customer_email=record.customer_email;
+                classArray[module].arr[recordID].customer_tel_number=record.customer_tel_number;
+                classArray[module].arr[recordID].customer_notes=record.customer_notes;
+                classArray[module].arr[recordID].customer_id=record.customer_id;
+                classArray[module].cNames[recordID]=buildCstmrSearchString(record);
 
                 const entries = Object.entries(cstrIDtoProperty);
                 entries.forEach(([key, value]) => {
