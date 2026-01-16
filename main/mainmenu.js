@@ -38,7 +38,7 @@ const headerToDBFieldLookup = { // look up table to match record to db schmea
     "Projects": {'Project Number':'project_number','Company Name':'company_name','Customer Last Name':'project_cstmr_lastname','Project Type':'project_type','Project Manager/Rep':'project_m_contractor','Project Address':'project_address','Files':'file_uploaded'},
     "Payments": {'Project Number':'project_number','Payment Amount':'payment_amount','Payment Date':'payment_date','Payment Method':'payment_method','Payment Number':'payment_number','Description':'description','Files':'file_uploaded'},
     "Sub Contractors": {'Contractor Name':'contractor_name','Job Date':'job_date','Payment Amount':'payment_amount','Check Number':'check_number','Date Paid':'date_paid','Description':'description','Files':'file_uploaded'},
-    "Employee Jobs": {'Full Name':'full_name','Job Date':'job_date','Job SignIn':'job_signin_time','Lunch SignIn':'lunch_signin_time','Lunch SignOut':'lunch_signout_time','Job SignOut':'job_signout_time','Total Hours':'total_hours','Description':'description','Total Cost':'total_cost','Files':'file_uploaded'},
+    "Employee Jobs": {'Full Name':'employee_fname','Job Date':'job_date','Job SignIn':'job_signin','Lunch SignIn':'lunch_signin','Lunch SignOut':'lunch_signout','Job SignOut':'job_signout','Total Hours':'total_hours','Description':'description','Total Cost':'total_cost','Files':'file_uploaded'},
     "Purchases": {'Project Number':'project_number','Vendor':'vendor_name','Purchase Number':'purchase_number','Purchase Amount':'purchase_amount','Purchase Date':'purchase_date','Purchase Method':'purchase_method','Description':'description','Files':'file_uploaded'},
 } 
  
@@ -250,7 +250,7 @@ const nametoIDLookup = {
      "Full Name":           {"name":"fullName",
                              "id":"fullNameID",
                              "header":"Full Name",
-                             "dbField":"full_name",
+                             "dbField":"employee_fname",
                              "modules":{"Employee Jobs":{"display":true,
                                                          "mandatory":true},
                                         "Contractors":{"display":true,
