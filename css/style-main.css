@@ -660,7 +660,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 
-
 .outer-table  {
 	 margin				: 0 auto;
 	 width				: 99%;
@@ -1143,4 +1142,9 @@ img 	{
 	z-index				: 10000;
 	opacity				: 0.9;
 	display				: none;
+}
+
+.fullNameClass {
+	/*width				: 15vw;*/
+	display				: flex;
 }
