@@ -111,8 +111,6 @@
         targetDisplay = "#result-table1";
         const screen_name="Employees";
 		let out = "";
-        var tabI=1;
-        //let eArray=[];
 
         lastScreen=screen_name;
         $("#screen_name").html(screen_name);
@@ -145,11 +143,11 @@
                 //  out += `<td><a href=""><img src='../misc/minus-2.jpg' value="DeleteImage" alt='plus' width='10' height='10' onclick="return deleteRow(event);"></a></td>`;
                 //out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="DeleteImage" alt='plus' width='10' height='10'></td>`;
                 out += `<td></td>`;
-                out += `<td><input tabindex="0" type="text" name="fullname" id="fullNameID" class="projectNameClass" maxlength="30" value="${eArray[i].fullname}">`;
+                out += `<td class="fullNameClass"><input tabindex="0" type="text" name="fullname" id="fullNameID" class="projectNameClass" maxlength="30" value="${eArray[i].fullname}">`;
                 out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="employeeID" value=${eArray[i].employee_id}>`;
-                out += `<input type="color" id="emplColorInput" class="emplColor" value=${classArray["Employees"].colors[eArray[i].fullname]}></td>`;
-                out += `<td><input type="text" name="employmentType" class="projectNameClass" maxlength="20" value='${eArray[i].employment_type}'></td>`;
-                out += `<td><input type="text" id="hrValueID" name="hourlyRate" readonly maxlength="7" class="projectNameClass" value='${eArray[i].hourlyrate}'></td>`;
+                out += `<input tabindex="0" type="color" id="emplColorInput" class="emplColor" value=${classArray["Employees"].colors[eArray[i].fullname]}></td>`;
+                out += `<td><input tabindex="0" type="text" name="employmentType" class="projectNameClass" maxlength="20" value='${eArray[i].employment_type}'></td>`;
+                out += `<td><input tabindex="0" type="text" id="hrValueID" name="hourlyRate" readonly maxlength="7" class="projectNameClass" value='${eArray[i].hourlyrate}'></td>`;
                 out += `<td id="hrDateID">${jsDate}</td>`;
                 if (eArray[i].is_active == "1")
                     out += `<td><input tabindex="0" id="isActEmplID" class="inputDate" type="checkbox" name="isActive" value="IsActive" checked></td>`;
