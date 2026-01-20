@@ -203,7 +203,7 @@ function saveRow(moduleName,element) {
     windowLog.trace("Key:"+headers[moduleName]['primaryKey']);
 
     // Push the headers
-    $(element.closest('table').find("thead th:gt(0)")).each(function() {
+    $(element).closest('table').find("thead th:gt(0)").each(function() {
         headers1.push($(this).text());
     });
     row=element.closest('tr');  // get the tr of the focused element
@@ -212,7 +212,7 @@ function saveRow(moduleName,element) {
     const idName=headers[moduleName]['primaryKey'];
 
     let ID = $(row).find('[id='+idName+']').val();
-    let prjName="";
+    //let prjName="";
     switch( moduleName ) { // Add hidden header at the end only at Hourly Rate, Employees and projects
 
         case "Hourly Rate"      :
@@ -440,7 +440,7 @@ function saveRow(moduleName,element) {
                 if ( lastID["Employees"] < Number(ID) ) {           // is this a new row
                     tempRow.push(formatDateForInput(new Date()));   // yes- push today's date as start date
                     tempRow2["startdate"]=formatDateForInput(new Date());
-                    tempRow2["profile_color"]=$(targetTR).find('[id="emplColorInput"]').val();
+                    tempRow2["profile_color"]=$(targetTR).find('[id="emplColorInputID"]').val();
                     tempRow2["is_newEmployee"]="1";
                 }
                 else {

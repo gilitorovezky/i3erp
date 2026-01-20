@@ -151,8 +151,8 @@ Promise.all(requests)
     });
 
     
-    $( "body" ).delegate('#emplColorInput',"change", function(e) {  // set the employee color" 
-            windowLog.trace("emplColorInput on change"+e.target.value);
+    $( "body" ).delegate('#emplColorInputID',"change", function(e) {  // set the employee color" 
+            windowLog.trace("emplColorInputID on change"+e.target.value);
             const selectedValue = $(this).val();            // Get the selected value
             classArray["Employees"].colors[$(this).siblings().first().val()]=selectedValue// update the new color in the class array;
             windowLog.trace("Selected employee:"+$(this).siblings().first().val()+",New color value: " + $(this).val());
@@ -1086,7 +1086,7 @@ Promise.all(requests)
                 //$("#result-table").addClass("greyed-out");
                 break;
 
-            case "emplColorInput"   :
+            case "emplColorInputID"   :
                 if ( !$('#editCBID').is(":checked") ) { 
                     windowLog.trace("Ignore mousedown..editMode:off");
                     event.preventDefault();
@@ -1418,9 +1418,15 @@ Promise.all(requests)
         out += `<center><p class="label1">Do you want to enable Edit mode?</p></center><br>`;
         out += `<center><input type="button" class="button" value="No" id="noEditBtn"/>&nbsp<input type="button" class="button" value="Yes" id="yesEditBtn"/></center>`;
        
-        const editDialog=document.getElementById("editControl");      
-        editDialog.innerHTML=out;
-        editDialog.showModal();
+        //const editDialog=document.getElementById("editControl");      
+        //editDialog.innerHTML=out;
+        //editDialog.showModal();
+        $("#editControl").html(out);    // show the dialuge
+    //const dlg=document.getElementById(parentElement);
+    //dlg.showModal();
+    //$(".editCntrlClass").visible();
+    //$("#submitFilesID,#resetFormID").hide();
+        $("#editControl").show();
         //$(".editCntrlClass").visible();
 
         $('#yesEditBtn,#noEditBtn').on('click',editHandler);

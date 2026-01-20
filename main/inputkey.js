@@ -203,7 +203,7 @@
                     }
                 break;
 
-                case "Vendor"               :
+                case "Vendor Name"               :
                     if ( Object.keys(classArray["Vendors"].pNames).length > 0 )  {
                         Object.keys(classArray["Vendors"].pNames).forEach( (name) => { //copy the return data from the DB into the class array
                             tempArray.push(name); })
@@ -243,6 +243,7 @@
                 break;
 
                 case "Payment Method"       :
+                case "Purchase Method"      :
                      showNewEntry=false; // do not allow new entry
                     if ( paymentTypes.length > 0 ) {
                         tempArray=paymentTypes;
@@ -252,9 +253,9 @@
                         windowLog.trace("Payment names array is empty!!");
                 break;
 
-                case "Vendor Name"          :
+                /*case "Vendor Name"          :
                     retValue=true;
-                    showNewEntry=false; // do not allow new entry
+                    showNewEntry=false; // do not allow new entry*/
                 break;
 
                 case "Employment Type"      :

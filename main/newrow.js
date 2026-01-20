@@ -169,9 +169,9 @@
 
             case "Employees" :
 
-                row += `<td><input tabindex="0" type="text" name="fulltName" id="fullNameID" class="projectNameClass" maxlength="25" value='${tempRow[3].Name}'>`;
+                row += `<td class="fullNameClass"><input tabindex="0" type="text" name="fulltName" id="fullNameID" class="projectNameClass" maxlength="25" value='${tempRow[3].Name}'>`;
                 row += `<input type="hidden" id='${headers['Employees']['primaryKey']}' name="employeeID" value=${ID}>`;
-                row += `<input tabindex="0" type="color" id="emplColorInput" class="emplColor" value="#ffffff"></td>`;
+                row += `<input tabindex="0" type="color" id="emplColorInputID" class="emplColor" value="#ffffff"></td>`;
                 row += `<td><input tabindex="0" type="text" name="employmentType" id="etID" class="projectNameClass" maxlength="10" value=${tempRow[index++].value}></td>`;
                 var hourlyRate = 0.00;
                 if ( restore ) {

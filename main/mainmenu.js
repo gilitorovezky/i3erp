@@ -39,7 +39,11 @@ const headerToDBFieldLookup = { // look up table to match record to db schmea
     "Payments": {'Project Number':'project_number','Payment Amount':'payment_amount','Payment Date':'payment_date','Payment Method':'payment_method','Payment Number':'payment_number','Description':'description','Files':'file_uploaded'},
     "Sub Contractors": {'Contractor Name':'contractor_name','Job Date':'job_date','Payment Amount':'payment_amount','Payment Number':'payment_number','Date Paid':'date_paid','Description':'description','Files':'file_uploaded'},
     "Employee Jobs": {'Full Name':'employee_fname','Job Date':'job_date','Job SignIn':'job_signin','Lunch SignIn':'lunch_signin','Lunch SignOut':'lunch_signout','Job SignOut':'job_signout','Total Hours':'total_hours','Description':'description','Total Cost':'total_cost','Files':'file_uploaded'},
-    "Purchases": {'Project Number':'project_number','Vendor':'vendor_name','Purchase Number':'purchase_number','Purchase Amount':'purchase_amount','Purchase Date':'purchase_date','Purchase Method':'purchase_method','Description':'description','Files':'file_uploaded'},
+    "Purchases": {'Project Number':'project_number','Vendor Name':'vendor_name','Purchase Number':'purchase_number','Purchase Amount':'purchase_amount','Purchase Date':'purchase_date','Purchase Method':'purchase_method','Description':'description','Files':'file_uploaded'},
+    "Employees": {'Full Name':'employee_fname','Employee Color':'profile_color','Employment Type':'employment_type','Hourly Rate':'hourlyrate','Hourly Rate Date':'hourlyrate_effective_date','Is Active':'is_active','Password':'password','Files':'file_uploaded'},
+    "Vendors": {'Vendor Name':'vendor_name','Vendor Address':'vendor_address','Notes':'notes','Files':'file_uploaded'},
+    "Companies": {'Company Name':'company_name','Notes':'notes','Files':'file_uploaded'},
+    "Contractors": {'Contractor Name':'contractor_name','Notes':'notes','Files':'file_uploaded'}
 } 
  
 const nametoIDLookup = {
@@ -148,17 +152,16 @@ const nametoIDLookup = {
                              "modules":{"Employee Jobs":{"display":true,
                                                          "mandatory":false}}},
 
-    "Total Hours":         {"name":"totalHours",
-                            "id":"totalHoursID",
-                            "header":"Total Hours",
-                            "modules":{"Employee Jobs":{"display":true,
+    "Total Hours":          {"name":"totalHours",
+                             "id":"totalHoursID",
+                             "header":"Total Hours",
+                             "modules":{"Employee Jobs":{"display":true,
                                                         "mandatory":false}}},
 
-
-    "Total Cost":         {"name":"totalCost",
-                            "id":"lbrCostID",
-                            "header":"Total Cost",
-                            "modules":{"Employee Jobs":{"display":true,
+    "Total Cost":           {"name":"totalCost",
+                             "id":"lbrCostID",
+                             "header":"Total Cost",
+                             "modules":{"Employee Jobs":{"display":true,
                                                         "mandatory":false}}},
 
     "Lunch SignOut":        {"name":"lunchSignoutTime",
@@ -181,24 +184,25 @@ const nametoIDLookup = {
                                         "Sub Contractors":{"display":true,
                                                            "mandatory":true}}},
 
-    "Purchase Number":       {"name":"purchaseNumber",
+    "Purchase Number":      {"name":"purchaseNumber",
                              "id":"purchaseNumberID",
                              "header":"Purchase Number",
                              "modules":{"Purchases":{"display":true,
                                                      "mandatory":true}}},
-    "Purchase Date":         {"name":"purchaseDate",
+
+    "Purchase Date":        {"name":"purchaseDate",
                              "id":"purchaseDateID",
                              "header":"Purchase Date",
                              "modules":{"Purchases":{"display":true,
                                                      "mandatory":false}}},
 
-    "Purchase Amount":       {"name":"purchaseAmount",
+    "Purchase Amount":      {"name":"purchaseAmount",
                              "id":"purchaseAmountID",
                              "header":"Purchase Amount",
                              "modules":{"Purchases":{"display":true,
                                                      "mandatory":true}}},
 
-    "Purchase Method":       {"name":"purchaseMethod",
+    "Purchase Method":      {"name":"purchaseMethod",
                              "id":"purchaseMethodID",
                              "header":"Purchase Method",
                              "modules":{"Purchases":{"display":true,
@@ -210,9 +214,9 @@ const nametoIDLookup = {
                              "modules":{"Sub Contractors":{"display":true,
                                                            "mandatory":true}}},
                                                           
-    "Vendor":               {"name":"vendorName",
+    "Vendor Name":          {"name":"vendorName",
                              "id":"vendorNameID",
-                             "header":"Vendor",
+                             "header":"Vendor Name",
                              "modules":{"Purchases":{"display":true,
                                                      "mandatory":true}}},
 
@@ -238,11 +242,12 @@ const nametoIDLookup = {
                                         "Employees":{"display":true,
                                                      "mandatory":false},
                                         "Customers":{"display":true ,
-                                                      "mandatory":false},
+                                                     "mandatory":false},
                                         "Estimates":{"display":true,
-                                                      "mandatory":false},
+                                                     "mandatory":false},
                                         "Contractors":{"display":true,
                                                        "mandatory":false}}},
+
      "Full Name":           {"name":"fullName",
                              "id":"fullNameID",
                              "header":"Full Name",
@@ -253,39 +258,64 @@ const nametoIDLookup = {
                                                        "mandatory":true},
                                         "Employees":{"display":true,
                                                      "mandatory":true}}},
-     "Files":               {"name":"file_uploaded",
-                              "id":"allFilesID",
-                              "header":"Files",
-                              "modules":{"Projects":{"display":true,
+
+    "Employee Color":       {"name":"employmentColor",
+                             "id":"emplColorInputID",
+                             "header":"", // no header for now
+                             "modules":{"Employees":{"display":true,
+                                                     "mandatory":true}}},
+
+    "Is Active":            {"name":"isActive",
+                             "id":"is_active",
+                             "header":"Is Active", // no header for now
+                             "modules":{"Employees":{"display":true,
+                                                     "mandatory":true}}},
+                                                     
+    "Password":            {"name":"password",
+                             "id":"password",
+                             "header":"Password", // no header for now
+                             "modules":{"Employees":{"display":true,
+                                                     "mandatory":true}}},
+                                                     
+    "Employment Type":      {"name":"employmentType",
+                             "id":"employmentTypeID",
+                             "header":"Employment Type", // no header for now
+                             "modules":{"Employees":{"display":true,
+                                                     "mandatory":true}}},   
+
+    "Files":                {"name":"file_uploaded",
+                             "id":"allFilesID",
+                             "header":"Files",
+                             "modules":{"Projects":{"display":true,
                                                      "mandatory":false},
-                                         "Payments":{"display":true,
+                                        "Payments":{"display":true,
                                                      "mandatory":false},
-                                         "Employee Jobs":{"display":true,
+                                        "Employee Jobs":{"display":true,
                                                           "mandatory":false},
-                                         "Purchases":{"display":true,
+                                        "Purchases":{"display":true,
                                                       "mandatory":false},
-                                         "Sub Contractors":{"display":true,
+                                        "Sub Contractors":{"display":true,
                                                             "mandatory":false},
-                                         "Vendors":{"display":true,
+                                        "Vendors":{"display":true,
                                                     "mandatory":false},
-                                         "Companies":{"display":true,
+                                        "Companies":{"display":true,
                                                       "mandatory":false},
-                                         "Contractors":{"display":true,
+                                        "Contractors":{"display":true,
                                                         "mandatory":false},
-                                         "Employees":{"display":true,
+                                        "Employees":{"display":true,
                                                       "mandatory":false},
-                                         "Customers":{"display":true,
+                                        "Customers":{"display":true,
                                                       "mandatory":false},
-                                         "Estimates":{"display":true,
+                                        "Estimates":{"display":true,
                                                       "mandatory":false},
-                                         "Scheduler":{"display":true,
+                                        "Scheduler":{"display":true,
                                                       "mandatory":false}}}}; // look up table to match names to their IDs
 
 // only the first 4 do not include thead and <th></th> since these records are also showing in the project summary therefor no need delete 
 const headers = {
     "Home":{hash:'home',callBack:home,tableName:'home',sn:1},
     "Employee Jobs":{hash:'empljbs',callBack:upperLeft,callType:"generalUpload",sn:"home",columns:'<th style="width:4%">Full Name</th><th>Job Date</th><th style="width:4%">Job SignIn</th><th>Lunch SignIn</th><th>Lunch SignOut</th><th>Job SignOut</th><th>Total Hours</th><th style="width:15%">Description</th><th>Total Cost</th><th style="width:100px">Files</th>',numOfCols:12,showInPrj:true,primaryKey:'task_id',tableName:'employee_jobs',params:0},
-    "Purchases":{hash:'prchs',callBack:upperRight,callType:"generalUpload",sn:"home",columns:'<th>Vendor</th><th>Purchase Number</th><th>Purchase Amount</th><th>Purchase Date</th><th>Purchase Method</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'purchase_id',tableName:'purchases',params:0},
+    "Purchases":{hash:'prchs',callBack:upperRight,callType:"generalUpload",sn:"home",columns:'<th>Vendor Name</th><th>Purchase Number</th><th>Purchase Amount</th><th>Purchase Date</th><th>Purchase Method</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'purchase_id',tableName:'purchases',params:0},
     "Payments":{hash:'pymnts',callBack:lowerLeft,callType:"generalUpload",sn:"home",columns:'<th>Payment Amount</th><th>Payment Date</th><th>Payment Method</th><th>Payment Number</th><th>Description</th><th>Files</th>',numOfCols:8,showInPrj:true,primaryKey:'payment_id',tableName:'payments',params:0},
     "Sub Contractors":{hash:'sbcntrcj',callBack:lowerRight,callType:"generalUpload",sn:"home",columns:'<th>Contractor Name</th><th>Job Date</th><th>Payment Amount</th><th>Payment Number</th><th>Date Paid</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'task_id',tableName:'contractor_jobs',params:0},
     "Projects":{hash:'dprjct',callBack:projects,callType:"generalUpload",sn:"aux",columns:'<thead class="mainHeaderClass" id="mainHeader"><th></th><th>Project Number</th><th>Company Name</th><th>Customer Last Name</th><th>Project Type</th><th>Project Manager/Rep</th><th>Project Address</th><th>Files</th></tr></thead>',numOfCols:8,showInPrj:false,primaryKey:'project_id',tableName:'projects',params:0},
@@ -2393,13 +2423,13 @@ function displayPurchaseResults(projectNumber,targetDisplay) {
                 out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="DeleteImage" alt='plus' width='10' height='10'></td>`;
                 out += `<td><input tabindex="0" type="text" id="prjctNumberID" name="projectNumber" class="projectNameClass" size="44" maxlength="50" value="${pArray[i].project_number}">`;
                 //out += `<input type="hidden" id="invoiceID" name="invoiceID" value=${pArray[i].purchase_id}></td>`;
-                out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="invoiceID" value=${pArray[i].purchase_id}></td>`;
+                out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="purchase_id" value=${pArray[i].purchase_id}></td>`;
                 out += `<td><input tabindex="0" type="text" id="vendorNameID" name="vendorName" class="projectNameClass" value='${pArray[i].vendor_name}'></td>`;
-                out += `<td><input tabindex="0" type="text" id="invoiceNumberID" name="invoiceNumber" class="projectNameClass" maxlength="40" value=${pArray[i].invoice_number}></td>`;
-                out += `<td><input tabindex="0" type="text" id="invoiceAmountID" name="invoiceAmount" class="projectNameClass" value=${pArray[i].purchase_amount}></td>`;
-                out += `<td><input tabindex="0" type="date" id="invoiceDateID" name="invoiceDate" class="inputDate" value=${pArray[i].invoice_date}></td>`;
-                out += `<td><input tabindex="0" type="text" id="invoiceMethodID" name="invoiceMethod" class="projectNameClass" value='${pArray[i].purchase_method}'></td>`;
-                out += `<td><input tabindex="0" type="text" id="descriptionID" name="Description" class="projectNameClass" maxlength="40" value='${pArray[i].invoice_desc}'></td>`;
+                out += `<td><input tabindex="0" type="text" id="purchaseNumberID" name="purchaseNumber" class="projectNameClass" maxlength="40" value=${pArray[i].purchase_number}></td>`;
+                out += `<td><input tabindex="0" type="text" id="purchaseAmountID" name="purchaseAmount" class="projectNameClass" value=${pArray[i].purchase_amount}></td>`;
+                out += `<td><input tabindex="0" type="date" id="purchaseDateID" name="purchaseDate" class="inputDate" value=${pArray[i].purchase_date}></td>`;
+                out += `<td><input tabindex="0" type="text" id="purchaseMethodID" name="purchaseMethod" class="projectNameClass" value='${pArray[i].purchase_method}'></td>`;
+                out += `<td><input tabindex="0" type="text" id="descriptionID" name="Description" class="projectNameClass" maxlength="40" value='${pArray[i].purchase_desc}'></td>`;
                 out += outFiles+`</tr>`;
                 if ( pArray[i].purchase_amount != "")
                     sumOfInvoices += Number(pArray[i].purchase_amount);
