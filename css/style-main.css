@@ -1088,7 +1088,7 @@ img 	{
 	box-shadow			: 0px 0px 10px #cccccc;
 	border-radius		: 15px;
 	z-index				: 1500;
-	/* display				: none; */
+	display				: none;
 }
 
  .filesSelect {
@@ -1147,4 +1147,34 @@ img 	{
 .fullNameClass {
 	/*width				: 15vw;*/
 	display				: flex;
+}
+
+ #yesBtn {
+     background: #4CAF50;
+     color: white;
+}
+        
+#yesBtn:hover {
+	background: #45a049;
+}
+
+#yesBtn:focus {
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.4);
+	transform: scale(1.02);
+}
+
+#noBtn {
+	background: #f44336;
+	color: white;
+}
+
+#noBtn:hover {
+	background: #da190b;
+}
+
+#noBtn:focus {
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.4);
+	transform: scale(1.02);
 }

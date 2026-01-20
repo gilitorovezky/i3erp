@@ -1,3 +1,12 @@
+
+    const shortcuts = [
+            { ctrl: true, shift: true, key: 'a', action: () => console.log('Ctrl+Shift+A - Select All activated!') },
+            { ctrl: true, shift: true, key: 'h', action: () => console.log('Ctrl+Shift+H - Home shortcut activated!') },
+            { ctrl: true, key: 'z', action: () => console.log('Ctrl+Z - Undo activated!') },
+            { ctrl: true, key: 'n', action: () => console.log('Ctrl+N - New activated!') },
+            { alt: true, key: 'f', action: () => console.log('Alt+F - File menu activated!') }
+        ];
+
     var currCell="";	                // holds the focused cell
     const paymentTypes=["Check","Credit Card","Wire Trasnfer"];
     const employmentType=["Full-Time","Part-Time"];
@@ -481,7 +490,7 @@
                         //$("#overLay").hide();
                         //$(e.target).focus();
                         //windowLog.trace("Prevent default3");
-                        //$("#btnYes").hide();
+                        //$("#yesBtn").hide();
                         //e.preventDefault();
                     }
                 }
@@ -545,7 +554,7 @@
                             charactersCount=0;
                             $("#overLay ul").empty();
                             //$('#overLay').hide();
-                            $("#btnYes").hide();    // hide the button from the tree screen                                    
+                            $("#yesBtn").hide();    // hide the button from the tree screen                                    
                         }
                     break;
 
@@ -699,18 +708,18 @@
                                         else {
                                             if ($("#prjTreeID").val() != "" )   { // just a precaution 
                                                 windowLog.trace("Enter and prjID");
-                                                //var htmlText = "<br><center>Are you sure?<br><br><input type='button' class='button' value='Yes' id='btnYes'/>&nbsp<input 
-                                                // type='button' class='button' value='No' id='btnNo' /></center>";
+                                                //var htmlText = "<br><center>Are you sure?<br><br><input type='button' class='button' value='Yes' id='yesBtn'/>&nbsp<input 
+                                                // type='button' class='button' value='No' id='noBtn' /></center>";
                                                 //$("#buttomHalfID").html(htmlText);
-                                                $("#btnYes").val($('input[name=opRadio]:checked').val());
-                                                $("#btnYes").show();                                                
-                                                $('#btnYes').unbind("click");
-                                                $('#btnYes').click({destTree        : $('#aboutDialog').attr('name'), // get the active tree
+                                                $("#yesBtn").val($('input[name=opRadio]:checked').val());
+                                                $("#yesBtn").show();                                                
+                                                $('#yesBtn').unbind("click");
+                                                $('#yesBtn').click({destTree        : $('#aboutDialog').attr('name'), // get the active tree
                                                                     dstnFolder      : $("#prjTreeID").val()+"/"+e.data.parentFolder,
                                                                     srcFolder       : e.data.srcPath,
                                                                     filename        : e.data.srcFilename,
                                                                     parentFolder    : e.data.parentFolder},fileOpsGo);
-                                                $('#btnNo').click(cleanupTree);
+                                                $('#noBtn').click(cleanupTree);
                                             }
                                         }
 
@@ -1152,17 +1161,17 @@
                     }
                     //let tableID=event.currentTarget.closest("table").id;
                     if ( event.data.invoker === "tree" ) {
-                        //var htmlText = "<br><center>Are you sure?<br><br><input type='button' class='button' value='Yes' id='btnYes'/>&nbsp<input type='button' class='button' value='No' id='btnNo' /></center>";
+                        //var htmlText = "<br><center>Are you sure?<br><br><input type='button' class='button' value='Yes' id='yesBtn'/>&nbsp<input type='button' class='button' value='No' id='noBtn' /></center>";
                         //$("#buttomHalfID").html(htmlText);
-                        $("#btnYes").val($('input[name=opRadio]:checked').val());
-                        $("#btnYes").show();
-                        $('#btnYes').unbind("click");
-                        $('#btnYes').click({destTree        :   $('#aboutDialog').attr('name'), // get the active tree
+                        $("#yesBtn").val($('input[name=opRadio]:checked').val());
+                        $("#yesBtn").show();
+                        $('#yesBtn').unbind("click");
+                        $('#yesBtn').click({destTree        :   $('#aboutDialog').attr('name'), // get the active tree
                                             dstnFolder      :   $("#prjTreeID").val()+"/"+event.data.parentFolder,
                                             srcFolder       :   event.data.srcPath,
                                             filename        :   event.data.srcFilename,
                                             parentFolder    :   event.data.parentFolder},fileOpsGo);
-                        $('#btnNo').click(cleanupTree);
+                        $('#noBtn').click(cleanupTree);
                     
                     } else {
                         currCell.find("input").focus();//$(lastCell).children().first().focus();// focus on the first input!!; // return focus to the launching cell
@@ -1536,3 +1545,14 @@ for (const [key, value] of Object.entries(obj)) {
 console.log(reverseMap.get('John')); // 'name'
 console.log(reverseMap.get(30));     // 'age'
 // */
+
+    function checkShortcut(event, shortcut) {
+            const ctrlMatch = shortcut.ctrl ? event.ctrlKey : !event.ctrlKey;
+            const shiftMatch = shortcut.shift ? event.shiftKey : !event.shiftKey;
+            const altMatch = shortcut.alt ? event.altKey : !event.altKey;
+            const keyMatch = event.key.toLowerCase() === shortcut.key.toLowerCase();
+            
+            return ctrlMatch && shiftMatch && altMatch && keyMatch;
+    }
+
+    

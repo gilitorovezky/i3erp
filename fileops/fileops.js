@@ -176,7 +176,7 @@ function fileOpsGo(msg) {
                             'color'     :    msgColor});
     $("#opsReturnID").html('<center>'+resultMSG+'</center>');
     //cleanupTree();
-    $("#btnYes").hide();
+    $("#yesBtn").hide();
     $("#opsReturnID").show();
     $("#cancelFileID").val("Close");
 

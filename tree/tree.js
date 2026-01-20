@@ -40,7 +40,7 @@
      
       const fileAction = {
         cpRadioID       : () => {
-                          $("#btnYes").val($('input[name=opRadio]:checked').val()); // update the label according to the requested action
+                          $("#yesBtn").val($('input[name=opRadio]:checked').val()); // update the label according to the requested action
                           $("#inputDstnPrjID,#prjTreeID").visible();
                           if ( $('#aboutDialog').attr('name') == "jstree2" )
                             $("#buttomHalfID").visible();
@@ -48,10 +48,10 @@
                             $("#buttomHalfID").invisible();
                           if ( ( $("#prjTreeID").val() == "" ) ||
                                ( $("#prjTreeID").val() == default_folder_search_string ) )
-                            $("#btnYes").hide();  },
+                            $("#yesBtn").hide();  },
 
         mvRadioID       : () => {
-                          $("#btnYes").val($('input[name=opRadio]:checked').val()); // update the label according to the requested action
+                          $("#yesBtn").val($('input[name=opRadio]:checked').val()); // update the label according to the requested action
                           $("#inputDstnPrjID,#prjTreeID").visible();
                           if ( $('#aboutDialog').attr('name') == "jstree2" )
                             $("#buttomHalfID").visible();
@@ -59,13 +59,13 @@
                             $("#buttomHalfID").invisible();
                           if ( ( $("#prjTreeID").val() == "" ) ||
                                 ( $("#prjTreeID").val() == default_folder_search_string ) )
-                          $("#btnYes").hide();  },
+                          $("#yesBtn").hide();  },
 
         dlRadioID       : () => {
-                          $("#btnYes").val($('input[name=opRadio]:checked').val()); // update the label according to the requested action
+                          $("#yesBtn").val($('input[name=opRadio]:checked').val()); // update the label according to the requested action
                           $("#buttomHalfID,#inputDstnPrjID,#prjTreeID").invisible();
-                          /*$("#btnYes").val("Delete");*/
-                          $("#btnYes").show();
+                          /*$("#yesBtn").val("Delete");*/
+                          $("#yesBtn").show();
                           $("#closeTreeTD").visible();  },
         upldFileRadioID : () => {
                           var ref = $('#jstree2').jstree(true);
@@ -77,7 +77,7 @@
                                 $("#buttomHalfID").visible();
                               else
                                 $("#buttomHalfID").invisible();
-                              //$("#btnYes").show();
+                              //$("#yesBtn").show();
                               $("#closeTreeTD").invisible();
                               
                               var parentFolder="";
@@ -143,7 +143,7 @@
           $("#cancelFileID").show();
           $("#inputDstnPrjID").addClass("underLineTD")
           let fileName = e.target.innerText;// e.target.parentNode.parentNode.parentNode.innerText.replace("\n","/");
-          $('#btnYes').on("click",{parentFolder  : parentFolder,
+          $('#yesBtn').on("click",{parentFolder  : parentFolder,
                                    srcPath       : $("#jstree").jstree().get_path(e.target.id).slice(0, -1).join("/"),// full path minus the file name
                                    srcFilename   : fileName},fileOpsGo);
 
@@ -255,7 +255,7 @@
                 $("#cpRadioID").next().text("Copy Folder");
                 $("#dlRadioID").next().text("Delete Folder")
               }
-              $("#btnYes").val($('input[name=opRadio]:checked').val());
+              $("#yesBtn").val($('input[name=opRadio]:checked').val());
               if ( $('input[name=opRadio]:checked').val() == "uploadFile" )
                 showFileUpload(e,"generalUpload","buttomHalfID","");
               isLastSelectedElementFile=false;  // set the flag to false;
@@ -331,7 +331,7 @@
     tree += `<tr style="height:1%"><td colspan="3" id="fileThumbnailID"></td></tr>`;   // return message
     tree += `<tr style="height:5%"><td colspan="3" id="inputDstnPrjID"></td></tr>`; // project name input
     tree += `<tr style="height:40%"><td colspan="3" id="buttomHalfID" style="display:table-cell;align-content:center;width:fit-content;justify-items:center" ><div class="dstnPrjList" id="overLay"><ul data-tag="channelList" class="uList" id="uListID"></div></td></tr>`;
-    tree += `<tr><td id="closeTreeTD" colspan="3" style="height:10%"><center><input type='button' class='button' hidden value='Yes' id='btnYes'/>&nbsp&nbsp<input type='button' class='button' hidden value='Cancel' id='cancelFileID'/></center></td></tr></table>`;
+    tree += `<tr><td id="closeTreeTD" colspan="3" style="height:10%"><center><input type='button' class='button' hidden value='Yes' id='yesBtn'/>&nbsp&nbsp<input type='button' class='button' hidden value='Cancel' id='cancelFileID'/></center></td></tr></table>`;
     tree += `<tr><td id="closeTreeDlgTD" colspan="2"><center><input type='button' class='button' value='Close' id='closeTreeDlg'/></center></td></tr></tbody></table>`;
     //align-content:flex-start
     return tree;
@@ -346,7 +346,7 @@
     $("#prjTreeID").val("");
     $("#prjTreeID").unbind('keydown');              // to be safe, unbind the handler
     $("#prjTreeID").bind('keydown',TblKeyDown);     // assign the keydown handler to the input project to accept project name
-    $("#cancelFileID,#opsFileID,#opsReturnID,#btnYes").hide();
+    $("#cancelFileID,#opsFileID,#opsReturnID,#yesBtn").hide();
     $("#inputDstnPrjID").removeClass("underLineTD");
     editing=false;
 

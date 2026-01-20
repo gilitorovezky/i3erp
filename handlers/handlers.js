@@ -302,8 +302,10 @@ Promise.all(requests)
             case "escape"   :
             case "n"        :
             case "N"        :    
-                document.getElementById("editControl").close();
-                if ( lastScreen != "Customers" )
+                $("#editControl").html("");
+                $("#editControl").hide();
+
+                if ( lastScreen !== "Customers" )
                     setCellFocus(); // return the focus back to the original field
             break;
         }
@@ -448,8 +450,8 @@ Promise.all(requests)
             case "upldFileRadioID"  :
             case "dlRadioID"        :
             case "inputCloudfileID" :
-            //case "btnNo"            :
-            //case "btnYes"           :
+            //case "noBtn"            :
+            //case "yesBtn"           :
                /* var ref = $('#jstree').jstree(true),
                     sel = ref.get_selected();
                     ret = ref.delete_node(sel);
@@ -1012,7 +1014,7 @@ Promise.all(requests)
     // event listner of mouse click
     $("#result-table1").on("click", "td", function(event) {
 
-        windowLog.trace("Inside "+this.closest('table').id);
+        windowLog.trace("Inside #result-table1 click "+this.closest('table').id);
         if ( this.closest('table').id == 'result-table1')
             windowLog.trace("Inside click result-table1 TD-element, Header:"+$('#result-table1 thead tr th:nth-child('+this.cellIndex+')').text());
         
@@ -1032,9 +1034,9 @@ Promise.all(requests)
                 }
                 else {
                     //event.preventDefault(); // prevent edit the date
-                    windowLog.trace("Ignore keydown..editMode is off");
+                    
                     //$("#"+event.delegateTarget.id).addClass("greyed-out");
-                    enableEditDlg(event);
+                    //enableEditDlg(event);
                 }
 
              break; 
@@ -1398,17 +1400,18 @@ Promise.all(requests)
     function editHandler() {
 
         windowLog.trace("Inside Edit handler");
-        
-        $("#navID,#result-table,#result-table1,#editLabel").removeClass("greyed-out");
-``
-        if ( this.id == "yesEditBtn") {
+        ``
+        if ( this.id === "yesBtn") {
             $("#editCBID").prop("checked", true ); // turn on edit mode
-            if ( lastScreen == "Scheduler" )
+            if ( lastScreen === "Scheduler" )
                 $("[id=editTaskID").removeClass("greyed-out").prop("disabled",false);   // enable all Edit task button
         }
 
-        document.getElementById("editControl").close();
-        if ( lastScreen != "Customers" )
+        $("#editControl").html("");
+        $("#editControl").hide();
+        $("#navID,#result-table,#result-table1,#editLabel").removeClass("greyed-out");
+
+        if ( lastScreen !== "Customers" )
             setCellFocus(); // return the focus back to the original field
     }
 
@@ -1418,16 +1421,17 @@ Promise.all(requests)
         
         out = `<center><p class="label1">Not in Edit mode</p></center>`;
         out += `<center><p class="label1">Do you want to enable Edit mode?</p></center><br>`;
-        out += `<center><input type="button" class="button" value="No" id="noEditBtn"/>&nbsp<input type="button" class="button" value="Yes" id="yesEditBtn"/></center>`;
+        out += `<center><input type="button" class="button" value="No" id="nobtn"/>&nbsp<input type="button" class="button" value="Yes" id="yesBtn"/></center>`;
        
         $("#navID,#result-table,#result-table1,#editLabel").addClass("greyed-out");
                     
         $("#editControl").html(out);    // show the dialuge
         $("#editControl").show();
+        $('#yesBtn').focus();  
 
-        $('#yesEditBtn,#noEditBtn').on('click',editHandler);
-        $('#yesEditBtn,#noEditBtn').on('keydown', function(event) {
-        $("#navID,#result-table,#result-table1,#editLabel").addClass("greyed-out");
+        $('#yesBtn,#nobtn').on('click',editHandler);
+        /*$('#yesBtn,#nobtn').on('keydown', function(event) {
+            $("#navID,#result-table,#result-table1,#editLabel").addClass("greyed-out");
 
             switch (event.key) {
                 case "y"        :
@@ -1438,13 +1442,14 @@ Promise.all(requests)
                 case "Escape"   :
                 case "n"        :
                 case "N"        :    
-                    document.getElementById("editControl").close();
-                    if ( lastScreen != "Customers" )
-                        setCellFocus(); // return the focus back to the original field
+                $("#editControl").html("");
+                $("#editControl").hide();
+                if ( lastScreen !== "Customers" )
+                    setCellFocus(); // return the focus back to the original field
                 break;
-        }});
+        }}); */
 
-        $('#yesEditBtn').focus();  
+      
     }
 
     function uploadFilesCheckBoxHandler(e) {
@@ -1597,19 +1602,29 @@ Promise.all(requests)
 
     $("#result-table1").on("keydown",function(event) {
    
+        const allowedKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Tab'];
         windowLog.trace("Event listener-Inside keydown");
+        const key=event.key;
         //if ( lastScreen != "Home" ) {
+        for (const shortcut of shortcuts) {
+            if (checkShortcut(event, shortcut)) {
+                event.preventDefault();
+                shortcut.action();
+                console.log(`Shortcut triggered: ${shortcut.key}`);
+                return;
+            }
+        }
         if ( $('#editCBID').is(":checked") || 
-                (event.key == "Tab")) {   // allow tab
-            if ( event.ctrlKey && event.key === 'z' ) {
+            ( allowedKeys.includes(key) ) ) {   // allow navigation keys even if edit mode is off
+            if ( event.ctrlKey && key === 'z' ) {
                 windowLog.trace("Event listener - calling CtrlZ");
                 CtrlZ();
                 windowLog.trace("Prevent default1");
                 event.preventDefault(); // prevent any further TAB
             }
             else {
-                if ( event.ctrlKey && event.key === 'n' ) {
-                    if ( $("#screen_name").html() == "Scheduler" ) {
+                if ( event.ctrlKey && key === 'n' ) {
+                    if ( $("#screen_name").html() === "Scheduler" ) {
                         windowLog.trace("Event listener - ctrlN");
                         CtrlN(event);
                         windowLog.trace("Prevent default2");
@@ -1622,13 +1637,13 @@ Promise.all(requests)
                         parentTableID=$(event.target).parents().filter("table")[0].id;
                     else
                         windowLog.trace("no table found:"+event.target.id);
-                    if ( ( event.target.nodeName != "BODY" ) || ( parentTableID == "addSingleRec" ) )
+                    if ( ( event.target.nodeName != "BODY" ) || ( parentTableID === "addSingleRec" ) )
                         resultKey=TblKeyDown(event);
                 }
             }
         } 
         else {
-            if ( !(event.keyCode == 16) ) {   // shift Tab is 
+            if ( !(event.keyCode === 16) ) {   // shift Tab is 
                 windowLog.trace("Ignore keydown..editMode is off");
                 event.preventDefault(); // prevent edit 
                 //$(this).addClass("greyed-out");

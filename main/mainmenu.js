@@ -468,7 +468,7 @@ class classTask	{
 
     upperleftMsg(msg) {
         //$("#tHalf").unbind("click");
-        $('#tHalf').html("Are you sure you want to "+msg+"<br><br><input type='button' class='button boxShadow' value='Yes' id='btnYes'/>&nbsp<input type='button' class='button boxShadow' value='No' id='btnNo'/>");
+        $('#tHalf').html("Are you sure you want to "+msg+"<br><br><input type='button' class='button boxShadow' value='Yes' id='yesBtn'/>&nbsp<input type='button' class='button boxShadow' value='No' id='noBtn'/>");
     }
 
     open() {
@@ -1597,8 +1597,8 @@ function upperLeft() {
 
             return false;
         }    
-        $('#btnYes').click(Yes);
-        $('#btnNo').click(No);
+        $('#yesBtn').click(Yes);
+        $('#noBtn').click(No);
     }
     return false;	
 }
@@ -1622,7 +1622,7 @@ function upperRight() {
             case "signin"       :
             case "lunchout"     :   // allowed to signout only when sign in or if lucnh started, when lunch is closed  
                 //$("#tHalf").unbind("click");  
-                $("#tHalf").html("Are you sure you want to Sign Out<br><br><input type='button' class='button' value='Yes' id='btnYes'/>&nbsp<input type='button' class='button' value='No' id='btnNo' />");
+                $("#tHalf").html("Are you sure you want to Sign Out<br><br><input type='button' class='button' value='Yes' id='yesBtn'/>&nbsp<input type='button' class='button' value='No' id='noBtn' />");
             break;
 
             case "lunchin"       :
@@ -1645,8 +1645,8 @@ function upperRight() {
         
         return false;
     }    
-    $('#btnYes').click(Yes);
-    $('#btnNo').click(No);
+    $('#yesBtn').click(Yes);
+    $('#noBtn').click(No);
 
     return false;	
 }
