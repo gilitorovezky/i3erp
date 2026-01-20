@@ -1397,8 +1397,10 @@ Promise.all(requests)
 
     function editHandler() {
 
-        windowLog.trace("Confirm Edit handler");
-
+        windowLog.trace("Inside Edit handler");
+        
+        $("#navID,#result-table,#result-table1,#editLabel").removeClass("greyed-out");
+``
         if ( this.id == "yesEditBtn") {
             $("#editCBID").prop("checked", true ); // turn on edit mode
             if ( lastScreen == "Scheduler" )
@@ -1418,24 +1420,28 @@ Promise.all(requests)
         out += `<center><p class="label1">Do you want to enable Edit mode?</p></center><br>`;
         out += `<center><input type="button" class="button" value="No" id="noEditBtn"/>&nbsp<input type="button" class="button" value="Yes" id="yesEditBtn"/></center>`;
        
+        $("#navID,#result-table,#result-table1,#editLabel").addClass("greyed-out");
+                    
         $("#editControl").html(out);    // show the dialuge
         $("#editControl").show();
 
         $('#yesEditBtn,#noEditBtn').on('click',editHandler);
         $('#yesEditBtn,#noEditBtn').on('keydown', function(event) {
-         switch (event.key) {
-            case "y"        :
-            case "Y"        :
-                $("#editCBID").prop( "checked", true );
-                if ( lastScreen == "Scheduler" )
-                    $("[id=editTaskID").removeClass("greyed-out").prop("disabled",false);   // enable all Edit task button
-            case "Escape"   :
-            case "n"        :
-            case "N"        :    
-                document.getElementById("editControl").close();
-                `if ( lastScreen != "Customers" )`
-                    setCellFocus(); // return the focus back to the original field
-            break;
+        $("#navID,#result-table,#result-table1,#editLabel").addClass("greyed-out");
+
+            switch (event.key) {
+                case "y"        :
+                case "Y"        :
+                    $("#editCBID").prop( "checked", true );
+                    if ( lastScreen == "Scheduler" )
+                        $("[id=editTaskID").removeClass("greyed-out").prop("disabled",false);   // enable all Edit task button
+                case "Escape"   :
+                case "n"        :
+                case "N"        :    
+                    document.getElementById("editControl").close();
+                    if ( lastScreen != "Customers" )
+                        setCellFocus(); // return the focus back to the original field
+                break;
         }});
 
         $('#yesEditBtn').focus();  

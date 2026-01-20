@@ -360,7 +360,6 @@
                 if ( tableID === "#innerCellID" ) {
                     $("#navID,#main-menue,#projectLbl,#customers,#tHalf").addClass("greyed-out");
                     $('img[id^="Pls"]').removeClass("greyed-out");
-                    
                 }
                
                 if ( e.key === "Backspace" ) // in case of a backspace trim the last character 
