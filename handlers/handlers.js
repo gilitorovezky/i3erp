@@ -1418,19 +1418,10 @@ Promise.all(requests)
         out += `<center><p class="label1">Do you want to enable Edit mode?</p></center><br>`;
         out += `<center><input type="button" class="button" value="No" id="noEditBtn"/>&nbsp<input type="button" class="button" value="Yes" id="yesEditBtn"/></center>`;
        
-        //const editDialog=document.getElementById("editControl");      
-        //editDialog.innerHTML=out;
-        //editDialog.showModal();
         $("#editControl").html(out);    // show the dialuge
-    //const dlg=document.getElementById(parentElement);
-    //dlg.showModal();
-    //$(".editCntrlClass").visible();
-    //$("#submitFilesID,#resetFormID").hide();
         $("#editControl").show();
-        //$(".editCntrlClass").visible();
 
         $('#yesEditBtn,#noEditBtn').on('click',editHandler);
-
         $('#yesEditBtn,#noEditBtn').on('keydown', function(event) {
          switch (event.key) {
             case "y"        :
@@ -1446,17 +1437,7 @@ Promise.all(requests)
                     setCellFocus(); // return the focus back to the original field
             break;
         }});
-//        $('#noEditBtn').on('click',editHandler);
- /*
-        document.getElementById("yesEditBtn").addEventListener("click", function() {
-                editHandler(this,e);
-            }, false);
 
-        document.getElementById("noEditBtn").addEventListener("click", function() {
-                editHandler(this,e);
-            }, false);
-*/
-        //$("#editControl").visible();
         $('#yesEditBtn').focus();  
     }
 
