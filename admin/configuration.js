@@ -127,7 +127,7 @@
             
             out += `<tr>`;
             out += `<td><img src='../misc/minus-2.jpg' value="DeleteImage" alt='plus' width='10' height='10'></td>`;
-            out += `<td><input tabindex="0" type="text" name="fullName" class="projectNameClass" maxlength="30" >`;
+            out += `<td><input tabindex="0" type="text" name="fullName" class="projectNameClass" maxlength="30">`;
             out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="employeeID" value="1"></td>`;
             out += `<td><input tabindex="0" type="text" name="employmentType" class="projectNameClass" maxlength="10"></td>`;
             out += `<td><input tabindex="0" type="text" name="hourlyRate" class="projectNameClass" value=""></td>`;
@@ -140,16 +140,14 @@
             for (var i = 1; i < length; i++) { //loop throu the return msg, starting from 1 since 0 is for unassigned
                 var jsDate=sql2JSDate(eArray[i].effective_date,1);
                 out += `<tr>`;
-                //  out += `<td><a href=""><img src='../misc/minus-2.jpg' value="DeleteImage" alt='plus' width='10' height='10' onclick="return deleteRow(event);"></a></td>`;
-                //out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="DeleteImage" alt='plus' width='10' height='10'></td>`;
                 out += `<td></td>`;
-                out += `<td class="fullNameClass"><input tabindex="0" type="text" name="fullname" id="fullNameID" class="projectNameClass" maxlength="30" value="${eArray[i].fullname}">`;
+                out += `<td class="fullNameClass"><input readonly tabindex="0" type="text" name="fullname" id="fullNameID" class="projectNameClass" maxlength="30" value="${eArray[i].fullname}">`;
                 out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="employeeID" value=${eArray[i].employee_id}>`;
-                out += `<input tabindex="0" type="color" id="emplColorInput" class="emplColor" value=${classArray["Employees"].colors[eArray[i].fullname]}></td>`;
+                out += `<input tabindex="0" type="color" id="emplColorInput" class="emplColor" name="employeePrflColor" value=${classArray["Employees"].colors[eArray[i].fullname]}></td>`;
                 out += `<td><input tabindex="0" type="text" name="employmentType" class="projectNameClass" maxlength="20" value='${eArray[i].employment_type}'></td>`;
                 out += `<td><input tabindex="0" type="text" id="hrValueID" name="hourlyRate" readonly maxlength="7" class="projectNameClass" value='${eArray[i].hourlyrate}'></td>`;
                 out += `<td id="hrDateID">${jsDate}</td>`;
-                if (eArray[i].is_active == "1")
+                if ( eArray[i].is_active === "1" )
                     out += `<td><input tabindex="0" id="isActEmplID" class="inputDate" type="checkbox" name="isActive" value="IsActive" checked></td>`;
                 else 
                     out += `<td><input tabindex="0" id="isActEmplID" class="inputDate" type="checkbox" name="isActive" value="IsActive"></td>`;
