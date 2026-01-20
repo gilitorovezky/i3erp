@@ -156,37 +156,41 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
 
         case "Purchases"        :
 
-            //let entry1=classArray[module].retEntrybyID(record[0]);
             if ( !isNewRecord ) {
+                record2.map(function(rec,index) {
+                    if ( headerToDBFieldLookup[module] && headerToDBFieldLookup[module][rec.header] ) {
+                        classArray[module].arr[recordID][headerToDBFieldLookup[module][rec.header]] = rec.value;
+                    }
+                });
                 classArray[module].arr[recordID].purchase_id      = record2["purchase_id"];
-                classArray[module].arr[recordID].project_number  = record2["project_number"];
-                classArray[module].arr[recordID].vendor_name     = record2["vendor_name"];
-                classArray[module].arr[recordID].purchase_number  = record2["purchase_number"];
-                classArray[module].arr[recordID].purchase_amount  = record2["purchase_amount"];
-                classArray[module].arr[recordID].purchase_date    = record2["purchase_date"];
-                classArray[module].arr[recordID].purchase_method  = record2["purchase_method"];
-                classArray[module].arr[recordID].description     = record2["description"];
-                classArray[module].arr[recordID].file_uploaded   = record2["file_uploaded"];
-                classArray[module].arr[recordID].foldername      = record2["foldername"];
+                classArray[module].arr[recordID].project_number  = record2["Project Number"];
+                classArray[module].arr[recordID].vendor_name     = record2["Vendor Name"];
+                classArray[module].arr[recordID].purchase_number = record2["Purchase Number"];
+                classArray[module].arr[recordID].purchase_amount = record2["Purchase Amount"];
+                classArray[module].arr[recordID].purchase_date   = record2["Purchase Date"];
+                classArray[module].arr[recordID].purchase_method  = record2["Purchase Method"];
+                classArray[module].arr[recordID].description     = record2["Description"];
+                classArray[module].arr[recordID].file_uploaded   = record2["Files"];
+                classArray[module].arr[recordID].foldername      = record2["Folder Name"];
                 //classArray[module].arr.splice(entryNumber,1);     // remove the item then add new/updted record
             }
             else { // record not found then add 
                 classArray[module].arr.push({
                     purchase_id      :   record2["purchase_id"],
-                    project_number   :   record2["project_number"],
-                    vendor_name      :   record2["vendor_name"],
-                    invoice_number   :   record2["invoice_number"],
-                    purchase_amount  :   record2["purchase_amount"],
-                    invoice_date     :   record2["invoice_date"],
-                    payment_method   :   record2["payment_method"],
-                    invoice_desc     :   record2["invoice_desc"],
-                    file_uploaded    :   record2["file_uploaded"],
-                    folderrname      :   record2["folderrname"],
+                    project_number   :   record2["Project Number"],
+                    vendor_name      :   record2["Vendor Name"],
+                    invoice_number   :   record2["Purchase Number"],
+                    purchase_amount  :   record2["Purchase Amount"],
+                    purchase_date    :   record2["Purchase Date"],
+                    payment_method   :   record2["Purchase Method"],
+                    invoice_desc     :   record2["Description"],
+                    file_uploaded    :   record2["Files"],
+                    folderrname      :   record2["Folder Name"],
                     images_json      :   ""});
                     
             }
             classArray["Purchases"].arr.sort(function(a,b) {
-                return new Date(a.invoice_date) - new Date(b.invoice_date);
+                return new Date(a.purchase_date) - new Date(b.purchase_date);
               });
 
         break;
