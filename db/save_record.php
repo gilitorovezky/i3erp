@@ -107,10 +107,10 @@
             //for ($cell=0; $cell<$headersCount; $cell++) { // Go over the headers to construct the sql
             foreach ($headers as $index => $header) {
                 file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 2.8-header index:".$index." header value:".$header."\n", FILE_APPEND);
-                $new_value = str_replace("'","\'", $arrayJson->record->{'project_id'}); // escaping the field to support ' and "
+                $new_value = str_replace("'","\'", $arrayJson->record->$index); // escaping the field to support ' and "
                 $sql_st .= $header."='".$new_value."',";
             }
-            //}
+            
           
             switch ($moduleName) {
                 
