@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Sum Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .instructions {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .instructions strong {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            user-select: none;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: #4CAF50;
+            color: white;
+            font-weight: 600;
+            position: relative;
+        }
+
+        th.sortable {
+            cursor: pointer;
+            user-select: none;
+            padding: 0;
+        }
+
+        .th-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            gap: 8px;
+        }
+
+        .th-text {
+            flex: 1;
+            position: relative;
+            padding-right: 20px;
+            cursor: pointer;
+        }
+
+        th.sortable:hover .th-text {
+            opacity: 0.9;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .filter-btn.active {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .filter-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            min-width: 200px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .filter-dropdown.show {
+            display: block;
+        }
+
+        .filter-header {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            background: #f9f9f9;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-action-btn {
+            background: none;
+            border: none;
+            color: #4CAF50;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .filter-action-btn:hover {
+            background: #e8f5e9;
+        }
+
+        .filter-options {
+            padding: 5px;
+        }
+
+        .filter-option {
+            padding: 8px 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #333;
+            transition: background 0.2s;
+        }
+
+        .filter-option:hover {
+            background: #f5f5f5;
+        }
+
+        .filter-option input[type="checkbox"] {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+        }
+
+        .filter-option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .sort-arrow {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            opacity: 0.5;
+        }
+
+        th.sortable.asc .sort-arrow::after {
+            content: '▲';
+            opacity: 1;
+        }
+
+        th.sortable.desc .sort-arrow::after {
+            content: '▼';
+            opacity: 1;
+        }
+
+        td {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        td:hover {
+            background: #f0f0f0;
+        }
+
+        td.selected {
+            background: #e3f2fd;
+            border: 2px solid #2196F3;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .result-panel {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 6px;
+            border: 2px solid #4CAF50;
+        }
+
+        .result-panel h2 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .total {
+            font-size: 32px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin: 10px 0;
+        }
+
+        .selected-count {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .button-group {
+            margin-top: 15px;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        button.secondary {
+            background: #666;
+        }
+
+        button.secondary:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Table Sum Calculator</h1>
+        <p class="instructions">
+            <strong>Click and drag</strong> to select a range of cells in a column.<br>
+            <strong>Shift + Click</strong> to add or remove individual cells from selection.<br>
+            <strong>Click (no shift)</strong> clears selection and selects that cell.
+        </p>
+        
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th class="sortable">
+                        <div class="th-content">
+                            <span onclick="sortTable(0)" class="th-text">
+                                Item <span class="sort-arrow"></span>
+                            </span>
+                            <button class="filter-btn" onclick="toggleFilter(event, 0)">⋮</button>
+                        </div>
+                        <div class="filter-dropdown" id="filter-0"></div>
+                    </th>
+                    <th class="sortable">
+                        <div class="th-content">
+                            <span onclick="sortTable(1)" class="th-text">
+                                Price <span class="sort-arrow"></span>
+                            </span>
+                            <button class="filter-btn" onclick="toggleFilter(event, 1)">⋮</button>
+                        </div>
+                        <div class="filter-dropdown" id="filter-1"></div>
+                    </th>
+                    <th class="sortable">
+                        <div class="th-content">
+                            <span onclick="sortTable(2)" class="th-text">
+                                Quantity <span class="sort-arrow"></span>
+                            </span>
+                            <button class="filter-btn" onclick="toggleFilter(event, 2)">⋮</button>
+                        </div>
+                        <div class="filter-dropdown" id="filter-2"></div>
+                    </th>
+                    <th class="sortable">
+                        <div class="th-content">
+                            <span onclick="sortTable(3)" class="th-text">
+                                Discount <span class="sort-arrow"></span>
+                            </span>
+                            <button class="filter-btn" onclick="toggleFilter(event, 3)">⋮</button>
+                        </div>
+                        <div class="filter-dropdown" id="filter-3"></div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Product A</td>
+                    <td><input type="number" value="100" step="0.01"></td>
+                    <td><input type="number" value="5" step="1"></td>
+                    <td><input type="number" value="10" step="0.01"></td>
+                </tr>
+                <tr>
+                    <td>Product A</td>
+                    <td><input type="number" value="100" step="0.01"></td>
+                    <td><input type="number" value="8" step="1"></td>
+                    <td><input type="number" value="15" step="0.01"></td>
+                </tr>
+                <tr>
+                    <td>Product A</td>
+                    <td><input type="number" value="100" step="0.01"></td>
+                    <td><input type="number" value="3" step="1"></td>
+                    <td><input type="number" value="5" step="0.01"></td>
+                </tr>
+                <tr>
+                    <td>Product B</td>
+                    <td><input type="number" value="250" step="0.01"></td>
+                    <td><input type="number" value="3" step="1"></td>
+                    <td><input type="number" value="15" step="0.01"></td>
+                </tr>
+                <tr>
+                    <td>Product B</td>
+                    <td><input type="number" value="250" step="0.01"></td>
+                    <td><input type="number" value="7" step="1"></td>
+                    <td><input type="number" value="20" step="0.01"></td>
+                </tr>
+                <tr>
+                    <td>Product B</td>
+                    <td><input type="number" value="250" step="0.01"></td>
+                    <td><input type="number" value="2" step="1"></td>
+                    <td><input type="number" value="10" step="0.01"></td>
+                </tr>
+                <tr>
+                    <td>Product C</td>
+                    <td><input type="number" value="75" step="0.01"></td>
+                    <td><input type="number" value="10" step="1"></td>
+                    <td><input type="number" value="5" step="0.01"></td>
+                </tr>
+                <tr>
+                    <td>Product C</td>
+                    <td><input type="number" value="75" step="0.01"></td>
+                    <td><input type="number" value="12" step="1"></td>
+                    <td><input type="number" value="8" step="0.01"></td>
+                </tr>
+                <tr>
+                    <td>Product C</td>
+                    <td><input type="number" value="75" step="0.01"></td>
+                    <td><input type="number" value="15" step="1"></td>
+                    <td><input type="number" value="12" step="0.01"></td>
+                </tr>
+                <tr>
+                    <td>Product D</td>
+                    <td><input type="number" value="150" step="0.01"></td>
+                    <td><input type="number" value="2" step="1"></td>
+                    <td><input type="number" value="20" step="0.01"></td>
+                </tr>
+                <tr>
+                    <td>Product D</td>
+                    <td><input type="number" value="150" step="0.01"></td>
+                    <td><input type="number" value="6" step="1"></td>
+                    <td><input type="number" value="25" step="0.01"></td>
+                </tr>
+                <tr>
+                    <td>Product D</td>
+                    <td><input type="number" value="150" step="0.01"></td>
+                    <td><input type="number" value="4" step="1"></td>
+                    <td><input type="number" value="18" step="0.01"></td>
+                </tr>
+                <tr>
+                    <td>Product E</td>
+                    <td><input type="number" value="300" step="0.01"></td>
+                    <td><input type="number" value="7" step="1"></td>
+                    <td><input type="number" value="25" step="0.01"></td>
+                </tr>
+                <tr>
+                    <td>Product E</td>
+                    <td><input type="number" value="300" step="0.01"></td>
+                    <td><input type="number" value="9" step="1"></td>
+                    <td><input type="number" value="30" step="0.01"></td>
+                </tr>
+                <tr>
+                    <td>Product E</td>
+                    <td><input type="number" value="300" step="0.01"></td>
+                    <td><input type="number" value="5" step="1"></td>
+                    <td><input type="number" value="22" step="0.01"></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="result-panel">
+            <h2>Sum of Selected Cells</h2>
+            <div class="total" id="totalSum">0</div>
+            <div class="selected-count" id="selectedCount">No cells selected</div>
+            <div class="button-group">
+                <button onclick="clearSelection()">Clear Selection</button>
+                <button class="secondary" onclick="selectColumn()">Select Column</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedCells = new Set();
+        let isDragging = false;
+        let dragColumn = null;
+        let sortOrder = {};
+        let columnFilters = {};
+        let allRows = [];
+        let lastSelectedCell = null;
+
+        window.addEventListener('DOMContentLoaded', function() {
+            const tbody = document.getElementById('dataTable').querySelector('tbody');
+            allRows = Array.from(tbody.querySelectorAll('tr'));
+        });
+
+        document.querySelectorAll('#dataTable tbody td').forEach(td => {
+            td.addEventListener('mousedown', function(e) {
+                const input = this.querySelector('input[type="number"]');
+                if (!input) return;
+                
+                e.preventDefault();
+                
+                // If shift key is not pressed, clear selection and start fresh
+                if (!e.shiftKey) {
+                    isDragging = true;
+                    dragColumn = this.cellIndex;
+                    clearSelection();
+                    
+                    selectedCells.add(this);
+                    this.classList.add('selected');
+                    lastSelectedCell = this;
+                    calculateTotal();
+                }
+            });
+            
+            td.addEventListener('mouseenter', function(e) {
+                if (!isDragging) return;
+                
+                const input = this.querySelector('input[type="number"]');
+                if (!input) return;
+                
+                if (this.cellIndex === dragColumn) {
+                    if (!selectedCells.has(this)) {
+                        selectedCells.add(this);
+                        this.classList.add('selected');
+                        calculateTotal();
+                    }
+                }
+            });
+            
+            td.addEventListener('click', function(e) {
+                const input = this.querySelector('input[type="number"]');
+                if (!input) return;
+                
+                // Shift+Click: toggle selection (add or remove)
+                if (e.shiftKey) {
+                    e.preventDefault();
+                    if (selectedCells.has(this)) {
+                        // Remove from selection
+                        selectedCells.delete(this);
+                        this.classList.remove('selected');
+                    } else {
+                        // Add to selection
+                        selectedCells.add(this);
+                        this.classList.add('selected');
+                        lastSelectedCell = this;
+                    }
+                    calculateTotal();
+                }
+                // Regular click is handled by mousedown
+            });
+        });
+
+        document.addEventListener('mouseup', function() {
+            isDragging = false;
+            dragColumn = null;
+        });
+
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', calculateTotal);
+        });
+
+        function calculateTotal() {
+            let sum = 0;
+            let count = 0;
+            let isPriceColumn = false;
+            
+            selectedCells.forEach(td => {
+                const input = td.querySelector('input[type="number"]');
+                if (input) {
+                    const value = parseFloat(input.value) || 0;
+                    sum += value;
+                    count++;
+                    
+                    // Check if this is the Price or Discount column (columns 1 or 3)
+                    if (td.cellIndex === 1 || td.cellIndex === 3) {
+                        isPriceColumn = true;
+                    }
+                }
+            });
+            
+            // Format with $ sign for Price and Discount columns
+            const formattedSum = isPriceColumn ? `${sum.toFixed(2)}` : sum.toFixed(2);
+            
+            document.getElementById('totalSum').textContent = formattedSum;
+            document.getElementById('selectedCount').textContent = 
+                count === 0 ? 'No cells selected' : 
+                count === 1 ? '1 cell selected' : 
+                `${count} cells selected`;
+        }
+
+        function selectRange(startCell, endCell) {
+            const tbody = document.getElementById('dataTable').querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr')).filter(row => row.style.display !== 'none');
+            
+            const startRow = rows.indexOf(startCell.parentElement);
+            const endRow = rows.indexOf(endCell.parentElement);
+            const column = startCell.cellIndex;
+            
+            const minRow = Math.min(startRow, endRow);
+            const maxRow = Math.max(startRow, endRow);
+            
+            // Select all cells in the range
+            for (let i = minRow; i <= maxRow; i++) {
+                const cell = rows[i].cells[column];
+                if (cell && cell.querySelector('input[type="number"]')) {
+                    selectedCells.add(cell);
+                    cell.classList.add('selected');
+                }
+            }
+        }
+
+        function clearSelection() {
+            selectedCells.forEach(td => {
+                td.classList.remove('selected');
+            });
+            selectedCells.clear();
+            calculateTotal();
+        }
+
+        function selectColumn() {
+            const colIndex = prompt('Enter column number (1=Price, 2=Quantity, 3=Discount):');
+            const col = parseInt(colIndex);
+            
+            if (col < 1 || col > 3 || isNaN(col)) {
+                alert('Please enter a number between 1 and 3');
+                return;
+            }
+            
+            clearSelection();
+            
+            document.querySelectorAll(`#dataTable tbody tr`).forEach(row => {
+                const td = row.cells[col];
+                if (td && td.querySelector('input[type="number"]')) {
+                    selectedCells.add(td);
+                    td.classList.add('selected');
+                }
+            });
+            
+            calculateTotal();
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('dataTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            const header = table.querySelectorAll('th')[columnIndex];
+            
+            let isAscending = true;
+            if (sortOrder[columnIndex] === 'asc') {
+                isAscending = false;
+                sortOrder[columnIndex] = 'desc';
+            } else {
+                sortOrder[columnIndex] = 'asc';
+            }
+            
+            table.querySelectorAll('th').forEach(th => {
+                th.classList.remove('asc', 'desc');
+            });
+            
+            header.classList.add(isAscending ? 'asc' : 'desc');
+            
+            rows.sort((a, b) => {
+                let aValue, bValue;
+                
+                if (columnIndex === 0) {
+                    aValue = a.cells[columnIndex].textContent.trim();
+                    bValue = b.cells[columnIndex].textContent.trim();
+                    return isAscending ? 
+                        aValue.localeCompare(bValue) : 
+                        bValue.localeCompare(aValue);
+                } else {
+                    const aInput = a.cells[columnIndex].querySelector('input');
+                    const bInput = b.cells[columnIndex].querySelector('input');
+                    aValue = parseFloat(aInput.value) || 0;
+                    bValue = parseFloat(bInput.value) || 0;
+                    return isAscending ? aValue - bValue : bValue - aValue;
+                }
+            });
+            
+            clearSelection();
+            
+            rows.forEach(row => tbody.appendChild(row));
+            
+            attachEventListeners();
+        }
+
+        function attachEventListeners() {
+            const table = document.getElementById('dataTable');
+            const oldTbody = table.querySelector('tbody');
+            const newTbody = oldTbody.cloneNode(true);
+            oldTbody.parentNode.replaceChild(newTbody, oldTbody);
+            
+            allRows = Array.from(newTbody.querySelectorAll('tr'));
+            
+            newTbody.querySelectorAll('td').forEach(td => {
+                td.addEventListener('mousedown', function(e) {
+                    const input = this.querySelector('input[type="number"]');
+                    if (!input) return;
+                    
+                    e.preventDefault();
+                    
+                    if (!e.shiftKey) {
+                        isDragging = true;
+                        dragColumn = this.cellIndex;
+                        clearSelection();
+                        
+                        selectedCells.add(this);
+                        this.classList.add('selected');
+                        lastSelectedCell = this;
+                        calculateTotal();
+                    }
+                });
+                
+                td.addEventListener('mouseenter', function(e) {
+                    if (!isDragging) return;
+                    
+                    const input = this.querySelector('input[type="number"]');
+                    if (!input) return;
+                    
+                    if (this.cellIndex === dragColumn) {
+                        if (!selectedCells.has(this)) {
+                            selectedCells.add(this);
+                            this.classList.add('selected');
+                            calculateTotal();
+                        }
+                    }
+                });
+                
+                td.addEventListener('click', function(e) {
+                    const input = this.querySelector('input[type="number"]');
+                    if (!input) return;
+                    
+                    if (e.shiftKey) {
+                        e.preventDefault();
+                        if (selectedCells.has(this)) {
+                            selectedCells.delete(this);
+                            this.classList.remove('selected');
+                        } else {
+                            selectedCells.add(this);
+                            this.classList.add('selected');
+                            lastSelectedCell = this;
+                        }
+                        calculateTotal();
+                    }
+                });
+            });
+            
+            newTbody.querySelectorAll('input[type="number"]').forEach(input => {
+                input.addEventListener('input', calculateTotal);
+            });
+        }
+
+        function toggleFilter(event, columnIndex) {
+            event.stopPropagation();
+            
+            const dropdown = document.getElementById(`filter-${columnIndex}`);
+            const allDropdowns = document.querySelectorAll('.filter-dropdown');
+            
+            allDropdowns.forEach(dd => {
+                if (dd !== dropdown) {
+                    dd.classList.remove('show');
+                }
+            });
+            
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+            } else {
+                populateFilterOptions(columnIndex);
+                dropdown.classList.add('show');
+            }
+        }
+
+        function populateFilterOptions(columnIndex) {
+            const dropdown = document.getElementById(`filter-${columnIndex}`);
+            const uniqueValues = new Set();
+            
+            allRows.forEach(row => {
+                const cell = row.cells[columnIndex];
+                let value;
+                
+                if (columnIndex === 0) {
+                    value = cell.textContent.trim();
+                } else {
+                    const input = cell.querySelector('input');
+                    value = input ? input.value : '';
+                }
+                
+                if (value) {
+                    uniqueValues.add(value);
+                }
+            });
+            
+            if (!columnFilters[columnIndex]) {
+                columnFilters[columnIndex] = new Set(uniqueValues);
+            }
+            
+            const values = Array.from(uniqueValues).sort((a, b) => {
+                if (columnIndex === 0) {
+                    return a.localeCompare(b);
+                }
+                return parseFloat(a) - parseFloat(b);
+            });
+            
+            let html = `
+                <div class="filter-header">
+                    <span>Filter</span>
+                    <div class="filter-actions">
+                        <button class="filter-action-btn" onclick="selectAllFilter(${columnIndex})">All</button>
+                        <button class="filter-action-btn" onclick="clearAllFilter(${columnIndex})">None</button>
+                    </div>
+                </div>
+                <div class="filter-options">
+            `;
+            
+            values.forEach(value => {
+                const isChecked = columnFilters[columnIndex].has(value);
+                html += `
+                    <div class="filter-option">
+                        <input type="checkbox" 
+                               id="filter-${columnIndex}-${value}" 
+                               ${isChecked ? 'checked' : ''}
+                               onchange="updateFilter(${columnIndex}, '${value}', this.checked)">
+                        <label for="filter-${columnIndex}-${value}">${value}</label>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            dropdown.innerHTML = html;
+        }
+
+        function updateFilter(columnIndex, value, isChecked) {
+            if (!columnFilters[columnIndex]) {
+                columnFilters[columnIndex] = new Set();
+            }
+            
+            if (isChecked) {
+                columnFilters[columnIndex].add(value);
+            } else {
+                columnFilters[columnIndex].delete(value);
+            }
+            
+            applyFilters();
+        }
+
+        function selectAllFilter(columnIndex) {
+            const uniqueValues = new Set();
+            
+            allRows.forEach(row => {
+                const cell = row.cells[columnIndex];
+                let value;
+                
+                if (columnIndex === 0) {
+                    value = cell.textContent.trim();
+                } else {
+                    const input = cell.querySelector('input');
+                    value = input ? input.value : '';
+                }
+                
+                if (value) {
+                    uniqueValues.add(value);
+                }
+            });
+            
+            columnFilters[columnIndex] = new Set(uniqueValues);
+            populateFilterOptions(columnIndex);
+            applyFilters();
+        }
+
+        function clearAllFilter(columnIndex) {
+            columnFilters[columnIndex] = new Set();
+            populateFilterOptions(columnIndex);
+            applyFilters();
+        }
+
+        function applyFilters() {
+            clearSelection();
+            
+            allRows.forEach(row => {
+                let shouldShow = true;
+                
+                for (let colIndex in columnFilters) {
+                    const filterSet = columnFilters[colIndex];
+                    
+                    if (filterSet.size === 0) {
+                        shouldShow = false;
+                        break;
+                    }
+                    
+                    const cell = row.cells[colIndex];
+                    let value;
+                    
+                    if (colIndex == 0) {
+                        value = cell.textContent.trim();
+                    } else {
+                        const input = cell.querySelector('input');
+                        value = input ? input.value : '';
+                    }
+                    
+                    if (!filterSet.has(value)) {
+                        shouldShow = false;
+                        break;
+                    }
+                }
+                
+                if (shouldShow) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            attachEventListeners();
+        }
+
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.filter-dropdown') && !event.target.closest('.filter-btn')) {
+                document.querySelectorAll('.filter-dropdown').forEach(dd => {
+                    dd.classList.remove('show');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
