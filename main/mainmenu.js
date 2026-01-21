@@ -100,6 +100,12 @@ const nametoIDLookup = {
                              "modules":{"Projects":{"display":true,
                                                     "mandatory":true}}}, 
 
+    "Vendor Address":      {"name":"vendorAddress",
+                             "id":"vendorAddressID",
+                             "header":"Vendor Address",
+                             "modules":{"Vendors":{"display":true,
+                                                   "mandatory":true}}}, 
+
     "Payment Amount":       {"name":"paymentAmount",
                              "id":"paymentAmountID",
                              "header":"Payment Amount",
@@ -218,7 +224,19 @@ const nametoIDLookup = {
                              "id":"vendorNameID",
                              "header":"Vendor Name",
                              "modules":{"Purchases":{"display":true,
+                                                     "mandatory":true},
+                                        "Vendors":{"display":true,
                                                      "mandatory":true}}},
+
+   "Notes"            :     {"name":"notes",
+                             "id":"notesID",
+                             "header":"Notes",
+                             "modules":{"Companies":{"display":true,
+                                                     "mandatory":false},
+                                        "Vendors":{"display":true,
+                                                   "mandatory":false},
+                                        "Contractors":{"display":true,
+                                                       "mandatory":false}}},
 
     "Description":          {"name":"description",
                              "id":"descriptionID",

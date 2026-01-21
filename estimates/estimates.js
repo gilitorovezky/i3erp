@@ -38,7 +38,7 @@
         estmDlg += `<tr><td style="width:40%;font-weight:bold;text-align:end"><label for="estimateTitleID">Title:</label></td>`;
         estmDlg += `<td style="width:50%"><input type="text" id="estimateTitleID" size="50" maxlength="50"></td>`;
         estmDlg += `<td><button id="estimateUploadFileID" class='button'>Upload file(s)</button></td></tr>`;
-        estmDlg += `<tr><td colspan="3" style="width:100%;"><center><textarea rows="20" style="width:80%;height:100%;overflow-y:auto;" id="estimateNotesID"></textarea></center></td></tr>`;
+        estmDlg += `<tr><td colspan="3" style="width:100%;"><center><textarea rows="20" style="width:80%;height:100%;overflow-y:auto;" id="notesID"></textarea></center></td></tr>`;
         estmDlg += `<tr><td colspan="2" style="font-weight:bold;text-align:end"><label for="estimateAmountID">Estimate Amount: $</label></td><td style="width:10%"><input type="text" id="estimateAmountID" size="10" maxlength="10"></td></tr>`;
         estmDlg += `<br>`;
         estmDlg += `<tr><td colspan="3"><center>`;
@@ -59,7 +59,7 @@
         const screen_name="newEstimates";
 
         estimateSaveIntervalId=setInterval(() => {
-            if (notes != $("#estimateNotesID").val())
+            if (notes != $("#notesID").val())
                 windowLog.trace("Saving estimate");
                 //saveEstimate();
             
@@ -93,7 +93,7 @@
     
     function resetEstimateScreen() {
 
-        $("#estimateNotesID").val("");
+        $("#notesID").val("");
         $("#emailEstmateBtn,#printEstmateBtn,#pdfEstmateBtn").removeClass("button").prop("disabled",true);
 
     }

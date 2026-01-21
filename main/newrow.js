@@ -209,10 +209,10 @@
             case "Vendors" :
                 //if ( restore )                    
                 //    ID= tempRow[4].ID;
-                row += `<td><input tabindex="0" type="text" name="vendorName" id="vendorID" class="projectNameClass" maxlength="50" value='${tempRow[3].Name}'>`;
+                row += `<td><input tabindex="0" type="text" name="vendorName" id="vendorNameID" class="projectNameClass" maxlength="50" value='${tempRow[3].Name}'>`;
                 row += `<input type="hidden" id='${headers['Vendors']['primaryKey']}' name="vendorID" value=${ID}></td>`;
-                row += `<td><input tabindex="0" type="text" name="vendorAddress" id="vaID" class="projectNameClass" maxlength="50" value=${tempRow[index++].value}></td>`;
-                row += `<td><input tabindex="0" type="text" name="vendorNotes" id="vNotesID" class="projectNameClass" maxlength="50" value=${tempRow[index].value}></td>`;
+                row += `<td><input tabindex="0" type="text" name="vendorAddress" id="vendorAddressID" class="projectNameClass" maxlength="50" value=${tempRow[index++].value}></td>`;
+                row += `<td><input tabindex="0" type="text" name="vendorNotes" id="notesID" class="projectNameClass" maxlength="50" value=${tempRow[index].value}></td>`;
                 if ( restore ) 
                     files=tempRow[index].value;
                 row += `<td style="width:2%"><a tabindex="0" id="allFilesID" data-files="0" style="text-decoration:none;font-size:12px">${files}</a></td>`;

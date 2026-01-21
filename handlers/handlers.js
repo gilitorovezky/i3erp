@@ -668,10 +668,10 @@ Promise.all(requests)
 
    
 
-    /**$( "body" ).delegate("#estimateNotesID","keyup",function(event) {
+    /**$( "body" ).delegate("#notesID","keyup",function(event) {
 
         comment in till further notice
-        if ($("#estimateNotesID").val().length > 0) {
+        if ($("#notesID").val().length > 0) {
            // $("#emailEstmateBtn,#printEstmateBtn,#pdfEstmateBtn").addClass("button").prop("disabled",false);
         }
 
