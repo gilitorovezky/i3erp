@@ -1431,7 +1431,7 @@ function pContractorJobs() {
 }
 
 // Called to show the projectSummary
-function showProjectSummary(rowNumber,prjIndex) {
+function showProjectSummary(prjIndex) {
     
     windowLog.trace("Inside showProjectSummary");
 

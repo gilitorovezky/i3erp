@@ -4,7 +4,7 @@
             { ctrl: true, shift: true, key: 'h', action: () => console.log('Ctrl+Shift+H - Home shortcut activated!') },
             { ctrl: true, key: 'z', action: () => console.log('Ctrl+Z - Undo activated!') },
             { ctrl: true, key: 'n', action: () => console.log('Ctrl+N - New activated!') },
-            { alt: true, key: 'f', action: () => console.log('Alt+F - File menu activated!') }
+            { ctrl: true, key: 'e', action: () =>  $("#editCBID").prop("checked", !$('#editCBID').is(":checked")) }, // Enable Edit mode
         ];
 
     var currCell="";	                // holds the focused cell
@@ -131,7 +131,7 @@
                     break;
 
                     default:
-                        if (tableID != "#customerTblID") {
+                        if ( tableID !== "#customerTblID" ) {
                             active=currCell.index()+1;    // calculate the cell numerical position from start
                             //header=$('#mainHeader'+' th:nth-child('+(currCell.index()+1)+')').html(); // Identify the header    
                             header=$("#"+e.currentTarget.id+" thead th:nth-child("+(currCell.index()+1)+")").html();
@@ -140,11 +140,6 @@
                             //header=$("label[for='"+e.target.id+"']")[0].innerText.replace(":",'');
                            
                 }
-            }
-       
-        if (e.key === 'z' && e.ctrlKey) {
-           CtrlZ();
-           windowLog.trace("key dowen- calling CtrlZ");
         }
 
         //foundChar = foundChar && specialChar;
@@ -450,7 +445,7 @@
                     const listLength=newArr.length>20?20:newArr.length; // dispaly only the top 10
                     
                     for (let i = 0; i < listLength; i++) {
-                        if ( tableID != "#customerTblID" ) {
+                        if ( tableID !== "#customerTblID" ) {
                             if (( e.target.id !== "prjTreeID" ) || 
                                 ( ( e.target.id === "prjTreeID" ) && 
                                   ( $("#jName").html() !== newArr[i] )))  // do not include the same project number in the list
@@ -525,7 +520,7 @@
                         leftMostTD = 2; // not allowed to go left beyond the 2nd TD  
                     // if lower left most TD - do nothing
                     currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell      
-                    if ( e.target.closest('td') != $(tableID+' tbody tr:first td:nth-child('+leftMostTD+')')[0] ) { 
+                    if ( e.target.closest('td') !== $(tableID+' tbody tr:first td:nth-child('+leftMostTD+')')[0] ) { 
                         // if not left most cell in the TR
                         if ( (e.target.closest('td')) === $(e.target).closest('tr').find('td:nth-child('+leftMostTD+')')[0] )
                             currCell=currCell.closest('tr').prev().find('td:nth-child(' + (numOfColumns)+ ')'); // focus on the right most cell at the previous row
@@ -653,8 +648,8 @@
 
                     case "Enter"        :
                         if ( $('#overLay ul li').length > 0 ) {
-                            if ( $('#overLay ul li').length == 1 ) {
-                                if ( lastScreen == "Customers" ) {
+                            if ( $('#overLay ul li').length === 1 ) {
+                                if ( lastScreen === "Customers" ) {
                                     const cstmNumber=classArray["Customers"].cNames.findIndex(x => x === $('#overLay ul li').first().text());
                                     updateCustomerPane(Number(classArray["Customers"].arr[cstmNumber].customer_id));
                                 } else {
@@ -666,14 +661,24 @@
                                     } else
                                         e.target.value=$('#overLay ul li')[0].innerText; // only one entry than act as enter
                                 }
-                                $("#overLay ul").empty();
-                                editing=false;
-                                charactersCount=0;
                                 //Tasks.newTask= e.target;    // Save a pointer to the field for coloring and send to the DB
                             }
-                        }
+                            $("#overLay ul").empty();
+                            editing=false;
+                            charactersCount=0;
+                            e.target.value=""; // clear the field for new entry
+                            if ( tableID === "#innerCellID" ) {
+                                $("#navID,#main-menue,#projectLbl,#customers,#tHalf").removeClass("greyed-out");
+                                $('img[id^="Pls"]').removeClass("greyed-out");
+                            } else {
+                                if ( lastFocusedEntry.length > 0 ) {
+                                    $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr).removeClass("greyed-out");
+                                    $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr).css("opacity",'1.0');
+                                }
+                            }
+                        }   
                         else {
-                            if ( tableID == "#customerTblID" )
+                            if ( tableID === "#customerTblID" )
                                 updateCustomerPane($("#customer_id").text());
                             else {
                                 windowLog.trace("Header"+header);
@@ -686,14 +691,13 @@
                                     break;    
 
                                     case 'Project Address'      :
-                                        if (e.target.value != "") // not empty address then open google maps with the address
+                                        if (e.target.value !== "") // not empty address then open google maps with the address
                                             window.open("http://maps.google.com/?q="+e.target.value,"_blank");
                                     break;
 
                                     case 'Project Number'       :
-                                        if ( e.target.id != "prjTreeID" ) {
-                                            if ( ( screenName === 'Projects' ) ||
-                                                    ( screenName === "Home" ) ) { // open projectdetails if in the Project screen
+                                        if ( e.target.id !== "prjTreeID" ) {
+                                           if ( !isNewRec ) {
                                                 //var entryNumber=-1;
                                                 // search for the project number just to be safe
                                                 //const entryNumber=Projects.retEntrybyID(e.target.value.split("-")[0]); 
@@ -701,8 +705,10 @@
                                                 //const entryNumber=Projects.retEntrybyID(prjNumber); 
 
                                                 const entryNumber=Projects.arrProjects.findIndex(t => t.project_number == prjNumber);
-                                                if (entryNumber != -1) 
-                                                    showProjectSummary(e.target.closest('tr').rowIndex,entryNumber);
+                                                if ( entryNumber !== -1 ) {
+                                                    showProjectSummary(entryNumber);
+                                                    e.stopPropagation();
+                                                }
                                             }
                                         }
                                         else {
@@ -787,10 +793,10 @@
                             if ( e.target.value !== origText ) {
                                 charactersCount -= e.target.value.length; // reduce the char count
                                 e.target.value = origText;
-                                windowLog.trace("Content change detected- restore origin");
+                                windowLog.trace("Content change detected-restore origin");
                             }
                             else
-                                windowLog.trace("No content change detected- do nothing");
+                                windowLog.trace("No content change detected-do nothing");
                             e.target.focus();
                             if ( (!e.target.id.toLowerCase().includes("date")) && 
                                     (!e.target.id.toLowerCase().includes("time")) )
@@ -826,14 +832,14 @@
                             //ret_value=false;
                         }  else {
                                 if (header != "projectScheduler") { 
-                                    if (e.target.selectionStart == 0) {
+                                    if (e.target.selectionStart === 0) {
                                         currCell.children().first().css({'background-color'    : '#'}); // remove the highlight from the current cell  
                                         if (( e.target.type != 'date' ) && ( e.target.type != 'time' )) {
                                             let leftMostTD = 1; // point to the 1st TD in the TR
-                                            if (lastScreen == "Projects")
+                                            if ( lastScreen === "Projects" )
                                                 leftMostTD = 2; // wrap around to the 2nd TD - skip the project number  
-                                            if ( e.target.closest('td')  != $(tableID+' tbody tr:first td:nth-child('+leftMostTD+')')[0] ) { 
-                                                if ( (e.target.closest('td')) == $(e.target).closest('tr').find('td:nth-child('+leftMostTD+')')[0] ) { 
+                                            if ( e.target.closest('td')  !== $(tableID+' tbody tr:first td:nth-child('+leftMostTD+')')[0] ) { 
+                                                if ( (e.target.closest('td')) === $(e.target).closest('tr').find('td:nth-child('+leftMostTD+')')[0] ) { 
                                                     currCell=currCell.closest('tr').prev().find('td:nth-child(' + (numOfColumns)+ ')'); // focus on the right most cell at the previous row
                                                     active-=numOfColumns;
                                                 }
@@ -923,7 +929,7 @@
                                 $("#overLay ul").empty();
                         }
                         else {
-                            if ( lastScreen == "Customers") {
+                            if ( lastScreen === "Customers" ) {
                                 /*if ( ( e.target.id == "customerFirstName") || 
                                         ( e.target.id == "customerLastName") ) {
                                         let cstmrId=Number($("#customer_id").text()); 
@@ -964,7 +970,7 @@
                             retValue=false;
                         }
                         else {
-                            if ( lastScreen == "Customers") {
+                            if ( lastScreen === "Customers" ) {
                                 /*if ( ( e.target.id == "customerFirstName") || 
                                         ( e.target.id == "customerLastName") ) {
                                         let cstmrId=Number($("#customer_id").text()); 
@@ -976,10 +982,10 @@
                                     $("#updateRecordBtn").show(); // show the update record button
                                 }*/
                             } else {
-                                if (( tableID != "#addSingleRec" ) &&
-                                    ( e.target.type != 'date' )    && 
-                                    ( e.target.type != 'time' )) {
-                                    if ( ( e.target.closest('tr').rowIndex == $(tableID).find("tr").last().index()+1) && 
+                                if (( tableID !== "#addSingleRec" ) &&
+                                    ( e.target.type !== 'date' )    && 
+                                    ( e.target.type !== 'time' )) {
+                                    if ( ( e.target.closest('tr').rowIndex === $(tableID).find("tr").last().index()+1) && 
                                             ( lastScreen != "Projects" ) ) {  // Add new row only if the last row and not in Projects screen
                                         //lastID[$("#screen_name").html()]++;   // only here increament the ID by 1
                                         addNewRow(tableID,screenName,rows,0); 
@@ -1229,8 +1235,8 @@
                             currCell.closest('tr').find("a[id='allFilesID']").removeClass('assign'); // turn on the file button
                     }
                     $(currCell).children().first().val("");
-                    if (( currCell.id == "prjShortCut" ) || 
-                        ( currCell.id == "prjShortCutGallery") ) {  // special case of project input field 
+                    if (( currCell.id === "prjShortCut" ) || 
+                        ( currCell.id === "prjShortCutGallery") ) {  // special case of project input field 
                         $(currCell).children().first().focus();// focus on the first input!!
                     }
                     else {     
@@ -1274,7 +1280,7 @@
                 windowLog.trace("Default key pressed: "+event.keyCode);
                 retValue=false;
         }
-
+        event.stopPropagation();
         return retValue;
     };
 
@@ -1547,12 +1553,18 @@ console.log(reverseMap.get(30));     // 'age'
 // */
 
     function checkShortcut(event, shortcut) {
-            const ctrlMatch = shortcut.ctrl ? event.ctrlKey : !event.ctrlKey;
-            const shiftMatch = shortcut.shift ? event.shiftKey : !event.shiftKey;
-            const altMatch = shortcut.alt ? event.altKey : !event.altKey;
-            const keyMatch = event.key.toLowerCase() === shortcut.key.toLowerCase();
-            
-            return ctrlMatch && shiftMatch && altMatch && keyMatch;
+
+        const keyMatch = event.key.toLowerCase() === shortcut.key.toLowerCase();
+        if (!keyMatch) 
+            return false;
+        const ctrlMatch = shortcut.ctrl ? event.ctrlKey : !event.ctrlKey;
+        const shiftMatch = shortcut.shift ? event.shiftKey : !event.shiftKey;
+        const altMatch = shortcut.alt ? event.altKey : !event.altKey;            //const keyMatch = event.key.toLowerCase() === shortcut.key.toLowerCase();
+        const noExtraCtrl = !shortcut.ctrl ? !event.ctrlKey : true;
+        const noExtraShift = !shortcut.shift ? !event.shiftKey : true;
+        const noExtraAlt = !shortcut.alt ? !event.altKey : true;
+                
+       return ctrlMatch && shiftMatch && altMatch && noExtraCtrl && noExtraShift && noExtraAlt;    
     }
 
     

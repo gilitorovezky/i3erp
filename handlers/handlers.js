@@ -91,9 +91,19 @@ Promise.all(requests)
 
     $('body').on('keydown', function(event) {
 
-        windowLog.trace("Inside minDiv keydown ID:"+event.target.id+" key:"+event.key);
-         const isCtrlShift = (event.ctrlKey || event.metaKey) && event.shiftKey;
-    
+        windowLog.trace("Inside body keydown ID:"+event.target.id+" key:"+event.key);
+        const isCtrlShift = (event.ctrlKey || event.metaKey) && event.shiftKey;
+        const allowedKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Tab'];
+        const key=event.key;
+        //if ( lastScreen != "Home" ) {
+        for (const shortcut of shortcuts) {
+            if (checkShortcut(event, shortcut)) {
+                event.preventDefault();
+                shortcut.action();
+                console.log(`Shortcut triggered: ${shortcut.key}`);
+                return;
+            }
+        }
         // Check if the 'S' key is pressed. Use event.code for modern browsers.
         if (isCtrlShift && event.code === 'KeyV') {
             event.preventDefault(); // Prevent the browser's default action (e.g., save page, screenshot)
@@ -322,12 +332,12 @@ Promise.all(requests)
             case "editSliderID"     :
                 if ( $('#editCBID').is(":checked") ) {
                      $("#editCBID").prop("checked", false);
-                    if ( lastScreen == "Scheduler" ) // if in Scheduler screen then disable the edit mode
+                    if ( lastScreen === "Scheduler" ) // if in Scheduler screen then disable the edit mode
                         $("[id=editTaskID").addClass("greyed-out").prop("disabled",true);
                 }
                 else {  
                     $("#editCBID").prop("checked", true);
-                    if ( lastScreen == "Scheduler" ) // if in Scheduler screen then disable the edit mode
+                    if ( lastScreen === "Scheduler" ) // if in Scheduler screen then disable the edit mode
                         $("[id=editTaskID").removeClass("greyed-out").prop("disabled",false);
                 }
 
@@ -526,7 +536,7 @@ Promise.all(requests)
                 //if ( lastScreen == "Customers" ) { // just aas a precausion 
                 const entryNumber=Projects.arrProjects.findIndex(t => t.project_number == Number(event.target.value));
                 if ( entryNumber != -1 ) 
-                    showProjectSummary(event.target.closest('tr').rowIndex,entryNumber);
+                    showProjectSummary(entryNumber);
                 //}
 
             case "cstmrUploadFileID"    :
@@ -704,10 +714,12 @@ Promise.all(requests)
 
     $("body").delegate("#prjShortCut,#cstmrShortCut","keydown",function(event) {
         windowLog.trace("Invoking keydown handler(id):"+this.id);
-        const inValidKey=event.ctrlKey || event.metaKey || event.key === "Tab" || event.key == "Alt"; //|| exceptionKeys(event.key);
-        if ( !(event.currentTarget.closest('table').id === "innerCellID" &&  inValidKey) ||
-              $('#overLay ul li').length > 1 )
-            TblKeyDown(event);
+        const inValidKey=event.ctrlKey || event.metaKey || event.key === "Tab" || event.key === "Alt"; //|| exceptionKeys(event.key);
+        if ( !(event.currentTarget.closest('table').id === "innerCellID" && inValidKey) ||
+              $('#overLay ul li').length > 1 ) {
+                TblKeyDown(event);
+                event.stopPropagation();// stop the bubbling
+            }
     });
 
     $("body").delegate("#aboutDialog,#estimateDlg,#newSingleRec","keydown",function(event) {
@@ -915,6 +927,12 @@ Promise.all(requests)
             case "prjShortCut"          :
                 $("#overLay ul").attr('data-module',"Project Number");
                 $("#cstmrShortCut").val("");
+                if ( e.type === "keydown") {
+                    //const entryNumber=Projects.arrProjects.findIndex(t => t.project_number == Number(event.target.value));
+                    //if ( entryNumber != -1 ) 
+                    //    showProjectSummary(entryNumber);
+                }
+
             case "cstmrShortCut"        :
                 $("#prjShortCut").val("");
                 $('#overLay ul').empty();
@@ -1044,7 +1062,7 @@ Promise.all(requests)
             case "prjctNumberID"    :
                 const entryNumber=Projects.arrProjects.findIndex(t => t.project_number == Number(event.target.value));
                 if ( entryNumber != -1 ) 
-                    showProjectSummary(event.target.closest('tr').rowIndex,entryNumber);
+                    showProjectSummary(entryNumber);
             break;
 
             case "jobDateID"        :
@@ -1600,7 +1618,7 @@ Promise.all(requests)
         }
     });
 
-    $("#result-table1").on("keydown",function(event) {
+    $("result-table1 td input").on("keydown",function(event) {
    
         const allowedKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Tab'];
         windowLog.trace("Event listener-Inside keydown");
@@ -1616,22 +1634,22 @@ Promise.all(requests)
         }
         if ( $('#editCBID').is(":checked") || 
             ( allowedKeys.includes(key) ) ) {   // allow navigation keys even if edit mode is off
-            if ( event.ctrlKey && key === 'z' ) {
+            /*if ( event.ctrlKey && key === 'z' ) {
                 windowLog.trace("Event listener - calling CtrlZ");
                 CtrlZ();
                 windowLog.trace("Prevent default1");
                 event.preventDefault(); // prevent any further TAB
-            }
-            else {
-                if ( event.ctrlKey && key === 'n' ) {
+            }*/
+            //else {
+               /* if ( event.ctrlKey && key === 'n' ) {
                     if ( $("#screen_name").html() === "Scheduler" ) {
                         windowLog.trace("Event listener - ctrlN");
                         CtrlN(event);
                         windowLog.trace("Prevent default2");
                         event.preventDefault(); // prevent any further TAB
                     }
-                }
-                else {
+                }*/
+                //else {
                     let parentTableID="";
                     if ( typeof $(event.target).parents().filter("table")[0] != 'undefined' ) 
                         parentTableID=$(event.target).parents().filter("table")[0].id;
@@ -1639,16 +1657,16 @@ Promise.all(requests)
                         windowLog.trace("no table found:"+event.target.id);
                     if ( ( event.target.nodeName != "BODY" ) || ( parentTableID === "addSingleRec" ) )
                         resultKey=TblKeyDown(event);
-                }
-            }
+                //}
+            //}
         } 
         else {
-            if ( !(event.keyCode === 16) ) {   // shift Tab is 
+            //if ( !(event.keyCode === 16) ) {   // shift Tab is 
                 windowLog.trace("Ignore keydown..editMode is off");
                 event.preventDefault(); // prevent edit 
                 //$(this).addClass("greyed-out");
                 enableEditDlg(this);
-            }
+           // }
         }
     });
 

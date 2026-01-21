@@ -494,6 +494,7 @@
                         $(currCell).children().first().focus();
                         
                         TblKeyDown(elementRec);
+                        //elementRec.preventDefault();
                     }
                 }
             }
