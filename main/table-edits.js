@@ -182,7 +182,6 @@ function deleteFromDB(rec2Delete) {
 // Main funtion to save record to the DB, either adding or replacing
 function saveRow(moduleName,element) {
 
-    var headers1=[];
     var rootDir="";
     var arrObj=[];
     let tempRow=[];
@@ -199,41 +198,31 @@ function saveRow(moduleName,element) {
     
     windowLog.trace("Inside saveRow..module:"+moduleName+" LastScreen:"+lastScreen);
  
-    headers1.push(headers[moduleName]['primaryKey']); 
     windowLog.trace("Key:"+headers[moduleName]['primaryKey']);
-
-    // Push the headers
-    $(element).closest('table').find("thead th:gt(0)").each(function() {
-        headers1.push($(this).text());
-    });
     row=element.closest('tr');  // get the tr of the focused element
     targetTR=row;
 
     const idName=headers[moduleName]['primaryKey'];
 
     let ID = $(row).find('[id='+idName+']').val();
-    //let prjName="";
+    
     switch( moduleName ) { // Add hidden header at the end only at Hourly Rate, Employees and projects
 
         case "Hourly Rate"      :
-            headers1.push("employee_id");
+           
             break;
 
         case "Employees"        :
-            headers1.push("startdate");
+
             tempRow2['fullname']=$(targetTR).find('[id="fullNameID"]').val();
             tempRow2["password"]=$(targetTR).find('[name="password"]').val();;
             break;
 
         case "Projects"         :
-            
-            //headers1.push("project_name");
-
-        case "Employee Jobs"        :
-            // add job signin job signout lunch signin lunchsignout 
-        case "Sub Contractors"      :
-        case "Purchases"            :
-        case "Payments"             :
+        case "Employee Jobs"    :
+        case "Sub Contractors"  :
+        case "Purchases"        :
+        case "Payments"         :
             rootDir=appConfig.root_projects;
             //prjName=$(row).find('[id="prjctNumberID"]').val();
             //tempRow.push(prjName); // entry 1 append the project name
@@ -242,9 +231,7 @@ function saveRow(moduleName,element) {
 
         default                 :
             rootDir=appConfig.config_dir+(moduleName).toLowerCase();
-
-            headers1.push("foldername");    // add the foldername at the end to confort with the table format 
-            break;     
+        break;     
     }
 
     if ( typeof ID === "undefined") {
@@ -352,12 +339,7 @@ function saveRow(moduleName,element) {
                 arrObj["entry0"].newFolderName=contactAllFields;
                 arrObj["entry0"].subFolderName=classArray[moduleName].arr[entryNumber].foldername;
             }
-            //else
-            //    arrObj[0].subFolderName=contactAllFields;   // update the subFolder with the contacnation of all the record fields
-        //}
     }
-    //else
-    //    arrObj[0].subFolderName=contactAllFields;   // update the subFolder with the contacnation of all the record fields
 
     tempRow2["isNewRecord"]=isNewRecord; 
 
@@ -411,7 +393,7 @@ function saveRow(moduleName,element) {
                 }
             }
             $(targetTR).find('[name^="labor_cost"]')[0].value=laborCost // reset the labor cost
-//            $(element.parentNode).parent().find('[name^="labor_cost"]')[0].value=laborCost // reset the labor cost
+            //$(element.parentNode).parent().find('[name^="labor_cost"]')[0].value=laborCost // reset the labor cost
             //tempRow[10]=laborCost;
             //tempRow.push(eID);
             //tempRow.push(hourlyrate);    
@@ -421,8 +403,8 @@ function saveRow(moduleName,element) {
             tempRow2["projectID"]=Projects.retEntrybyID(tempRow2["Project Number"].split("-")[0]);
             
         case "Sub Contractors"  :
-            if ( tempRow[4] == "") // if payment_amount is eempty then set the field to 0.00
-                tempRow[4] = 0.00;
+            if ( tempRow2["Payment Amount"] === "") // if payment_amount is empty then set the field to 0.00
+                tempRow2["Payment Amount"] = 0.00;
         case "Purchases"        :
         case "Payments"         :
             fullProjectName=tempRow[1];
@@ -469,36 +451,39 @@ function saveRow(moduleName,element) {
         break;
 
         case "Companies"        :
-            if ( element.id === "cmpnyNameID" ) {   // save the origText only if the updated field is the company name
+            tempRow2["Orig Company Name"]="";
+           /* if ( element.id === "cmpnyNameID" ) {   // save the origText only if the updated field is the company name
                 tempRow.push(origText);             // push the orig company name
                 tempRow2["cmpnyNameID"]=origText;
             }
             else {
                 tempRow.push("");             // push ""
                 tempRow2["cmpnyNameID"]="";
-            }
+            }*/
         break;
 
         case "Vendors"          :
-            if ( element.id === "vendorNameID" ) {      // save the origText only if the updated field is the vendor name
+            tempRow2["Orig Vendor Name"]="";
+
+            /*if ( element.id === "vendorNameID" ) {      // save the origText only if the updated field is the vendor name
                 tempRow.push(origText);          // oush the orig company name
                 tempRow2["vendorNameID"]=origText;
             }
             else {
                 tempRow.push("");             // push ""
                 tempRow2["vendorNameID"]="";
-            }
+            }*/
         break;
 
         case "Contractors"     :
-            if ( element.id == "cntrctNameID" )  {        // save the origText only if the updated field is the vendor name
+           /* if ( element.id == "cntrctNameID" )  {        // save the origText only if the updated field is the vendor name
                 tempRow.push(origText);         // oush the orig company name
                 tempRow2["cntrctNameID"]=origText;
             }
             else {
                 tempRow.push("");             // push ""
                 tempRow2["cntrctNameID"]="";
-            }
+            }*/
         break;
 
         case "Scheduler"     :

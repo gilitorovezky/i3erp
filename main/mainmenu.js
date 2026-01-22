@@ -37,8 +37,8 @@ const headerToDBFieldLookup = { // look up table to match record to db schmea
 
     "Projects": {'Project Number':'project_number','Company Name':'company_name','Customer Last Name':'project_cstmr_lastname','Project Type':'project_type','Project Manager/Rep':'project_m_contractor','Project Address':'project_address','Files':'file_uploaded'},
     "Payments": {'Project Number':'project_number','Payment Amount':'payment_amount','Payment Date':'payment_date','Payment Method':'payment_method','Payment Number':'payment_number','Description':'description','Files':'file_uploaded'},
-    "Sub Contractors": {'Contractor Name':'contractor_name','Job Date':'job_date','Payment Amount':'payment_amount','Payment Number':'payment_number','Date Paid':'date_paid','Description':'description','Files':'file_uploaded'},
-    "Employee Jobs": {'Full Name':'employee_fname','Job Date':'job_date','Job SignIn':'job_signin','Lunch SignIn':'lunch_signin','Lunch SignOut':'lunch_signout','Job SignOut':'job_signout','Total Hours':'total_hours','Description':'description','Total Cost':'total_cost','Files':'file_uploaded'},
+    "Sub Contractors": {'Project Number':'project_number','Contractor Name':'contractor_name','Job Date':'job_date','Payment Amount':'payment_amount','Payment Number':'payment_number','Date Paid':'date_paid','Description':'description','Files':'file_uploaded'},
+    "Employee Jobs": {'Project Number':'project_number','Full Name':'employee_fname','Job Date':'job_date','Job SignIn':'job_signin','Lunch SignIn':'lunch_signin','Lunch SignOut':'lunch_signout','Job SignOut':'job_signout','Total Hours':'total_hours','Description':'description','Total Cost':'total_cost','Files':'file_uploaded'},
     "Purchases": {'Project Number':'project_number','Vendor Name':'vendor_name','Purchase Number':'purchase_number','Purchase Amount':'purchase_amount','Purchase Date':'purchase_date','Purchase Method':'purchase_method','Description':'description','Files':'file_uploaded'},
     "Employees": {'Full Name':'employee_fname','Employee Color':'profile_color','Employment Type':'employment_type','Hourly Rate':'hourlyrate','Hourly Rate Date':'hourlyrate_effective_date','Is Active':'is_active','Password':'password','Files':'file_uploaded'},
     "Vendors": {'Vendor Name':'vendor_name','Vendor Address':'vendor_address','Notes':'notes','Files':'file_uploaded'},
@@ -55,6 +55,10 @@ const nametoIDLookup = {
                                                     "mandatory":true},
                                         "Payments":{"display":true,
                                                     "mandatory":true},
+                                        "Employee Jobs":{"display":true,
+                                                         "mandatory":true},
+                                        "Sub Contractors":{"display":true,
+                                                           "mandatory":false},
                                         "Purchases":{"display":true,
                                                      "mandatory":true}}},
 
@@ -71,6 +75,8 @@ const nametoIDLookup = {
                              "dbField":"company_name",
                              "modules":{"Projects":{"display":true,
                                                     "mandatory":true},
+                                        "Companies":{"display":true,
+                                                     "mandatory":true},
                                         "Payments":{"display":true,
                                                     "mandatory":true}}},
 
@@ -1358,8 +1364,8 @@ function displayMainMenue(screenName) {
     hashPassword("hello");
     windowLog.trace("inside DisplayMainMenue:today-"+today);
 
-    if (username === 'eddie') { //only Eddie could access
-        if (screenName === "home") {
+    if ( username === 'eddie' ) { //only Eddie could access
+        if ( screenName === "home" ) {
           
             $('#customers').html('<label tabindex="15" for="cstmrShortCut" class="css-3d-text label2" id="customersLbl">Customers</label><a><img tabindex="16" src="../misc/plus.png" id="newCustomer" width="10" height="10"></a>\n<input tabindex="17" type="text" class="prjShortCutInput" id="cstmrShortCut" name="customerNumber" size="20" maxlength="50">\n'); 
             $("#tHalf").html('<label tabindex="18" class="css-3d-text label2" id="schedulerLabelID">Scheduler</label><a><img tabindex="19" src="../misc/plus.png" width="10" id="mainNewTaskSchdlr" height="10"></a>');
@@ -1865,7 +1871,7 @@ function displayProjects(projectManager) {
     windowLog.trace("Inside "+screen_name);
     let out = "";
     //var slidingWindow;
-    var sumOfProjects=0;
+    //var sumOfProjects=0;
 
     passedArray=Projects.arrProjects;
     lastScreen=screen_name;
@@ -2525,7 +2531,7 @@ function home()	{
     today=date.getFullYear()+"-"+(("0" + (date.getMonth() + 1)).slice(-2))+"-"+(("0" + date.getDate()).slice(-2)); 
     windowLog.trace("Inside home:today-"+today);
     
-    $("#screen_name").html("home");
+    $("#screen_name").html("Home");
     $("#screen_name, #addSingleRec,#editDiv").hide();
     $(".scrollit").hide();
     $(".grid-gallery").css({'display' : "none"});
@@ -2535,7 +2541,7 @@ function home()	{
     $("#ul, #ur, #ll, #lr").removeClass("configScreen");
     $("#ul, #ur, #ll, #lr").addClass("homeScreen");
     
-    if (lastScreen == "Scheduler") { // if the last screen was Scheduler than restore default
+    if (lastScreen === "Scheduler") { // if the last screen was Scheduler than restore default
         $("#newTaskShortCutID").invisible();
         document.getElementById('result-table').id = 'result-table1';
        
@@ -2545,6 +2551,7 @@ function home()	{
         $(".res_table1 thead th:first-child").css({'width':'22px'});
     }
     lastScreen="Home";
+    screenName="Home";
     document.getElementById("result-table1").hidden=true;
     $("#centercellID").visible();
     //if ( !pageAccessedByReload )

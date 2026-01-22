@@ -50,24 +50,14 @@
             $keyName=$post_body["keyName"];
             
             $tableName = $post_body["tableName"];
-            //$arrayJson = json_decode($post_body[4]);    // tempRow2 in JS
-            //$row_number=3; // skip the first 3 entries: module and headers
-
             file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 2-module:".$moduleName." Table:".$tableName." rowCount:".$rowCount." headersCount:".$headersCount."\n", FILE_APPEND); 
             
-            //file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 2.3:row(".$row_number."):".print_r($arrayJson->record,true)."\n", FILE_APPEND); 
-
             $old_ProjectName = "";
             $new_project_name = "";
-            //$project_id = $arrayJson->record->ID;
-            //file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 2.1:header-".print_r($headers,true)." keyName:".$keyName." value:".$arrayJson->record->$keyName."\n", FILE_APPEND); 
-            //file_put_contents('../log/log_'.$logDate.'.log', "(save_record.php) ".$current_time." info 2.1:header-".print_r($headers,true)."\n", FILE_APPEND);
-
+            $subFolderName=$post_body["subFolderName"];
             $project_created_date="";
-            // Special case only Projects - checking if the new name is same as the last name cause project names could be changed.
             
             if ( $moduleName == "projects" ) {  // if yes, then retain the old name to update across all tables
-                //$new_project_name=$arrayJson->record->projectname;//$post_body[$row_number][8];
                 $old_ProjectName = $arrayJson->record->projectname; // retain the old name to update across all tables
                 file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 2.3.5-found project_name:".$old_ProjectName."\n", FILE_APPEND);
 
@@ -110,14 +100,14 @@
                 $new_value = str_replace("'","\'", $arrayJson->record->$index); // escaping the field to support ' and "
                 $sql_st .= $header."='".$new_value."',";
             }
-            
+            //
           
             switch ($moduleName) {
                 
                 case "projects"            :
                     if ( $project_created_date != "" )// only for projects add project_created_Date at the end of the sql
                         $sql_st .= "project_created_date='".$project_created_date."'";
-                    $sql_st .= ", project_name = '$old_ProjectName'";   
+                    $sql_st .= ", project_name='$old_ProjectName'";   
                 break;
 
                 case "scheduler"            :
@@ -132,10 +122,10 @@
                 case "employees"            :
                     
                     $sql_st .= "profile_color ='".$arrayJson->record->profile_color."'";
-                    break;
+                break;
 
                 default:
-                    $sql_st .= "foldername='".$arrayJson->record->{'Folder Name'}."'"; // add the folder name at the end
+                    $sql_st .= "foldername='".$rootDir."/".$subFolderName."'"; // add the folder name at the end
                     //$sql_st = substr($sql_st, 0, -1);   // remove the last char ","
             }
             file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 3.2-sql_st:".$sql_st."\n", FILE_APPEND);
@@ -148,8 +138,7 @@
                     case "sub contractors"          :
                     case "purchases"                :
 
-                        $subFolderName=$post_body["subFolderName"];
-                        $project_name = str_replace("'","\'", $arrayJson->record->{'Project Number'}); //  $post_body[$row_number][1]); // escaping the project name to support ' and "
+                        $project_name = str_replace("'","\'", $arrayJson->record->{'Project Number'}); 
                         $sql_st=$sqlArray[$moduleName];
                         file_put_contents('../log/log_'.$logDate.'.log',"(save_record) ".$current_time." info 4.1-sql_st:".$sql_st."\n", FILE_APPEND);
                         if ( $project_name != "" ) {
@@ -195,19 +184,18 @@
                     break;
                         
                     case "employee jobs"            :
-                        $subFolderName=$post_body["subFolderName"];
-                        $project_name = str_replace("'","\'", $arrayJson->record->{'Project Number'}); //  $post_body[$row_number][1]); // escaping the project name to support ' and "
 
-                        $employee_id = $arrayJson->record->employeeID; //$post_body[$row_number][12]; // only in employee_jobs, the employee_id is the last field in the record
-                        $taskID = $arrayJson->record->$keyName; //$post_body[$row_number][0];
-                        $projectNumber=$arrayJson->record->{'Project Number'}; //$post_body[$row_number][1];
-                        $project_id = $arrayJson->record->projectID; //$post_body[$row_number][14];
-                        $fullname = $arrayJson->record->{'Full Name'};//$post_body[$row_number][2]; // get the fullname from the record
-                        $task_time = $arrayJson->record->{'Job Date'}; //$post_body[$row_number][3] ; //." ".$post_body[$row_number][4].":00"; // get the task time
-                        $totalLaborTime = $arrayJson->record->{'Total Hours'}; //$post_body[$row_number][7];
-                        $notes = $arrayJson->record->Description; //$post_body[$row_number][9];
-                        $hourly_rate = $arrayJson->record->hourlyrate; //$post_body[$row_number][13];
-                        //file_put_contents('../log/log_'.$logDate.'.log',"(save_record) ".$current_time." info .6-creating new subflder:", FILE_APPEND);
+                        $project_name = str_replace("'","\'", $arrayJson->record->{'Project Number'}); 
+
+                        $employee_id = $arrayJson->record->employeeID; 
+                        $taskID = $arrayJson->record->$keyName; 
+                        $projectNumber=$arrayJson->record->{'Project Number'}; 
+                        $project_id = $arrayJson->record->projectID; 
+                        $fullname = $arrayJson->record->{'Full Name'};
+                        $task_time = $arrayJson->record->{'Job Date'}; 
+                        $totalLaborTime = $arrayJson->record->{'Total Hours'}; 
+                        $notes = $arrayJson->record->Description; 
+                        $hourly_rate = $arrayJson->record->hourlyrate; 
                         if ( $projectNumber != "") { // create new dir 
                             if ( $subFolderName != $newFolderName && // is it same record but different record fields
                                     $newFolderName != "" ) 
@@ -255,10 +243,10 @@
                                 $pieces  = explode(".", $totalLaborTime);   // split the hours and minutes
                                 $workingHours   = $pieces[0];
                                 $workingMinutes = $pieces[1];
-                                if ( ( $post_body[$row_number][5] != "" &&  // lunch in and lunch out are not empty
-                                        $post_body[$row_number][6]!= "" ) ) {
-                                    $lunchIn = new DateTime($post_body[$row_number][5]);
-                                    $lunchOut = new DateTime($post_body[$row_number][6]);
+                                if ( ( $arrayJson->record->{'Lunch SignIn'} != "" &&  // lunch in and lunch out are not empty
+                                        $arrayJson->record->{'Lunch Sign Out'} != "" ) ) {
+                                    $lunchIn = new DateTime($arrayJson->record->{'Lunch SignIn'});
+                                    $lunchOut = new DateTime($arrayJson->record->{'Lunch Sign Out'});
                                     $interval     = $lunchIn->diff($lunchOut);
                                     $lunchHours   = $interval->h;
                                     $lunchMinutes = ($lunchHours*60)+$interval->i;
@@ -319,9 +307,9 @@
 
                     case "hourly rate"          :
                         
-                        $eID = $post_body[$row_number][3];
-                        $hourlyRate = $post_body[$row_number][1];
-                        $hourlyRateDate = $post_body[$row_number][2];
+                        $eID = $arrayJson->record->$keyName;
+                        $hourlyRate = $arrayJson->record->{'Hourly Rate'};
+                        $hourlyRateDate = $arrayJson->record->{'Hourly Rate Date'};
                         
                         $sql_st= "UPDATE employees SET hourlyrate = '$hourlyRate', hourlyrate_effective_date = '$hourlyRateDate' where employee_id = '$eID'"; // update the employee hr 
                         file_put_contents('../log/log_'.$logDate.'.log',"(save_record) ".$current_time." info 15-sql_st:".$sql_st."\n", FILE_APPEND);
@@ -337,8 +325,8 @@
                     case "employees"            :
                         
                         $today = date('Y-m-d');
-                        $employeeID=$arrayJson->record->ID;// $post_body[$row_number][0];
-                        $rateType=$arrayJson->record->hourlyRateType; //$post_body[$row_number][9];   // newRate or currentRate
+                        $employeeID=$arrayJson->record->ID;
+                        $rateType=$arrayJson->record->hourlyRateType; 
                         $hourlyRate=$arrayJson->record->{'Hourly Rate'};
                         $empl_st="SELECT employee_id from accounts where employee_id='$employeeID'";
                         file_put_contents('../log/log_'.$logDate.'.log',"(save_record) ".$current_time." info 16-rateType:".$rateType." empl_st:".$empl_st." hourlyRate:".$hourlyRate."\n", FILE_APPEND);
@@ -463,9 +451,11 @@
                     break;
 
                     case "companies"                :
-                        $new_company_name=$post_body[$row_number][1];
-                        $orig_company_name=$post_body[$row_number][4];
-                        file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 31-Update company_name:".$orig_company_name." with:".$new_company_name.")\n", FILE_APPEND);  
+                       
+                        $new_company_name=$arrayJson->record->{'Company Name'};
+                        $orig_company_name=$arrayJson->record->{'Orig Company Name'};
+
+                        //file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 31-Update company_name:".$orig_company_name." with:".$new_company_name.")\n", FILE_APPEND);  
                         if ( $orig_company_name != "" )  {   // only replace if new company name is not empty
                             $sql_st="UPDATE projects SET company_name = REPLACE(company_name,'$orig_company_name','$new_company_name')";
                             file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 32-sql_st:".$sql_st."\n", FILE_APPEND);  
@@ -521,15 +511,25 @@
                         else
                             file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." warning- No new company name \n", FILE_APPEND);
 
+                        if ( $arrayJson->record->isNewRecord == "1" ) { // is it a new company - create the folder
+                            file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." creating a new folder ".$subFolderName."\n", FILE_APPEND);
+                            $retCode=atomFS("mkdir","",$rootDir."/".$subFolderName,"","");
+                        }
+                        else 
+                            if ( ( $orig_company_name != $new_company_name ) && // is it same record but different record fields
+                                    ($new_company_name != "" )) 
+                                $retCode=atomFS("rendir",$rootDir."/".$subFolderName,"","",$rootDir."/".$newFolderName); // rename from sub to new 
+                            
                         $ret_recs=array("Status"            => $return_code,
                                         "new_company_name"  => $new_company_name);
                     break;
 
                     case "vendors"                  :
-                        $new_vendor_name=$post_body[$row_number][1];
-                        $orig_vendor_name=$post_body[$row_number][5];
+
+                        $new_vendor_name=$arrayJson->record->{'Vendor Name'};
+                        $orig_vendor_name=$arrayJson->record->{'Orig Vendor Name'};
                         file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 44-Update vendor_name:".$orig_vendor_name." with:".$new_vendor_name.")\n", FILE_APPEND);  
-                        if ( $orig_vendor_name != "" )  {   // only replace if new company name is not empty
+                        if ( $new_vendor_name != "" )  {   // only replace if new vendor name is not empty
                             $sql_st="UPDATE purchases SET vendor_name = REPLACE(vendor_name,'$orig_vendor_name','$new_vendor_name')";
                             file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 45-sql_st:".$sql_st."\n", FILE_APPEND);  
                             if ( mysqli_query($con,$sql_st) ) 
@@ -540,13 +540,25 @@
                             }
                         } else
                             file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." warning- No new vendor name \n", FILE_APPEND);
+
+                        if ( $arrayJson->record->isNewRecord == "1" ) { // is it a new company - create the folder
+                            file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." creating a new folder ".$subFolderName."\n", FILE_APPEND);
+                            $retCode=atomFS("mkdir","",$rootDir."/".$subFolderName,"","");
+                        }
+                        else 
+                            if ( ( $orig_company_name != $new_company_name ) && // is it same record but different record fields
+                                    ($new_company_name != "" )) 
+                                $retCode=atomFS("rendir",$rootDir."/".$subFolderName,"","",$rootDir."/".$newFolderName); // rename from sub to new 
+                            
+
+                            
                         $ret_recs=array("Status"            => $return_code,
                                         "new_vendor_name"   => $new_vendor_name);
                     break;
 
                     case "contractors"              :
-                        $new_contractor_name=$post_body[$row_number][1];
-                        $orig_contractor_name=$post_body[$row_number][4];
+                        $new_contractor_name=$arrayJson->record->{'Contractor Name'};
+                        $orig_contractor_name=$arrayJson->record->{'Contractor Name'};
                         file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 47-Update contractor_name:".$orig_contractor_name." with:".$new_contractor_name."\n", FILE_APPEND);  
                         if ( $orig_contractor_name != "" )  {   // only replace if new company name is not empty
                             $sql_st="UPDATE contractor_jobs SET contractor_name = REPLACE(contractor_name,'$orig_contractor_name','$new_contractor_name')";

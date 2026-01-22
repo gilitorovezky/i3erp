@@ -212,6 +212,10 @@
                         Object.keys(classArray["Vendors"].pNames).forEach( (name) => { //copy the return data from the DB into the class array
                             tempArray.push(name); })
                         isList=charactersCount > 0?true: false;
+                        if ( $(tableID).attr('data-module') === "Vendors" && isNewRec) {
+                            showNewEntry=false;
+                            retValue=true; // allow new entry only in the Vendors screen
+                        }
                     }
                     else
                         windowLog.trace("Vendors names array is empty");
@@ -255,11 +259,6 @@
                     }
                     else
                         windowLog.trace("Payment names array is empty!!");
-                break;
-
-                /*case "Vendor Name"          :
-                    retValue=true;
-                    showNewEntry=false; // do not allow new entry*/
                 break;
 
                 case "Employment Type"      :
@@ -351,7 +350,6 @@
                     retValue=true;
                 break;
 
-
                 default: // lije Notes just allowed 
                     windowLog.trace("Default field name:"+header);
                     retValue=true;
@@ -360,7 +358,7 @@
             if ( isList ) { // is the header has a list?
                 windowLog.trace("Inside isList");
                 
-                retValue = false;   // reset the retValue ahead of validating the charecter
+                //retValue = false;   // reset the retValue ahead of validating the charecter
                 if ( tableID === "#innerCellID" ) {
                     $("#navID,#main-menue,#projectLbl,#customers,#tHalf").addClass("greyed-out");
                     $('img[id^="Pls"]').removeClass("greyed-out");
@@ -417,7 +415,7 @@
                 }
                 var outList="";
                 if ( newArr.length > 0 ) {
-                    if (e,key.length === 1) { // only disable once,. the first time
+                    if (e.key.length === 1) { // only disable once,. the first time
                         $("#"+e.currentTarget.id).addClass("greyed-out");
                         $("#"+e.currentTarget.id).css("opacity",'0.8');
                     }
@@ -477,9 +475,17 @@
                         retValue=true;  // allow the text to show
                     }
                     else {
-                        e.target.value="";
-                        $("#"+e.currentTarget.id).removeClass("greyed-out");
-                        editing=false;
+                        if ( !retValue ) {
+                            e.target.value="";
+                            $("#"+e.currentTarget.id).removeClass("greyed-out");
+                            $("#"+e.currentTarget.id).css("opacity",'1.0');
+                            editing=false;
+                        }
+                        else {
+                            $("#"+e.currentTarget.id).removeClass("greyed-out");
+                            $("#"+e.currentTarget.id).css("opacity",'1.0');
+                        }
+
                         //$('#uListID').html("");
                         //$("#overLay ul").empty();
                         //$("#overLay").hide();
@@ -490,7 +496,7 @@
                     }
                 }
                 if ( outList.length || 
-                     showNewEntry) {
+                     showNewEntry ) {
 
                     if ( showNewEntry )    // sopme fields do not allow new entry like payment method
                         outList += `<li tabindex="0" id="new entry">New Entry</li>`;

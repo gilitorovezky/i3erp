@@ -238,9 +238,9 @@
                 // take the ID from the delete record
                 if ( restore )                    
                     ID= tempRow[4].ID;
-                row += `<td><input tabindex="0" type="text" name="companyName" class="projectNameClass" maxlength="50" value='${tempRow[3].Name}'>`;
+                row += `<td><input tabindex="0" id="companyNameID" type="text" name="companyName" class="projectNameClass" maxlength="50" value='${tempRow[3].Name}'>`;
                 row += `<input type="hidden" id='${headers['Companies']['primaryKey']}' name="companyID" value=${ID}></td>`;
-                row += `<td><input tabindex="0" type="text" name="companyNotes" class="projectNameClass" maxlength="50" value=${tempRow[index++].value}></td>`;
+                row += `<td><input tabindex="0" type="text" name="companyNotes" id="notesID" class="projectNameClass" maxlength="50" value=${tempRow[index++].value}></td>`;
                 if ( restore ) 
                     files=tempRow[index].value;
                 row += `<td style="width:2%"><a tabindex="0" id="allFilesID" data-files="0" class="hyperlinkLabel" style="text-decoration:none;font-size:12px">${files}</a></td>`; //class="hyperlinkLabel" 
@@ -385,7 +385,7 @@
 
         //$("#main-menue,#navID").addClass("greyed-out");
        
-        if ( $("#screen_name").html() != "Home")
+        if ( $("#screen_name").html() !== "Home" && $("#screen_name").html() !== "Configuration")
             $("#editCBID").prop( "checked", true );   // turn on to allow edit in tblkeydown 
       
        //lastScreen=screenName; 
@@ -416,6 +416,9 @@
        // if ( element.id === "editTaskID" ) // only show by defaukt the buttons when its called from Scheduler editTaskID 
         $('#'+newRecordPntr).css({'top':50+(5*(lastFocusedEntry.length))+"%"});
         $('#'+newRecordPntr).show();
+
+        $('#'+newRecordPntr).attr('data-module',module); // store the module in the new record pointer
+
        
         windowLog.trace("Register keydown handler for "+newRecordPntr);
         
@@ -435,6 +438,12 @@
                                  newRecordPntr  : newRecordPntr,
                                  focusedElement : currCell.children().first()},function(elementRec) {  // add module to the bubble record
             windowLog.trace("Inside addNewRec "+newRecordPntr+" click keydown event, module:"+elementRec.data.module+",eID:"+elementRec.data.eID+",id:"+elementRec.target.id);
+            if ( elementRec.type === "click"  && $("#overLay ul li").length ) {
+                $("#overLay ul").empty();
+                $("#"+elementRec.currentTarget.id).removeClass("greyed-out");
+                $("#"+elementRec.currentTarget.id).css("opacity",'1.0');
+            }
+
             switch ( elementRec.target.id ) {
                 case "SaveNewBtn"           :
                      if ( elementRec.type === "click" || 

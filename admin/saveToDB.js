@@ -243,13 +243,13 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
                 classArray[module].arr[recordID].project_number  = record2["Project Number"];
                 classArray[module].arr[recordID].contractor_name = record2["Contractor Name"];
                 classArray[module].arr[recordID].job_date        = record2['Job Date'];
-                classArray[module].arr[recordID].payment_amount  = record2['payment Amount'];
+                classArray[module].arr[recordID].payment_amount  = record2['Payment Amount'];
                 classArray[module].arr[recordID].payment_number  = record2["Payment Number"];
-                classArray[module].arr[recordID].date_paid       = record2['date Paid'];
+                classArray[module].arr[recordID].date_paid       = record2['Date Paid'];
                 classArray[module].arr[recordID].description     = record2['Description'];
                 classArray[module].arr[recordID].employee_id     = tempeID;
                 classArray[module].arr[recordID].file_uploaded   = record["Files"];
-                classArray[module].arr[recordID].foldername      = record2['folder Name'];
+                classArray[module].arr[recordID].foldername      = record2['Folder Name'];
             }
             else {
                 classArray[module].arr.push({
@@ -257,13 +257,13 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
                     project_number  :   record2["Project Number"],
                     contractor_name :   record2["Contractor Name"],
                     job_date        :   record2['Job Date'],
-                    payment_amount  :   record2['payment Amount'],
+                    payment_amount  :   record2['Payment Amount'],
                     payment_number  :   record2["Payment Number"],
-                    date_paid       :   record2['date Paid'],
+                    date_paid       :   record2['Date Paid'],
                     description     :   record2['Description'],
                     employee_id     :   tempeID,
                     file_uploaded   :   record["Files"],
-                    foldername      :   record2['folder Name'],
+                    foldername      :   record2['Folder Name'],
                     images_json     :   ""
                 });
             }
@@ -288,7 +288,7 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
                 employee_id     :   record2['employee_id'],
                 username        :   "",
                 fullname        :   record2["fullname"],
-                hourlyrate      :   record2["hourly_rate"],
+                hourlyrate      :   record2["Hourly Rate"],
                 is_active       :   record2["is_active"],
                 employment_type :   record2["employment_type"],
                 effective_date  :   record2["effective_date"],
@@ -309,16 +309,16 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
                 //const entryC=classArray[module].retEntrybyID(record[0]);
                 classArray[module].arr[recordID].contractor_id   =  record2["contractor_id"];
                 classArray[module].arr[recordID].name            =  record2["name"];
-                classArray[module].arr[recordID].notes           =  record2["notes"];
-                classArray[module].arr[recordID].file_uploaded   =  record2["file_uploaded"];
+                classArray[module].arr[recordID].notes           =  record2["Notes"];
+                classArray[module].arr[recordID].file_uploaded   =  record2["Files"];
                 delete classArray[module].pNames[record2["name"]];       // remove the item from the pNames array
             }
             else {
                 classArray[module].arr.push({
                     contractor_id   :   record2["contractor_id"],
-                    name            :   record2["name"],
-                    notes           :   record2["notes"],
-                    file_uploaded   :   record2["file_uploaded"],
+                    name            :   record2["name`"],
+                    notes           :   record2["Notes"],
+                    file_uploaded   :   record2["Files"],
                     images_json     :   ""
                 });
             }
@@ -338,93 +338,94 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
             if ( !isNewRecord ) {
                 //const entryV=classArray[module].retEntrybyID(record[0]);
                 classArray[module].arr[recordID].vendor_id       =  record2["vendor_id"];       
-                classArray[module].arr[recordID].vendor_name     =  record2["vendor_name"];      
-                classArray[module].arr[recordID].vendor_address  =  record2["vendor_address"];      
-                classArray[module].arr[recordID].notes           =  record2["notes"];
-                classArray[module].arr[recordID].file_uploaded   =  record2["file_uploaded"];
-                delete classArray[module].pNames[record2["vendor_name"]];        // remove the item from the pNames array
+                classArray[module].arr[recordID].vendor_name     =  record2["Vendor Name"];      
+                classArray[module].arr[recordID].vendor_address  =  record2["Vendor Address"];      
+                classArray[module].arr[recordID].notes           =  record2["Notes"];
+                classArray[module].arr[recordID].file_uploaded   =  record2["Files"];
+                delete classArray[module].pNames[record2["Vendor Name"]];        // remove the item from the pNames array
             }
             else {
                 classArray[module].arr.push({
                     vendor_id       :   record2["vendor_id"],
-                    vendor_name     :   record2["vendor_name"],
-                    vendor_address  :   record2["vendor_address"],
-                    notes           :   record2["notes"],
-                    file_uploaded   :   record2["file_uploaded"],
+                    vendor_name     :   record2["Vendor Name"],
+                    vendor_address  :   record2["Vendor Address"],
+                    notes           :   record2["Notes"],
+                    file_uploaded   :   record2["Files"],
                     images_json     :   ""
                 });
             }
-            classArray[module].pNames[record2["vendor_name"]]=record[0];
+            classArray[module].pNames[record2["Vendor Name"]]=record2["Vendor Name"];
             windowLog.trace("Updating new vendor name in the Purchases(purchases) table");
             classArray["Purchases"].arr.forEach(element => {
-                if ( element.vendor_name  == record[5]) {  // entry 4 holds the original contractor name, tempRow[1[] holds the new contractor name]
+                if ( element.vendor_name  === record2["Vendor Name"]) {  // entry 4 holds the original contractor name, tempRow[1[] holds the new contractor name]
                     windowLog.trace("Updating vendor:"+element.vendor_id);
-                    element.vendor_name = record[1];
+                    element.vendor_name = record2["Vendor Name"];
                 }
             });
         break;
 
         case "Companies"        :
 
+            const temCompnyName= record2["Company Name"];
             if ( !isNewRecord ) {
                 //const entryCM=classArray[module].retEntrybyID(record[0]);
                 classArray[module].arr[recordID].company_id      =  record2["company_id"];       
-                classArray[module].arr[recordID].company_name    =  record2["company_name"];
-                classArray[module].arr[recordID].notes           =  record2["notes"];
-                classArray[module].arr[recordID].file_uploaded   =  record2["file_uploaded"];
-                classArray[module].arr[recordID].images_json     =  record2["images_json"];               
-                delete classArray[module].pNames[record2["company_name"]];    // remove the item from the pNames array        
+                classArray[module].arr[recordID].company_name    =  temCompnyName;
+                classArray[module].arr[recordID].notes           =  record2["Notes"];
+                classArray[module].arr[recordID].file_uploaded   =  record2["Files"];
+                classArray[module].arr[recordID].images_json     =  record2["Images JSON"];               
+                delete classArray[module].pNames[temCompnyName];    // remove the item from the pNames array        
             }
             else {
                 classArray[module].arr.push({
                     company_id      :   record2["company_id"],
-                    company_name    :   record2["company_name"],
-                    notes           :   record2["notes"],
-                    file_uploaded   :   record2["file_uploaded"],
+                    company_name    :   temCompnyName,
+                    notes           :   record2["Notes"],
+                    file_uploaded   :   record2["Files"],
                     images_json     :   "" 
                 });
             }
-            classArray[module].pNames[record2["company_name"]]=record[0];
+            classArray[module].pNames[record2["Company Name"]]=temCompnyName;
 
             windowLog.trace("Updating new project name in the Purchases(purchases) table");
-            if ( record[4] != "" ) {
+            if ( record2["Orig Company Name"] !== "" ) { // is the original company name is not empty then proceed
                 classArray["Purchases"].arr.forEach(element => {
-                    if ( element.project_number.includes(record[4])) {  // entry 4 holds the original contractor name, tempRow[1[] holds the new contractor name]
-                        windowLog.trace("Updating project name:"+element.project_number);
-                        element.project_number=element.project_number.replace(record[4],record[1]);
+                    if ( element.project_number.includes(temCompnyName) ) {  // entry 4 holds the original contractor name, tempRow[1[] holds the new contractor name]
+                        windowLog.trace("Updating project name in Purchases:"+element.project_number);
+                        element.project_number=element.project_number.replace(record2["Orig Company Name"],temCompnyName);
                     }
                 });
 
                 windowLog.trace("Updating new project name in payment table");
                 classArray["Payments"].arr.forEach(element => {
-                    if ( element.project_number.includes(record[4])) {  // entry 4 holds the original contractor name, tempRow[1[] holds the new contractor name]
-                        windowLog.trace("Updating project name:"+element.project_number);
-                        element.project_number=element.project_number.replace(record[4],record[1]);
+                    if ( element.project_number.includes(temCompnyName) ) {  // entry 4 holds the original contractor name, tempRow[1[] holds the new contractor name]
+                        windowLog.trace("Updating project name in Payments:"+element.project_number);
+                        element.project_number=element.project_number.replace(record2["Orig Company Name"],temCompnyName);
                     }
                 });
 
                 windowLog.trace("Updating new project name in Sub Contractor table");
                 classArray["Sub Contractors"].arr.forEach(element => {
-                    if ( element.project_number.includes(record[4])) {  // entry 4 holds the original contractor name, tempRow[1[] holds the new contractor name]
-                        windowLog.trace("Updating project name:"+element.project_number);
-                        element.project_number=element.project_number.replace(record[4],record[1]);
+                    if ( element.project_number.includes(temCompnyName) ) {  // entry 4 holds the original contractor name, tempRow[1[] holds the new contractor name]
+                        windowLog.trace("Updating project name in Sub Contractors:"+element.project_number);
+                        element.project_number=element.project_number.replace(record2["Orig Company Name"],temCompnyName);
                     }
                 });
 
                 windowLog.trace("Updating new project name in employee jobs table");
                 classArray["Employee Jobs"].arr.forEach(element => {
-                    if ( element.project_number.includes(record[4])) {  // entry 4 holds the original contractor name, tempRow[1[] holds the new contractor name]
-                        windowLog.trace("Updating project name:"+element.project_number);
-                        element.project_number=element.project_number.replace(record[4],record[1]);
+                    if ( element.project_number.includes(temCompnyName) ) {  // entry 4 holds the original contractor name, tempRow[1[] holds the new contractor name]
+                        windowLog.trace("Updating project name in EJ:"+element.project_number);
+                        element.project_number=element.project_number.replace(record2["Orig Company Name"],temCompnyName);
                     }
                 });
                 
                 windowLog.trace("Updating new project name in projects table");
                 Projects.arrProjects.forEach(element => {
-                    if ( element.company_name == record[4] ) {  // entry 4 holds the original contractor name, tempRow[1[] holds the new contractor name]
-                        windowLog.trace("Updating project number:"+element.project_number);
-                        element.company_name = record[1];
-                        element.project_name=element.project_name.replace(record[4],record[1]);
+                    if ( element.company_name === record2["Company Name"] ) {  // entry 4 holds the original contractor name, tempRow[1[] holds the new contractor name]
+                        windowLog.trace("Updating project number in Projects:"+element.project_number);
+                        element.company_name = record2["Company Name"];
+                        element.project_name=element.project_name.replace(record2["Orig Company Name"],temCompnyName);
                     }
                 });
             }
@@ -435,8 +436,8 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
 
            
             if ( !isNewRecord ) {
-                const entryHR=classArray["Employees"].retEntrybyID(record[3]);
-                classArray["Employees"].arr[entryHR].hourlyrate=record[1]; // update the HR to the latest value
+                const entryHR=classArray["Employees"].retEntrybyID(record2["fullname"]);
+                classArray["Employees"].arr[entryHR].hourlyrate=record2["Hourly Rate"]; // update the HR to the latest value
             }
             
         break;
@@ -618,7 +619,7 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
                         
                 else {
                     Tasks.unAssignedCount++; 
-                    if ( $("#screen_name").html() == "Scheduler" )  // if unassignedor no job date set then add to the unassigned area
+                    if ( $("#screen_name").html() === "Scheduler" )  // if unassignedor no job date set then add to the unassigned area
                         addUnassignedTask(Tasks.arrTasks[tEntry]); // add the new task to the scheduler screen
                 }
                 break;   

@@ -18,12 +18,12 @@
        // $("#exportDialogueID").invisible(); 
         $(".grid-gallery").hide();
         //$(".grid-gallery").css({'display' : "none"});
-        //$("#screen_name").html(lastScreen);
+        $("#screen_name").html("Configuration");
         
         
         $('#result-table1,#postScrollit').html("");
        
-        if ( lastScreen == "Scheduler" ) { // if the last screen was Scheduler than restore default
+        if ( lastScreen === "Scheduler" ) { // if the last screen was Scheduler than restore default
             document.getElementById('result-table').id = 'result-table1';
             $("#newTaskShortCutID").invisible();
             $("#result-table1").removeClass("tbl_schedule");
@@ -35,6 +35,7 @@
 
         document.getElementById("result-table1").hidden=true;
         lastScreen="Configuration";
+        screenName="Configuration";
         
         $('#newProject,#addSingleRec,#overLay,#screen_name,#editDiv,#bHalf,#customers,#tHalf,#newScheduler').hide();
         $(".main_menue").css({'background-color':'#4ccd4a'});
