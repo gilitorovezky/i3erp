@@ -126,7 +126,8 @@ Promise.all(requests)
             //newEntry(currCell,$("#mainHeader tr th:eq("+currCell.index()+")").text());
             //newEntry(currCell,$("#"+currCell.closest("table").find('[id="mainHeader"]').attr('id')+" tr th:eq("+currCell.index()+")").text());
             if ( $("#overLay ul").attr("data-module") !== "" ) {
-                newEntry(currCell,$("#overLay ul").attr("data-module"));
+                //newEntry(currCell,$("#overLay ul").attr("data-module"));
+                newEntry(currCell,currCell.closest("table").find('[id="mainHeader"]').find(" tr th:eq("+currCell.index()+")").text());
                 $("#overLay ul").attr("data-module","");
             }
             else
@@ -384,7 +385,6 @@ Promise.all(requests)
     $("body").delegate('#captionRow',"click", function(event) {
 
         windowLog.trace("Inside captionRow click handler:"+event.target.id); 
-
         captionDispatcher(event)
         return false;
     });
@@ -393,6 +393,7 @@ Promise.all(requests)
 
         windowLog.trace("overLay keyDown handler(key):"+event.key);
         overLayKeyDown(event);
+        return false;
     });
 
     $( "body" ).delegate("#editCBID","change",function() {
