@@ -47,10 +47,13 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
 
     var taskStatus ="open"; 
    
-    record2.map(function(rec) {
-    if ( headerToDBFieldLookup[module] && headerToDBFieldLookup[module][rec.header] ) 
-        classArray[module].arr[recordID][headerToDBFieldLookup[module][rec.header]] = rec.value;
-    });
+    if ( !isNewRecord ) { //to be used in the future
+        /*for (const [key, value] of Object.entries(record2)) {
+            windowLog.trace("Record2 key:"+key+" value:"+value);
+            //if ( headerToDBFieldLookup[module][key] ) 
+                classArray[module].arr[recordID][headerToDBFieldLookup[module][key]] = value;
+        }*/
+    }
     switch (module) {
 
         case "Employee Jobs"    :
@@ -311,7 +314,7 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
             if ( !isNewRecord ) {
                 //const entryC=classArray[module].retEntrybyID(record[0]);
                 classArray[module].arr[recordID].contractor_id   =  record2["contractor_id"];
-                classArray[module].arr[recordID].contractorName  =  record2["contractorName"];
+                classArray[module].arr[recordID].contractorName  =  record2["Contractor Name"];
                 classArray[module].arr[recordID].notes           =  record2["Notes"];
                 classArray[module].arr[recordID].file_uploaded   =  record2["Files"];
                 delete classArray[module].pNames[record2["contractorName"]];       // remove the item from the pNames array
@@ -319,7 +322,7 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
             else {
                 classArray[module].arr.push({
                     contractor_id   :   record2["contractor_id"],
-                    contractorName  :   record2["contractorName"],
+                    contractorName  :   record2["Contractor Name"],
                     notes           :   record2["Notes"],
                     file_uploaded   :   record2["Files"],
                     images_json     :   ""
@@ -329,9 +332,9 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
 
             windowLog.trace("Updating new contractor name in sub contractor table");
             classArray["Sub Contractors"].arr.forEach(element => {
-                if ( element.contractor_name  == record[4]) {  // entry 4 holds the original contractor name, tempRow[1[] holds the new contractor name]
+                if ( element.contractor_name  === record2["Orig Contractor Name"]) {  // entry 4 holds the original contractor name, tempRow[1[] holds the new contractor name]
                     windowLog.trace("Updating task:"+element.task_id);
-                    element.contractor_name = record2["contractorName"];
+                    element.contractor_name = record2["Contractor Name"];
                 }
             });
         break;
@@ -360,7 +363,7 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
             classArray[module].pNames[record2["Vendor Name"]]=record2["Vendor Name"];
             windowLog.trace("Updating new vendor name in the Purchases(purchases) table");
             classArray["Purchases"].arr.forEach(element => {
-                if ( element.vendor_name  === record2["Vendor Name"]) {  // entry 4 holds the original contractor name, tempRow[1[] holds the new contractor name]
+                if ( element.vendor_name  === record2["Oriog Vendor Name"]) {  // entry 4 holds the original contractor name, tempRow[1[] holds the new contractor name]
                     windowLog.trace("Updating vendor:"+element.vendor_id);
                     element.vendor_name = record2["Vendor Name"];
                 }
@@ -729,15 +732,15 @@ function saveAndNew(elementRec) {
     let saveResult=saveSingleRec(elementRec);    // Save the record
 
     let startElement=2;// default startElement, in case of Project, it wil lset to 2
-    if ( lastScreen == "Projects" ) {
+    if ( lastScreen === "Projects" ) {
         startElement=3;
-        $('#addSingleRec tr td:nth-child(1)').children()[0].value=Number(Projects.arrProjects[Projects.arrProjects.length-1].project_number)+1; // update the project number in the front end
+        $('#'+elementRec.data.newRecordPntr+' tr td:nth-child(1)').children()[0].value=Number(Projects.arrProjects[Projects.arrProjects.length-1].project_number)+1; // update the project number in the front end
     }
-    resetRecord('#addSingleRec',startElement-1); // reset the record to allow new content, for new Project, skip the Project Number field
-    const tID=Number($('#addSingleRec tbody tr td:nth-child(2)').children()[1].value)+1;  // increased the taskID by 1
-    $('#addSingleRec tr td:nth-child(2)').children()[1].value=tID; // update the ID
+    resetRecord('#'+elementRec.data.newRecordPntr,startElement-1); // reset the record to allow new content, for new Project, skip the Project Number field
+    const tID=Number($('#'+elementRec.data.newRecordPntr+' tbody tr td:nth-child(2)').children()[1].value)+1;  // increased the taskID by 1
+    $('#'+elementRec.data.newRecordPntr+' tr td:nth-child(2)').children()[1].value=tID; // update the ID
 
-    currCell = $('#addSingleRec tr td:nth-child('+startElement+')').first();    
+    currCell = $('#'+elementRec.data.newRecordPntr+' tr td:nth-child('+startElement+')').first();    
     currCell.children().first().focus();    // set the focus back to the original field
 
     return saveResult;
