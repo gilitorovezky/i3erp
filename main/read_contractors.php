@@ -24,23 +24,23 @@
             $i=1;
             while ($row = mysqli_fetch_assoc($contractors)) {   
                 $maxID=max($maxID,$row["contractor_id"]);
-                $ret_recs[$i] =  array("contractor_id"   => $row["contractor_id"],                                    
+                $ret_recs[$i] =  array("contractor_id"    => $row["contractor_id"],                                    
                                         /*"employee_id"    => $row["employee_id"],*/
-                                        "name"           => $row["name"],
+                                        "contractorName" => $row["contractor_name"],
                                         /*"address1"       => $row["address1"],
                                         "address2"       => $row["address2"],
                                         "zipcode"        => $row["zipcode"],
                                         "city"           => $row["city"],
                                         "state"          => $row["state"],*/
-                                        "notes"          => $row["notes"], 
-                                        "file_uploaded"  => $row["file_uploaded"],
-                                        "images_json"    => $row["images_json"]);
+                                        "notes"           => $row["notes"], 
+                                        "file_uploaded"   => $row["file_uploaded"],
+                                        "images_json"     => $row["images_json"]);
 
                 file_put_contents('../log/log_'.$logDate.'.log',"(read_contractors) ".$current_time." info 4-".print_r($ret_recs[$i++],true)."\n", FILE_APPEND); 
             }
         }
         $ret_recs[0]=array("Status" => 1,
-                            "maxID"  => $maxID);           
+                           "maxID"  => $maxID);           
         mysqli_close($con);   // Close DB connectin
     } else {
         file_put_contents('../log/log_'.$logDate.'.log',"(read_contractors) ".$current_time." error 1-sql connect error:".mysqli_connect_errno()."\n", FILE_APPEND); 
