@@ -120,10 +120,8 @@
                 break;
 
                 case "employees"            :
-                    
-                    $sql_st .= "profile_color ='".$arrayJson->record->profile_color."'";
-                break;
-
+                    $sql_st .= "foldername='".$subFolderName."'"; // add the folder name at the end
+                    break;
                 default:
                     $sql_st .= "foldername='".$rootDir."/".$subFolderName."'"; // add the folder name at the end
                     //$sql_st = substr($sql_st, 0, -1);   // remove the last char ","
@@ -325,13 +323,13 @@
                     case "employees"            :
                         
                         $today = date('Y-m-d');
-                        $employeeID=$arrayJson->record->ID;
+                        $employeeID=$arrayJson->record->$keyName;
                         $rateType=$arrayJson->record->hourlyRateType; 
                         $hourlyRate=$arrayJson->record->{'Hourly Rate'};
                         $empl_st="SELECT employee_id from accounts where employee_id='$employeeID'";
                         file_put_contents('../log/log_'.$logDate.'.log',"(save_record) ".$current_time." info 16-rateType:".$rateType." empl_st:".$empl_st." hourlyRate:".$hourlyRate."\n", FILE_APPEND);
                         $isEmplFound=mysqli_query($con,$empl_st);
-                        $hashPassword = password_hash($arrayJson->record->password , PASSWORD_DEFAULT);
+                        $hashPassword = password_hash($arrayJson->record->Password , PASSWORD_DEFAULT);
                         if ( $arrayJson->record->is_newEmployee == "1") { // new Employee?
                             $fullname=str_replace("'","\'", $arrayJson->record->fullname); // esscaping the field to support ' and "
                             $username=strtolower($fullname);
