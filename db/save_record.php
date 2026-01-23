@@ -557,7 +557,7 @@
                     break;
 
                     case "contractors"              :
-                        $new_contractor_name=$arrayJson->record->{'Contractor Name'};
+                        $new_contractor_name=$arrayJson->record->{'Orig Contractor Name'};
                         $orig_contractor_name=$arrayJson->record->{'Contractor Name'};
                         file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." info 47-Update contractor_name:".$orig_contractor_name." with:".$new_contractor_name."\n", FILE_APPEND);  
                         if ( $orig_contractor_name != "" )  {   // only replace if new company name is not empty

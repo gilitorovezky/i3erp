@@ -224,7 +224,9 @@ const nametoIDLookup = {
                              "id":"contractorNameID",
                              "header":"Contractor Name",
                              "modules":{"Sub Contractors":{"display":true,
-                                                           "mandatory":true}}},
+                                                           "mandatory":true},
+                                        "Contractors":{"display":true,
+                                                       "mandatory":true}}},
                                                           
     "Vendor Name":          {"name":"vendorName",
                              "id":"vendorNameID",
@@ -1068,7 +1070,7 @@ $(document).ready( function() {
                          ( Number(data[0].Status) > 0 ) ) {
                        classArray["Contractors"] = new classType2(data,"Contractors",2); 
                        classArray["Contractors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
-                        classArray["Contractors"].pNames[key.name.toString()]=key.contractor_id; 
+                        classArray["Contractors"].pNames[key.contractorName.toString()]=key.contractor_id; 
                     })
                     windowLog.trace("Load all Contractors completed succesfully("+(classArray["Contractors"].arr.length)+")");
                     }
