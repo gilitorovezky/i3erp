@@ -203,7 +203,7 @@ function saveRow(moduleName,element) {
 
     const idName=headers[moduleName]['primaryKey'];
 
-    let ID = $(row).find('[id='+idName+']').val();
+    let ID = Number($(row).find('[id='+idName+']').val());
     
     switch( moduleName ) { // Add hidden header at the end only at Hourly Rate, Employees and projects
 
@@ -234,10 +234,7 @@ function saveRow(moduleName,element) {
         break;     
     }
 
-    if ( typeof ID === "undefined") {
-        ID = -1;
-        windowLog.trace("saveRow exception: ID is undefined");
-    }
+   
 
     tempRow.push(ID);   // entry 0 append the primary key to the record
     tempRow2[headers[moduleName]['primaryKey']] = ID;
@@ -289,7 +286,7 @@ function saveRow(moduleName,element) {
 
     //$(row).find("td:has(a[data-files])").each(function() {});
 
-    tempRow2["Files"]=Number($(row).find("a[id='allFilesID']").attr("data-files"))
+    tempRow2["Files"]=Number($(row).find("[id='allFilesID']").attr("data-files"))
   
     $(row).find("td:has(input[type='date'])").each(function() {
         const header=$(tTable).find(' thead th:nth-child('+((this.cellIndex)+1)+')').html();
