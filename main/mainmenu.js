@@ -40,7 +40,7 @@ const headerToDBFieldLookup = { // look up table to match record to db schmea
     "Sub Contractors": {'Project Number':'project_number','Contractor Name':'contractor_name','Job Date':'job_date','Payment Amount':'payment_amount','Payment Number':'payment_number','Date Paid':'date_paid','Description':'description','Files':'file_uploaded'},
     "Employee Jobs": {'Project Number':'project_number','Full Name':'employee_fname','Job Date':'job_date','Job SignIn':'job_signin','Lunch SignIn':'lunch_signin','Lunch SignOut':'lunch_signout','Job SignOut':'job_signout','Total Hours':'total_hours','Description':'description','Total Cost':'total_cost','Files':'file_uploaded'},
     "Purchases": {'Project Number':'project_number','Vendor Name':'vendor_name','Purchase Number':'purchase_number','Purchase Amount':'purchase_amount','Purchase Date':'purchase_date','Purchase Method':'purchase_method','Description':'description','Files':'file_uploaded'},
-    "Employees": {'Full Name':'employee_fname','Employee Color':'profile_color','Employment Type':'employment_type','Hourly Rate':'hourlyrate','Hourly Rate Date':'hourlyrate_effective_date','Is Active':'is_active','Password':'password','Files':'file_uploaded'},
+    "Employees": {'Full Name':'fullname','Employee Color Profile':'profile_color','Employment Type':'employment_type','Hourly Rate':'hourlyrate','Hourly Rate Date':'hourlyrate_effective_date','Is Active':'is_active','Password':'password','Files':'file_uploaded'},
     "Vendors": {'Vendor Name':'vendor_name','Vendor Address':'vendor_address','Notes':'notes','Files':'file_uploaded'},
     "Companies": {'Company Name':'company_name','Notes':'notes','Files':'file_uploaded'},
     "Contractors": {'Contractor Name':'contractor_name','Notes':'notes','Files':'file_uploaded'}
@@ -853,7 +853,7 @@ window.addEventListener("load", function() {
                 logout();})
         });*/
 
-        $.ajax({url         : "../main/read_employees.php",
+        /*$.ajax({url         : "../main/read_employees.php",
                 method		: "POST",
                 data      	: {calltype:username},
                 dataType	: "json",
@@ -876,7 +876,7 @@ window.addEventListener("load", function() {
                     windowLog.trace("Load schedule failed:"+textStatus + ", " + error);
                     logout();
                 })
-        });
+        });*/
     }
     else { 
         console.log("Error- username undefined, exit");
@@ -1275,9 +1275,9 @@ $(document).ready( function() {
                     //windowLog.trace("Load all tasks completed succesfully");
                     Tasks = new classTasks(tasks); // create Tasks class
                     classArray["Scheduler"] = Tasks;
-                    Tasks.intervalEJID=window.setInterval(function() {
+                    /*Tasks.intervalEJID=window.setInterval(function() {
                         refreshReportCallBack();
-                    }, appConfig.tsPolling_Interval*1000*60);
+                    }, appConfig.tsPolling_Interval*1000*60);*/
                     windowLog.trace("All Tasks loaded succesfully("+classArray["Scheduler"].arr.length+")");
                     windowLog.trace("Set the clock to pollingTasks:"+appConfig.tsPolling_Interval*1000*60);
                     assignedTasksArr=Tasks.arrTasks.filter((x) => ( ( x.employee_id > 0) && ( Number(x.is_assigned) === 1 ) && ( classArray["Employees"].arr[classArray["Employees"].arr.findIndex(t => t.employee_id === x.employee_id)].is_active === "1" ) ));

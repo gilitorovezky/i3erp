@@ -1106,14 +1106,6 @@ Promise.all(requests)
                 //$("#result-table").addClass("greyed-out");
                 break;
 
-            case "emplColorInputID"   :
-                if ( !$('#editCBID').is(":checked") ) { 
-                    windowLog.trace("Ignore mousedown..editMode:off");
-                    event.preventDefault();
-                    enableEditDlg(event);
-                }
-                break;
-
             case "assignID"         :
                 
                 /*if ( ( new Date(msg.data.taskDate) == new Date($("#result-table thead tr").find('th:nth-child('+((msg.target.closest('td').cellIndex))+')').html()) ) && 
@@ -1142,6 +1134,13 @@ Promise.all(requests)
                 reorderElement(event.target,event.target.id);
                 break;
 
+            case "emplColorInputID"   :
+                if ( !$('#editCBID').is(":checked") ) { 
+                    windowLog.trace("Ignore mousedown..editMode:off");
+                    event.preventDefault();
+                    enableEditDlg(event);
+                }
+                break;
 
             default                 : 
                 windowLog.trace("Placeholder(do nothing): "+event.target.id);

@@ -19,7 +19,7 @@
             if ( $calltype == 'all') {
                 $file2upload="";
                
-                $sql_st = "SELECT employee_id,username,fullname,hourlyrate,startdate,is_active,hourlyrate_effective_date,employment_type,password,file_uploaded,images_json,profile_color from employees
+                $sql_st = "SELECT employee_id,username,fullname,hourlyrate,startdate,is_active,hourlyrate_effective_date,employment_type,password,file_uploaded,foldername,images_json,profile_color from employees
                 order by case when fullname = 'jake'   then 1
                               when fullname = 'pedro'  then 2
                               when fullname = 'orel'   then 3
@@ -48,6 +48,7 @@
                                                 "password"           =>  $row["password"],
                                                 "file_uploaded"      =>  $row["file_uploaded"],
                                                 "images_json"        =>  $row["images_json"],
+                                                "foldername"         =>  $row["foldername"],
                                                 "startdate"          =>  $row["startdate"],
                                                 "profile_color"      =>  $row["profile_color"]); // default color
                         file_put_contents('../log/log_'.$logDate.'.log', "(read_employees) ".$current_time." info 6-rec #:".$i." ".print_r($ret_recs[$i++],true)."\n", FILE_APPEND); 

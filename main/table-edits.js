@@ -190,7 +190,6 @@ function saveRow(moduleName,element) {
     var fullProjectName="";    // hold the full project name
     var projectSet=false;   // Flag to indicate if the screen is project related screen
     let saveUrl="../db/save_record.php"; // default save URL, changed for Scheduler
-    //var headerPTR="";
     var isNewRecord=false;
 
     if ( lastFocusedEntry.length > 0 ) 
@@ -210,13 +209,14 @@ function saveRow(moduleName,element) {
 
         case "Hourly Rate"      :
            
-            break;
+        break;
 
         case "Employees"        :
-
+            rootDir=appConfig.config_dir+(moduleName).toLowerCase();
             tempRow2['fullname']=$(targetTR).find('[id="fullNameID"]').val();
-            tempRow2["password"]=$(targetTR).find('[name="password"]').val();;
-            break;
+            tempRow2["Password"]=$(targetTR).find('[name="password"]').val();
+            tempRow2["Employee Color Profile"]=$(targetTR).find('[id="emplColorInputID"]').val();
+        break;
 
         case "Projects"         :
         case "Employee Jobs"    :
@@ -227,7 +227,7 @@ function saveRow(moduleName,element) {
             //prjName=$(row).find('[id="prjctNumberID"]').val();
             //tempRow.push(prjName); // entry 1 append the project name
             //tempRow2['prjName']=prjName;
-            break;
+        break;
 
         default                 :
             rootDir=appConfig.config_dir+(moduleName).toLowerCase();
@@ -263,38 +263,14 @@ function saveRow(moduleName,element) {
     const tTable=element.closest('table');
     $(row).find('td:gt(0)').has(":text").each(function() { //} $(row).find('td:gt(0)').each(function(iCol) {   //$(this).find('td:gt(1)').each(function(iCol,iTD) {   
         const value=this.childNodes[0].value;
-        //var value=0;
-        //var value = this.childNodes[0].value;
-        /*if ( this.childElementCount > 0 ) {
-            switch ( this.childNodes[0].nodeName ) {
-                case "INPUT"    :
-                case "TEXTAREA" :
-                case "SELECT"   :
-                    if ( this.childNodes[0].value == "IsActive")       
-                        value = this.childNodes[0].checked==false?"0":"1";
-                    else 
-                        value = this.childNodes[0].value;
-                break;
-
-                
-                //    value=this.childNodes[0].value;
-                    break
-
-                default:
-                    value=this.childNodes[0].innerText;
-            }   
-        }
-        else {
-            windowLog.trace("childElementount is Zero");
-            value=this.innerText;
-        }*/
+       
         windowLog.trace("SRow,headerID:"+this.childNodes[0].id+" value:"+value);
         tempRow.push(value); // append to the array
         //const tiCol=iCol+2;  // since iCol starts at 0 and the loop starts at td:gt(1), need to add 2 to the actual counter
         //const header=$('#mainHeader tr th:nth-child('+tiCol+')').html();
         
         //const header=$(element.closest('table').find(' thead th:nth-child('+((this.cellIndex)+1)+')')).html();
-        const header=$(tTable.find(' thead th:nth-child('+((this.cellIndex)+1)+')')).html();
+        const header=$(tTable).find(' thead th:nth-child('+((this.cellIndex)+1)+')').html();
         tempRow2[header]=value;
         //const header=$(element.closest('table').find(' thead th:nth-child('+(tiCol)+')')).html();
         //$("#"+headerPTR+" thead th:nth-child('+(tiCol+1)+')'").html();
@@ -316,15 +292,23 @@ function saveRow(moduleName,element) {
     tempRow2["Files"]=Number($(row).find("a[id='allFilesID']").attr("data-files"))
   
     $(row).find("td:has(input[type='date'])").each(function() {
-        const header=$(tTable.find(' thead th:nth-child('+((this.cellIndex)+1)+')')).html();
+        const header=$(tTable).find(' thead th:nth-child('+((this.cellIndex)+1)+')').html();
         tempRow2[header]=this.childNodes[0].value;
-    });
+    });  
 
     $(row).find("td:has(input[type='time'])").each(function() {
-        const header=$(tTable.find(' thead th:nth-child('+((this.cellIndex)+1)+')')).html();
+        const header=$(tTable).find(' thead th:nth-child('+((this.cellIndex)+1)+')').html();
         var value = "0.00"
         if ( this.childNodes[0].value.length > 0 )
             value=this.childNodes[0].value;
+        tempRow2[header]=value;
+    });
+
+    $(row).find("td:has(input[type='checkbox'])").each(function() {
+        const header=$(tTable).find(' thead th:nth-child('+((this.cellIndex)+1)+')').html();
+        var value = 0;
+        if ( this.childNodes[0].checked )
+            value=1;
         tempRow2[header]=value;
     });
 
@@ -419,17 +403,18 @@ function saveRow(moduleName,element) {
                  $(targetTR).find('[name="password"]').val() != "" )  { // only save if the employee name nd Password are at least entered
                 //tempRow[$('#mainHeader').find('th:contains("Password")').index()]=""; // mask the password 
                 //tempRow2["Password"]="";
-                if ( lastID["Employees"] < Number(ID) ) {           // is this a new row
+                tempRow2["Hourly Rate Date"]=$(targetTR).find('[id="hrDateID"]').html();
+                if ( isNewRecord ) {           // is this a new row
                     tempRow.push(formatDateForInput(new Date()));   // yes- push today's date as start date
                     tempRow2["startdate"]=formatDateForInput(new Date());
-                    tempRow2["profile_color"]=$(targetTR).find('[id="emplColorInputID"]').val();
+                    //tempRow2["profile_color"]=$(targetTR).find('[id="emplColorInputID"]').val();
                     tempRow2["is_newEmployee"]="1";
                 }
                 else {
                     tempRow2["is_newEmployee"]="0";
                     tempRow.push(classArray["Employees"].arr[classArray["Employees"].retEntrybyID(ID)].startdate);  // push the start date which is today
                     tempRow2["startdate"]=classArray["Employees"].arr[classArray["Employees"].retEntrybyID(ID)].startdate;
-                    tempRow2["profile_color"]=classArray["Employees"].colors[$(targetTR).find('[id="fullNameID"]').val()];
+                    //tempRow2["profile_color"]=classArray["Employees"].colors[$(targetTR).find('[id="fullNameID"]').val()];
                 }
                 if (element.name == "hourlyRate") {
                     tempRow.push("newRate");
