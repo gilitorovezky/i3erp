@@ -1202,7 +1202,7 @@
                                 lastCell.closest('tr').find("a[id='allFilesID']").removeClass('greyed-out'); // turn on the file button
                                 lastCell.closest('tr').find("a[id='allFilesID']").addClass('assign'); // turn on the file button
                             }
-                            if ( validateEnableSaveConditions(module,$(lastCell).closest('tr')) )
+                            if ( validateEnableSaveConditions(lastCell.closest('table').attr('data-module'),$(lastCell).closest('tr')) )
                                 $("#SaveNewBtn,#SaveCloseBtn").show();
                             else
                                 $("#SaveNewBtn,#SaveCloseBtn").hide();
@@ -1216,6 +1216,7 @@
                     }
                 } 
                 else {
+                    currCell.find("input").val("");     // reset the New Entry text
                     if ( lastFocusedEntry.length === 0 ) { // overlay in prohjects or customers screen
                         lastCell=currCell;
                         addNewRec($("#overLay ul").attr("data-module"),e.target,"addSingleRec");  
@@ -1227,8 +1228,7 @@
                         $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").hide();
                         currentRecordPointer=0;
                         newEntry($(lastCell).closest('td'),lastCell.closest("table").find('[id="mainHeader"]').find(" tr th:eq("+lastCell.index()+")").text()); 
-                    }
-                    currCell.find("input").val("");     // reset the New Entry text
+                    }                  
                 }
             break;
 
