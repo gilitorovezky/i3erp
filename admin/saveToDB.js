@@ -281,27 +281,27 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
         case "Employees"        :
                           
             if ( classArray[module].arr.length > 0 ) { // if just edit then delete the record and later add a new one
-                const entryE=classArray[module].retEntrybyID(record[0]);
+                //const entryE=classArray[module].retEntrybyID(record[0]);
                 if ( !isNewRecord ) {
-                    classArray[module].arr.splice(entryE,1);      
-                    delete classArray[module].pNames[record[1]];        // remove the item from the pNames array
-                    classArray["Employees"].colors[record2["fullname"]]=record2["profile_color"]; // add the color to the colors array
+                    classArray[module].arr.splice(recordID,1);      
+                    delete classArray[module].pNames[record2["fullname"]];        // remove the item from the pNames array
+                    classArray["Employees"].colors[record2["fullname"]]=record2["Employee Color Profile"]; // add the color to the colors array
                 }
                 else
-                    classArray["Employees"].colors[record2["fullname"]]=record2["profile_color"]; // add the color to the colors array
+                    classArray["Employees"].colors[record2["fullname"]]=record2["Employee Color Profile"]; // add the color to the colors array
             }
             classArray[module].arr.push({
                 employee_id     :   record2['employee_id'],
                 username        :   "",
                 fullname        :   record2["fullname"],
                 hourlyrate      :   record2["Hourly Rate"],
-                is_active       :   record2["is_active"],
-                employment_type :   record2["employment_type"],
-                effective_date  :   record2["effective_date"],
-                password        :   record2["password"],
-                file_uploaded   :   record["Files"],
-                startdate       :   record2["start_date"],
-                profile_color   :   record2["profile_color"],
+                is_active       :   record2["Is Active"],
+                employment_type :   record2["Employment Type"],
+                effective_date  :   record2["Hourly Rate Date"],
+                password        :   record2["Password"],
+                file_uploaded   :   record2["Files"],
+                startdate       :   record2["startdate"],
+                profile_color   :   record2["Employee Color Profile"],
                 images_json     :   ""
             });
             //classArray[module].arr.sort((firstItem, secondItem) => firstItem.effective_date - secondItem.effective_date);
