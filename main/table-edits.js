@@ -2,11 +2,11 @@
 function resetRecord(parentTable,start) {
 
     // loop throu the TD of the first row
-    $(parentTable+' tbody tr:nth-child(0) td:gt('+start+')').each(function(iTD,TD) {
+    $(parentTable+' tbody tr:eq(0) td:gt('+(start-1)+')').each(function(TD) {
 
         let value=0;
         //switch ($(parentTable+' th:nth-child('+(iTD+1)+')').html()) {
-        switch ( $(parentTable+' th:nth-child('+$(this).index()+')').html() ) {
+        switch ( $(parentTable+' th:nth-child('+(TD.cellIndex+1)+')').html() ) {
             case "Gas"              :
             case "Files"            :
                 value="0";
