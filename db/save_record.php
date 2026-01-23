@@ -550,7 +550,6 @@
                                     ($new_company_name != "" )) 
                                 $retCode=atomFS("rendir",$rootDir."/".$subFolderName,"","",$rootDir."/".$newFolderName); // rename from sub to new 
                             
-
                             
                         $ret_recs=array("Status"            => $return_code,
                                         "new_vendor_name"   => $new_vendor_name);
@@ -572,6 +571,15 @@
                         }
                         else
                             file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." warning- No new contractor name \n", FILE_APPEND);
+
+                        if ( $arrayJson->record->isNewRecord == "1" ) { // is it a new company - create the folder
+                            file_put_contents('../log/log_'.$logDate.'.log', "(save_record) ".$current_time." creating a new folder ".$subFolderName."\n", FILE_APPEND);
+                            $retCode=atomFS("mkdir","",$rootDir."/".$subFolderName,"","");
+                        }
+                        else 
+                            if ( ( $orig_co_name != $new_contractor_name ) && // is it same record but different record fields
+                                    ($new_contractor_name != "" )) 
+                                $retCode=atomFS("rendir",$rootDir."/".$subFolderName,"","",$rootDir."/".$newFolderName); // rename from sub to new 
                         $ret_recs=array("Status"                => $return_code,
                                         "new_contractor_name"   => $new_contractor_name);
                     break;
