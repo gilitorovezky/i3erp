@@ -47,6 +47,10 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
 
     var taskStatus ="open"; 
    
+    record2.map(function(rec) {
+    if ( headerToDBFieldLookup[module] && headerToDBFieldLookup[module][rec.header] ) 
+        classArray[module].arr[recordID][headerToDBFieldLookup[module][rec.header]] = rec.value;
+    });
     switch (module) {
 
         case "Employee Jobs"    :
@@ -157,10 +161,9 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
         case "Purchases"        :
 
             if ( !isNewRecord ) {
-                record2.map(function(rec,index) {
-                    if ( headerToDBFieldLookup[module] && headerToDBFieldLookup[module][rec.header] ) {
+                record2.map(function(rec) {
+                    if ( headerToDBFieldLookup[module] && headerToDBFieldLookup[module][rec.header] ) 
                         classArray[module].arr[recordID][headerToDBFieldLookup[module][rec.header]] = rec.value;
-                    }
                 });
                 classArray[module].arr[recordID].purchase_id      = record2["purchase_id"];
                 classArray[module].arr[recordID].project_number  = record2["Project Number"];
@@ -308,27 +311,27 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
             if ( !isNewRecord ) {
                 //const entryC=classArray[module].retEntrybyID(record[0]);
                 classArray[module].arr[recordID].contractor_id   =  record2["contractor_id"];
-                classArray[module].arr[recordID].name            =  record2["name"];
+                classArray[module].arr[recordID].contractorName  =  record2["contractorName"];
                 classArray[module].arr[recordID].notes           =  record2["Notes"];
                 classArray[module].arr[recordID].file_uploaded   =  record2["Files"];
-                delete classArray[module].pNames[record2["name"]];       // remove the item from the pNames array
+                delete classArray[module].pNames[record2["contractorName"]];       // remove the item from the pNames array
             }
             else {
                 classArray[module].arr.push({
                     contractor_id   :   record2["contractor_id"],
-                    name            :   record2["name`"],
+                    contractorName  :   record2["contractorName"],
                     notes           :   record2["Notes"],
                     file_uploaded   :   record2["Files"],
                     images_json     :   ""
                 });
             }
-            classArray[module].pNames[record[1]]=record[0];
+            classArray[module].pNames[record2["contractorName"]]=record2["contractor_id"];
 
             windowLog.trace("Updating new contractor name in sub contractor table");
             classArray["Sub Contractors"].arr.forEach(element => {
                 if ( element.contractor_name  == record[4]) {  // entry 4 holds the original contractor name, tempRow[1[] holds the new contractor name]
                     windowLog.trace("Updating task:"+element.task_id);
-                    element.contractor_name = record[1];
+                    element.contractor_name = record2["contractorName"];
                 }
             });
         break;

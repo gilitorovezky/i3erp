@@ -229,6 +229,10 @@
                                 Object.keys(classArray["Contractors"].pNames).forEach( (name) => { //copy the return data from the DB into the class array
                                 tempArray.push(name); })
                             isList=charactersCount > 0?true: false;
+                             if ( $(tableID).attr('data-module') === "Contractors" && isNewRec) {
+                                showNewEntry=false;
+                                retValue=true; // allow new entry only in the Vendors screen
+                            }
                         }
                         else
                             windowLog.trace("Contractor names array is empty");

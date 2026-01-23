@@ -100,19 +100,19 @@ Promise.all(requests)
             if (checkShortcut(event, shortcut)) {
                 event.preventDefault();
                 shortcut.action();
-                console.log(`Shortcut triggered: ${shortcut.key}`);
+                windowLog.trace(`Shortcut triggered: ${shortcut.key}`);
                 return;
             }
         }
         // Check if the 'S' key is pressed. Use event.code for modern browsers.
-        if (isCtrlShift && event.code === 'KeyV') {
+        /*if (isCtrlShift && event.code === 'KeyV') {
             event.preventDefault(); // Prevent the browser's default action (e.g., save page, screenshot)
             
             console.log('Ctrl + Shift + S pressed! Custom action here.');
             alert('Custom Save Action Executed!');
             
             // Place your custom logic here (e.g., save data via AJAX)
-        }
+        }*/
     });
 
 
@@ -1439,7 +1439,7 @@ Promise.all(requests)
         
         out = `<center><p class="label1">Not in Edit mode</p></center>`;
         out += `<center><p class="label1">Do you want to enable Edit mode?</p></center><br>`;
-        out += `<center><input type="button" class="button" value="No" id="nobtn"/>&nbsp<input type="button" class="button" value="Yes" id="yesBtn"/></center>`;
+        out += `<center><input type="button" class="button" value="No" id="noBtn"/>&nbsp<input type="button" class="button" value="Yes" id="yesBtn"/></center>`;
        
         $("#navID,#result-table,#result-table1,#editLabel").addClass("greyed-out");
                     
@@ -1447,8 +1447,8 @@ Promise.all(requests)
         $("#editControl").show();
         $('#yesBtn').focus();  
 
-        $('#yesBtn,#nobtn').on('click',editHandler);
-        /*$('#yesBtn,#nobtn').on('keydown', function(event) {
+        $('#yesBtn,#noBtn').on('click',editHandler);
+        /*$('#yesBtn,#noBtn').on('keydown', function(event) {
             $("#navID,#result-table,#result-table1,#editLabel").addClass("greyed-out");
 
             switch (event.key) {
@@ -1618,7 +1618,7 @@ Promise.all(requests)
         }
     });
 
-    $("result-table1 td input").on("keydown",function(event) {
+    $("#result-table1").on("keydown","td input",function(event) {
    
         const allowedKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Tab'];
         windowLog.trace("Event listener-Inside keydown");

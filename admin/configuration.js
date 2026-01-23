@@ -236,27 +236,27 @@
         out += `<tbody class="thover">`;
         if (length == 0) {	// No records found, just show an empty record
             out += `<tr>`;
-            out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="DeleteImage" alt='plus' width='10' height='10'></td>`;
-            out += `<td><input tabindex="0" type="text" name="name" class="projectNameClass" maxlength="20" value="">`;
+            out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="deleteImage" alt='plus' width='10' height='10'></td>`;
+            out += `<td><input tabindex="0" id="contractorNameID" type="text" name="contractorName" class="projectNameClass" maxlength="20" value="">`;
             out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="contractorID" value="1"></td>`;
-            out += `<td><input tabindex="0" type="text" name="notes" class="projectNameClass" maxlength="50" value=""></td>`;
+            out += `<td><input tabindex="0" id="notesID" type="text" name="notes" class="projectNameClass" maxlength="50" value=""></td>`;
             out += `</tr>`;
         }
         else {
             for (var i = 0; i < length; i++) { //loop throu the return msg , starting from 1 since 0 is for the return message                    
                 //vendorsArray.push(passedArray[i].vendor_name);
                 out += `<tr>`;
-                out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="DeleteImage" alt='plus' width='10' height='10'></td>`;
-                out += `<td><input tabindex="0" type="text" name="Name" id="cntrctNameID" class="projectNameClass" maxlength="30" value="${eArray[i].name}">`;
+                out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="deleteImage" alt='plus' width='10' height='10'></td>`;
+                out += `<td><input tabindex="0" type="text" name="contractorName" id="contractorNameID" class="projectNameClass" maxlength="30" value="${eArray[i].contractorName}">`;
                 out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="contractorID" value=${eArray[i].contractor_id}></td>`;
                 out += `<td><input tabindex="0" type="text" name="notes" id="notesID" class="projectNameClass" maxlength="50" value="${eArray[i].notes}"></td>`;
                 fileupload=uploadFilesMngr(Number(eArray[i].file_uploaded),(eArray[i].project_number != ""));
                 out += `</tr>`;
             }
             DelCounter=length;
-        }
+         }
         out += `</tbody></table>`;
-        document.querySelector(targetDisplay).innerHTML =out; // print to screen the return messages
+        document.querySelector(targetDisplay).innerHTML = out; // print to screen the return messages
         
         currCell = $(targetDisplay+' tbody tr:last td:nth-child(2)').first(); // currCell points to 2nd TD in the last TR
         currCell.children().first().focus();// focus on the first input!!
