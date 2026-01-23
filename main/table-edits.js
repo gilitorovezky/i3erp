@@ -176,7 +176,7 @@ function deleteFromDB(rec2Delete) {
             $("#saveTableLabel").val("Error while Deleting");
     })
     .fail(function (jqXHR, textStatus, errorThrown)  { 
-            windowLog.trace(errorThrown); });
+            windowLog.warn(errorThrown); });
 }
 
 // Main funtion to save record to the DB, either adding or replacing
@@ -452,38 +452,14 @@ function saveRow(moduleName,element) {
 
         case "Companies"        :
             tempRow2["Orig Company Name"]="";
-           /* if ( element.id === "cmpnyNameID" ) {   // save the origText only if the updated field is the company name
-                tempRow.push(origText);             // push the orig company name
-                tempRow2["cmpnyNameID"]=origText;
-            }
-            else {
-                tempRow.push("");             // push ""
-                tempRow2["cmpnyNameID"]="";
-            }*/
         break;
 
         case "Vendors"          :
             tempRow2["Orig Vendor Name"]="";
-
-            /*if ( element.id === "vendorNameID" ) {      // save the origText only if the updated field is the vendor name
-                tempRow.push(origText);          // oush the orig company name
-                tempRow2["vendorNameID"]=origText;
-            }
-            else {
-                tempRow.push("");             // push ""
-                tempRow2["vendorNameID"]="";
-            }*/
         break;
 
         case "Contractors"     :
-           /* if ( element.id == "cntrctNameID" )  {        // save the origText only if the updated field is the vendor name
-                tempRow.push(origText);         // oush the orig company name
-                tempRow2["cntrctNameID"]=origText;
-            }
-            else {
-                tempRow.push("");             // push ""
-                tempRow2["cntrctNameID"]="";
-            }*/
+            tempRow2["Orig Contractor Name"]="";
         break;
 
         case "Scheduler"     :
@@ -585,7 +561,7 @@ function saveRow(moduleName,element) {
             //newRecord=false;
         })
         .fail(function (jqXHR, textStatus, errorThrown) { 
-            windowLog.trace(errorThrown); 
+            windowLog.warn(errorThrown); 
         });
     }
     
@@ -652,7 +628,7 @@ function saveCustomer(element) {
         saveRet=true;
         })
         .fail(function (jqXHR, textStatus, errorThrown) { 
-            windowLog.trace(errorThrown); 
+            windowLog.warn(errorThrown); 
     });
 
     return saveRet;l
