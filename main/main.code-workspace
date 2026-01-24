@@ -59,6 +59,9 @@
 		},
 		{
 			"path": "../leads"
+		},
+		{
+			"path": "../dynamicFields"
 		}
 	],
 	"settings": {

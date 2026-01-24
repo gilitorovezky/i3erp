@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Table with Field Mapping</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .actions {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        button.secondary {
+            background: #10b981;
+        }
+
+        button.secondary:hover {
+            background: #059669;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        thead {
+            background: #f8fafc;
+        }
+
+        th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        input[type="date"] {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input.required {
+            border-left: 3px solid #ef4444;
+        }
+
+        .row-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .row-actions button {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .row-actions .save-btn {
+            background: #10b981;
+        }
+
+        .row-actions .save-btn:hover {
+            background: #059669;
+        }
+
+        .row-actions .delete-btn {
+            background: #ef4444;
+        }
+
+        .row-actions .delete-btn:hover {
+            background: #dc2626;
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 10px;
+            color: #374151;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dynamic Data Table</h1>
+        
+        <div id="message" class="message"></div>
+
+        <div class="actions">
+            <button id="addRowBtn" class="secondary">+ Add New Row</button>
+            <button id="loadDataBtn">Reload Data</button>
+        </div>
+
+        <div id="tableContainer">
+            <div class="loading">Loading data...</div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        let fieldMappings = [];
+        let tableData = [];
+
+        // Show message
+        function showMessage(message, type = 'success') {
+            const msgEl = $('#message');
+            msgEl.removeClass('success error').addClass(type + ' show');
+            msgEl.text(message);
+            setTimeout(() => msgEl.removeClass('show'), 5000);
+        }
+
+        // Load field mappings from database
+        function loadFieldMappings() {
+            return $.ajax({
+                url: 'get_fields.php',
+                method: 'GET',
+                dataType: 'json'
+            }).done(function(response) {
+                if (response.success) {
+                    fieldMappings = response.fields;
+                }
+            }).fail(function() {
+                showMessage('Failed to load field mappings', 'error');
+            });
+        }
+
+        // Load data from database
+        function loadData() {
+            $.ajax({
+                url: 'get_data.php',
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        tableData = response.data;
+                        renderTable();
+                    }
+                },
+                error: function() {
+                    showMessage('Failed to load data', 'error');
+                }
+            });
+        }
+
+        // Render the table
+        function renderTable() {
+            if (fieldMappings.length === 0) {
+                $('#tableContainer').html('<div class="empty-state"><h3>No fields configured</h3><p>Please configure field mappings first.</p></div>');
+                return;
+            }
+
+            let html = '<table id="dataTable"><thead><tr>';
+            
+            // Build header from field mappings
+            fieldMappings.forEach(field => {
+                const required = field.is_required ? ' *' : '';
+                html += `<th>${field.field_name}${required}</th>`;
+            });
+            html += '<th>Actions</th></tr></thead><tbody>';
+
+            // Build rows from data
+            if (tableData.length === 0) {
+                html += '<tr><td colspan="' + (fieldMappings.length + 1) + '" style="text-align:center; padding:40px;">No data yet. Click "Add New Row" to start.</td></tr>';
+            } else {
+                tableData.forEach(row => {
+                    html += buildRow(row);
+                });
+            }
+
+            html += '</tbody></table>';
+            $('#tableContainer').html(html);
+        }
+
+        // Build a single row
+        function buildRow(data = null) {
+            const rowId = data ? data.id : 'new';
+            let html = `<tr data-row-id="${rowId}">`;
+
+            fieldMappings.forEach(field => {
+                const value = data ? (data[field.db_column_name] || '') : '';
+                const required = field.is_required ? 'required' : '';
+                const fieldType = field.field_type;
+                
+                html += `<td>
+                    <input 
+                        type="${fieldType}" 
+                        name="${field.field_name}" 
+                        data-db-field="${field.db_column_name}"
+                        value="${value}" 
+                        class="${required}"
+                        ${field.is_required ? 'required' : ''}
+                        placeholder="${field.field_name}">
+                </td>`;
+            });
+
+            html += `<td>
+                <div class="row-actions">
+                    <button class="save-btn" onclick="saveRow('${rowId}')">Save</button>
+                    ${data ? '<button class="delete-btn" onclick="deleteRow(' + data.id + ')">Delete</button>' : ''}
+                </div>
+            </td></tr>`;
+
+            return html;
+        }
+
+        // Add new row to table
+        function addNewRow() {
+            const tbody = $('#dataTable tbody');
+            const newRow = buildRow();
+            tbody.prepend(newRow);
+            
+            // Focus first input
+            tbody.find('tr:first input:first').focus();
+        }
+
+        // Save row data
+        function saveRow(rowId) {
+            const row = $(`tr[data-row-id="${rowId}"]`);
+            const formData = {};
+            let isValid = true;
+
+            // Collect data from inputs
+            row.find('input').each(function() {
+                const input = $(this);
+                const fieldName = input.attr('name');
+                const value = input.val().trim();
+                
+                // Validate required fields
+                if (input.hasClass('required') && !value) {
+                    isValid = false;
+                    input.css('border-color', '#ef4444');
+                } else {
+                    input.css('border-color', '');
+                }
+                
+                formData[fieldName] = value;
+            });
+
+            if (!isValid) {
+                showMessage('Please fill in all required fields', 'error');
+                return;
+            }
+
+            // Add ID if updating existing row
+            if (rowId !== 'new') {
+                formData.id = rowId;
+            }
+
+            // Send to server
+            $.ajax({
+                url: 'save_data.php',
+                method: 'POST',
+                data: formData,
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        showMessage(response.message, 'success');
+                        
+                        // If it was a new row, update the row ID
+                        if (rowId === 'new') {
+                            row.attr('data-row-id', response.id);
+                            // Add delete button
+                            row.find('.row-actions').append(
+                                `<button class="delete-btn" onclick="deleteRow(${response.id})">Delete</button>`
+                            );
+                        }
+                        
+                        // Reload data to ensure sync
+                        setTimeout(() => loadData(), 1000);
+                    } else {
+                        showMessage(response.message, 'error');
+                    }
+                },
+                error: function() {
+                    showMessage('Failed to save data', 'error');
+                }
+            });
+        }
+
+        // Delete row (soft delete or actual delete)
+        function deleteRow(id) {
+            if (!confirm('Are you sure you want to delete this record?')) {
+                return;
+            }
+
+            $.ajax({
+                url: 'delete_data.php',
+                method: 'POST',
+                data: { id: id },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        showMessage('Record deleted successfully', 'success');
+                        loadData();
+                    } else {
+                        showMessage(response.message, 'error');
+                    }
+                },
+                error: function() {
+                    showMessage('Failed to delete record', 'error');
+                }
+            });
+        }
+
+        // Event handlers
+        $('#addRowBtn').on('click', addNewRow);
+        $('#loadDataBtn').on('click', loadData);
+
+        // Handle Enter key to save
+        $(document).on('keydown', '#dataTable input', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const rowId = $(this).closest('tr').attr('data-row-id');
+                saveRow(rowId);
+            }
+        });
+
+        // Initialize on page load
+        $(document).ready(function() {
+            loadFieldMappings().then(function() {
+                loadData();
+            });
+        });
+    </script>
+</body>
+</html>
