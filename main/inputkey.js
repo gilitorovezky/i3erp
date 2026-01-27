@@ -58,7 +58,7 @@
         var header="";
         var newArr =[];
         var key = e.key; 
-        var showNewEntry=true;
+        var showNewEntry=true && lastFocusedEntry.length <= appConfig.newEntryMaxDepth; // default allow new entry only if last focused entry exist
         const regex=/[-a-zA-Z0-9 /!@#$%^&*()'_+={}Z\],<.>/?`~\\";:|]/g;
         var foundChar="";
         const specialChar = ( specialChars.indexOf(e.key) !== -1 );
@@ -459,14 +459,6 @@
                         //    outList +=`<li tabindex="-1" id="focusableElement-`+classArray["Customers"].arr[Number(newArr[i])].customer_id+`"`+">"+classArray["Customers"].cNames[Number(newArr[i])]+`</li>`;                      
                             outList += `<li tabindex="0" id="focusableElement-`+classArray["Customers"].cNames.findIndex(x => x === newArr[i])+`"`+">"+newArr[i]+`</li>`;                      
                     }
-                    
-                    /*switch ( header ) {
-
-                        case "Project Number" : 
-                            outList += `<li tabindex="0" id="new entry">New Entry</li>`;
-                        break;
-
-                    }*/
 
                     if ( e.target.id === "prjShortCutGallery") 
                         $("#MoveBtn").prop("disabled",false); // enable the move button

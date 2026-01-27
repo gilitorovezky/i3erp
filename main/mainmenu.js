@@ -577,7 +577,9 @@ class classConfig {
         this.estimates_dir=this.root+fldrs.system.estimates;
         this.maxUAtasksInRow=arrConfig[1].maxUAtasksInRow;
         this.maxUArows=arrConfig[1].maxUArows;
-        this.masterModuleAttributes=JSON.parse(arrConfig[1].masterModuleAttributes)
+        this.masterModuleAttributes=JSON.parse(arrConfig[1].masterModuleAttributes);
+        this.newEntryMaxDepth=arrConfig[1].new_entry_max_depth;
+        //this.defaultProfileColor=arrConfig[1].default_profile_color;
     }
 }
 
