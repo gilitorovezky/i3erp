@@ -935,8 +935,11 @@
                         editing=false;
                         if ( $('#overLay ul li').length > 0 ) { // if list box is "open" then reset the values, hide and clea nthe 
                             e.target.value="";
+                            e.target.focus();
                             ret_value=false;
-                                $("#overLay ul").empty();
+                            $("#overLay ul").empty();
+                            $("#"+e.currentTarget.id).removeClass("greyed-out");
+                            $("#"+e.currentTarget.id).css("opacity",'1.0');
                         }
                         else {
                             if ( lastScreen === "Customers" ) {
@@ -971,13 +974,13 @@
                     case "ArrowDown"                                           :
 
                         editing=false;
-                        if ($('#overLay ul li').length > 0) { // if list box is "open" then reset the values, hide and clean the list 
-                            //e.target.value="";
-                            $('#overLay ul li').first().focus(); // focus to the first element in the list
-                                //document.getElementById($('#overLay ul li')[0].id).focus();
-                                //$("#"+$('#overLay ul li')[0].id).focus();
-                            //$('#overLay ul li')[0].classList.add("selectedLI"); 
-                            retValue=false;
+                        if ( $('#overLay ul li').length > 0 ) { // if list box is "open" then reset the values, hide and clea nthe 
+                            e.target.value="";
+                            e.target.focus();
+                            ret_value=false;
+                            $("#overLay ul").empty();
+                            $("#"+e.currentTarget.id).removeClass("greyed-out");
+                            $("#"+e.currentTarget.id).css("opacity",'1.0');
                         }
                         else {
                             if ( lastScreen === "Customers" ) {
@@ -1216,7 +1219,7 @@
                     }
                 } 
                 else {
-                    currCell.find("input").val("");     // reset the New Entry text
+                    currCell.find("input").first().val("");     // reset the New Entry text (specify first cause when the curCell is the 1st entry, there are two input)
                     if ( lastFocusedEntry.length === 0 ) { // overlay in prohjects or customers screen
                         lastCell=currCell;
                         addNewRec($("#overLay ul").attr("data-module"),e.target,"addSingleRec");  

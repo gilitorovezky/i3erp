@@ -311,7 +311,7 @@ function saveRow(moduleName,element) {
 
     arrObj["entry0"].subFolderName=contactAllFields;   // update the subFolder with the contacnation of all the record fields// set default`
     if ( !isNewRecord ) { //if its not a new record than the entry must be found
-        entryNumber=classArray[moduleName].retEntrybyID(Number(ID));
+        const entryNumber=classArray[moduleName].retEntrybyID(Number(ID));
         //if ( entryNumber >= 0 )  { // valid entry found : exisiting record 
             tempRow[tempRow.length-1]=classArray[moduleName].arr[entryNumber].file_uploaded; // update the file_uploaded (replace the upload file(s)) if exist
             tempRow2["Files"] = tempRow[tempRow.length-1];
@@ -326,24 +326,20 @@ function saveRow(moduleName,element) {
 
     switch (moduleName) {
 
-        case "Projects":
-            projectSet=true;
-            // construct the full projct name: number+company_name+cstmr_name+add+proj type+prj_mngr
-            //fullProjectName=tempRow[1]+"-"+tempRow[2]+"-"+tempRow[3]+"-"+tempRow[4]+"-"+tempRow[5]+"-"+tempRow[6]; // must change to a function 
-            fullProjectName=tempRow2["Project Number"]+"-"+tempRow2["Company Name"]+"-"+tempRow2["Customer Last Name"]+"-"+tempRow2["Project Type"]+"-"+tempRow2["Project Manager/Rep"]+"-"+tempRow2["Project Address"];
-            tempRow.push(fullProjectName); // entry #7
-            //const tToday=new Date();
-            //const tempDAte=formatDateForInput(new Date()); // e.g., '2025-07-10'
+        case "Projects"         :
+            //projectSet=true;
+           
             const currentTime=formatCurrentTime(new Date())
             const sqlDate=formatDateForInput(new Date());
             tempRow.push(sqlDate+" "+currentTime);      // entry #8 - create project timestamp
             tempRow.push(appConfig.root_projects);    // entry #9 - root folder for all the project folerds
-            tempRow2["projectname"]=fullProjectName;  
+            tempRow2["projectname"]=tempRow2["Project Number"]+"-"+tempRow2["Company Name"]+"-"+tempRow2["Customer Last Name"]+"-"+tempRow2["Project Type"]+"-"+tempRow2["Project Manager/Rep"]+"-"+tempRow2["Project Address"];;
+            fuillProjectName=tempRow2["projectname"];   // just for debugging
             tempRow2["createdtime"]=sqlDate+" "+currentTime;
             tempRow2["rootFolder"]=appConfig.root_projects;
         break;
 
-        case "Hourly Rate"  :
+        case "Hourly Rate"      :
             tempRow.push($('th:nth-child(1)')[0].id); // push the employee_id that saved in the table hidden
             tempRow2["employeeID"]=$('th:nth-child(1)')[0].id;
         break;
@@ -388,7 +384,7 @@ function saveRow(moduleName,element) {
                 tempRow2["Payment Amount"] = 0.00;
         case "Purchases"        :
         case "Payments"         :
-            fullProjectName=tempRow[1];
+            fullProjectName=tempRow2["Project Number"];
             projectSet=true;    // set the projectSet flag to true for Purchases and all of EJ, Payments and SC
             //tempRow.push(contactAllFields); // push the employee_id that saved in the table hidden
             tempRow2["Folder Name"]=contactAllFields;
@@ -513,32 +509,35 @@ function saveRow(moduleName,element) {
             if ( !isNewRecord )
                 entryPntr=classArray[moduleName].retEntrybyID(ID);
             appendRecord(moduleName,tempRow,tempRow2,isNewRecord,entryPntr); // update the corresponding record int he cache 
-            if ( projectSet && (fullProjectName != "") ) { // perform the next paragraph only if projectSet is true;
-                var prjID=Projects.retEntrybyID(tempRow[1].split("-")[0]); // get the Project Index of the name. the projectID is not neccesarily the Project Index. 
-                // in case of a new project, prjid will not be found since it happens in append record that called later. 
-                if ( prjID !== -1 && Object.keys(data.length > 1) ) {    // only updste the corresponding fields for a valid prjID and any return value
+            if ( projectSet ) { // perform the next paragraph only if projectSet is true: all modules but Projects
+                //var prjID=Projects.retEntrybyID(tempRow2["project_id"]); // get the Project Index of the name. the projectID is not neccesarily the Project Index. 
+                const prjNumber=tempRow2["Project Number"].split("-")[0];
+               
+                const prjEntry = Projects.arrProjects.findIndex(t => t.project_number === prjNumber);
+                let entryNumber=0;
+                if ( Object.keys(data).length > 1 && moduleName !== "Projects") {    // only update the corresponding fields for a valid prjID and any return value
                     entryNumber=Number(classArray[moduleName].retEntrybyID(Number(ID)));
-                    if ( entryNumber >= 0)
-                        classArray[moduleName].arr[entryNumber].foldername = contactAllFields;   // update the current foldername with the new one 
+                    //if ( entryNumber >= 0)
+                    classArray[moduleName].arr[entryNumber].foldername = contactAllFields;   // update the current foldername with the new one 
                     switch(moduleName) {
                         case "Employee Jobs"    :
-                            Projects.arrProjects[prjID].project_total_empl_cost=Number(data.totalLabor);
+                            Projects.arrProjects[prjEntry].project_total_empl_cost=Number(data.totalLabor);
                         break;
 
                         case "Payments"         :
-                            Projects.arrProjects[prjID].project_total_payments=Number(data.totalPayment);
+                            Projects.arrProjects[prjEntry].project_total_payments=Number(data.totalPayment);
                         break;
 
                         case "Sub Contractors"  :
-                            Projects.arrProjects[prjID].project_total_cntrc_cost=Number(data.totalCntrc_cost);
+                            Projects.arrProjects[prjEntry].project_total_cntrc_cost=Number(data.totalCntrc_cost);
                         break;
                         
                         case "Purchases"        :
-                            Projects.arrProjects[prjID].project_total_purchases=Number(data.totalPurchases);
+                            Projects.arrProjects[prjEntry].project_total_purchases=Number(data.totalPurchases);
                         break;
                     }
                 }
-                windowLog.trace("project:"+fullProjectName+" PrjID:"+(prjID == -1?"not":prjID)+" found,data length:"+Object.keys(data).length);
+                windowLog.trace("project:"+fullProjectName+" prjEntry:"+prjEntry+ "entry:"+entryNumber);
             }
             //newRecord=false;
         })

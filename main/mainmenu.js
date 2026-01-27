@@ -624,12 +624,14 @@ class genesisClass {
         var found = false;
         const key=headers[this.moduleName].primaryKey;
         while ( ( i < this.arr.length) && (!found) ) {
-            if  ( this.arr[i][key] == item ) {
+            if  ( this.arr[i][key] === item ) {
                 found = true; 	// exit the while gracefully
                 entry = i;
             }
             i++;
         }
+
+
         return entry;
     } 
 };
@@ -724,7 +726,7 @@ class classProjects extends genesisClass {
         var i=0;
         var found = false;
         while ( ( i < this.arrProjects.length) && (!found) ) {
-            if  ( this.arrProjects[i].project_id == ID ) {
+            if  ( this.arrProjects[i].project_id === ID ) {
                 found = true; 	// exit the while gracefully
                 entry = i;
             }
@@ -2160,7 +2162,7 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
                 
                 const tID = eArray[i].task_id;
 
-                const entryNumber = Tasks.arrTasks.findIndex(t => t.task_id == tID);
+                const entryNumber = Tasks.arrTasks.findIndex(t => t.task_id === tID);
                 if ( entryNumber != -1 ) 
                     description = Tasks.arrTasks[entryNumber].task_description;
                 else
@@ -2358,9 +2360,9 @@ function displayContractorJobsResults(projectNumber,targetDisplay) {
                     out += `<td><input tabindex="0" type="text" id='ContractorNameID' name="ContractorName" class="projectNameClass" value="${cArray[i].contractor_name}" size="20"></td>`;
                     out += `<td><input tabindex="0" type="date" id="jobDateID" name="jobDate" class="inputDate" value=${cArray[i].job_date}></td>`;
                     if ( cArray[i].payment_amount != 0.00)
-                        out += `<td><input tabindex="0" type="text" id="pymntID" name="payment" class="projectNameClass" value="${cArray[i].payment_amount}"></td>`;
+                        out += `<td><input tabindex="0" type="text" id="paymentID" name="payment" class="projectNameClass" value="${cArray[i].payment_amount}"></td>`;
                     else
-                        out += `<td><input tabindex="0" type="text" id="pymntID" name="payment" class="projectNameClass" value=""></td>`;
+                        out += `<td><input tabindex="0" type="text" id="paymentID" name="payment" class="projectNameClass" value=""></td>`;
 
                     out += `<td><input tabindex="0" type="text" id="paymentNumberID" name="paymentNumber" class="projectNameClass" maxlength="20" value="${cArray[i].payment_number}"></td>`;
                     out += `<td><input tabindex="0" type="date" id="paymentDate" name="jobPaymentDate" class="inputDate" value=${cArray[i].date_paid}></td>`;

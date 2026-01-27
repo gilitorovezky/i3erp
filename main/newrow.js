@@ -83,7 +83,7 @@
             case "Payments" :
 
                 row += `<td><input tabindex="0" type="text" name="projectName" id="prjctNumberID" class="projectNameClass" value='${tempRow[3].Name}'>`;
-                row += `<input type="hidden" id='${headers['Payments']['primaryKey']}' name="pymntID" value=${ID}></td>`; 
+                row += `<input type="hidden" id='${headers['Payments']['primaryKey']}' name="payment" value=${ID}></td>`; 
                 
                 var amount='';
                 if ( restore ) 
@@ -461,10 +461,15 @@
                     else 
                         windowLog.trace("Inside SaveCloseBtn keydown enter");
                     if ( lastFocusedEntry.length > 1 ) {
-                        lastFocusedEntry[lastFocusedEntry.length-2].currCell.children().first().val(lastFocusedEntry[lastFocusedEntry.length-1].currCell.children().first().val());
+                        if (lastFocusedEntry[lastFocusedEntry.length-1].module === "Projects" ) 
+                            lastFocusedEntry[lastFocusedEntry.length-2].currCell.children().first().val(Projects.arrProjects[Projects.arrProjects.length-1].project_name);
+                        else
+                            lastFocusedEntry[lastFocusedEntry.length-2].currCell.children().first().val(lastFocusedEntry[lastFocusedEntry.length-1].currCell.children().first().val());
                         lastFocusedEntry[lastFocusedEntry.length-2].currCell.children().first().focus();
-                        $("#"+lastFocusedEntry[lastFocusedEntry.length-2].recPntr+" tfoot tr td").find("input[id='SaveNewBtn']").show();
-                        $("#"+lastFocusedEntry[lastFocusedEntry.length-2].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").show();
+                        validateEnableSaveConditions(lastFocusedEntry[lastFocusedEntry.length-2].module,lastFocusedEntry[lastFocusedEntry.length-2].currCell.closest('tr'));
+                        //$("#addSingleRec").show();
+                        //$("#"+lastFocusedEntry[lastFocusedEntry.length-2].recPntr+" tfoot tr td").find("input[id='SaveNewBtn']").show();
+                        //$("#"+lastFocusedEntry[lastFocusedEntry.length-2].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").show();
                     }
                     
                 case "CancelSnglRecBtn"     :

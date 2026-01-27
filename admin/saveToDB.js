@@ -517,7 +517,7 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
                     project_total_purchases :   '0.00',
                     project_total_payments  :   '0.00'
                 });
-                Projects.length++;
+                //Projects.length++;
             }
             Projects.pNames.push(prjName);      // add the new project name to the array of names
             
