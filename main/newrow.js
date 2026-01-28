@@ -180,17 +180,17 @@
                 row += `<td class="fullNameClass"><input tabindex="0" type="text" name="fulltName" id="fullNameID" class="projectNameClass" maxlength="25" value='${tempRow[3].Name}'>`;
                 row += `<input type="hidden" id='${headers['Employees']['primaryKey']}' name="employeeID" value=${ID}>`;
                 row += `<input tabindex="0" type="color" id="emplColorInputID" class="emplColor" value="#ffffff"></td>`;
-                row += `<td><input tabindex="0" type="text" name="employmentType" id="etID" class="projectNameClass" maxlength="10" value=${tempRow[index++].value}></td>`;
+                row += `<td><input tabindex="0" type="text" name="employmentType" id="emplymntTypeID" class="projectNameClass" maxlength="10" value=${tempRow[index++].value}></td>`;
                 var hourlyRate = 0.00;
                 if ( restore ) {
                     hourlyRate=tempRow[index].value;
                     index++;
                 }
-                row += `<td><input tabindex="0" type="text" name="hourlyRate" id="hrID" class="projectNameClass" maxlength="5" value="${hourlyRate}"></td>`;
+                row += `<td><input tabindex="0" type="text" name="hourlyRate" id="hourlyRateID" class="projectNameClass" maxlength="5" value="${hourlyRate}"></td>`;
                 if ( restore ) 
                  tempDay=tempRow[index].value;
                 index++;
-                row += `<td><input tabindex="0" type="date" name="hourlyRateDate" id="hrdID" class="inputDate" value=${tempDay}></td>`;
+                row += `<td><input tabindex="0" type="date" name="hourlyRateDate" id="hourlyRateDateID" class="inputDate" value=${tempDay}></td>`;
                 //row += `<td tabindex="0"><input type="checkbox" name="isActive" id="iaID" value="IsActive" onclick="updateIsActive(event)">`;
                 row += `<td><input tabindex="0" type="checkbox" name="isActive" id="iaID" value="IsActive">`;
                 row += `<td><input tabindex="0" type="password" name="password" id="pswdID" class="projectNameClass" value="${tempRow[index++].value}" >`;
@@ -234,13 +234,13 @@
                 row += `<td></td>`; // dummy td to confront with the other tables that minus icon occupies the first td
                 row += `<td><input tabindex="0" type="text" name="hourlyRate" class="projectNameClass" maxlength="5" value=${tempRow[index++].value}>`;
                 //row += `<input type="hidden" id="hrId" name="hrID" value=${tempRow[index++].ID}></td>`;
-                row += `<input type="hidden" id='${headers['Hourly Rate']['primaryKey']}' name="hrID" value=${ID}></td>`;
+                row += `<input type="hidden" id='${headers['Hourly Rate']['primaryKey']}' name="hourlyRateID" value=${ID}></td>`;
                 // here the hidden is in not under full name cause the first td is not a deleteion like all other tables
                 if ( restore ) {
                     tempDay=tempRow[index].value;
                     index+=3;
                 }             
-                row += `<td><input tabindex="0" type="date" name="hourlyRateDate" id="hrdID" class="inputDate" value=${tempDay}></td>`;
+                row += `<td><input tabindex="0" type="date" name="hourlyRateDate" id="hourlyRateDateID" class="inputDate" value=${tempDay}></td>`;
                  
             break;
 

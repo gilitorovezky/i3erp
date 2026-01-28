@@ -126,11 +126,11 @@ const nametoIDLookup = {
                              "modules":{"Sub Contractors":{"display":true,
                                                            "mandatory":false}}},
 
-    /*"Project Sales Rep":    {"name":"projectSalesRep",
-                             "id":"projectSalesRepID",
-                             "header":"Project Sales Rep",
-                             "modules":{"Projects":{"display":true,
-                                                    "mandatory":true}}},*/
+    "Employee Color Profile": {"name":"emplyColorProfile",
+                             "id":"emplColorInputID",
+                             "header":"Employee Color Profile",
+                             "modules":{"Employees":{"display":true,
+                                                    "mandatory":true}}},
 
     "Payment Date":         {"name":"jobPaymentDate",
                              "id":"jobPaymentDateID",
@@ -304,8 +304,20 @@ const nametoIDLookup = {
                                                      "mandatory":true}}},
                                                      
     "Employment Type":      {"name":"employmentType",
-                             "id":"employmentTypeID",
+                             "id":"emplymntTypeID",
                              "header":"Employment Type", // no header for now
+                             "modules":{"Employees":{"display":true,
+                                                     "mandatory":true}}},   
+
+    "Hourly Rate"    :      {"name":"hourlyRate",
+                             "id":"hourlyRateID",
+                             "header":"Hourly Rate", // no header for now
+                             "modules":{"Employees":{"display":true,
+                                                     "mandatory":true}}},   
+
+    "Hourly Rate Date"    : {"name":"hourlyRateDate",
+                             "id":"hourlyRateDateID",
+                             "header":"Hourly Rate Date", // no header for now
                              "modules":{"Employees":{"display":true,
                                                      "mandatory":true}}},   
 
@@ -915,7 +927,7 @@ window.addEventListener("load", function() {
     $(".main_menue").show();
     if (username == 'eddie') {
         $("#prjShortCut").focus();
-        $("#savingTD").html("<a style=\"font-size : 12px;\" id=\"saveTableLabel\"></a>");
+        $("#savingTD").html("<a style='font-size : 12px;' id='saveTableLabel'>''</a>");
     }
 
      $("body").delegate("#projectLbl1,#customersLbl2","contextmenu",function() {

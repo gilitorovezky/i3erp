@@ -1089,7 +1089,7 @@ Promise.all(requests)
 
             break;
 
-            case "hrValueID"        :
+            case "hourlyRateID"        :
                 window.location.hash = headers["Hourly Rate"].hash;
                 headers["Hourly Rate"].params=$(this).closest('tr').find('[id='+headers[$("#screen_name").html()]["primaryKey"]+']').val();
                 //retCode=showHR($(this).closest('tr').find('[id='+headers[$("#screen_name").html()]["primaryKey"]+']').val());

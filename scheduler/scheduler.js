@@ -865,7 +865,7 @@ function saveScheduler(element,overideAssignment,newTask) { // Save the element 
               } else {
                   windowLog.trace("Saving schedule to the db failed");
                   $("#saveTableLabel").html("Saving failed..");
-                  setTimeout(() => $("#saveTableLabel").hide(), 2000); // clear the message after 2 sec
+                  setTimeout(() => $("#saveTableLabel").html(""), 2000); // clear the message after 2 sec
               }
             }),
             error   :  function (xhr, ajaxOptions, thrownError) {

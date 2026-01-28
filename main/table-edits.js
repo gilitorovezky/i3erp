@@ -423,7 +423,7 @@ function saveRow(moduleName,element) {
                 allowSave = false;
                 $("#saveTableLabel").html("Both Full name and Password must be entered...");
                 $("#saveTableLabel").show();
-                setTimeout(() => $("#saveTableLabel").hide(), 2000); // clear the message after x sec
+                setTimeout(() => $("#saveTableLabel").html("&nbsp;"), 2000); // clear the message after x sec
             }
            
         break;
@@ -433,7 +433,7 @@ function saveRow(moduleName,element) {
         break;
 
         case "Vendors"          :
-            tempRow2["Orig Vendor Name"]="";
+            tempRow2["Orig Vendor Name"] = "";
         break;
 
         case "Contractors"     :
@@ -500,7 +500,7 @@ function saveRow(moduleName,element) {
                 $("#saveTableLabel").html("Saving has been successfull");
             $("#saveTableLabel").css({'color'     :    msgColor});
 
-            setTimeout(() => $("#saveTableLabel").hide(), 2000); // clear the message after 2 sec
+            setTimeout(() => $("#saveTableLabel").html(""), 2000); // clear the message after 2 sec
            // }
 
             windowLog.trace("Saving to DB "+(ret_value?"has been successfull":"failed"));
