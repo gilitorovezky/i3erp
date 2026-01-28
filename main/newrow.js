@@ -18,10 +18,10 @@
         var localCurrentTime; // =("0" + (date.getHours())).slice(-2)+":"+("0" + (date.getMinutes())).slice(-2); // dont set the time
         
         row = `<tr id="${module}">`;     // add the module mainly for scheduler since if the Installer is Select, disable the save button
-        if ( ( newRecPntr === "#addSingleRec" )    || // Dont allow delete in single rec or Employees or Projects
-             ( module  === "Employees" )        || 
-             ( module  === "Customers" )        ||
-             ( module  === "Projects" ) )
+        if (  newRecPntr.includes("addSingleRec")    || // Dont allow delete in single rec or Employees or Projects
+              module  === "Employees"         || 
+              module  === "Customers"         ||
+              module  === "Projects"  )
             row +=`<td></td>`;
         else
             row += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="DeleteImage" alt='plus' width='10' height='10'></td>`;
@@ -57,7 +57,10 @@
                 row += `<td><input tabindex="0" type="text" id="projectTypeID" name="projectType" class="projectNameClass" value=${tempRow[index++].value}></td>`;
                 row += `<td><input tabindex="0" type="text" id="projectSalesRepID" name="projectSalesRep" class="projectNameClass" value=${tempRow[index++].value}></td>`;
                 row += `<td><input tabindex="0" type="text" id="projectAddressID" name="projectAddress" class="projectNameClass" value=${tempRow[index++].value}></td>`;
-                row += `<td style="width:2%"><input tabindex="0" type="text" id="allFilesID" data-files="0" name="allFiles" class="projectNameClass" value="0"></td>`;
+                files=uploadFilesMngr(0,false);  
+                if ( restore )
+                    files=tempRow[index++].value;
+                row += `<td tabindex="0" style="width:8%"><a class="hyperlinkLabel" id="allFilesID" data-files="0">${files}</a></td>`;
             break;
 
             case "Purchases" :
@@ -76,8 +79,11 @@
                 if ( restore )
                     tempDay=tempRow[index].value;
                 index++;
+                files=uploadFilesMngr(0,false);  
+                if ( restore )
+                    files=tempRow[index++].value;
                 row += `<td><input tabindex="0" type="text" id="descriptionID" name="description" class="projectNameClass" maxlength="40" value=${tempRow[index].value}></td>`;
-                row += `<td style="width:8%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" data-files="0" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:8%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" data-files="0">${files}</a></td>`;
             break;
 
             case "Payments" :
@@ -98,11 +104,10 @@
                 index++;
                 row += `<td><input tabindex="0" type="text" id="paymentNumberID" name="checkNumberCNF" class="projectNameClass" value=${tempRow[index].value}></td>`;
                 row += `<td><input tabindex="0" type="text" id="descriptionID" name="pDscrptn" class="projectNameClass" maxlength="40" value=${tempRow[index].value}></td>`;
+                files=uploadFilesMngr(0,false);  
                 if ( restore )
                     files=tempRow[index++].value;
-                else
-                    files=uploadFilesMngr(0,false);  
-                row += `<td style="width:8%"><a class="greyed-out" tabindex="0" id="allFilesID" data-files="0" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:8%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" data-files="0">${files}</a></td>`;
 
             break;
 
@@ -118,6 +123,8 @@
                 var totalHours = "0.00";
                 var description="",localCurrentTime="",lunchSignInTime="",files="",jobSignOutTime="",lunchSignOutTime="";
                 var labor_cost = "0.0";
+                 
+                files=uploadFilesMngr(0,false);  
                 if ( restore ) {
                     localCurrentTime=tempRow[index++].value;
                     lunchSignInTime=tempRow[index++].value;
@@ -135,7 +142,7 @@
                 row += `<td><input tabindex="0" type="text" id="totalHoursID" name="totalHours" readonly class="projectNameClass" maxlength="5" value=${totalHours}></td>`;
                 row += `<td><input tabindex="0" type="text" id="descriptionID" name="description" class="projectNameClass" maxlength="20" value=${description}></td>`;
                 row += `<td><input tabindex="0" type="text" id="lbrCostID" hidden name="labor_cost" class="projectNameClass" readonly value=${labor_cost}></td>`;
-                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" data-files="0" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" data-files="0">${files}</a></td>`;
 
             break;
 
@@ -161,9 +168,10 @@
                 if ( restore ) 
                     descrpition=tempRow[index++].value;
                 row += `<td><input tabindex="0" type="text" id="descriptionID" name="description" class="projectNameClass" maxlength="40" value="${descrpition}"></td>`;
+                files=uploadFilesMngr(0,false);  
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td style="width:2%"><a tabindex="0" id="allFilesID" data-files="0" class="hyperlinkLabel" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:2%"><a tabindex="0" id="allFilesID" data-files="0" class="hyperlinkLabel">${files}</a></td>`;
 
             break;
 
@@ -187,11 +195,11 @@
                 row += `<td><input tabindex="0" type="checkbox" name="isActive" id="iaID" value="IsActive">`;
                 row += `<td><input tabindex="0" type="password" name="password" id="pswdID" class="projectNameClass" value="${tempRow[index++].value}" >`;
                 row += `<label for="isActive"></td>`;
-                 if ( restore )
+                files=uploadFilesMngr(0,false);  
+                if ( restore )
                     files=tempRow[index].value;
-                else
-                    files=uploadFilesMngr(0,false);  
-                row += `<td><a tabindex="0" class="hyperlinkLabel" id="allFilesID" data-files="0" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                 
+                row += `<td><a tabindex="0" class="hyperlinkLabel" id="allFilesID" data-files="0">${files}</a></td>`;
 
             break;
             
@@ -200,9 +208,10 @@
                 row += `<td><input tabindex="0" type="text" name="contractorName" id="contractorNameID" class="projectNameClass" maxlength="25" value='${tempRow[3].Name}'>`;
                 row += `<input type="hidden" id='${headers['Contractors']['primaryKey']}' name="contractorID" value=${ID}></td>`;                
                 row += `<td><input tabindex="0" type="text" name="notes" id="notesID" class="projectNameClass" maxlength="50" value=${tempRow[index].value}></td>`;
+                files=uploadFilesMngr(0,false);  
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" data-files="0" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" data-files="0">${files}</a></td>`;
 
             break;
             
@@ -213,9 +222,10 @@
                 row += `<input type="hidden" id='${headers['Vendors']['primaryKey']}' name="vendorID" value=${ID}></td>`;
                 row += `<td><input tabindex="0" type="text" name="vendorAddress" id="vendorAddressID" class="projectNameClass" maxlength="50" value=${tempRow[index++].value}></td>`;
                 row += `<td><input tabindex="0" type="text" name="vendorNotes" id="notesID" class="projectNameClass" maxlength="50" value=${tempRow[index].value}></td>`;
+                files=uploadFilesMngr(0,false);  
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td style="width:2%"><a tabindex="0" id="allFilesID" data-files="0" style="text-decoration:none;font-size:12px">${files}</a></td>`;
+                row += `<td style="width:2%"><a tabindex="0"  class="hyperlinkLabel" id="allFilesID" data-files="0">${files}</a></td>`;
 
             break;
 
@@ -241,9 +251,10 @@
                 row += `<td><input tabindex="0" id="companyNameID" type="text" name="companyName" class="projectNameClass" maxlength="50" value='${tempRow[3].Name}'>`;
                 row += `<input type="hidden" id='${headers['Companies']['primaryKey']}' name="companyID" value=${ID}></td>`;
                 row += `<td><input tabindex="0" type="text" name="companyNotes" id="notesID" class="projectNameClass" maxlength="50" value=${tempRow[index++].value}></td>`;
+                files=uploadFilesMngr(0,false);  
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td style="width:2%"><a tabindex="0" id="allFilesID" data-files="0" class="hyperlinkLabel" style="text-decoration:none;font-size:12px">${files}</a></td>`; //class="hyperlinkLabel" 
+                row += `<td style="width:2%"><a id="allFilesID" data-files="0" class="hyperlinkLabel">${files}</a></td>`; //class="hyperlinkLabel" 
             break;
 
             
@@ -427,7 +438,8 @@
         else
             currCell = $('#'+newRecordPntr+' tr td:eq(1)').first();
         
-        lastFocusedEntry.push({"currCell":currCell,"recPntr":newRecordPntr,"module":module}); // push the current focused entry to the stack
+        lastFocusedEntry.push({"currCell":currCell,"recPntr":newRecordPntr,"module":module,"charCount":charactersCount}); // push the current focused entry to the stack
+        charactersCount=0; // reset the character count for the new entry
         currCell.children().first().focus();
         currCell.children().first().css({'background-color'    : '#90e9e9'}); // highlight the editing field
 

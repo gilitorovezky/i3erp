@@ -184,7 +184,7 @@ Promise.all(requests)
                 //$("#tx"+($(this).closest("div").parent().attr("id"))).css("background-color","#ffffff"); // set the background color
             }
             else {
-                if ( e.target.closest('table').id != "addSingleRec" ) {
+                if ( e.target.closest('table').id !== "addSingleRec" ) {
 
                     $("#tx"+this.closest("div").parentElement.id).find('[id="assignID"]').show();
                     $("#assignID").unbind("click");
@@ -242,7 +242,7 @@ Promise.all(requests)
             }
         }
 
-        if ( e.target.closest('table').id != "addSingleRec" ) { // dont auto save when at the new Task mode
+        if ( e.target.closest('table').id !== "addSingleRec" ) { // dont auto save when at the new Task mode
         
             const taskID = $(this).parents('div').filter(function() {
                     return this.id.includes("div-"+$(this).closest('tr').index()+"-"+($(this).closest('td').index()-1));// decrease 1 since the elements start in 0
@@ -1679,7 +1679,7 @@ Promise.all(requests)
         $("#overLay ul").empty();
         
         if ( lastFocusedEntry.length > 0 ) {
-            newRecPntr=lastFocusedEntry[lastFocusedEntry.length-1].recPntr+"-"+lastFocusedEntry.length; // name the new rec pntr based on the previous record
+            newRecPntr="addSingleRec"+"-"+lastFocusedEntry.length; // name the new rec pntr based on the previous record
             $('#newRecDiv-'+(lastFocusedEntry.length-1)).after('<div id="newRecDiv-'+(lastFocusedEntry.length)+'"><table hidden class="newRecDialg" id="'+newRecPntr+'"></div>');
         }
         else {
