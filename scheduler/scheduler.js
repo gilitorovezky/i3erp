@@ -807,7 +807,7 @@ function saveScheduler(element,overideAssignment,newTask) { // Save the element 
                  "Record"     : employee_rec}); // add a new record to the main array
     
     $("#saveTableLabel").html("Saving....");
-    $("#saveTableLabel").show();
+
     $.ajax({
             url       : "../db/save_schedule.php",
             method    : "POST",
@@ -819,14 +819,14 @@ function saveScheduler(element,overideAssignment,newTask) { // Save the element 
               if (data != '') { // data is not null only when a new task is created and task_id has been assigned by the DB (AI)
                 windowLog.trace("Saving schedule to the db has been "+(data[0].Status === 1?"succesfull":"failed"));
                 if ( data[0].Status === 1 ) {
-                  $("#saveTableLabel").html("Saving has been successfull");
+                  $("#saveTableLabel").html("Changes saved successfully");
                   $("#saveTableLabel").css("color", "green");
                 }
                 else {
-                  $("#saveTableLabel").html("Saving failed");
+                  $("#saveTableLabel").html("Saving failed(-3)");
                   $("#saveTableLabel").css("color", "red");
                 }
-                setTimeout(() => $("#saveTableLabel").hide(), 2000); // clear the message after 2 sec
+                setTimeout(() => $("#saveTableLabel").html("&nbsp"), 2000); // clear the message after 2 sec
                 // loop over the return task_id. Stating from 1 cause the 0 entry is the return code
                 /*for (var ret=1; ret < Object.keys(data).length; ret++) { // there is only single entry if the return code form save is 0 so the loop will not execute
                   $("#"+data[ret].input_id)[0].nextSibling.defaultValue=data[ret].task_id; // update the task_id
@@ -863,7 +863,7 @@ function saveScheduler(element,overideAssignment,newTask) { // Save the element 
                     Tasks.noneClosedDailyTasks[data[ret].task_id+"-"]="open"; // add the new task only for today
                 }*/
               } else {
-                  windowLog.trace("Saving schedule to the db failed");
+                  windowLog.warn("Saving Schedule to the DB failed");
                   $("#saveTableLabel").html("Saving failed..");
                   setTimeout(() => $("#saveTableLabel").html(""), 2000); // clear the message after 2 sec
               }

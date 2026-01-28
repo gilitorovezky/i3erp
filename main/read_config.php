@@ -18,6 +18,7 @@
                                    "newTask_polling_interval"        =>  $row["newTask_polling_interval"],
                                    "taskStatus_polling_interval"     =>  $row["taskStatus_polling_interval"],
                                    "app_version"                     =>  $row["app_version"],
+                                   "saveMsgTimeout"                  =>  $row["saveMsgTimeout"],
                                    "db_version"                      =>  $row["db_version"],
                                    "maxUploadFileSize"               =>  $row["maxUploadFileSize"],
                                    "maxUAtasksInRow"                 =>  $row["maxUAtasksInRow"],

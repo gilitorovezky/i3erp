@@ -192,7 +192,7 @@
                 index++;
                 row += `<td><input tabindex="0" type="date" name="hourlyRateDate" id="hourlyRateDateID" class="inputDate" value=${tempDay}></td>`;
                 //row += `<td tabindex="0"><input type="checkbox" name="isActive" id="iaID" value="IsActive" onclick="updateIsActive(event)">`;
-                row += `<td><input tabindex="0" type="checkbox" name="isActive" id="is_activeID" value="IsActive" checked></td>`;
+                row += `<td><input tabindex="0" type="checkbox" name="isActive" id="is_activeID" value="1" checked></td>`;
                 row += `<td><input tabindex="0" type="password" name="password" id="userPasswordID" class="projectNameClass" value="${tempRow[index++].value}" >`;
                 row += `<label for="isActive"></td>`;
                 files=uploadFilesMngr(0,false);  
@@ -277,11 +277,11 @@
                     taskDate=formatDateForInput(new Date($('#result-table thead tr th:nth-child('+(iCol+1)+')').text()));
                     ID=$(parentElement).closest('div[id="rootElement"]').find('[name="taskID"]').val();
                 
-                    const activeEmplArr=classArray['Employees'].arr.filter((x) => x.is_active == "1").map((x) => x.fullname );      // array for all the assigned tasks  (employeeID = -1)
+                    const activeEmplArr=classArray['Employees'].arr.filter((x) => x.is_active === "1").map((x) => x.fullname );      // array for all the assigned tasks  (employeeID = -1)
                     const employeeFName=$(parentElement).closest('tr').find('[id="employeeName"]').text();
                     //const formattedDate = formatDateForInput(today); // e.g., '2025-07-10'
                     addEmpls +=`<option value="`+employeeFName+`">`+employeeFName+`</option>`;  // build the active employee drop down menue
-                    addEmpls += classArray["Employees"].arr.filter((x) => (x.is_active == "1" && x.fullname !=employeeFName)).map((x) => `<option value="${x.fullname}">${x.fullname}</option>`);
+                    addEmpls += classArray["Employees"].arr.filter((x) => (x.is_active === "1" && x.fullname !=employeeFName)).map((x) => `<option value="${x.fullname}">${x.fullname}</option>`);
 
                     if ( Tasks.unAssignedCount < Number(appConfig.maxUAtasksInRow) )
                         addEmpls +=`<option value="unassigned">UA</option>`;  // build the active employee drop down menue
@@ -289,7 +289,7 @@
                 } else {
                     if ( Tasks.unAssignedCount < Number(appConfig.maxUAtasksInRow) )
                         addEmpls +=`<option value="unassigned">UA</option>`;  // build the active employee drop down menue
-                    addEmpls += classArray["Employees"].arr.filter((x) => (x.is_active == "1" )).map((x) => `<option value="${x.fullname}">${x.fullname}</option>`);
+                    addEmpls += classArray["Employees"].arr.filter((x) => (x.is_active === "1" )).map((x) => `<option value="${x.fullname}">${x.fullname}</option>`);
                 }
                 addEmpls += `</select>`; //`<option value="select">Select</option>`+activeEmplys+`</select>`;
                 addEmpls=addEmpls.replace(/\,/g, '');

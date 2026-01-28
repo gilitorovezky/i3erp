@@ -46,10 +46,10 @@
 
     function TblKeyDown(e) {
         
-        var tableID='#'+$(e.target).parents('table').eq($(e.target).parents('table').length-1)[0].id;
+        const tableID='#'+$(e.target).parents('table').eq($(e.target).parents('table').length-1)[0].id;
         const isNewRec=e.target.closest('div').id.includes("newRecDiv");
         const digits="0123456789";
-        var numOfColumns=0;//,element;
+        var numOfColumns=0;
         const specialChars=["ArrowRight","ArrowLeft","ArrowDown","ArrowUp","Tab","Escape","Enter","Backspace"];
         const metaKeys =["Shift","Meta`","Control","Delete","Insert","PageUp","PageDown","Home","End","Pause","CapsLock","NumLock","ScrollLock","F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12","PrintScreen","ContextMenu","BrowserBack","BrowserForward","BrowserRefresh","BrowserStop","BrowserSearch","BrowserFavorites","BrowserHome","VolumeMute","VolumeDown","VolumeUp","MediaNextTrack","MediaPreviousTrack","MediaStop","MediaPlayPause","LaunchMail","LaunchMediaSelect","LaunchApp1","LaunchApp2","Unidentified"];
         const screenName=$("#screen_name").html();// document.getElementById("screen_name").innerHTML;
@@ -57,15 +57,14 @@
         var retValue=false; // used to indicate if the typed charecter will be shown or not
         var header="";
         var newArr =[];
-        var key = e.key; 
         var showNewEntry=true && lastFocusedEntry.length <= appConfig.newEntryMaxDepth; // default allow new entry only if last focused entry exist
         const regex=/[-a-zA-Z0-9 /!@#$%^&*()'_+={}Z\],<.>/?`~\\";:|]/g;
-        var foundChar=false;
+        var   foundChar=false;
         const specialChar = ( specialChars.indexOf(e.key) !== -1 );
         const metaKey = ( metaKeys.indexOf(e.key) !== -1 );
 
-        if (!metaKey && !specialChar) // if not a meta key nor special key than it must be regular key
-            foundChar=regex.test(key);  
+        if ( !metaKey && !specialChar ) // if not a meta key nor special key than it must be regular key
+            foundChar=regex.test(e.key);  
 
         windowLog.trace("TableKeyDown: ("+e.currentTarget.id+") ..inside keydown,key="+e.key);
         _lastAction="";
@@ -142,18 +141,13 @@
                 }
         }
 
-        //foundChar = foundChar && specialChar;
-
-        //var selectionLength = 0;
-        //if ( e.target.nodeName != "TD")
-        //    selectionLength=e.target.selectionEnd-e.target.selectionStart-e.target.value.length;  // Calculate the selection text, if all the text and backspace, special case 
-        if ( foundChar  || e.key === "Backspace" ) {   /*&&( selectionLength > 1)*/ 
+        if ( foundChar || e.key === "Backspace" ) {
         
             var tempArray=[];
             var isList=false;
             var saveRetValue=false;
             var text=e.target.value;
-            windowLog.trace("Header:"+header);
+            windowLog.trace("TblKeyDown Header:"+header);
             if ( e.key === "Backspace" )
                 charactersCount > 0 ? charactersCount-- : charactersCount=0;
             else
@@ -179,7 +173,7 @@
                         isList=charactersCount > 0?true: false;
                     }
                     else
-                        windowLog.trace("Tel Number - Invalid character");
+                        windowLog.warn("Tel Number - Invalid character, igonore");
                 break;
 
                 case "CustomerFullRecord"       :
@@ -188,7 +182,7 @@
                         isList=charactersCount > 0?true: false;
                     }
                     else 
-                        windowLog.trace("Projects names array is empty!!");
+                        windowLog.warn("Custoemrs names array is empty!!");
 
                 break;
 
@@ -203,13 +197,13 @@
                                 tempArray.push(name); })
                         }
                         else
-                            windowLog.trace("Companies names array is empty");
+                            windowLog.warn("Company names array is empty");
                     }
                 break;
 
                 case "Vendor Name"               :
                     if ( Object.keys(classArray["Vendors"].pNames).length > 0 )  {
-                        Object.keys(classArray["Vendors"].pNames).forEach( (name) => { //copy the return data from the DB into the class array
+                         Object.keys(classArray["Vendors"].pNames).forEach( (name) => { //copy the return data from the DB into the class array
                             tempArray.push(name); })
                         isList=charactersCount > 0?true: false;
                         if ( $(tableID).attr('data-module') === "Vendors" && isNewRec) {
@@ -307,7 +301,7 @@
                 case "Zip"                  :
                     showNewEntry=false; // do not allow new entry
                     retValue=false;
-                    if ( (( digits.indexOf(e.key) != -1 ) || ( e.key === "Backspace" )))    //only allow digits
+                    if ( (( digits.indexOf(e.key) !== -1 ) || ( e.key === "Backspace" )))    //only allow digits
                         retValue=true;
                     else
                         windowLog.trace("Zip - Invalid character");
@@ -1114,6 +1108,7 @@
         windowLog.trace("keydown, ret_value:"+retValue+" charCount="+charactersCount);
         if ( !retValue)
             e.preventDefault();
+
         return retValue;
     }
 

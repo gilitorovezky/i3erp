@@ -728,14 +728,16 @@ function saveAndNew(elementRec) {
     
     let saveResult=saveSingleRec(elementRec);    // Save the record
 
-    let startElement=2;// default startElement, in case of Project, it wil lset to 2
+    let startElement=2;// default startElement, in case of Project, it will set to 3, cause not allowed to change the project nubmer 
     if ( lastScreen === "Projects" ) {
         startElement=3;
         $('#'+elementRec.data.newRecordPntr+' tr td:nth-child(1)').children()[0].value=Number(Projects.arrProjects[Projects.arrProjects.length-1].project_number)+1; // update the project number in the front end
     }
     resetRecord('#'+elementRec.data.newRecordPntr,startElement-1); // reset the record to allow new content, for new Project, skip the Project Number field
-    const tID=Number($('#'+elementRec.data.newRecordPntr+' tbody tr td:nth-child(2)').children()[1].value)+1;  // increased the taskID by 1
-    $('#'+elementRec.data.newRecordPntr+' tr td:nth-child(2)').children()[1].value=tID; // update the ID
+    const pKeyPntr=$('#'+elementRec.data.newRecordPntr).find("[id="+headers[elementRec.data.module]['primaryKey']+"]");
+    const tID=Number(pKeyPntr.val())+1;
+    //Number($('#'+elementRec.data.newRecordPntr+' tbody tr td:nth-child(2)').children()[1].value)+1;  // increased the taskID by 1
+    pKeyPntr.val(tID); // update the ID
 
     currCell = $('#'+elementRec.data.newRecordPntr+' tr td:nth-child('+startElement+')').first();    
     currCell.children().first().focus();    // set the focus back to the original field

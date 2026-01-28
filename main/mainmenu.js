@@ -591,6 +591,7 @@ class classConfig {
         this.maxUArows=arrConfig[1].maxUArows;
         this.masterModuleAttributes=JSON.parse(arrConfig[1].masterModuleAttributes);
         this.newEntryMaxDepth=arrConfig[1].new_entry_max_depth;
+        this.saveMsgTimeout=arrConfig[1].saveMsgTimeout;
         //this.defaultProfileColor=arrConfig[1].default_profile_color;
     }
 }
@@ -1858,7 +1859,6 @@ function prepareDisplay(display) {
 function prepareProjectRecords2Display(inputArr) {
 
     let outArr="";
-    var tabI=1;
 
     for (var i = 0; i < inputArr.length; i++) { //loop throu the return msg 
         //if ( (passedArray[i].project_m_contractor == projectManager ) || for future
@@ -1962,10 +1962,8 @@ function displayProjects(projectManager) {
 function refreshProjects(start,end) {
     
     var out="";
-    var tabI=0;
 
-    windowLog.trace("Inside refresh");
-    tabI=start+1;
+    windowLog.trace("Inside refresh Projects");
     for (var i = start; i < end; i++) { //loop throu the return msg 
         out += `<tr>`;
         
@@ -2009,7 +2007,7 @@ function displayPaymentResults(projectNumber,targetDisplay) {
     windowLog.trace("Inside "+screen_name);
     let eArray=[];
     let out = "";
-    var tabI=1;
+    var fileuploadLink="";
     var sumOfPayments=0;    // sum of all payments
 
 
@@ -2034,8 +2032,9 @@ function displayPaymentResults(projectNumber,targetDisplay) {
     out += headers[screen_name]['columns']+`</tr></thead>`;
     out += `<tbody id="tBodyID" class="thover">`; 
     for (var i = 0; i < length; i++) { //loop throu the return msg 
-        fileupload=uploadFilesMngr(Number(eArray[i].file_uploaded,(eArray[i].project_number != "")));
-        outFiles = `<td>${fileupload}</td>`;
+        fileuploadLink=uploadFilesMngr(Number(eArray[i].file_uploaded,(eArray[i].project_number != "")));
+        //outFiles = `<td>${fileupload}</td>`;
+        outFiles = `<td tabindex="0" style="width:8%"><a class="hyperlinkLabel" id="allFilesID" data-files="0">${fileuploadLink}</a></td>`;
         if ( targetDisplay == "#result-table1" ) {
             out += `<tr>`;
             out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="DeleteImage" alt='plus' width='10' height='10'></td>`;
@@ -2085,7 +2084,6 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
     lastScreen="Employee Jobs";
 
     let out = "";
-    var tabI=1;
     let eArray=[];
     var sumofJobs=0;
    
@@ -2327,8 +2325,7 @@ function displayContractorJobsResults(projectNumber,targetDisplay) {
    
     const screen_name="Sub Contractors";
     windowLog.trace("Inside "+screen_name);
-    let out = "";   
-    var tabI=1;
+    let out = "";
     let cArray=[];
     var sumofCntrJobs =0;
    
@@ -2420,7 +2417,6 @@ function displayPurchaseResults(projectNumber,targetDisplay) {
     windowLog.trace("Inside "+screen_name);
     //var t_files2show="";
     let out = "";
-    var tabI=1;
     let pArray=[];
     var sumOfInvoices =0;
 
@@ -2502,8 +2498,6 @@ function displayPurchaseResults(projectNumber,targetDisplay) {
 
 function initConfig(data) {
 
-    appConfig.initGlobalSettings(data);	// initialize the configuration class
-    
    
     switch (data[1].debug_level) {
         case 'OFF'		:	windowLog.setLevel(Log4js.Level.OFF); 	//	nothing is logged
@@ -2527,6 +2521,8 @@ function initConfig(data) {
     }
     windowLog.addAppender(new Log4js.ConsoleAppender(false)); //to windowLog to seperate windowLog window
     windowLog.trace("Setup debug level:"+data[1].debug_level); 
+    appConfig.initGlobalSettings(data);	// initialize the configuration class
+    
 }
 
 function myOverFPrjctNmbr(e) {

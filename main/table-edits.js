@@ -48,7 +48,7 @@ function resetRecord(parentTable,start) {
 
 function deleteRow(event) {
 	
-    $("#saveTableLabel").html("Deleting..");
+    $("#saveTableLabel").html("Deleting row..");
     $("#saveTableLabel").show();
 
     const rowNumber=$(event.target).closest('tr')[0].rowIndex;
@@ -421,9 +421,9 @@ function saveRow(moduleName,element) {
             else {
                 windowLog.trace("Warning: fullname is empty - skip saving");
                 allowSave = false;
-                $("#saveTableLabel").html("Both Full name and Password must be entered...");
+                $("#saveTableLabel").html("Both Full name and Password must be entered");
                 $("#saveTableLabel").show();
-                setTimeout(() => $("#saveTableLabel").html("&nbsp;"), 2000); // clear the message after x sec
+                setTimeout(() => $("#saveTableLabel").html("&nbsp"), 2000); // clear the message after x sec
             }
            
         break;
@@ -471,7 +471,6 @@ function saveRow(moduleName,element) {
              $("#saveTableLabel").show();
         }*/
         $("#saveTableLabel").html("Saving...");
-        $("#saveTableLabel").show();
 
         arrObj["entry1"]=JSON.stringify({"record":tempRow2});   
 
@@ -494,16 +493,16 @@ function saveRow(moduleName,element) {
             //     $("#screen_name").html() != "Configuration") {
             var msgColor ='green';
             if ( !ret_value ) {
-                $("#saveTableLabel").html("Saving has been failed..");
+                $("#saveTableLabel").html("Saving failed(-2)");
                 msgColor ='red';
             } else
-                $("#saveTableLabel").html("Saving has been successfull");
+                $("#saveTableLabel").html("Changes saved successfully");
             $("#saveTableLabel").css({'color'     :    msgColor});
 
-            setTimeout(() => $("#saveTableLabel").html(""), 2000); // clear the message after 2 sec
+            setTimeout(() => $("#saveTableLabel").html("&nbsp"), 2000); // clear the message after 2 sec
            // }
 
-            windowLog.trace("Saving to DB "+(ret_value?"has been successfull":"failed"));
+            windowLog.trace("Saving to DB "+(ret_value?"was successfull":"failed"));
             DelCounter++;;     // one of Two conditons to allow delete: done saving or any report length > 0
             var entryPntr=-1;
             if ( !isNewRecord )

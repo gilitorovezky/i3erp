@@ -585,7 +585,8 @@ Promise.all(requests)
                     currCell=lastFocusedEntry[lastFocusedEntry.length-1].currCell;
                 }
                 else
-                    $("#main-menue,#naviID").removeClass("greyed-out");
+                    //$("#main-menue,#naviID").
+                    $("#navID,#result-table,#result-table1,#editLabel").removeClass("greyed-out");
                 $(this).hide();
                 currCell.children().first().focus();
                 //$(currCell).closest('table').removeClass("greyed-out");
@@ -1034,10 +1035,10 @@ Promise.all(requests)
     $("#result-table1").on("click", "td", function(event) {
 
         windowLog.trace("Inside #result-table1 click "+this.closest('table').id);
-        if ( this.closest('table').id == 'result-table1')
-            windowLog.trace("Inside click result-table1 TD-element, Header:"+$('#result-table1 thead tr th:nth-child('+this.cellIndex+')').text());
+        if ( this.closest('table').id === 'result-table1')
+            windowLog.trace("Inside click result-table1 TD-element, Header:"+$('#result-table1 thead tr th:nth-child('+(this.cellIndex+1)+')').text());
         
-        currCell=$(event.target).closest('td'); // Identify the TD
+        currCell=$(this);
         switch ( event.target.id ) {
 
             case "allFilesID"       :
@@ -1055,7 +1056,7 @@ Promise.all(requests)
                     //event.preventDefault(); // prevent edit the date
                     
                     //$("#"+event.delegateTarget.id).addClass("greyed-out");
-                    //enableEditDlg(event);
+                    enableEditDlg(event);
                 }
 
              break; 

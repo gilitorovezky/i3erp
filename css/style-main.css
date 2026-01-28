@@ -1090,6 +1090,7 @@ img 	{
 	border-radius		: 15px;
 	z-index				: 1500;
 	display				: none;
+	margin				: 0;
 }
 
  .filesSelect {
