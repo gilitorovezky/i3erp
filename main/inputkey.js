@@ -60,11 +60,11 @@
         var key = e.key; 
         var showNewEntry=true && lastFocusedEntry.length <= appConfig.newEntryMaxDepth; // default allow new entry only if last focused entry exist
         const regex=/[-a-zA-Z0-9 /!@#$%^&*()'_+={}Z\],<.>/?`~\\";:|]/g;
-        var foundChar="";
+        var foundChar=false;
         const specialChar = ( specialChars.indexOf(e.key) !== -1 );
         const metaKey = ( metaKeys.indexOf(e.key) !== -1 );
 
-        if (!metaKey & !specialChar) // if not a meta key nor special key than it must be regular key
+        if (!metaKey && !specialChar) // if not a meta key nor special key than it must be regular key
             foundChar=regex.test(key);  
 
         windowLog.trace("TableKeyDown: ("+e.currentTarget.id+") ..inside keydown,key="+e.key);
@@ -222,7 +222,8 @@
                 break;
 
                 case "Contractor Name"      :
-                    if ( screenName === "Contractors" ) 
+                    if ( screenName === "Contractors" || // allow to add new company name in the company screen or from the shortcut 
+                            lastFocusedEntry[lastFocusedEntry.length-1].module === "Sub Contractors" )  
                         retValue=true;
                     else {
                         if ( Object.keys(classArray["Contractors"].pNames).length > 0 ) {
@@ -1047,16 +1048,24 @@
         else {*/
             if ( e.key === "Backspace" ) {
                 charactersCount = charactersCount > 0 ? charactersCount-- : 0; // decrease the characters count
-                if ( charactersCount === 0 ) {
-                    if ( $("#overLay ul").length )
+                if ( e.target.value.length === 0 ||
+                     charactersCount === 0 )
+                {
+                    e.target.value=""; // clear the field
+                    editing=false;
+                    if ( $("#overLay ul li").length > 0 )
                         $("#overLay ul").empty();
                     if ( lastFocusedEntry.length === 0 ) {
                         $("#navID,#main-menue,#customers,#tHalf,#projectLbl,#innerCellID,#Pl,#caption,#result-table").removeClass("greyed-out");
                         $('img[id^="Pls"]').removeClass("greyed-out");
                         lastFocusedEntry=[]; // remove the last focused entry from the stack
                     } else {
-                        $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveNewBtn']").hide();
-                        $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").hide();
+                        //$("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveNewBtn']").hide();
+                        //$("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tfoot tr td").find("input[id='SaveCloseBtn']").hide();
+                        validateEnableSaveConditions(lastFocusedEntry[lastFocusedEntry.length-1].module,
+                            ($("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tr:eq(1)")) );
+                        $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr).removeClass("greyed-out");
+                        $("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr).css("opacity",'1.0');
                     }
                 }
                 else {

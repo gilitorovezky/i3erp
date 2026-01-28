@@ -238,16 +238,13 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
 
         case "Sub Contractors" :
 
-            var tempeID=-1;
-            
-
-            if ( record[2] != "" )  // if Contractor name is not null
-                tempeID=classArray["Contractors"].pNames[record[2]];
+            const cntrNme= record2["Contractor Name"];
+            tempeID=classArray["Contractors"].pNames[cntrNme];
             if ( !isNewRecord ) {
                 //const entrySC=classArray[module].retEntrybyID(record[0]);
                 classArray[module].arr[recordID].task_id         = record2['task_id'];
                 classArray[module].arr[recordID].project_number  = record2["Project Number"];
-                classArray[module].arr[recordID].contractor_name = record2["Contractor Name"];
+                classArray[module].arr[recordID].contractor_name = cntrNme;
                 classArray[module].arr[recordID].job_date        = record2['Job Date'];
                 classArray[module].arr[recordID].payment_amount  = record2['Payment Amount'];
                 classArray[module].arr[recordID].payment_number  = record2["Payment Number"];
@@ -261,7 +258,7 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
                 classArray[module].arr.push({
                     task_id         :   record2['task_id'],
                     project_number  :   record2["Project Number"],
-                    contractor_name :   record2["Contractor Name"],
+                    contractor_name :   cntrNme,
                     job_date        :   record2['Job Date'],
                     payment_amount  :   record2['Payment Amount'],
                     payment_number  :   record2["Payment Number"],

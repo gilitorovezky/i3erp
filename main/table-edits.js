@@ -6,7 +6,7 @@ function resetRecord(parentTable,start) {
 
         let value=0;
         //switch ($(parentTable+' th:nth-child('+(iTD+1)+')').html()) {
-        switch ( $(parentTable+' th:nth-child('+(TD.cellIndex+1)+')').html() ) {
+        switch ( $(parentTable+' th:nth-child('+(this.cellIndex+1)+')').html() ) {
             case "Gas"              :
             case "Files"            :
                 value="0";
@@ -42,7 +42,7 @@ function resetRecord(parentTable,start) {
             default                 : 
                 value = "";
         }
-        TD.childNodes[0].value=value;
+        this.childNodes[0].value=value;
     });
 }
 
@@ -203,7 +203,7 @@ function saveRow(moduleName,element) {
 
     const idName=headers[moduleName]['primaryKey'];
 
-    let ID = Number($(row).find('[id='+idName+']').val());
+    let ID = $(row).find('[id='+idName+']').val();
     
     switch( moduleName ) { // Add hidden header at the end only at Hourly Rate, Employees and projects
 
@@ -311,7 +311,7 @@ function saveRow(moduleName,element) {
 
     arrObj["entry0"].subFolderName=contactAllFields;   // update the subFolder with the contacnation of all the record fields// set default`
     if ( !isNewRecord ) { //if its not a new record than the entry must be found
-        const entryNumber=classArray[moduleName].retEntrybyID(Number(ID));
+        const entryNumber=classArray[moduleName].retEntrybyID(ID);
         //if ( entryNumber >= 0 )  { // valid entry found : exisiting record 
             tempRow[tempRow.length-1]=classArray[moduleName].arr[entryNumber].file_uploaded; // update the file_uploaded (replace the upload file(s)) if exist
             tempRow2["Files"] = tempRow[tempRow.length-1];
@@ -516,7 +516,7 @@ function saveRow(moduleName,element) {
                 const prjEntry = Projects.arrProjects.findIndex(t => t.project_number === prjNumber);
                 let entryNumber=0;
                 if ( Object.keys(data).length > 1 && moduleName !== "Projects") {    // only update the corresponding fields for a valid prjID and any return value
-                    entryNumber=Number(classArray[moduleName].retEntrybyID(Number(ID)));
+                    entryNumber=Number(classArray[moduleName].retEntrybyID((ID))); // get the entry number in the corresponding array
                     //if ( entryNumber >= 0)
                     classArray[moduleName].arr[entryNumber].foldername = contactAllFields;   // update the current foldername with the new one 
                     switch(moduleName) {

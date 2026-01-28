@@ -23,7 +23,7 @@
                                    "maxUAtasksInRow"                 =>  $row["maxUAtasksInRow"],
                                    "maxUArows"                       =>  $row["maxUArows"],
                                    "new_entry_max_depth"             =>  $row["new_entry_max_depth"],
-                                   "default_profile_color"           =>  $row["default_profile_color"],
+                                   //"default_profile_color"           =>  $row["default_profile_color"],
                                    "masterModuleAttributes"          =>  $row["masterModuleAttributes"]
                                 );
             
