@@ -87,7 +87,7 @@ function showFileUpload(eventTarget,callType,parentElement,parentFolder) {
 
     $("#"+eventTarget.closest('table').id +",#main-menue").addClass("greyed-out");
     var out="";
-    out =  `<center><a style="class="" font-weight: bold;font-style: italic; font-size=15px">Upload Files</a></center><br>`;
+    out =  `<center><a style="font-weight: bold;font-style: italic; font-size=15px">Upload Files</a></center><br>`;
     out += `<form class="upldForm" method="POST" enctype="multipart/form-data">`;
     if ( callType == "deviceUpload" ) { 
         out += `<input id="inputfileID" type="file" name="fileToUpload[]" multiple/>`;
@@ -98,10 +98,10 @@ function showFileUpload(eventTarget,callType,parentElement,parentFolder) {
     out += `<div style="display: inline-block"><p  tabindex="0" id="fileNames" class="label1">Filenames here</p></div>`;
     out += `<center><p id="returnMsg" style="margin:0">&nbsp</p></center><br>`;
     if ( $("#aboutDialog").attr('name') != 'jstree2' )   // special case if the event called within the jstree
-        out += `<div style="display: flex;justify-content:space-around"><center><input tabindex="0" type="button" class='button' id="closeFileUpload" value="Close"></center>`;
+        out += `<div style="display: table;justify-content:space-around"><center><input tabindex="0" type="button" class='button' id="closeFileUpload" value="Close"></center>`;
     else {
         windowLog.trace("ShowUploadfiles- not showing close");
-        out += `<div style="display: flex;justify-content:space-around">`;
+        out += `<div style="display: table;justify-content:space-around">`;
     }
     out += `<input tabindex="0" type="reset" value="Reset" class='button' id="resetFormID">`;
     if ( callType == "userJobUpload" )

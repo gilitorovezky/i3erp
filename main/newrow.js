@@ -142,7 +142,7 @@
                 row += `<td><input tabindex="0" type="text" id="totalHoursID" name="totalHours" readonly class="projectNameClass" maxlength="5" value=${totalHours}></td>`;
                 row += `<td><input tabindex="0" type="text" id="descriptionID" name="description" class="projectNameClass" maxlength="20" value=${description}></td>`;
                 row += `<td><input tabindex="0" type="text" id="lbrCostID" hidden name="labor_cost" class="projectNameClass" readonly value=${labor_cost}></td>`;
-                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" data-files="0">${files}</a></td>`;
+                row += `<td><a tabindex="0" class="hyperlinkLabel" id="allFilesID" data-files="0">${files}</a></td>`;
 
             break;
 
@@ -171,7 +171,7 @@
                 files=uploadFilesMngr(0,false);  
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td style="width:2%"><a tabindex="0" id="allFilesID" data-files="0" class="hyperlinkLabel">${files}</a></td>`;
+                row += `<td><a tabindex="0" id="allFilesID" data-files="0" class="hyperlinkLabel">${files}</a></td>`;
 
             break;
 
@@ -211,7 +211,7 @@
                 files=uploadFilesMngr(0,false);  
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" data-files="0">${files}</a></td>`;
+                row += `<td><a tabindex="0" class="hyperlinkLabel" id="allFilesID" data-files="0">${files}</a></td>`;
 
             break;
             
@@ -225,7 +225,7 @@
                 files=uploadFilesMngr(0,false);  
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td style="width:2%"><a tabindex="0"  class="hyperlinkLabel" id="allFilesID" data-files="0">${files}</a></td>`;
+                row += `<td><a tabindex="0"  class="hyperlinkLabel" id="allFilesID" data-files="0">${files}</a></td>`;
 
             break;
 
@@ -254,7 +254,7 @@
                 files=uploadFilesMngr(0,false);  
                 if ( restore ) 
                     files=tempRow[index].value;
-                row += `<td style="width:2%"><a id="allFilesID" data-files="0" class="hyperlinkLabel">${files}</a></td>`; //class="hyperlinkLabel" 
+                row += `<td><a id="allFilesID" data-files="0" class="hyperlinkLabel">${files}</a></td>`; //class="hyperlinkLabel" 
             break;
 
             
@@ -300,7 +300,7 @@
                 row += `<td><input tabindex="0" type="date" id="unAssgnTskDateID" name="jobDate" class="inputDate" min="${new Date().toISOString().split('T')[0]}" value="${taskDate}"></td>`;
                 row += `<td><input tabindex="0" type="text" id="schdlrDcrptnID" name="description" class="projectNameClass" style="width:15vw" maxlength="20" value="${description}"></td>`;
                 row += `<td>${addEmpls}</td>`;
-                row += `<td style="width:2%"><a tabindex="0" class="hyperlinkLabel" id="allFilesID" style="text-decoration:none;font-size:12px" value="0">${files}</a></td>`;
+                row += `<td><a tabindex="0" class="hyperlinkLabel" id="allFilesID" data-files="0">${files}</a></td>`;
                 
                 //row = `<tr class="rowContentPane"><td tabindex="0">td1</td><td>td2</td><td>td3</td></tr>`;
                                
