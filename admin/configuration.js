@@ -251,6 +251,7 @@
                 out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="contractorID" value=${eArray[i].contractor_id}></td>`;
                 out += `<td><input tabindex="0" type="text" name="notes" id="notesID" class="projectNameClass" maxlength="50" value="${eArray[i].notes}"></td>`;
                 fileupload=uploadFilesMngr(Number(eArray[i].file_uploaded),(eArray[i].project_number != ""));
+                out += `<td>${fileupload}</td>`;
                 out += `</tr>`;
             }
             DelCounter=length;
