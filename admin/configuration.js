@@ -153,7 +153,7 @@
                 else 
                     out += `<td><input tabindex="0" id="isActEmplID" class="inputDate" type="checkbox" name="isActive" value="IsActive"></td>`;
 
-                out += `<td><input tabindex="0" tabindex="0" name="password" class="projectNameClass" maxlength="10" type="password" value='${eArray[i].password}' required></td>`;
+                out += `<td><input tabindex="0" id="userPasswordID" name="password" class="projectNameClass" maxlength="10" type="password" value='${eArray[i].password}' required></td>`;
                 fileupload=uploadFilesMngr(Number(eArray[i].file_uploaded),(eArray[i].project_number != ""));  
                 out += `<td>${fileupload}</td>`;
                 out += `</tr>`;

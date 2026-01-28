@@ -292,13 +292,13 @@ const nametoIDLookup = {
                                                      "mandatory":true}}},
 
     "Is Active":            {"name":"isActive",
-                             "id":"is_active",
+                             "id":"is_activeID",
                              "header":"Is Active", // no header for now
                              "modules":{"Employees":{"display":true,
                                                      "mandatory":true}}},
                                                      
     "Password":            {"name":"password",
-                             "id":"password",
+                             "id":"userPasswordID",
                              "header":"Password", // no header for now
                              "modules":{"Employees":{"display":true,
                                                      "mandatory":true}}},

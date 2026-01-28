@@ -192,8 +192,8 @@
                 index++;
                 row += `<td><input tabindex="0" type="date" name="hourlyRateDate" id="hourlyRateDateID" class="inputDate" value=${tempDay}></td>`;
                 //row += `<td tabindex="0"><input type="checkbox" name="isActive" id="iaID" value="IsActive" onclick="updateIsActive(event)">`;
-                row += `<td><input tabindex="0" type="checkbox" name="isActive" id="iaID" value="IsActive">`;
-                row += `<td><input tabindex="0" type="password" name="password" id="pswdID" class="projectNameClass" value="${tempRow[index++].value}" >`;
+                row += `<td><input tabindex="0" type="checkbox" name="isActive" id="is_activeID" value="IsActive" checked></td>`;
+                row += `<td><input tabindex="0" type="password" name="password" id="userPasswordID" class="projectNameClass" value="${tempRow[index++].value}" >`;
                 row += `<label for="isActive"></td>`;
                 files=uploadFilesMngr(0,false);  
                 if ( restore )
