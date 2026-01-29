@@ -1619,7 +1619,7 @@ Promise.all(requests)
         }
     });
 
-    $("#result-table1").on("keydown","td input",function(event) {
+    $("#result-table1").on("keydown",function(event) {
    
         const allowedKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Tab'];
         windowLog.trace("Event listener-Inside keydown");

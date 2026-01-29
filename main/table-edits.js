@@ -373,8 +373,11 @@ function saveRow(moduleName,element) {
             //$(element.parentNode).parent().find('[name^="labor_cost"]')[0].value=laborCost // reset the labor cost
             //tempRow[10]=laborCost;
             //tempRow.push(eID);
-            //tempRow.push(hourlyrate);    
-            tempRow2["employeeID"]=eID
+            //tempRow.push(hourlyrate);
+            if ( tempRow2["Total Cost"] === "" )
+                tempRow2["Total Cost"] = 0;
+
+            tempRow2["employeeID"]=eID;
             tempRow2["hourlyrate"]=hourlyrate;
             tempRow2["laborcost"]=laborCost;
             tempRow2["projectID"]=Projects.retEntrybyID(tempRow2["Project Number"].split("-")[0]);
@@ -541,6 +544,7 @@ function saveRow(moduleName,element) {
             //newRecord=false;
         })
         .fail(function (jqXHR, textStatus, errorThrown) { 
+             $("#saveTableLabel").html("Savig faikled(-3)");
             windowLog.warn(errorThrown); 
         });
     }

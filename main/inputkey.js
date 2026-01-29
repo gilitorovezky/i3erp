@@ -77,7 +77,8 @@
             header=innText.slice(0,innText.indexOf(":"));
         } else {
             if (tableID !== "#innerCellID")
-                numOfColumns=($("#"+e.currentTarget.id+" thead th").length)-1;//$('#mainHeader th').length-1;  // # of columns minus the delete column
+                //numOfColumns=e.currentTarget.closest('tr').children.length-1;
+                numOfColumns=$("#"+e.currentTarget.id+" thead th").length-1;//$('#mainHeader th').length-1;  // # of columns minus the delete column
         }
 
         if (e.ctrlKey && e.shiftKey && e.key === 'S') { 
@@ -944,7 +945,7 @@
                                 if (( e.target.type != 'date' ) && ( e.target.type != 'time' )) {
                                     currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell      
                                     if ( e.target.closest('tr').rowIndex  > 1) {  // only move up if this is not the first row
-                                        currCell = currCell.closest('tr').prev().find('td:nth-child('+currCell.index()+')');   
+                                        currCell = currCell.closest('tr').prev().find('td:nth-child('+(currCell.index()+1)+')');   
                                         active -= numOfColumns;
                                         e.target.setSelectionRange(0,0);
                                         setCellFocus();
@@ -992,7 +993,7 @@
                                     }
                                     currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell                        
                                     //currCell=currCell.closest('tr').next().find('td:nth-child('+currCell.index()+')'); // the TD at the next row straight below
-                                    currCell=currCell.closest('tr').next().find('td:nth-child('+$(e.target).closest('td').index()+')'); // the TD at the next row straight below
+                                    currCell=currCell.closest('tr').next().find('td:nth-child('+(currCell.index()+1)+')');   // the TD at the next row straight below
                                     currCell.children().first().css({'background-color'    : '#aadef0ff'}); // highlight the new current cell
                                     active+=numOfColumns;  
                                     e.target.setSelectionRange(0,0);
