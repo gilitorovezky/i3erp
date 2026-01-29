@@ -423,7 +423,7 @@ function saveRow(moduleName,element) {
                 allowSave = false;
                 $("#saveTableLabel").html("Both Full name and Password must be entered");
                 $("#saveTableLabel").show();
-                setTimeout(() => $("#saveTableLabel").html("&nbsp"), 2000); // clear the message after x sec
+                setTimeout(() => $("#saveTableLabel").html("&nbsp"), appConfig.saveMsgTimeout); // clear the message after x sec
             }
            
         break;
@@ -499,7 +499,7 @@ function saveRow(moduleName,element) {
                 $("#saveTableLabel").html("Changes saved successfully");
             $("#saveTableLabel").css({'color'     :    msgColor});
 
-            setTimeout(() => $("#saveTableLabel").html("&nbsp"), 2000); // clear the message after 2 sec
+            setTimeout(() => $("#saveTableLabel").html("&nbsp"), appConfig.saveMsgTimeout); // clear the message after 2 sec
            // }
 
             windowLog.trace("Saving to DB "+(ret_value?"was successfull":"failed"));

@@ -663,7 +663,7 @@ let Monday = new Date();	// Holds the first Monday of the current week
              windowLog.trace("error: tsdk_id("+task_id+") not found in Tasks array");
           Tasks.arrTasks.splice(entry, 1); 
           document.getElementById("aboutDialog").close();
-          setTimeout(() =>  $("#saveTableLabel").hide(), 2000);     // hide the delete message 
+          setTimeout(() =>  $("#saveTableLabel").html("&nbsp"), appConfig.saveMsgTimeout);     // hide the delete message 
 
           return delStatus;
       }
@@ -826,7 +826,7 @@ function saveScheduler(element,overideAssignment,newTask) { // Save the element 
                   $("#saveTableLabel").html("Saving failed(-3)");
                   $("#saveTableLabel").css("color", "red");
                 }
-                setTimeout(() => $("#saveTableLabel").html("&nbsp"), 2000); // clear the message after 2 sec
+                setTimeout(() => $("#saveTableLabel").html("&nbsp"), appConfig.saveMsgTimeout); // clear the message after 2 sec
                 // loop over the return task_id. Stating from 1 cause the 0 entry is the return code
                 /*for (var ret=1; ret < Object.keys(data).length; ret++) { // there is only single entry if the return code form save is 0 so the loop will not execute
                   $("#"+data[ret].input_id)[0].nextSibling.defaultValue=data[ret].task_id; // update the task_id
@@ -864,8 +864,8 @@ function saveScheduler(element,overideAssignment,newTask) { // Save the element 
                 }*/
               } else {
                   windowLog.warn("Saving Schedule to the DB failed");
-                  $("#saveTableLabel").html("Saving failed..");
-                  setTimeout(() => $("#saveTableLabel").html(""), 2000); // clear the message after 2 sec
+                  $("#saveTableLabel").html("Saving failed");
+                  setTimeout(() => $("#saveTableLabel").html("nbsp"), appConfig.saveMsgTimeout); // clear the message after 2 sec
               }
             }),
             error   :  function (xhr, ajaxOptions, thrownError) {

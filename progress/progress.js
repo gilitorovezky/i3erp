@@ -9,7 +9,7 @@ setTimeout(() => {
       clearInterval(ab);
       setTimeout(() => {
         progressBar.classList.add("height-0");
-      }, 2000); // 2 Sec delay before the progress bar disapears
+      }, appConfig.saveMsgTimeout); // 2 Sec delay before the progress bar disapears
       setTimeout(() => {
         document.getElementById("loader").classList.add("hide-loader");
         $(".navtop,#caption,#mainDiv,#footer,#welcomeNameID").visible();

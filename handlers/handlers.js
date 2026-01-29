@@ -1177,7 +1177,7 @@ Promise.all(requests)
                 const slidingWindow=refreshProjects(minRec,maxRec);
                 windowLog.trace("No scroll");
                 //windowLog.trace("no scrolling");
-            }, 2000);
+            }, appConfig.saveMsgTimeout);
             */
 
 
@@ -1506,7 +1506,7 @@ Promise.all(requests)
         floatingMessage.style.display = 'block';
         setTimeout(function() {
             floatingMessage.style.display = 'none';
-        }, 2000); // Hide after 2 seconds
+        }, appConfig.saveMsgTimeout); // Hide after 2 seconds
     });*/
 
 

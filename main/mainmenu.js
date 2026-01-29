@@ -591,7 +591,7 @@ class classConfig {
         this.maxUArows=arrConfig[1].maxUArows;
         this.masterModuleAttributes=JSON.parse(arrConfig[1].masterModuleAttributes);
         this.newEntryMaxDepth=arrConfig[1].new_entry_max_depth;
-        this.saveMsgTimeout=arrConfig[1].saveMsgTimeout;
+        this.saveMsgTimeout=Number(arrConfig[1].saveMsgTimeout);
         //this.defaultProfileColor=arrConfig[1].default_profile_color;
     }
 }
@@ -1671,7 +1671,7 @@ function upperRight() {
             case "lunchin"       :
                 $("#tHalf").html("Please Clock Lunch out");
                 $('#tHalf').show();
-                setTimeout(() => $('#tHalf').html(currentWorkingTask.description), 2000);    // clear the message after 2 seconds
+                setTimeout(() => $('#tHalf').html(currentWorkingTask.description), appConfig.saveMsgTimeout);    // clear the message after 2 seconds
         }
     }
     function Yes() {
@@ -1816,7 +1816,7 @@ function checkSignOutStatus(result) {
         $('#tHalf').removeClass("nextTask");
         $('#tHalf').addClass("taskResult"); 
         $('#tHalf').html("Sign Out succesfully from project "+result[0].Status);
-        setTimeout(() => $('#tHalf').html(""), 2000);  // clear the message after 2 seconds
+        setTimeout(() => $('#tHalf').html("&nbsp"), appConfig.saveMsgTimeout);  // clear the message after 2 seconds
         loadNextTask();
     }
 }
@@ -2035,10 +2035,10 @@ function displayPaymentResults(projectNumber,targetDisplay) {
         fileuploadLink=uploadFilesMngr(Number(eArray[i].file_uploaded,(eArray[i].project_number != "")));
         //outFiles = `<td>${fileupload}</td>`;
         outFiles = `<td tabindex="0" style="width:8%"><a class="hyperlinkLabel" id="allFilesID" data-files="0">${fileuploadLink}</a></td>`;
-        if ( targetDisplay == "#result-table1" ) {
+        if ( targetDisplay === "#result-table1" ) {
             out += `<tr>`;
             out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="DeleteImage" alt='plus' width='10' height='10'></td>`;
-            out += `<td><input tabindex="0" type="text" name="projectNumber" class="projectNameClass" value="${eArray[i].project_number}" size="44" maxlength="50">`;
+            out += `<td><input tabindex="0" type="text" id="prjctNumberID" name="projectNumber" class="projectNameClass" value="${eArray[i].project_number}" size="44" maxlength="50">`;
             out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="payment" value=${eArray[i].payment_id}></td>`;
             out += `<td><input type="text" id="paymentID" name="paymentAmount" class="projectNameClass" value=${eArray[i].payment_amount}></td>`;
             out += `<td><input type="date" id="paymentDateID" name="paymentDate" class="inputDate" value=${eArray[i].payment_date}></td>`;
@@ -2307,7 +2307,7 @@ function checkUploadStatus(result) {
             IsTaskInProgress=false;
             $('#upperLeft').html("");
             loadNextTask();
-            //   setTimeout(() => $('#tHalf').html(""), 2000);  // clear the message after 2 seconds
+            //   setTimeout(() => $('#tHalf').html("&nbsp"), appConfig.saveMsgTimeout);  // clear the message after 2 seconds
             //   setNewTaskInterval();
         } */
     }

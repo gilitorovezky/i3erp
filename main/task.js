@@ -31,7 +31,7 @@ function nextTask() {
                             $('#centerTXT').html("Next Task");
                             $('#centerTXT').removeClass("taskResult");
                             $('#centerTXT').addClass("nextTask");
-                        }, 2000);*/
+                        }, appConfig.saveMsgTimeout);*/
                     }
                     currentWorkingTask.showDescription();
                     $('#upperLeft').html("Sign In");
