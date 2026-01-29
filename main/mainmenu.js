@@ -2033,7 +2033,6 @@ function displayPaymentResults(projectNumber,targetDisplay) {
     out += `<tbody id="tBodyID" class="thover">`; 
     for (var i = 0; i < length; i++) { //loop throu the return msg 
         fileuploadLink=uploadFilesMngr(Number(eArray[i].file_uploaded,(eArray[i].project_number != "")));
-        //outFiles = `<td>${fileupload}</td>`;
         outFiles = `<td tabindex="0" style="width:8%"><a class="hyperlinkLabel" id="allFilesID" data-files="0">${fileuploadLink}</a></td>`;
         if ( targetDisplay === "#result-table1" ) {
             out += `<tr>`;
@@ -2131,7 +2130,7 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
             out += `<table class="res_table2" id="result-table"><thead><tr>`;
         out += headers[screen_name]['columns']+`</tr></thead>`;
         out += `<tbody class="thover">`;
-        let  fileupload="0";
+    
         for (var i = 0; i < length; i++) { 
             if (eArray[i].job_signin != null) 
                 dateSignIn = eArray[i].job_signin.split("-");
@@ -2185,8 +2184,9 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
                 if ( eArray[i].labor_cost !=  "" )
                     sumofJobs += Number(eArray[i].labor_cost);
 
-                fileupload=uploadFilesMngr(Number(eArray[i].file_uploaded),(eArray[i].project_number != ""));
-                out += `<td>${fileupload}</td>`;
+                const fileuploadLink=uploadFilesMngr(Number(eArray[i].file_uploaded),(eArray[i].project_number != ""));
+                outFiles = `<td tabindex="0" style="width:8%"><a class="hyperlinkLabel" id="allFilesID" data-files="0">${fileuploadLink}</a></td>`;
+                out += outFiles;
             }
             else {	
                 out += `<td>${eArray[i].employee_fname}</td>`;
@@ -2215,8 +2215,7 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
                 out += `<td>${eArray[i].total_hours}</td>`;
                 //out += `<td>${eArray[i].gas}</td>`; // not shopw gas Eyal 04-11
                 fileupload=uploadFilesMngr(Number(eArray[i].file_uploaded),(eArray[i].project_number != ""));
-                outFiles = `<td>${fileupload}</td>`;
-
+                
                 out += `<td>${eArray[i].description}</td>`;
                 out += `<td>${eArray[i].labor_cost}</td>`;
                 out += `<td>${fileupload}</td>`; 
@@ -2359,10 +2358,8 @@ function displayContractorJobsResults(projectNumber,targetDisplay) {
         out += headers[screen_name]['columns']+`</tr></thead>`;
         out += `<tbody class="thover">`;
         for (var i = 0; i < length; i++) { //loop throu the return msg 
-            let  fileUpload="0";
-            fileupload=uploadFilesMngr(Number(cArray[i].file_uploaded),(cArray[i].project_number != ""));
-            outFiles = `<td>${fileupload}</td>`;
-
+            const fileuploadLink=uploadFilesMngr(Number(cArray[i].file_uploaded),(cArray[i].project_number != ""));
+            outFiles = `<td tabindex="0" style="width:8%"><a class="hyperlinkLabel" id="allFilesID" data-files="0">${fileuploadLink}</a></td>`;
             if ( targetDisplay == "#result-table1" ) {
                     out += `<tr>`;
                     out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="DeleteImage" alt='plus' width='10' height='10'></td>`;
@@ -2378,9 +2375,9 @@ function displayContractorJobsResults(projectNumber,targetDisplay) {
                     out += `<td><input tabindex="0" type="text" id="paymentNumberID" name="paymentNumber" class="projectNameClass" maxlength="20" value="${cArray[i].payment_number}"></td>`;
                     out += `<td><input tabindex="0" type="date" id="paymentDate" name="jobPaymentDate" class="inputDate" value=${cArray[i].date_paid}></td>`;
                     out += `<td><input tabindex="0" type="text" id="descriptionID" name="description" class="projectNameClass" maxlength="40" value="${cArray[i].description}"></td>`;
-                    fileupload=uploadFilesMngr(Number(cArray[i].file_uploaded),(cArray[i].project_number != ""));
-                    out += `<td>${fileupload}</td>`;
-                    out += `</tr>`;
+                    //fileupload=uploadFilesMngr(Number(cArray[i].file_uploaded),(cArray[i].project_number != ""));
+                    out += outFiles+`</tr>`;
+                    //out += `</tr>`;
                     if ( cArray[i].payment_amount != "" )
                         sumofCntrJobs += Number(cArray[i].payment_amount);
             } 
@@ -2454,8 +2451,9 @@ function displayPurchaseResults(projectNumber,targetDisplay) {
         out += `<tbody class="thover">`;
         
         for (var i = 0; i < length; i++) { //loop throu the return msg starting from 1 since entry 0 holds the return msg
-            fileupload=uploadFilesMngr(Number(pArray[i].file_uploaded),(pArray[i].project_number != ""));
-            outFiles = `<td>${fileupload}</td>`;
+            const fileuploadLink=uploadFilesMngr(Number(pArray[i].file_uploaded),(pArray[i].project_number != ""));
+            outFiles = `<td tabindex="0" style="width:8%"><a class="hyperlinkLabel" id="allFilesID" data-files="0">${fileuploadLink}</a></td>`;
+           
             if ( targetDisplay == "#result-table1" ) {
                 out += `<tr>`;
                 out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="DeleteImage" alt='plus' width='10' height='10'></td>`;
