@@ -2,12 +2,10 @@
     // restore is set to 1 if the function is called to restore deleted record
     function addNewRow(newRecPntr,module,rowNumber,restore,parentElement) { // parentElement only relevant for Scheduler
 
-        windowLog.trace("Inside addNewRow"+" newRecPntr:"+newRecPntr+" module: "+module+"- active:"+active);
+        windowLog.trace("Inside addNewRow"+" newRecPntr:"+newRecPntr+" module: "+module);
         
         var row="";
         var ID=1;
-        var tTabIndex=active; // Active points to the next TD to number
-        //const date=new Date();
         var tempRow=[];
         var files=0;
         origText="";
@@ -390,9 +388,9 @@
     function addNewRec(module,element,newRecordPntr) {   // element is only used in Scheduler to edit the task
 
         var out="";
-        active=0;
+        //active=0;
 
-        windowLog.trace("Entering addNewRec module:"+module+"-active:"+active);
+        windowLog.trace("Entering addNewRec module:"+module);
 
         //$("#main-menue,#navID").addClass("greyed-out");
        

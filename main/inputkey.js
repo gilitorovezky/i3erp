@@ -89,7 +89,7 @@
         }
         
         currCell=$(e.target).closest('td'); // Identify the TD
-        active = 0;
+        //active = 0;
 
         //id= prjShortCut // main project search
     
@@ -132,7 +132,7 @@
 
                     default:
                         if ( tableID !== "#customerTblID" ) {
-                            active=currCell.index()+1;    // calculate the cell numerical position from start
+                            //active=currCell.index()+1;    // calculate the cell numerical position from start
                             //header=$('#mainHeader'+' th:nth-child('+(currCell.index()+1)+')').html(); // Identify the header    
                             header=$("#"+e.currentTarget.id+" thead th:nth-child("+(currCell.index()+1)+")").html();
                         }
@@ -524,7 +524,7 @@
                             currCell=currCell.closest('tr').prev().find('td:nth-child(' + (numOfColumns)+ ')'); // focus on the right most cell at the previous row
                         else 
                             currCell=currCell.prev();
-                        active--;  
+                        //active--;  
                         currCell.children().first().focus();	// focus on the first input!!
                         currCell.children().first().css({'background-color'    : '#aadef0ff'}); // remove the highlight from the current cell        
                     }
@@ -606,12 +606,12 @@
                                         if ( e.target.closest('td') !== $(tableID+' tbody tr:last td:last')[0] ) { // is this the last TD in the table
                                             if ( ( e.target.closest('td').cellIndex < numOfColumns ) ) {   // Not end of the row
                                                 currCell = currCell.next();              // Move one cell to the right
-                                                active++;
+                                                //active++;
                                             }
                                             else {
-                                                active = 1; // focus on the 1st TD
+                                                var active = 2; // focus on the 1st TD
                                                 if ( lastScreen === "Projects" )
-                                                    active = 2; // focus on the 2nd TD(skip the projct number)
+                                                    active = 3; // focus on the 2nd TD(skip the projct number)
                                                 currCell = currCell.closest('tr').next().find('td:nth-child('+active+')');    // point to the next cell in the next TR
                                             }
                                         } 
@@ -621,11 +621,11 @@
                                             if ( lastScreen !== "Projects" && 
                                                  tableID !== "#addSingleRec" ) {
                                                  addNewRow(tableID,$("#screen_name").html(),rows,0);
-                                                 active = 1;  // poition the active on the first ld next to project name
-                                                 currCell = currCell.closest('tr').next().find('td:nth-child(1)'); // move to the 1st cell in the next row
+                                                 //const active = 1;  // poition the active on the first ld next to project name
+                                                 currCell = currCell.closest('tr').next().find('td:nth-child(1)');    // point to the next cell in the next TR
                                             }
                                             else {                                               
-                                                active = 2;
+                                                //active = 2;
                                                 //currCell = currCell.closest('tr').find('td:nth-child(2)'); // move to the 1st cell in the next row
                                             }
                                         }
@@ -839,18 +839,18 @@
                                             if ( e.target.closest('td')  !== $(tableID+' tbody tr:first td:nth-child('+leftMostTD+')')[0] ) { 
                                                 if ( (e.target.closest('td')) === $(e.target).closest('tr').find('td:nth-child('+leftMostTD+')')[0] ) { 
                                                     currCell=currCell.closest('tr').prev().find('td:nth-child(' + (numOfColumns)+ ')'); // focus on the right most cell at the previous row
-                                                    active-=numOfColumns;
+                                                    //active-=numOfColumns;
                                                 }
                                                 else {
                                                     currCell=currCell.prev();
-                                                    active--;
+                                                    //active--;
                                                 }
                                                 currCell.children().first().css({'background-color'    : '#aadef0ff'}); // remove the highlight from the current cell      
                                                 setCellFocus();  
                                             }
                                             else { // wrap around .. move to the last cell
                                                 currCell=currCell.closest('tr').find('td:last'); // skip project number 
-                                                active -= numOfColumns+1;
+                                                //active -= numOfColumns+1;
                                             }
                                             currCell.children().first().focus();	// focus on the first input!!
                                         }
@@ -907,7 +907,7 @@
                                             currCell=currCell.closest('tr').find('td:nth-child(2)'); // swrap around , kip project number
                                     }
                                     currCell.children().first().css({'background-color'    : '#aadef0ff'}); // highlight the new current cell
-                                    active=Number($(currCell).attr("tabindex"));    // calculate the cell numerical position from start
+                                    //active=Number($(currCell).attr("tabindex"));    // calculate the cell numerical position from start
                                     setCellFocus();
                                 }
                                 else
@@ -943,10 +943,12 @@
                                 }*/
                             } else {
                                 if (( e.target.type != 'date' ) && ( e.target.type != 'time' )) {
-                                    currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell      
+                                    //currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell      
                                     if ( e.target.closest('tr').rowIndex  > 1) {  // only move up if this is not the first row
-                                        currCell = currCell.closest('tr').prev().find('td:nth-child('+(currCell.index()+1)+')');   
-                                        active -= numOfColumns;
+                                        currCell.children().first().css({'border'    : 'none'}); // remove the highlight from the current cell            
+                                        currCell = currCell.closest('tr').prev().find('td:nth-child('+(currCell.index()+1)+')'); 
+                                        currCell.children().first().css({'border'    : '1px solid black'}); // highlight the new current cell
+                                        //active -= numOfColumns;
                                         e.target.setSelectionRange(0,0);
                                         setCellFocus();
                                     }
@@ -955,7 +957,7 @@
                             }
                         }
                         
-                        currCell.children().first().css({'background-color'    : '#aadef0ff'}); // highlight the new current cell
+                       
                         //$('#overLay').hide();
                     break;
 
@@ -986,21 +988,26 @@
                                 if (( tableID !== "#addSingleRec" ) &&
                                     ( e.target.type !== 'date' )    && 
                                     ( e.target.type !== 'time' )) {
-                                    if ( ( e.target.closest('tr').rowIndex === $(tableID).find("tr").last().index()+1) && 
-                                            ( lastScreen != "Projects" ) ) {  // Add new row only if the last row and not in Projects screen
-                                        //lastID[$("#screen_name").html()]++;   // only here increament the ID by 1
-                                        addNewRow(tableID,screenName,rows,0); 
-                                    }
-                                    currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell                        
+                                    if ( e.target.closest('tr').rowIndex === $(tableID).find("tr").last().index()+1 && 
+                                         lastScreen != "Projects"  )  { // Add new row only if the last row and not in Projects screen
+                                            if ( !$('#editCBID').is(":checked") ) {
+                                                event.preventDefault(); // prevent edit the date
+                                                windowLog.trace("Ignore mousedown..editMode:off");
+                                                enableEditDlg(event);
+                                            }
+                                            else
+                                                addNewRow(tableID,screenName,rows,0);
+                                    } 
+                                    
+                                    currCell.children().first().css({'border'    : 'none'}); // remove the highlight from the current cell                        
                                     //currCell=currCell.closest('tr').next().find('td:nth-child('+currCell.index()+')'); // the TD at the next row straight below
                                     currCell=currCell.closest('tr').next().find('td:nth-child('+(currCell.index()+1)+')');   // the TD at the next row straight below
-                                    currCell.children().first().css({'background-color'    : '#aadef0ff'}); // highlight the new current cell
-                                    active+=numOfColumns;  
-                                    e.target.setSelectionRange(0,0);
+                                    currCell.children().first().css({'border'    : '1px solid black'}); // highlight the new current cell
+                                    //active+=numOfColumns;  
+                                    //e.target.setSelectionRange(0,0);
                                     setCellFocus();
-                                    //currCell.children().first()[0].setSelectionRange(0,0);
-                                }
-                                retValue=true;
+                                } else
+                                    retValue=true;
                             }
                         }
                         //$("#overLay ul").empty();//$('.uList').text("")

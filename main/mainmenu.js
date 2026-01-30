@@ -3,7 +3,7 @@ var date = new Date();
 let windowLog = new Log4js.getLogger("windowTest"); 
 
 var editing = false;    // global flag to indicate if any valid char was typed
-var active = 0;
+//var active = 0;
 var screenNumber="home";	
 var username;
 var fullname;
@@ -168,13 +168,13 @@ const nametoIDLookup = {
                              "id":"totalHoursID",
                              "header":"Total Hours",
                              "modules":{"Employee Jobs":{"display":true,
-                                                        "mandatory":false}}},
+                                                         "mandatory":false}}},
 
     "Total Cost":           {"name":"totalCost",
                              "id":"lbrCostID",
                              "header":"Total Cost",
                              "modules":{"Employee Jobs":{"display":true,
-                                                        "mandatory":false}}},
+                                                         "mandatory":false}}},
 
     "Lunch SignOut":        {"name":"lunchSignoutTime",
                              "id":"lunchSignOutTimeID",
@@ -352,7 +352,7 @@ const nametoIDLookup = {
 // only the first 4 do not include thead and <th></th> since these records are also showing in the project summary therefor no need delete 
 const headers = {
     "Home":{hash:'home',callBack:home,tableName:'home',sn:1},
-    "Employee Jobs":{hash:'empljbs',callBack:upperLeft,callType:"generalUpload",sn:"home",columns:'<th style="width:4%">Full Name</th><th>Job Date</th><th style="width:4%">Job SignIn</th><th>Lunch SignIn</th><th>Lunch SignOut</th><th>Job SignOut</th><th>Total Hours</th><th style="width:15%">Description</th><th>Total Cost</th><th style="width:100px">Files</th>',numOfCols:12,showInPrj:true,primaryKey:'task_id',tableName:'employee_jobs',params:0},
+    "Employee Jobs":{hash:'empljbs',callBack:upperLeft,callType:"generalUpload",sn:"home",columns:'<th style="width:4%">Full Name</th><th>Job Date</th><th style="width:4%">Job SignIn</th><th>Lunch SignIn</th><th>Lunch SignOut</th><th>Job SignOut</th><th>Total Hours</th><th style="width:15%">Description</th><th style="width:5%">Total Cost</th><th style="width:100px">Files</th>',numOfCols:12,showInPrj:true,primaryKey:'task_id',tableName:'employee_jobs',params:0},
     "Purchases":{hash:'prchs',callBack:upperRight,callType:"generalUpload",sn:"home",columns:'<th>Vendor Name</th><th>Purchase Number</th><th>Purchase Amount</th><th>Purchase Date</th><th>Purchase Method</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'purchase_id',tableName:'purchases',params:0},
     "Payments":{hash:'pymnts',callBack:lowerLeft,callType:"generalUpload",sn:"home",columns:'<th>Payment Amount</th><th>Payment Date</th><th>Payment Method</th><th>Payment Number</th><th>Description</th><th>Files</th>',numOfCols:8,showInPrj:true,primaryKey:'payment_id',tableName:'payments',params:0},
     "Sub Contractors":{hash:'sbcntrcj',callBack:lowerRight,callType:"generalUpload",sn:"home",columns:'<th>Contractor Name</th><th>Job Date</th><th>Payment Amount</th><th>Payment Number</th><th>Date Paid</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'task_id',tableName:'contractor_jobs',params:0},
@@ -849,52 +849,7 @@ window.addEventListener("load", function() {
     //$("#saveTableLabel").hide();
     if ( typeof username != "undefined" ) {
         uid=Cookies.get('uid');
-
-        /*$.ajax({url     : "../main/read_config.php",
-            method		: "GET",
-            dataType	: "json",
-            async       : false,  
-            success		: function(data) {  
-              if ( ( data != '' ) && 
-                    ( Number(data[0].Status) > 0 ) ) {
-                    initConfig(data);
-                    windowLog.trace("event listner load");
-                }
-                else {
-                    windowLog.warn("error loading configurtions, exit");
-                    logout();
-                }
-            },
-            error     	: (function (jqxhr, textStatus, error ) {
-                windowLog.trace("Load schedule failed:"+textStatus + ", " + error);
-                logout();})
-        });*/
-
-        /*$.ajax({url         : "../main/read_employees.php",
-                method		: "POST",
-                data      	: {calltype:username},
-                dataType	: "json",
-                async       : false,  
-                success		: function(data) {  
-                    if ( ( data != '' ) && 
-                         ( Number(data[0].Status) > 0 ) ) {
-                        eID = data[0].employee_id;
-                        windowLog.trace("username:"+username+" eID:"+eID);
-                        if ( ( eID == '')  || 
-                              ( typeof eID == "undefined" ) )// major error
-                            logout();
-                    }
-                    else {
-                        windowLog.trace("error loading employee_id, exit");
-                        logout();
-                    }
-                },
-                error     	: (function (jqxhr, textStatus, error ) {
-                    windowLog.trace("Load schedule failed:"+textStatus + ", " + error);
-                    logout();
-                })
-        });*/
-    }
+  }
     else { 
         console.log("Error- username undefined, exit");
         logout();
@@ -1062,24 +1017,9 @@ $(document).ready( function() {
                 })
         });
         
-        /*
-        fetch("../main/read_contractor_jobs.php",{method 	 	: "POST", 
-                                                  body		    : formData })
-            .then(res    => res.json())
-            .then((data) =>  {
-                classArray["Sub Contractors"] = new classType1(data,"Sub Contractors",1)
-                windowLog.trace("Load all Sub Contractors completed succesfully("+(classArray["Sub Contractors"].arr.length)+")");
-            })
-            .catch(error => {
-                windowLog.warn('Error: 3', error);
-                logout();
-            }
-        );*/
-
-
        $.ajax({url         : "../main/read_contractor_jobs.php",
                 method		: "POST",
-                data      	: JSON.stringify({'projectNumber':'all'}),
+                data      	: {'projectNumber':'all'},
                 dataType	: "json",
                 async       : false,  
                 success		: function(data) {
@@ -1197,6 +1137,34 @@ $(document).ready( function() {
             })
         });
 
+        $.ajax({url         : "../main/read_employees.php", // must read before tasks
+                method		: "POST",
+                data      	: {calltype:`all`},
+                dataType	: "json",
+                async       : false,  
+                success		: function(data) {  
+                    if ( ( data != '' ) && 
+                         ( Number(data[0].Status) > 0 ) ) {
+                            classArray["Employees"] = new classType2(data,"Employees",2);
+                            windowLog.trace("Load all employees completed succesfully("+classArray["Employees"].arr.length+")");
+                            classArray["Employees"].colors=[];
+                            classArray["Employees"].arr.forEach( (key) => { 
+                                classArray["Employees"].pNames[key.fullname.toString()]=key.employee_id;    // initialize the employee/id array 
+                                classArray["Employees"].colors[key.fullname.toString()]=key.profile_color;  // initialize the employee/colors array 
+                            });
+                    }
+                    else {
+                        windowLog.warn("error loading employees, exit");
+                        logout();
+                    }
+                },
+                error     	: (function (jqxhr, textStatus, error ) {
+                    windowLog.warn("Load employees failed:"+textStatus + ", " + error); 
+                    logout();
+                })
+        });
+
+
         $.ajax({url     : "../main/load_task.php",
             method		: "POST",
             data      	: JSON.stringify({'calltype':'scheduler'}),
@@ -1308,34 +1276,6 @@ $(document).ready( function() {
                     windowLog.wann("Load vendors failed:"+textStatus + ", " + error);
                 })
         });
-
-        $.ajax({url         : "../main/read_employees.php",
-                method		: "POST",
-                data      	: {calltype:`all`},
-                dataType	: "json",
-                async       : false,  
-                success		: function(data) {  
-                    if ( ( data != '' ) && 
-                         ( Number(data[0].Status) > 0 ) ) {
-                            classArray["Employees"] = new classType2(data,"Employees",2);
-                            windowLog.trace("Load all employees completed succesfully("+classArray["Employees"].arr.length+")");
-                            classArray["Employees"].colors=[];
-                            classArray["Employees"].arr.forEach( (key) => { 
-                                classArray["Employees"].pNames[key.fullname.toString()]=key.employee_id;    // initialize the employee/id array 
-                                classArray["Employees"].colors[key.fullname.toString()]=key.profile_color;  // initialize the employee/colors array 
-                            });
-                    }
-                    else {
-                        windowLog.warn("error loading employees, exit");
-                        logout();
-                    }
-                },
-                error     	: (function (jqxhr, textStatus, error ) {
-                    windowLog.warn("Load employees failed:"+textStatus + ", " + error); 
-                    logout();
-                })
-        });
-
 
         $.ajax({url         :   "../main/read_hourlyrate.php",
                 method      :   "POST",
@@ -1513,7 +1453,7 @@ function showProjectSummary(prjIndex) {
     $("#psDivID").css({'width' : "100%"});
     $("#psDivID").addClass("scrollit");
     $("#psDivID").show();
-    $("#editLabelID").hide();
+    //$("#editLabelID").hide();
   
     // window.open("../main/project-summary.html","Ratting","width=550,height=170,left=150,top=200,toolbar=1,status=0,");
     $("#rootID,#configID,#libraryID,#systemID").hide();
@@ -2206,8 +2146,8 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
                 else
                     description = eArray[i].description;
 
-                out += `<td><textarea tabindex="0" id="descriptionID" name="description" class="projectNameClass notesClass" rows="1" cols="33">${description}</textarea></td>`;
-                out += `<td><input tabindex="0" type="text" id="lbrCostID" hidden name="labor_cost" class="projectNameClass" readonly value="${eArray[i].labor_cost}"></td>`;
+                out += `<td><textarea tabindex="0" id=" descriptionID" name="description" class="projectNameClass notesClass" rows="1" cols="33">${description}</textarea></td>`;
+                out += `<td><input tabindex="0" style="width:40%" type="text" id="lbrCostID" hidden name="labor_cost" class="projectNameClass" maxlength="10" readonly value="${eArray[i].labor_cost}"></td>`;
                 if ( eArray[i].labor_cost !=  "" )
                     sumofJobs += Number(eArray[i].labor_cost);
 
@@ -2575,7 +2515,8 @@ function home()	{
     $(".scrollit").hide();
     $(".grid-gallery").css({'display' : "none"});
     $(".main_menue").css({'background-color'    : '#faba0a'});
-    $("#editLabelID, #formModeID, #exportDialogueID").remove();
+    /*$("#editLabelID, #formModeID, #exportDialogueID").remove();*/
+     $("#formModeID, #exportDialogueID").remove();
     $(".main_menue").show();
     $("#ul, #ur, #ll, #lr").removeClass("configScreen");
     $("#ul, #ur, #ll, #lr").addClass("homeScreen");

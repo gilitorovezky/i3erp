@@ -3,7 +3,7 @@
         windowLog.trace("Inside Configuration");
         screenNumber="config";
         $(".scrollit").hide();
-        $("#editLabelID").hide();
+        //$("#editLabelID").hide();
         $("#result-table1").unbind('mouseover');
         $("#result-table1").unbind('mouseleave');
         $("#result-table1").unbind('mouseenter');
