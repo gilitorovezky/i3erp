@@ -92,9 +92,9 @@ Promise.all(requests)
     $('body').on('keydown', function(event) {
 
         windowLog.trace("Inside body keydown ID:"+event.target.id+" key:"+event.key);
-        const isCtrlShift = (event.ctrlKey || event.metaKey) && event.shiftKey;
-        const allowedKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Tab'];
-        const key=event.key;
+        //const isCtrlShift = (event.ctrlKey || event.metaKey) && event.shiftKey;
+        //const allowedKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Tab'];
+        //const key=event.key;
         //if ( lastScreen != "Home" ) {
         for (const shortcut of shortcuts) {
             if (checkShortcut(event, shortcut)) {
@@ -1516,15 +1516,15 @@ Promise.all(requests)
 
         windowLog.trace("Inside "+this.id+" blur");
 
-        if ($("#overLay li").length > 0 ) {
+        if ( _lastAction !== 'tab' && $("#overLay li").length > 0 ) {
             windowLog.trace("Inside blur: overlay list is visible - empty the list");
             $("#overLay ul").empty(); 
         }
         localStorage.setItem("y9", $(window).scrollTop());
         localStorage.setItem("y9-lastActiveRow",e.target.closest("tr").rowIndex);
-        if (this.id == "result-table")
+        if ( this.id === "result-table" )
             $("#result-table").removeClass("greyed-out");
-        if ( $('#editCBID').is(":checked") ) {    // only save if the edit flag is on
+        //if ( $('#editCBID').is(":checked") ) {    // only save if the edit flag is on
             /*customerPanes.push("customers");
             if ( customerPanes.includes(this.id.replace("Pane","")) ) {// remove Pane
                 $('#overLay ul li') = "";   // reset the overlay list
@@ -1545,11 +1545,11 @@ Promise.all(requests)
                         break;
                 }
             } else {*/
-                if ( ( e.target.nodeName != 'TD' ) && 
-                     ( e.target != null ) && 
-                     ( $('#overLay ul li').length == 0 ) ) {
+                if ( ( e.target.nodeName !== 'TD' ) && 
+                     ( e.target !== null ) && 
+                     ( $('#overLay ul li').length === 0 ) ) {
                     editing=false;
-                    if ( origText != e.target.value && 
+                    if ( origText !== e.target.value && 
                          charactersCount > 0 ) { // content changed
                         windowLog.trace("Inside blur-charCount:"+charactersCount+",origText:"+origText+" e.target:"+ e.target.value);
                         windowLog.trace("Inside blur-New content detected so save");
@@ -1582,7 +1582,7 @@ Promise.all(requests)
                     }
                 }
                 else {
-                    if ( _lastAction != 'tab'  &&  // blur due to mouse 
+                    if ( _lastAction !== 'tab'  &&  // blur due to mouse 
                          $('#overLay ul li').length > 0 )  { // if in the midle of lsit, then resset and not save
                             windowLog.trace("Inside blur-reset list");
                             $("#overLay ul").empty();
@@ -1592,11 +1592,11 @@ Promise.all(requests)
                 charactersCount=0;
             /*}
             customerPanes.pop();*/
-        }
+        /*}
         else {
             //windowLog.trace("Edit is off - show enable edit dlg");
             //enableEditDlg();
-        }
+        }*/
     });
 
     $( "body" ).delegate("#addrsSlctor","change",function() {

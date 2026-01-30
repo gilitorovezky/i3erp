@@ -80,13 +80,6 @@
                 //numOfColumns=e.currentTarget.closest('tr').children.length-1;
                 numOfColumns=$("#"+e.currentTarget.id+" thead th").length-1;//$('#mainHeader th').length-1;  // # of columns minus the delete column
         }
-
-        if (e.ctrlKey && e.shiftKey && e.key === 'S') { 
-            e.preventDefault();
-            // Actions to perform when Ctrl+Shift+S is pressed
-             windowLog.trace('Ctrl+Shift+S pressed');
-            // Add your desired functionality here, such as saving the document
-        }
         
         currCell=$(e.target).closest('td'); // Identify the TD
         //active = 0;

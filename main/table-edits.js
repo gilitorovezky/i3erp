@@ -300,6 +300,7 @@ function saveRow(moduleName,element) {
             value=this.childNodes[0].value;
         tempRow2[header]=value;
     });
+    
 
     $(row).find("td:has(input[type='checkbox'])").each(function() {
         const header=$(tTable).find(' thead th:nth-child('+((this.cellIndex)+1)+')').html();
@@ -307,6 +308,11 @@ function saveRow(moduleName,element) {
         if ( this.childNodes[0].checked )
             value=1;
         tempRow2[header]=value;
+    });
+
+     $(row).find("td textarea").each(function() {
+        const header=$(tTable).find(' thead th:nth-child('+((this.parentNode.cellIndex)+1)+')').html(); // parentNode is TD
+        tempRow2[header]=this.value;
     });
 
     arrObj["entry0"].subFolderName=contactAllFields;   // update the subFolder with the contacnation of all the record fields// set default`

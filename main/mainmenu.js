@@ -2146,7 +2146,7 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
                 else
                     description = eArray[i].description;
 
-                out += `<td><textarea tabindex="0" id=" descriptionID" name="description" class="projectNameClass notesClass" rows="1" cols="33">${description}</textarea></td>`;
+                out += `<td><textarea tabindex="0" id="descriptionID" name="Description" class="projectNameClass notesClass" rows="1" cols="33">${description}</textarea></td>`;
                 out += `<td><input tabindex="0" style="width:40%" type="text" id="lbrCostID" hidden name="labor_cost" class="projectNameClass" maxlength="10" readonly value="${eArray[i].labor_cost}"></td>`;
                 if ( eArray[i].labor_cost !=  "" )
                     sumofJobs += Number(eArray[i].labor_cost);
