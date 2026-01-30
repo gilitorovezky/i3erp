@@ -952,8 +952,13 @@
                                         e.target.setSelectionRange(0,0);
                                         setCellFocus();
                                     }
-                                } else
-                                    retValue=true;
+                                } else 
+                                    if ( !$('#editCBID').is(":checked") ) {
+                                        e.preventDefault(); // prevent edit the date
+                                        windowLog.trace("Ignore mousedown..editMode:off");
+                                        enableEditDlg(e);
+                                    }   else
+                                        retValue=true;
                             }
                         }
                         
@@ -985,15 +990,15 @@
                                     $("#updateRecordBtn").show(); // show the update record button
                                 }*/
                             } else {
-                                if (( tableID !== "#addSingleRec" ) &&
+                                if (/*( tableID !== "#addSingleRec" ) &&*/
                                     ( e.target.type !== 'date' )    && 
                                     ( e.target.type !== 'time' )) {
                                     if ( e.target.closest('tr').rowIndex === $(tableID).find("tr").last().index()+1 && 
                                          lastScreen != "Projects"  )  { // Add new row only if the last row and not in Projects screen
                                             if ( !$('#editCBID').is(":checked") ) {
-                                                event.preventDefault(); // prevent edit the date
+                                                e.preventDefault(); // prevent edit the date
                                                 windowLog.trace("Ignore mousedown..editMode:off");
-                                                enableEditDlg(event);
+                                                enableEditDlg(e);
                                             }
                                             else
                                                 addNewRow(tableID,screenName,rows,0);
@@ -1006,8 +1011,13 @@
                                     //active+=numOfColumns;  
                                     //e.target.setSelectionRange(0,0);
                                     setCellFocus();
-                                } else
-                                    retValue=true;
+                                } else 
+                                    if ( !$('#editCBID').is(":checked") ) {
+                                        e.preventDefault(); // prevent edit the date
+                                        windowLog.trace("Ignore mousedown..editMode:off");
+                                        enableEditDlg(e);
+                                    } else
+                                        retValue=true;
                             }
                         }
                         //$("#overLay ul").empty();//$('.uList').text("")
