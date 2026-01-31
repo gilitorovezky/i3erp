@@ -35,7 +35,7 @@
                             $stmt->store_result();  // Store the result so we can check if the account exists in the database.
                             file_put_contents('../log/log_'.$logDate.'.log', "(authenticate.php) ".$current_time." info 3-num of rows:".$stmt->num_rows."\n", FILE_APPEND);
                             if ($stmt->num_rows > 0) {
-                                $stmt->bind_result($id, $password,$employee_id, $fullname);
+                                $stmt->bind_result($id, $password,$employee_id,$fullname);
                                 $stmt->fetch();
                                 file_put_contents('../log/log_'.$logDate.'.log', "(authenticate.php) ".$current_time." info 4-username found:".$username."\n", FILE_APPEND); 
                                 // Account exists, now we verify the password.
