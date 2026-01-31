@@ -147,7 +147,7 @@
                 out += `<input tabindex="0" type="color" id="emplColorInputID" class="emplColor" name="employeePrflColor" value=${classArray["Employees"].colors[eArray[i].fullname]}></td>`;
                 out += `<td><input tabindex="0" type="text" name="employmentType" id="employmentTypeID" class="projectNameClass" maxlength="20" value='${eArray[i].employment_type}'></td>`;
                 out += `<td><input tabindex="0" type="text" id="hourlyRateID" name="hourlyRate" readonly maxlength="7" class="projectNameClass" value='${eArray[i].hourlyrate}'></td>`;
-                out += `<td id="hrDateID">${jsDate}</td>`;
+                out += `<td id="hourlyRateDateID">${jsDate}</td>`;
                 if ( eArray[i].is_active === "1" )
                     out += `<td><input tabindex="0" id="isActEmplID" class="inputDate" type="checkbox" name="isActive" value="IsActive" checked></td>`;
                 else 
