@@ -194,7 +194,7 @@
                         $totalLaborTime = $arrayJson->record->{'Total Hours'}; 
                         $notes = $arrayJson->record->Description; 
                         $hourly_rate = $arrayJson->record->hourlyrate; 
-                        if ( $projectNumber != "") { // create new dir 
+                        if ( $projectNumber != "" ) { // create new dir 
                             if ( $subFolderName != $newFolderName && // is it same record but different record fields
                                     $newFolderName != "" ) 
                                     $retCode=atomFS("rendir",$rootDir.$project_name."/".$moduleName."/".$subFolderName,"","",$rootDir.$project_name."/".$moduleName."/".$newFolderName); // rename from sub to new 
@@ -242,9 +242,9 @@
                                 $workingHours   = $pieces[0];
                                 $workingMinutes = $pieces[1];
                                 if ( ( $arrayJson->record->{'Lunch SignIn'} != "" &&  // lunch in and lunch out are not empty
-                                        $arrayJson->record->{'Lunch Sign Out'} != "" ) ) {
+                                        $arrayJson->record->{'Lunch SignOut'} != "" ) ) {
                                     $lunchIn = new DateTime($arrayJson->record->{'Lunch SignIn'});
-                                    $lunchOut = new DateTime($arrayJson->record->{'Lunch Sign Out'});
+                                    $lunchOut = new DateTime($arrayJson->record->{'Lunch SignOut'});
                                     $interval     = $lunchIn->diff($lunchOut);
                                     $lunchHours   = $interval->h;
                                     $lunchMinutes = ($lunchHours*60)+$interval->i;
@@ -295,7 +295,7 @@
                                 }
                             } else {
                                 file_put_contents('../log/log_'.$logDate.'.log',"(save_record) ".$current_time." info 14-job hours less or equal 0: do nothing\n", FILE_APPEND);
-                                $ret_recs=array("Status" => 1);
+                                $ret_recs=array("Status" => 0);
                             } 
                         }  else {
                             file_put_contents('../log/log_'.$logDate.'.log',"(save_record) ".$current_time." error 4-No eID found"."\n", FILE_APPEND);

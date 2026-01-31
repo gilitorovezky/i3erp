@@ -1096,7 +1096,7 @@ Promise.all(requests)
                 //retCode=showHR($(this).closest('tr').find('[id='+headers[$("#screen_name").html()]["primaryKey"]+']').val());
                 break;
             
-            case "hrDateID"         :
+            case "hourlyRateDateID"         :
                 break;
 
             case "customer_id"      :   // show the customer screen

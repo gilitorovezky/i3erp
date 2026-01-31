@@ -31,8 +31,10 @@ function resetRecord(parentTable,start) {
 
             case "Invoice Amount"   :
             case "Payment Amount"   : 
-            case "Total Hours"      :   
                 value = "0.00";
+                break;
+            case "Total Hours"      :   
+                value = "00.00";
                 break;
 
             case "Installer"        :
@@ -295,7 +297,7 @@ function saveRow(moduleName,element) {
 
     $(row).find("td:has(input[type='time'])").each(function() {
         const header=$(tTable).find(' thead th:nth-child('+((this.cellIndex)+1)+')').html();
-        var value = "0.00"
+        var value = "00.00"
         if ( this.childNodes[0].value.length > 0 )
             value=this.childNodes[0].value;
         tempRow2[header]=value;
@@ -355,23 +357,23 @@ function saveRow(moduleName,element) {
             var eID=-1;
             var hourlyrate=0;   // set $0 default  just in case employee name cannot be found
             var laborCost=0;
-            if ( tempRow[2].length > 0 ) {  //  get the employeeID from the employeename otherwise set to -1
-                eID = ( (tempRow[2] == "" || typeof eID == "undefined")?-1:classArray["Employees"].pNames[tempRow[2]]); // if  employee name not found (partial name due to blur in the middle of editing)
+            const eName = tempRow2["Full Name"];
+            if ( eName !== "" ) {  //  get the employeeID from the employeename otherwise set to -1
+                eID = classArray["Employees"].pNames[eName]; // if  employee name not found (partial name due to blur in the middle of editing)
                 if ( eID > 0 ) { // if employeeID is valid then get the hourlyrate to pass down to  save_record
-                    tempRow.push(eID);
+                    //tempRow.push(eID);
                     tempRow2["employeeID"]=eID;    
                     hourlyrate=classArray["Employees"].arr[classArray["Employees"].retEntrybyID(eID)].hourlyrate;
-            
                     const entry=classArray["Employee Jobs"].retEntrybyID(ID);
-                    if ( ( element.name == "fullName" ) &&   // in case the employee name changed than calculate the new labor based on the new hourly rate
-                         ( classArray["Employee Jobs"].arr[entry].employee_fname != element.value ) ) {
+                    if ( ( element.name === "fullName" ) &&   // in case the employee name changed than calculate the new labor based on the new hourly rate
+                         ( classArray["Employee Jobs"].arr[entry].employee_fname !== element.value ) ) {
                         windowLog.trace("New employee name found, calculate new labor (old:"+classArray["Employee Jobs"].arr[entry].employee_fname+" new:"+element.value+")");
                         laborCost=calculateLaborCost(element);    // update the new labor
+                        $(element.closest('tr')).css({'background-color'    : classArray["Employees"].colors[element.value]});// update the background color
                     }
                 }
                 else {
-                    windowLog.trace("Warning: Inside saveRow..module:"+moduleName+" LastScreen:"+lastScreen+" invalid eID- use blank");
-                    //allowSave = false;
+                    windowLog.warn("Warning: Inside saveRow..module:"+moduleName+" LastScreen:"+lastScreen+" invalid eID- use blank");
                     element.value="";       // reset the field
                 }
             }
@@ -403,29 +405,25 @@ function saveRow(moduleName,element) {
             
             if ( $(targetTR).find('[id="fullNameID"]').val() != ""  &&
                  $(targetTR).find('[name="password"]').val() != "" )  { // only save if the employee name nd Password are at least entered
-                //tempRow[$('#mainHeader').find('th:contains("Password")').index()]=""; // mask the password 
-                //tempRow2["Password"]="";
-                tempRow2["Hourly Rate Date"]=$(targetTR).find('[id="hrDateID"]').html();
                 if ( isNewRecord ) {           // is this a new row
-                    tempRow.push(formatDateForInput(new Date()));   // yes- push today's date as start date
                     tempRow2["startdate"]=formatDateForInput(new Date());
-                    //tempRow2["profile_color"]=$(targetTR).find('[id="emplColorInputID"]').val();
                     tempRow2["is_newEmployee"]="1";
                 }
                 else {
                     tempRow2["is_newEmployee"]="0";
-                    tempRow.push(classArray["Employees"].arr[classArray["Employees"].retEntrybyID(ID)].startdate);  // push the start date which is today
+                    //tempRow.push(classArray["Employees"].arr[classArray["Employees"].retEntrybyID(ID)].startdate);  // push the start date which is today
                     tempRow2["startdate"]=classArray["Employees"].arr[classArray["Employees"].retEntrybyID(ID)].startdate;
                     //tempRow2["profile_color"]=classArray["Employees"].colors[$(targetTR).find('[id="fullNameID"]').val()];
                 }
-                if (element.name == "hourlyRate") {
+                tempRow2["hourlyRateType"]="currentRate";
+                /*if (element.name == "hourlyRate") {
                     tempRow.push("newRate");
                     tempRow2["hourlyRateType"]="newRate";
-                }
-                else {
-                    tempRow.push("currentRate");
-                    tempRow2["hourlyRateType"]="currentRate";
-                }
+                }*/
+                //else {
+                //    tempRow.push("currentRate");
+                    
+                //}
             }
             else {
                 windowLog.trace("Warning: fullname is empty - skip saving");
@@ -523,7 +521,7 @@ function saveRow(moduleName,element) {
                
                 const prjEntry = Projects.arrProjects.findIndex(t => t.project_number === prjNumber);
                 let entryNumber=0;
-                if ( Object.keys(data).length > 1 && moduleName !== "Projects") {    // only update the corresponding fields for a valid prjID and any return value
+                if ( Number(data.Status) && moduleName !== "Projects") {    // only update the corresponding fields for a valid prjID and Sytatus is 1 (success)
                     entryNumber=Number(classArray[moduleName].retEntrybyID((ID))); // get the entry number in the corresponding array
                     //if ( entryNumber >= 0)
                     classArray[moduleName].arr[entryNumber].foldername = contactAllFields;   // update the current foldername with the new one 
@@ -550,7 +548,7 @@ function saveRow(moduleName,element) {
             //newRecord=false;
         })
         .fail(function (jqXHR, textStatus, errorThrown) { 
-             $("#saveTableLabel").html("Savig faikled(-3)");
+             $("#saveTableLabel").html("Savig failed(-3)");
             windowLog.warn(errorThrown); 
         });
     }

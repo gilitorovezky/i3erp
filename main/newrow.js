@@ -118,7 +118,7 @@
                     tempDay=tempRow[index++].value;
 
                 row += `<td><input tabindex="0" type="date" name="Date" id="jobDateID" class="inputDate" value=${tempDay}>`;
-                var totalHours = "0.00";
+                var totalHours = "00.00";
                 var description="",localCurrentTime="",lunchSignInTime="",files="",jobSignOutTime="",lunchSignOutTime="";
                 var labor_cost = "0.0";
                  

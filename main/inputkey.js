@@ -229,18 +229,18 @@
                 break;
 
                 case "Full Name"            :
-                    if ( screenName === "Employees" ) 
-                        retValue=true;
-                    else {
-                        if ( Object.keys(classArray["Employees"].pNames).length > 0 ) {
-                                Object.keys(classArray["Employees"].pNames).forEach( (name) => { //copy the return data from the DB into the class array
-                                tempArray.push(name);
-                            });
-                            isList=charactersCount > 0?true: false;
+                    
+                    if ( Object.keys(classArray["Employees"].pNames).length > 0 ) {
+                         Object.keys(classArray["Employees"].pNames).forEach( (name) => { //copy the return data from the DB into the class array
+                            tempArray.push(name);});
+                        isList=charactersCount > 0?true: false;
+                        if ( $(tableID).attr('data-module') === "Employees" && isNewRec) {
+                            showNewEntry=false;
+                            retValue=true; // allow new entry only in the Employees screen
                         }
+                    }
                         else 
                             windowLog.trace("Employee names array is empty!!");
-                    }
                 break;
 
                 case "Payment Method"       :
@@ -593,9 +593,9 @@
                         else {
                             if ( tableID !== "#customerTblID" ) {    
                                 currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell              
-                                if ( ( e.target.type !== 'date' ) && 
-                                     ( e.target.type !== 'time' ) &&
-                                     ( lastScreen    !== "Scheduler") ) {
+                                if ( ( e.target.type !== 'date'  ) && 
+                                     ( e.target.type !== 'time'  ) &&
+                                     ( lastScreen !== "Scheduler") ) {
                                         if ( e.target.closest('td') !== $(tableID+' tbody tr:last td:last')[0] ) { // is this the last TD in the table
                                             if ( ( e.target.closest('td').cellIndex < numOfColumns ) ) {   // Not end of the row
                                                 currCell = currCell.next();              // Move one cell to the right
@@ -623,7 +623,8 @@
                                             }
                                         }
                                     }
-                                    currCell.children().first().css({'background-color'    : '#aadef0ff'}); // remove the highlight from the current cell            
+                                    if ( e.target.type !== "color" )
+                                        currCell.children().first().css({'background-color'    : '#aadef0ff'}); // remove the highlight from the current cell            
                                    // currCell.children().first().focus();	// focus on the first input!!
                             } else {
                                 // check if any field is empty
@@ -1107,7 +1108,7 @@
                 } 
             }
             else 
-                if ( e.key != 'Tab' && e.key != 'Shift' ) {
+                if ( e.key !== 'Tab' ) {
                     if ( isNewRec && 
                          validateEnableSaveConditions(lastFocusedEntry.length>0?lastFocusedEntry[lastFocusedEntry.length-1].module:lastScreen,
                             lastFocusedEntry.length>0?$("#"+lastFocusedEntry[lastFocusedEntry.length-1].recPntr+" tr:eq(1)"):$(lastScreen).closest('tr'))) {
@@ -1357,10 +1358,11 @@
         }else
             $(totalHoursID).val("0.0");
         charactersCount++;
-        if ( $(event.target.parentNode).parent().find('[name^="fullName"]').val() != "" ) // if employeename field is empty than avoid calculation
-            calculateLaborCost(event.target);
+        var laborCost=0;
+        if ( $(event.currentTarget.closest('tr')).find('[name^="fullName"]').val() !== "" ) // if employeename field is empty than avoid calculation
+            laborCost=calculateLaborCost(event.target);
         else
-            windowLog.trace("employee name is empty, bypassing laborcost");
+            windowLog.warn("Employee name is empty, bypassing laborcost");
 
         //        windowLog.trace("changeTime:"+event.target.name+" ,value:"+event.target.value);
     }
@@ -1410,11 +1412,11 @@
                     event.target.value = event.target.oldvalue;
             }
         }
-
-        if ( $(event.target.parentNode).parent().find('[name^="fullName"]').val() != "" ) // if employeename field is empty than avoid calculation
-            calculateLaborCost(event.target);
+        var laborCost=0;
+        if ( $(event.currentTarget.closest('tr')).find('[name^="fullName"]').val() !== "" ) // if employeename field is empty than avoid calculation
+            laborCost=calculateLaborCost(event.target);
         else
-            windowLog.trace("employee name is empty, bypassing laborcost");
+            windowLog.warn("employee name is empty, bypassing laborcost");
     }
 
     function minutesToString(timeDecimal) {
@@ -1465,12 +1467,12 @@
     function calculateLaborCost(e) {
 
         windowLog.trace("Insidee CalculateLabor");
-        const eName=$(e.parentNode).parent().find('[name^="fullName"]').val();
-        const id= classArray["Employees"].arr.findIndex(t => t.fullname == eName);
+        const eName=$(e.closest('tr')).find('[name^="fullName"]').val()
+        const id= classArray["Employees"].arr.findIndex(t => t.fullname === eName);
 
         var hr=Number(classArray["Employees"].arr[id].hourlyrate);
-        windowLog.trace("name:"+eName+" hr:"+Number(classArray["Employees"].arr[id].hourlyrate));
-        const totalHours=$(e.parentNode).parent().find('[name^="totalHours"]').val();
+        windowLog.trace("name:"+eName+" hr:"+Number(hr));
+        const totalHours=$(e.closest('tr')).find('[name^="totalHours"]').val();
         const hours=Number(totalHours.split(".")[0]);
         const mins=Number(totalHours.split(".")[1]);
         windowLog.log("calculate Labor,hours:"+hours+" mins:"+mins);
@@ -1488,7 +1490,8 @@
                 hr *= 1.5;
         }
         hourLabor = hourLabor + (mins*hr/60);   // add minutes 
-        $(e.parentNode).parent().find('[name^="labor_cost"]').val(hourLabor.toFixed(2));
+        $(e.closest('tr')).find('[name^="labor_cost"]').val(hourLabor.toFixed(2))
+        //$(e.parentNode).parent().find('[name^="labor_cost"]').val(hourLabor.toFixed(2));
 
         return hourLabor.toFixed(2);
     }

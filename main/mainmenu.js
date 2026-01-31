@@ -106,7 +106,7 @@ const nametoIDLookup = {
                              "modules":{"Projects":{"display":true,
                                                     "mandatory":true}}}, 
 
-    "Vendor Address":      {"name":"vendorAddress",
+    "Vendor Address":       {"name":"vendorAddress",
                              "id":"vendorAddressID",
                              "header":"Vendor Address",
                              "modules":{"Vendors":{"display":true,
@@ -236,7 +236,7 @@ const nametoIDLookup = {
                                         "Vendors":{"display":true,
                                                      "mandatory":true}}},
 
-   "Notes"            :     {"name":"notes",
+   "Notes":                 {"name":"notes",
                              "id":"notesID",
                              "header":"Notes",
                              "modules":{"Companies":{"display":true,
@@ -274,7 +274,7 @@ const nametoIDLookup = {
                                         "Contractors":{"display":true,
                                                        "mandatory":false}}},
 
-     "Full Name":           {"name":"fullName",
+    "Full Name":            {"name":"fullName",
                              "id":"fullNameID",
                              "header":"Full Name",
                              "dbField":"employee_fname",
@@ -297,7 +297,7 @@ const nametoIDLookup = {
                              "modules":{"Employees":{"display":true,
                                                      "mandatory":true}}},
                                                      
-    "Password":            {"name":"password",
+    "Password":             {"name":"password",
                              "id":"userPasswordID",
                              "header":"Password", // no header for now
                              "modules":{"Employees":{"display":true,
@@ -315,7 +315,7 @@ const nametoIDLookup = {
                              "modules":{"Employees":{"display":true,
                                                      "mandatory":true}}},   
 
-    "Hourly Rate Date"    : {"name":"hourlyRateDate",
+    "Hourly Rate Date":     {"name":"hourlyRateDate",
                              "id":"hourlyRateDateID",
                              "header":"Hourly Rate Date", // no header for now
                              "modules":{"Employees":{"display":true,
@@ -352,7 +352,7 @@ const nametoIDLookup = {
 // only the first 4 do not include thead and <th></th> since these records are also showing in the project summary therefor no need delete 
 const headers = {
     "Home":{hash:'home',callBack:home,tableName:'home',sn:1},
-    "Employee Jobs":{hash:'empljbs',callBack:upperLeft,callType:"generalUpload",sn:"home",columns:'<th style="width:4%">Full Name</th><th>Job Date</th><th style="width:4%">Job SignIn</th><th>Lunch SignIn</th><th>Lunch SignOut</th><th>Job SignOut</th><th>Total Hours</th><th style="width:15%">Description</th><th style="width:5%">Total Cost</th><th style="width:100px">Files</th>',numOfCols:12,showInPrj:true,primaryKey:'task_id',tableName:'employee_jobs',params:0},
+    "Employee Jobs":{hash:'empljbs',callBack:upperLeft,callType:"generalUpload",sn:"home",columns:'<th style="width:4%">Full Name</th><th>Job Date</th><th style="width:4%">Job SignIn</th><th>Lunch SignIn</th><th>Lunch SignOut</th><th>Job SignOut</th><th style="width:1%">Total Hours</th><th style="width:15%">Description</th><th style="width:5%">Total Cost</th><th style="width:100px">Files</th>',numOfCols:12,showInPrj:true,primaryKey:'task_id',tableName:'employee_jobs',params:0},
     "Purchases":{hash:'prchs',callBack:upperRight,callType:"generalUpload",sn:"home",columns:'<th>Vendor Name</th><th>Purchase Number</th><th>Purchase Amount</th><th>Purchase Date</th><th>Purchase Method</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'purchase_id',tableName:'purchases',params:0},
     "Payments":{hash:'pymnts',callBack:lowerLeft,callType:"generalUpload",sn:"home",columns:'<th>Payment Amount</th><th>Payment Date</th><th>Payment Method</th><th>Payment Number</th><th>Description</th><th>Files</th>',numOfCols:8,showInPrj:true,primaryKey:'payment_id',tableName:'payments',params:0},
     "Sub Contractors":{hash:'sbcntrcj',callBack:lowerRight,callType:"generalUpload",sn:"home",columns:'<th>Contractor Name</th><th>Job Date</th><th>Payment Amount</th><th>Payment Number</th><th>Date Paid</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'task_id',tableName:'contractor_jobs',params:0},
@@ -2147,7 +2147,7 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
                     description = eArray[i].description;
 
                 out += `<td><textarea tabindex="0" id="descriptionID" name="Description" class="projectNameClass notesClass" rows="1" cols="33">${description}</textarea></td>`;
-                out += `<td><input tabindex="0" style="width:40%" type="text" id="lbrCostID" hidden name="labor_cost" class="projectNameClass" maxlength="10" readonly value="${eArray[i].labor_cost}"></td>`;
+                out += `<td><input tabindex="0" style="width:50%" type="text" id="lbrCostID" hidden name="labor_cost" class="projectNameClass" maxlength="10" readonly value="${eArray[i].labor_cost}"></td>`;
                 if ( eArray[i].labor_cost !=  "" )
                     sumofJobs += Number(eArray[i].labor_cost);
 

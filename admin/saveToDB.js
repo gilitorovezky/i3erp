@@ -78,7 +78,7 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
             }
            
             if ( employeeName != "" )  // if Employee name is nut null than retrieve 
-                tempeID=classArray["Employees"].pNames[employeeName];               
+                tempeID=record2["employeeID"];               
             
             classArray["Employee Jobs"].arr.push({
                 task_id         :   taskID,
@@ -104,11 +104,11 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
             if ( !isNewRecord )  // task exist then delete the record (changes made to the record), follow by adding new one
                 //Tasks.arrTasks.splice(resultT,1);     // remove the old record 
             //else {
-                if (( employeeName != "" ) && // look for an existing task to update the seq number
-                    ( record[3] != "" ) ) {
+                if (( employeeName !== "" ) && // look for an existing task to update the seq number
+                    ( record2["Job Date"] != "" ) ) {
                         Tasks.arrTasks.map(function(rec) {
                         if (( rec.employee_name === employeeName) && 
-                            rec.task_date.split(" ")[0] === record[3] ) {
+                            rec.task_date.split(" ")[0] === record2["Job Date"]) {
                                 seqNumber = rec.seq_number;
                                 if ( rec.inid !== 0) {
                                     const arrayInid=rec.inid.split("-");
@@ -119,11 +119,11 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
                 }
             //}
 
-            if ( ( record2['Job SignOut'] !== "0.00" ) && ( record2['Job SignIn'] !== "0.00" ) )   // if both sign in and signout fields are populated
-                taskStatus = "closed";
-            else
-                if ( record2['Job SignIn'] !== "0.00" )
+             if ( record2['Job SignIn'] !== "0.00" ) {
                     taskStatus = "signin";
+                if ( record2['Job SignOut'] !== "0.00" )   // if both sign in and signout fields are populated
+                    taskStatus = "closed";
+             }
 
             // add the new task to the scheduler
             Tasks.arrTasks.push({
@@ -150,10 +150,10 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
             // update Task properties
             if ( !isNewRecord ) {
             //if (entryNumber != -1) {
-                windowLog.trace("Updating new employee name at the tasks table(old):"+Tasks.arrTasks[resultT].employee_name+" new:"+record[2]);
-                windowLog.trace("Updating new description at tasks table(old):"+Tasks.arrTasks[resultT].task_description+" new:"+description);
+                windowLog.trace("Updating new employee name at the tasks table(old):"+Tasks.arrTasks[resultT].employee_name+" new:"+record2["Full Name"]);
+                windowLog.trace("Updating new description at tasks table(old):"+Tasks.arrTasks[resultT].task_description+" new:"+record2["Descreiption"]);
                 windowLog.trace("Updating new task date at tasks table(old):"+Tasks.arrTasks[resultT].task_date +" new:"+record2['Job Date']+" "+record2['Job SignIn']);
-                Tasks.arrTasks[resultT].task_description = description;
+                Tasks.arrTasks[resultT].task_description = record2["Descreiption"];
                 Tasks.arrTasks[resultT].employee_name = record2['Full Name']; 
                 Tasks.arrTasks[resultT].task_date = record2['Job Date']+" "+record2['Job SignIn']+":00";
                 Tasks.arrTasks[resultT].employee_id=tempeID;
@@ -290,7 +290,7 @@ function appendRecord(module,record,record2,isNewRecord,recordID) {  // record2 
             classArray[module].arr.push({
                 employee_id     :   record2['employee_id'],
                 username        :   "",
-                fullname        :   record2["fullname"],
+                fullname        :   record2["Full Name"],
                 hourlyrate      :   record2["Hourly Rate"],
                 is_active       :   record2["Is Active"],
                 employment_type :   record2["Employment Type"],
