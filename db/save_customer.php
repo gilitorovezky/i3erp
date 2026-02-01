@@ -17,7 +17,7 @@
     $return_code=0;
     //$sessionJSON = json_decode($post_json, true);       $totalLabor=0;
     if ( mysqli_connect_errno() == 0 ) { // no error from the DB
-        if ( isset($post_body) ) { 
+        if ( $post_body != '' ) { 
             
             $return_code=1;
             $tableName = "customers";

@@ -9,10 +9,11 @@
     $current_time=date("m-d-Y H:i:s");
     $logDate= date("n.j.Y");
     $ret_recs = array();
-
-    $projectNumber=str_replace("'","\'",$_POST["projectNumber"]); // call type : * or project id
-    file_put_contents('../log/log_'.$logDate.'.log', "(contractors_jobs) ".$current_time." info 1-sql connect error:".mysqli_connect_errno()." prjNumber:".$_POST["projectNumber"]."\n", FILE_APPEND); 
-    if (isset($projectNumber)) {
+    $post_json = file_get_contents('php://input');
+    $sessionJSON = json_decode($post_json, true);
+    $projectNumber=str_replace("'","\'",$sessionJSON['projectNumber']); // call type : * or project id
+    if ( $projectNumber != '' ) {
+        file_put_contents('../log/log_'.$logDate.'.log', "(contractors_jobs) ".$current_time." info 1-sql connect error:".mysqli_connect_errno()." prjNumber:".$projectNumber."\n", FILE_APPEND); 
         if ( mysqli_connect_errno() == 0 ) {
             if ( $projectNumber =='all' )
                 // get all contractors
@@ -39,7 +40,7 @@
                                             "description"        => $row["description"],
                                             "payment_amount"     => $row["payment_amount"],
                                             "date_paid"          => $row["date_paid"],
-                                            "payment_number"    => $row["payment_number"],
+                                            "payment_number"     => $row["payment_number"],
                                             "job_date"           => $row["job_date"],
                                             "file_uploaded"      => $row["file_uploaded"],
                                             "images_json"        => $row["images_json"],

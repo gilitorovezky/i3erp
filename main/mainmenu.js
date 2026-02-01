@@ -1028,7 +1028,7 @@ $(document).ready( function() {
         
        $.ajax({url          : "../main/read_contractor_jobs.php",
                 method		: "POST",
-                data      	: {'projectNumber':'all'},
+                data      	: JSON.stringify({projectNumber:'all'}),
                 dataType	: "json",
                 async       : false,  
                 success		: function(data) {
@@ -1147,7 +1147,7 @@ $(document).ready( function() {
 
         $.ajax({url         : "../main/read_employees.php", // must read before tasks
                 method		: "POST",
-                data      	: {calltype:`all`},
+                data      	: {'calltype':"all"},
                 dataType	: "json",
                 async       : false,  
                 success		: function(data) {  
@@ -2064,7 +2064,7 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
     $.ajax({
         url         : "../main/read_employee_jobs.php",
         method      : "POST",
-        data        : JSON.stringify({'projectNumber':'all'}),
+        data        : {'projectNumber':'all'},
         dataType    : "json",
         async       : false,
         success     : (function(data) {  

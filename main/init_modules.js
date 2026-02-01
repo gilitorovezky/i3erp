@@ -32,23 +32,54 @@ function initModules() {
 }
 
 
-   async function readFilesSequentially(onProgress) {
-     
+     function ajaxRequest(config) {
+      //  const data2Send={config[data]};
+      const value=Object.values(JSON.parse(config.data))[0];
+      const key=Object.keys(JSON.parse(config.data))[0];
+      var jsonObj = {};
+          jsonObj[key]=value;
+      return $.ajax({
+        url         : config.module_file_url,
+        type        : config.method || "POST",
+        //data        : JSON.stringify({'projectNumber':'all'}),
+        data        : JSON.stringify(jsonObj),
+        async       : false,
+        headers     : config.headers || {},
+        dataType    : "json",
+        contentType : config.contentType || 'application/json; charset=utf-8',
+        success     : function(data, textStatus, xhr) {
+            if (data[0].Status > 0)
+                windowLog.trace("Loaded "+config.module_name+" succesfully");
+            else
+                windowLog.warn("Loaded "+config.module_name+" failed");
+          // Success handled by promise
+        },
+        error: function(xhr, textStatus, errorThrown) {
+          // Error handled by promise
+        }
+      });
+    }
+
+    async function readFilesSequentially(onProgress) {
+      const results = [];
       const delayPerFile = 2500; // 2.5 seconds per file = 10 seconds total for 4 files
       
       for (let i = 0; i < classModules.arr.length; i++) {
-        const url = classModules.arr[i].module_file;
+        const request = classModules.arr[i];
         
         try {
-          const response = await fetch(url);
-          if (!response.ok) throw new Error(`Failed to load ${url}: ${response.status}`);
-          const content = await response.text();
+          // Wait for this request to complete before moving to next
+          const response = await ajaxRequest(request);
           
-          results.push({ url, content });
+          results.push({
+            url: request.url,
+            method: request.method || 'GET',
+            content: response
+          });
           
           // Update progress
           if (onProgress) {
-            onProgress(i + 1, classModules.arr.length, url);
+            onProgress(i + 1, classModules.arr.length, request.url);
           }
           
           // Add delay before next file (except after the last file)
@@ -56,7 +87,7 @@ function initModules() {
             await new Promise(resolve => setTimeout(resolve, delayPerFile));
           }
         } catch (error) {
-          console.error(`Error reading ${url}:`, error);
+            console.error(`Error reading ${request.url}:`, error);
           throw error;
         }
       }
@@ -93,9 +124,6 @@ function initModules() {
       } catch (error) {
         console.error('Failed to load files:', error);
         hideProgress();
-        document.getElementById('content').innerHTML = 
-          '<h1 style="color: #f44336;">Error loading files</h1><p>' + error.message + '</p>';
-        document
-        .getElementById('content').classList.remove('hidden');
+
       }
     }
