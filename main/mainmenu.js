@@ -352,7 +352,7 @@ const nametoIDLookup = {
 // only the first 4 do not include thead and <th></th> since these records are also showing in the project summary therefor no need delete 
 const headers = {
     "Home":{hash:'home',callBack:home,tableName:'home',sn:1},
-    "Employee Jobs":{hash:'empljbs',callBack:upperLeft,callType:"generalUpload",sn:"home",columns:'<th style="width:4%">Full Name</th><th>Job Date</th><th style="width:4%">Job SignIn</th><th>Lunch SignIn</th><th>Lunch SignOut</th><th>Job SignOut</th><th style="width:1%">Total Hours</th><th style="width:15%">Description</th><th style="width:5%">Total Cost</th><th style="width:100px">Files</th>',numOfCols:12,showInPrj:true,primaryKey:'task_id',tableName:'employee_jobs',params:0},
+    "Employee Jobs":{hash:'empljbs',callBack:upperLeft,callType:"generalUpload",sn:"home",columns:'<th style="width:4%">Full Name</th><th style="width:10%">Job Date</th><th style="width:4%">Job SignIn</th><th style="width:5%">Lunch SignIn</th><th style="width:6%">Lunch SignOut</th><th style="width:5%">Job SignOut</th><th style="width:5%">Total Hours</th><th style="width:15%">Description</th><th style="width:5%">Total Cost</th><th style="width:100px">Files</th>',numOfCols:12,showInPrj:true,primaryKey:'task_id',tableName:'employee_jobs',params:0},
     "Purchases":{hash:'prchs',callBack:upperRight,callType:"generalUpload",sn:"home",columns:'<th>Vendor Name</th><th>Purchase Number</th><th>Purchase Amount</th><th>Purchase Date</th><th>Purchase Method</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'purchase_id',tableName:'purchases',params:0},
     "Payments":{hash:'pymnts',callBack:lowerLeft,callType:"generalUpload",sn:"home",columns:'<th>Payment Amount</th><th>Payment Date</th><th>Payment Method</th><th>Payment Number</th><th>Description</th><th>Files</th>',numOfCols:8,showInPrj:true,primaryKey:'payment_id',tableName:'payments',params:0},
     "Sub Contractors":{hash:'sbcntrcj',callBack:lowerRight,callType:"generalUpload",sn:"home",columns:'<th>Contractor Name</th><th>Job Date</th><th>Payment Amount</th><th>Payment Number</th><th>Date Paid</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'task_id',tableName:'contractor_jobs',params:0},
@@ -978,6 +978,7 @@ $(document).ready( function() {
         $("#libraryID").html("Library");
         $('#welcomeNameID,#rootID,#configID,#libraryID,#systemID,#logout').css({'cursor':'pointer'});
     
+        const iniModulesResult=init_modules();
 
         $.ajax({url         : "../main/read_payments.php",
                 method		: "POST",
