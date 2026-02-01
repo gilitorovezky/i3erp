@@ -942,24 +942,24 @@ $(document).ready( function() {
     if ( typeof username != "undefined" ) {
         uid=Cookies.get('uid');
 
-    $.ajax({url     : "../main/read_config.php",
-        method		: "GET",
-        dataType	: "json",
-        async       : false,  
-        success		: function(data) {  
-        if ( ( data != '' ) && 
-                ( Number(data[0].Status) > 0 ) ) {
-                initConfig(data);
-                windowLog.trace("Loaded config settings successfully");
-            }
-            else {
-                windowLog.warn("error loading configurtions, exit");
-                logout();
-            }
-        },
-        error     	: (function (jqxhr, textStatus, error ) {
-            windowLog.trace("Load schedule failed:"+textStatus + ", " + error);
-            logout();})
+    $.ajax({url         : "../main/read_config.php",
+            method		: "GET",
+            dataType	: "json",
+            async       : false,  
+            success		: function(data) {  
+            if ( ( data !== '' ) && 
+                    ( Number(data[0].Status) > 0 ) ) {
+                    initConfig(data);
+                    windowLog.trace("Loaded config settings successfully");
+                }
+                else {
+                    windowLog.warn("error loading configurtions, exit");
+                    logout();
+                }
+            },
+            error     	: (function (jqxhr, textStatus, error ) {
+                windowLog.trace("Load schedule failed:"+textStatus + ", " + error);
+                logout();})
     });
 
     windowLog.trace("Inside document ready");
@@ -967,11 +967,18 @@ $(document).ready( function() {
     $("#logout").html("Logout");
     //$('#logout').css({'cursor'   : 	'pointer'});
     username=Cookies.get('username');
-    if (typeof username == "undefined" ) {
+    if (typeof username === "undefined" ) {
         console.log("Error- username undefined, exit");
         logout();
     }
     if (username === 'eddie') { //only Eddie could access
+
+        const iniModulesResult=initModules();
+
+        if ( iniModulesResult ) {
+            loadModules();
+            $(".loggedin").css({'background-color'    : '#f8f7f3'});
+        }
 
         $("#configID").html("Configuration");
         $("#systemID").html("System");
@@ -979,7 +986,7 @@ $(document).ready( function() {
         $("#libraryID").html("Library");
         $('#welcomeNameID,#rootID,#configID,#libraryID,#systemID,#logout').css({'cursor':'pointer'});
     
-        const iniModulesResult=init_modules();
+        
 
         $.ajax({url         : "../main/read_payments.php",
                 method		: "POST",
@@ -987,7 +994,7 @@ $(document).ready( function() {
                 dataType	: "json",
                 async       : false,  
                 success		: function(data) {  
-                    if ( ( data != '' ) && 
+                    if ( ( data !== '' ) && 
                          ( Number(data[0].Status) > 0 ) ) {
                        classArray["Payments"] = new classType1(data,"Payments",1); 
                        windowLog.trace("Load all Payments completed succesfully("+(classArray["Payments"].arr.length)+")");
@@ -1000,13 +1007,13 @@ $(document).ready( function() {
                 })
         });
 
-       $.ajax({url         : "../main/read_purchases.php",
-                method		: "POST",
-                data      	: {'projectNumber':"all"},
-                dataType	: "json",
-                async       : false,  
-                success		: function(data) {  
-                    if ( ( data != '' ) && 
+       $.ajax({url          : "../main/read_purchases.php",
+               method		: "POST",
+               data      	: {'projectNumber':"all"},
+               dataType	    : "json",
+               async        : false,  
+               success		: function(data) {  
+                    if ( ( data !== '' ) && 
                          ( Number(data[0].Status) > 0 ) ) {
                        classArray["Purchases"] = new classType1(data,"Purchases",1); 
                        windowLog.trace("Load all Purchases completed succesfully("+(classArray["Purchases"].arr.length)+")");
@@ -1019,7 +1026,7 @@ $(document).ready( function() {
                 })
         });
         
-       $.ajax({url         : "../main/read_contractor_jobs.php",
+       $.ajax({url          : "../main/read_contractor_jobs.php",
                 method		: "POST",
                 data      	: {'projectNumber':'all'},
                 dataType	: "json",
@@ -1041,11 +1048,10 @@ $(document).ready( function() {
 
         let data ="";
 
-        $.ajax({url         :   "../main/read_projects.php",
-                type        :   "GET",
-                dataType    :   "json",
-                async       :   false,  
-                async       :   false, // Make the request synchronous
+        $.ajax({url         : "../main/read_projects.php",
+                type        : "GET",
+                dataType    : "json",
+                async       : false, // Make the request synchronous
                     success: function(data) {
                         Projects = new classProjects(data);
                         classArray["Projects"] = Projects;
@@ -1062,47 +1068,47 @@ $(document).ready( function() {
                 }
         });
 
-        $.ajax({url     : "../estimates/read_estimates.php",
-            method		: "POST",
-            data      	: JSON.stringify({'calltype':'all'}),
-            dataType	: "json",
-            async       : false,  
-            success		: function(data) {
-                if ( (data != '') &&
-                        (Number(data[0].Status) > 0) )  {
-                        classArray["Estimates"]  = new classType1(data,"Estimates",1);
-                        windowLog.trace("Load all estimates completed succesfully("+classArray["Estimates"].arr.length+")");
-                } else	{
-                    windowLog.warn("error loading estimaates, exit");
-                    logout();
-                }
-            },
-            error     	: (function (jqxhr, textStatus, error ) {
-                windowLog.warn("Load estimates failed:"+textStatus + ", " + error);
-                logtout();
-            })
+        $.ajax({url         : "../estimates/read_estimates.php",
+                method		: "POST",
+                data      	: JSON.stringify({'calltype':'all'}),
+                dataType	: "json",
+                async       : false,  
+                success		: function(data) {
+                    if ( (data !== '') &&
+                            (Number(data[0].Status) > 0) )  {
+                            classArray["Estimates"]  = new classType1(data,"Estimates",1);
+                            windowLog.trace("Load all estimates completed succesfully("+classArray["Estimates"].arr.length+")");
+                    } else	{
+                        windowLog.warn("error loading estimaates, exit");
+                        logout();
+                    }
+                },
+                error     	: (function (jqxhr, textStatus, error ) {
+                    windowLog.warn("Load estimates failed:"+textStatus + ", " + error);
+                    logtout();
+                })
         });
 
         data ="";
         $.ajax({url     : "../leads/read_leads.php",
-            method		: "POST",
-            data      	: JSON.stringify({'calltype':'all'}),
-            dataType	: "json",
-            async       : false,  
-            success		: function(data) {
-                if ((data != '') &&
-                        (Number(data[0].Status) > 0) )  {
-                        classArray["Leads"]  = new classType1(data,"Leads",1);
-                        windowLog.trace("Load all Leads completed succesfully("+(classArray["Leads"].arr.length)+")");
-                } else	{
-                    windowLog.warn("error loading Leads, exit");
-                    logout();
-                }
-            },
-            error     	: (function (jqxhr, textStatus, error ) {
-                windowLog.warn("Load Leads failed:"+textStatus + ", " + error);
-                logtout();
-            })
+                method		: "POST",
+                data      	: JSON.stringify({'calltype':'all'}),
+                dataType	: "json",
+                async       : false,  
+                success		: function(data) {
+                    if ((data !== '') &&
+                            (Number(data[0].Status) > 0) )  {
+                            classArray["Leads"]  = new classType1(data,"Leads",1);
+                            windowLog.trace("Load all Leads completed succesfully("+(classArray["Leads"].arr.length)+")");
+                    } else	{
+                        windowLog.warn("error loading Leads, exit");
+                        logout();
+                    }
+                },
+                error     	: (function (jqxhr, textStatus, error ) {
+                    windowLog.warn("Load Leads failed:"+textStatus + ", " + error);
+                    logtout();
+                })
         });
 
         data ="";
@@ -1112,7 +1118,7 @@ $(document).ready( function() {
             dataType	: "json",
             async       : false,  
             success		: function(data) {
-                if (( data != '' ) &&
+                if (( data !== '' ) &&
                     ( Number(data[0].Status) > 0 ))  {
                         classArray["Customers"] = new classType1(data,"Customers",1);
                         classArray["Customers"].cNames=[];
@@ -1145,7 +1151,7 @@ $(document).ready( function() {
                 dataType	: "json",
                 async       : false,  
                 success		: function(data) {  
-                    if ( ( data != '' ) && 
+                    if ( ( data !== '' ) && 
                          ( Number(data[0].Status) > 0 ) ) {
                             classArray["Employees"] = new classType2(data,"Employees",2);
                             windowLog.trace("Load all employees completed succesfully("+classArray["Employees"].arr.length+")");
@@ -1222,7 +1228,7 @@ $(document).ready( function() {
                 dataType	: "json",
                 async       : false,  
                 success		: function(data) {  
-                    if ( ( data != '' ) && 
+                    if ( ( data !== '' ) && 
                          ( Number(data[0].Status) > 0 ) ) {
                        classArray["Companies"] = new classType2(data,"Companies",2); 
                        classArray["Companies"].arr.forEach( (key) => { //copy the return data from the DB into the class array
@@ -1243,7 +1249,7 @@ $(document).ready( function() {
                 dataType	: "json",
                 async       : false,  
                 success		: function(data) {  
-                    if ( ( data != '' ) && 
+                    if ( ( data !== '' ) && 
                          ( Number(data[0].Status) > 0 ) ) {
                        classArray["Contractors"] = new classType2(data,"Contractors",2); 
                        classArray["Contractors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
@@ -1264,7 +1270,7 @@ $(document).ready( function() {
                 dataType	: "json",
                 async       : false,  
                 success		: function(data) {  
-                    if ( ( data != '' ) && 
+                    if ( ( data !== '' ) && 
                          ( Number(data[0].Status) > 0 ) ) {
                         classArray["Vendors"] = new classType2(data,"Vendors",2); 
                         classArray["Vendors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
@@ -1285,7 +1291,7 @@ $(document).ready( function() {
                 async       :   false,  
                 data        :   {employeeID: "all"},
                 success     :   function (data) { 
-                    if ( ( data != '' ) && 
+                    if ( ( data !== '' ) && 
                          ( Number(data[0].Status) > 0 ) ) {
                         classArray["Hourly Rate"] = new classType2(data,"Hourly Rate",2);
                         windowLog.trace("Load all hourly rate completed succesfully("+classArray["Hourly Rate"].arr.length+")");
