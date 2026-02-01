@@ -510,7 +510,7 @@
                     if (lastScreen === "Projects")
                         leftMostTD = 2; // not allowed to go left beyond the 2nd TD  
                     // if lower left most TD - do nothing
-                    currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell      
+                    //currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell      
                     if ( e.target.closest('td') !== $(tableID+' tbody tr:first td:nth-child('+leftMostTD+')')[0] ) { 
                         // if not left most cell in the TR
                         if ( (e.target.closest('td')) === $(e.target).closest('tr').find('td:nth-child('+leftMostTD+')')[0] )
@@ -592,7 +592,7 @@
                         } 
                         else {
                             if ( tableID !== "#customerTblID" ) {    
-                                currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell              
+                                //currCell.children().first().css({'background-color'    : '#f1f6f5'}); // remove the highlight from the current cell              
                                 if ( ( e.target.type !== 'date'  ) && 
                                      ( e.target.type !== 'time'  ) &&
                                      ( lastScreen !== "Scheduler") ) {
@@ -825,7 +825,7 @@
                         }  else {
                                 if (header != "projectScheduler") { 
                                     if (e.target.selectionStart === 0) {
-                                        currCell.children().first().css({'background-color'    : '#'}); // remove the highlight from the current cell  
+                                        //currCell.children().first().css({'background-color'    : '#'}); // remove the highlight from the current cell  
                                         if (( e.target.type != 'date' ) && ( e.target.type != 'time' )) {
                                             let leftMostTD = 1; // point to the 1st TD in the TR
                                             if ( lastScreen === "Projects" )
