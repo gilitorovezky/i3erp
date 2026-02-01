@@ -22,7 +22,7 @@ const customerPanes=["Leads","Estimates","Projects"];
 
 const screens=["",home,configuration];
 
-const modules = ["Employee Jobs","Purchases","Payments","Sub Contractors","Vendors",
+const modules1 = ["Employee Jobs","Purchases","Payments","Sub Contractors","Vendors",
                  "Companies","Contractors","Employees","Projects","Customers","Estimates","Scheduler","Hourly Rate"];
 
 const captions = {
@@ -434,7 +434,7 @@ bgColor["pedro"]=   "rgb(49 200 247 / 25%)";
 bgColor["orel"] =   "rgb(153, 226, 210)";*/
 
 var lastID=[];
-modules.forEach( (record) => {
+modules1.forEach( (record) => {
         lastID[record]=1; // init lastID with default value (1)
     }); 
 
@@ -836,12 +836,13 @@ var pageAccessedByReload = (
 $(window).on("load", function() {
 
     windowLog.trace("Insdie window onload");
- 
+   console.log("Insdie onLoad load");
 });
 
 window.addEventListener("load", function() {
 
-    
+    windowLog.trace("Insdie addEventListener load");
+    console.log("Insdie addEventListener load");
     /*username=Cookies.get('username');
     fullname = username;
     $("#overLay ul").attr('data-module',"");
@@ -949,7 +950,7 @@ $(document).ready( function() {
         if ( ( data != '' ) && 
                 ( Number(data[0].Status) > 0 ) ) {
                 initConfig(data);
-                windowLog.trace("event listner load");
+                windowLog.trace("Loaded config settings successfully");
             }
             else {
                 windowLog.warn("error loading configurtions, exit");
