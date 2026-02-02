@@ -13,7 +13,7 @@
     
     if ( mysqli_connect_errno() == 0 ) {
         ; // call type : sign in or signout
-        if ( isset($sessionJSON['calltype']) ) { 
+        if ( (isset($sessionJSON['calltype']) && ($sessionJSON['calltype'] != '')) ) { 
             $calltype=$sessionJSON['calltype'];
             file_put_contents('../log/log_'.$logDate.'.log',"(read_estimates) ".$current_time." info 3-call type:".$calltype."\n", FILE_APPEND);
             if ( $calltype == 'all') {

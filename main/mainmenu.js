@@ -1014,84 +1014,7 @@ $(document).ready( function() {
                         }
                 });
 
-                /*$.ajax({url         : "../estimates/read_estimates.php",
-                        method		: "POST",
-                        data      	: JSON.stringify({'calltype':'all'}),
-                        dataType	: "json",
-                        async       : false,  
-                        success		: function(data) {
-                            if ( (data !== '') &&
-                                    (Number(data[0].Status) > 0) )  {
-                                    classArray["Estimates"]  = new classType1(data,"Estimates",1);
-                                    windowLog.trace("Load all estimates completed succesfully("+classArray["Estimates"].arr.length+")");
-                            } else	{
-                                windowLog.warn("error loading estimaates, exit");
-                                logout();
-                            }
-                        },
-                        error     	: (function (jqxhr, textStatus, error ) {
-                            windowLog.warn("Load estimates failed:"+textStatus + ", " + error);
-                            logtout();
-                        })
-                });
-
-                data ="";
-                $.ajax({url     : "../leads/read_leads.php",
-                        method		: "POST",
-                        data      	: JSON.stringify({'calltype':'all'}),
-                        dataType	: "json",
-                        async       : false,  
-                        success		: function(data) {
-                            if ((data !== '') &&
-                                    (Number(data[0].Status) > 0) )  {
-                                    classArray["Leads"]  = new classType1(data,"Leads",1);
-                                    windowLog.trace("Load all Leads completed succesfully("+(classArray["Leads"].arr.length)+")");
-                            } else	{
-                                windowLog.warn("error loading Leads, exit");
-                                logout();
-                            }
-                        },
-                        error     	: (function (jqxhr, textStatus, error ) {
-                            windowLog.warn("Load Leads failed:"+textStatus + ", " + error);
-                            logtout();
-                        })
-                });
-
-                data ="";
-                $.ajax({url     : "../customers/read_customers.php",
-                    method		: "POST",
-                    data      	: JSON.stringify({'calltype':'all'}),
-                    dataType	: "json",
-                    async       : false,  
-                    success		: function(data) {
-                        if (( data !== '' ) &&
-                            ( Number(data[0].Status) > 0 ))  {
-                                classArray["Customers"] = new classType1(data,"Customers",1);
-                                classArray["Customers"].cNames=[];
-                                classArray["Customers"].telNumbers=[];
-                                classArray["Customers"].zips=[];
-                                classArray["Customers"].emails=[];
-                                for (var i = 0; i < classArray["Customers"].arr.length; i++) { //loop throu the return msg 
-                                    const tempEntry=classArray["Customers"].arr[i];
-                                
-                                    classArray["Customers"].cNames.push(buildCstmrSearchString(tempEntry));
-                                    classArray["Customers"].telNumbers.push(classArray["Customers"].arr[i].customer_tel_number);
-                                    classArray["Customers"].zips.push(classArray["Customers"].arr[i].zip);
-                                    classArray["Customers"].emails.push(classArray["Customers"].arr[i].customer_email);
-                                }
-                                windowLog.trace("Load all Customers completed succesfully("+classArray["Customers"].arr.length+")");
-                        } else	{
-                            windowLog.warn("error loading Customers.. see admin");
-                            logout();
-                        }
-                    },
-                    error     	: (function (jqxhr, textStatus, error ) {
-                        windowLog.warn("Load Customers failed:"+textStatus + ", " + error); 
-                        logout();
-                    })
-                });*/
-
-                $.ajax({url         : "../main/read_employees.php", // must read before tasks
+                /*$.ajax({url         : "../main/read_employees.php", // must read before tasks
                         method		: "POST",
                         data      	: {'calltype':"all"},
                         dataType	: "json",
@@ -1116,7 +1039,7 @@ $(document).ready( function() {
                             windowLog.warn("Load employees failed:"+textStatus + ", " + error); 
                             logout();
                         })
-                });
+                });*/
 
 
                 $.ajax({url     : "../main/load_task.php",
@@ -1148,29 +1071,21 @@ $(document).ready( function() {
                 });
 
                 lastID["Employee Jobs"]=(Number(Math.max(lastID["Employee Jobs"],lastID["Scheduler"])))+1;
-
-                $.ajax({url         : "../main/read_companies.php",
-                        method		: "POST",
-                        dataType	: "json",
-                        async       : false,  
-                        success		: function(data) {  
-                            if ( ( data !== '' ) && 
-                                ( Number(data[0].Status) > 0 ) ) {
-                            classArray["Companies"] = new classType2(data,"Companies",2); 
-                            classArray["Companies"].arr.forEach( (key) => { //copy the return data from the DB into the class array
+                classArray["Employees"].colors=[];
+                                    classArray["Employees"].arr.forEach( (key) => { 
+                                        classArray["Employees"].pNames[key.fullname.toString()]=key.employee_id;    // initialize the employee/id array 
+                                        classArray["Employees"].colors[key.fullname.toString()]=key.profile_color;  // initialize the employee/colors array 
+                                    });
+                classArray["Companies"].arr.forEach( (key) => { //copy the return data from the DB into the class array
                                 classArray["Companies"].pNames[key.company_name.toString()]=key.company_id; 
-                            })
-                            windowLog.trace("Load all Companies completed succesfully("+(classArray["Companies"].arr.length)+")");
-                            }
-                            else 
-                                windowLog.trace("error loading Companies, exit");
-                        },
-                        error     	: (function (jqxhr, textStatus, error ) {
-                            windowLog.warn("Load Companies failed:"+textStatus + ", " + error);
-                        })
-                });
+                                    });
 
-                $.ajax({url         : "../main/read_contractors.php",
+                classArray["Contractors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
+                                classArray["Contractors"].pNames[key.contractorName.toString()]=key.contractor_id; 
+                                    });
+                classArray["Vendors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
+                                classArray["Vendors"].pNames[key.vendor_name]=key.vendor_id;})
+                /*$.ajax({url         : "../main/read_contractors.php",
                         method		: "POST",
                         dataType	: "json",
                         async       : false,  
@@ -1189,9 +1104,9 @@ $(document).ready( function() {
                         error     	: (function (jqxhr, textStatus, error ) {
                             windowLog.warn("Load Contractors failed:"+textStatus + ", " + error);
                         })
-                });
+                });*/
 
-                $.ajax({url         : "../main/read_vendors.php",
+                /*$.ajax({url         : "../main/read_vendors.php",
                         method		: "POST",
                         dataType	: "json",
                         async       : false,  
@@ -1230,7 +1145,7 @@ $(document).ready( function() {
                             windowLog.warn("Load employees failed:"+textStatus + ", " + error); 
                             logout();
                         }
-                });
+                });*/
             
 
                 $("#innerPT_ID,#CloseBtnPsumry").on("click", innerPThandler);

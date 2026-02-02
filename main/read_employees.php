@@ -12,8 +12,12 @@
     file_put_contents('../log/log_'.$logDate.'.log',"(read_employees) ".$current_time." info 2-sql connect error:".mysqli_connect_errno()."\n", FILE_APPEND); 
 
     if ( mysqli_connect_errno() == 0 ) {
+        $post_json = file_get_contents('php://input');
+        $sessionJSON = json_decode($post_json, true);   
+        file_put_contents('../log/log_'.$logDate.'.log', "(read_estimates) ".$current_time." info 2.1:".print_r($sessionJSON,true)."\n", FILE_APPEND);
+    
 
-        $calltype=$_POST["calltype"]; // call type : sign in or signout
+        $calltype=$sessionJSON["calltype"]; // call type : sign in or signout
         if (isset($calltype)) { 
             file_put_contents('../log/log_'.$logDate.'.log',"(read_employees) ".$current_time." info 3-call type:".$calltype."\n", FILE_APPEND);
             if ( $calltype == 'all') {

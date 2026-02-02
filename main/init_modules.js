@@ -1,6 +1,6 @@
 var modules=[];
 var classModules="";
- const results = [];
+//const results = [];
 
 function initModules() {
 
@@ -64,7 +64,7 @@ function initModules() {
     }
 
     async function readFilesSequentially(onProgress) {
-      const results = [];
+      //const results = [];
       const delayPerFile = 500; // 2.5 seconds per file = 10 seconds total for 4 files
 
     windowLog.trace('Starting sequential load, total requests:', classModules.arr.length);
@@ -77,15 +77,15 @@ function initModules() {
           const response = await ajaxRequest(request);
            windowLog.trace(`Completed request ${i + 1}:`, classModules.arr[i].module_file_url);
           
-          results.push({
-            url: request.url,
-            method: request.method || 'GET',
-            content: response
-          });
+          //results.push({
+          //  url: request.url,
+          //  method: request.method || 'GET',
+          //  content: response
+          //});
           
           // Update progress
           if (onProgress) {
-            onProgress(i + 1, classModules.arr.length, request.url);
+            onProgress(i + 1, classModules.arr.length, request.module_file_url);
           }
           
           // Add delay before next file (except after the last file)
@@ -95,12 +95,12 @@ function initModules() {
             windowLog.trace('Delay complete, continuing...');
           }
         } catch (error) {
-            windowLog.warn(`Error reading ${request.url}:`, error);
+            windowLog.warn(`Error reading ${request.module_file_url}:`, error);
           throw error;
         }
       }
       
-      return results;
+      return true;//results;
     }
 
     function updateProgress(current, total, url) {
@@ -120,8 +120,8 @@ function initModules() {
   async function loadModules() {
 
     try {
-        const files = await readFilesSequentially(updateProgress);
-        windowlog.trace('All files loaded:', files);
+        const retCode = await readFilesSequentially(updateProgress);
+        windowlog.trace('All files loaded:', retCode);
         
         // Hide progress bar and show content
         setTimeout(() => {

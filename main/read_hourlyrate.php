@@ -6,8 +6,12 @@
     $logDate=date("n.j.Y");
 
     $ret_recs = array();
-        
-    $employee_id=$_POST["employeeID"]; 
+
+    $post_json = file_get_contents('php://input');
+    $sessionJSON = json_decode($post_json, true);   
+    $employee_id=$sessionJSON["employeeID"];
+    file_put_contents('../log/log_'.$logDate.'.log', "(read_hourlyrate) ".$current_time." info 2.1:".print_r($sessionJSON,true)."\n", FILE_APPEND);
+    
     file_put_contents('../log/log_'.$logDate.'.log', "(read_hourlyrate) info 1:".$current_time." sql connect error:".mysqli_connect_errno().", eID:".$employee_id."\n", FILE_APPEND); 
     if ( mysqli_connect_errno() == 0 ) {
         if ( $employee_id == "all") 
