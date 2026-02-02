@@ -8,7 +8,6 @@ function initModules() {
 
     windowLog.trace("Inside init_modules");
 
-
     $.ajax({url         : "../main/read_modules.php",
             method		: "POST",
             dataType	: "json",
@@ -66,15 +65,15 @@ function initModules() {
       //const results = [];
       const delayPerFile = 500; // 2.5 seconds per file = 10 seconds total for 4 files
 
-    windowLog.trace('Starting sequential load, total requests:', classModules.arr.length);
+    windowLog.trace('Starting sequential load, total requests:'+ classModules.arr.length);
       
       for (let i = 0; i < classModules.arr.length; i++) {
         const request = classModules.arr[i];
-        windowLog.trace(`Starting request ${i + 1}/${classModules.arr.length}:`, classModules.arr[i].module_file_url);
+        windowLog.trace(`Starting request ${i + 1}/${classModules.arr.length}:`+ classModules.arr[i].module_name);
         try {
           // Wait for this request to complete before moving to next
           const response = await ajaxRequest(request);
-           windowLog.trace(`Completed request ${i + 1}:`, classModules.arr[i].module_file_url);
+           windowLog.trace(`Completed request ${i + 1}:`+ classModules.arr[i].module_name);
           
           //results.push({
           //  url: request.url,
@@ -84,17 +83,15 @@ function initModules() {
           
           // Update progress
           if (onProgress) {
-            onProgress(i + 1, classModules.arr.length, request.module_file_url);
+            onProgress(i + 1, classModules.arr.length, request.module_name);
           }
           
           // Add delay before next file (except after the last file)
           if (i < classModules.arr.length - 1) {
-            windowLog.trace(`Waiting ${delayPerFile}ms before next request...`);
             await new Promise(resolve => setTimeout(resolve, delayPerFile));
-            windowLog.trace('Delay complete, continuing...');
           }
         } catch (error) {
-            windowLog.warn(`Error reading ${request.module_file_url}:`, error);
+            windowLog.warn(`Error reading ${request.module_name}:`+ error);
           throw error;
         }
       }
@@ -120,17 +117,14 @@ function initModules() {
 
     try {
         const retCode = await readFilesSequentially(updateProgress);
-        windowlog.trace('All files loaded:', retCode);
+        windowLog.trace('All files loaded (retCode):'+retCode);
         
-        // Hide progress bar and show content
         setTimeout(() => {
           hideProgress();
-          //displayFiles(files);
-        }, 500);
+        }, 1500);
         
     } catch (error) {
-        windowLog.warn('Failed to load files:', error);
+        windowLog.warn('Failed to load files:'+ error);
         hideProgress();
-
     }
 }

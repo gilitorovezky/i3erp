@@ -32,13 +32,13 @@ body {
       rgb(251, 251, 4) 30%,
       #faba0a 60%,
       #faba0a 100%);
-    transition        : 0.8s linear;
+    transition        : 0.8s ease; /*linear;*/ 
     display           : flex;
-      transform         : translateY(0);
+    transform         : translateY(0);
     justify-content   : center;
     align-items       : center;
     width             : 1%;
-    margin-left       : 25%;
+    /*margin-left       : 25%;*/
 }
 
 span.number-count {

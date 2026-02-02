@@ -3,7 +3,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 300px;
+      width: 500px;
       text-align: center;
     }
 
@@ -14,13 +14,13 @@
       border-radius: 2px;
       overflow: hidden;
     }
-
+/*
     .progress-bar {
       height: 100%;
       width: 0%;
       background-color: white;
       transition: width 2.5s ease;
-    }
+    }*/
 
     .progress-text {
       margin-top: 10px;
