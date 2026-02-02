@@ -822,6 +822,11 @@ class classType2 extends genesisClass {
     }
 };
 
+const classMap = {
+  1: classType1,
+  2: classType2
+};
+
 MainMenue = new classMainMenue;
 
 var pageAccessedByReload = (
@@ -987,89 +992,6 @@ $(document).ready( function() {
                 $("#libraryID").html("Library");
                 $('#welcomeNameID,#rootID,#configID,#libraryID,#systemID,#logout').css({'cursor':'pointer'});
             
-                /*
-
-                $.ajax({url         : "../main/read_payments.php",
-                        method		: "POST",
-                        data      	: {'projectNumber':"all"},
-                        dataType	: "json",
-                        async       : false,  
-                        success		: function(data) {  
-                            if ( ( data !== '' ) && 
-                                ( Number(data[0].Status) > 0 ) ) {
-                            classArray["Payments"] = new classType1(data,"Payments",1); 
-                            windowLog.trace("Load all Payments completed succesfully("+(classArray["Payments"].arr.length)+")");
-                            }
-                            else 
-                                windowLog.trace("error loading Payments, exit");
-                        },
-                        error     	: (function (jqxhr, textStatus, error ) {
-                            windowLog.warn("Load Payments failed:"+textStatus + ", " + error);
-                        })
-                });
-
-                $.ajax({url          : "../main/read_purchases.php",
-                    method		: "POST",
-                    data      	: {'projectNumber':"all"},
-                    dataType	    : "json",
-                    async        : false,  
-                    success		: function(data) {  
-                            if ( ( data !== '' ) && 
-                                ( Number(data[0].Status) > 0 ) ) {
-                            classArray["Purchases"] = new classType1(data,"Purchases",1); 
-                            windowLog.trace("Load all Purchases completed succesfully("+(classArray["Purchases"].arr.length)+")");
-                            }
-                            else 
-                                windowLog.trace("error loading Purchases, exit");
-                        },
-                        error     	: (function (jqxhr, textStatus, error ) {
-                            windowLog.warn("Load Purchases failed:"+textStatus + ", " + error);
-                        })
-                });
-
-                        $.ajax({url         : "../main/read_employee_jobs.php",
-                        method		: "POST",
-                        data      	: JSON.stringify({'projectNumber':'all'}),
-                        dataType	: "json",
-                        async       : false,  
-                        success		: function(data) {
-                            if (( data !== '' ) &&
-                                ( Number(data[0].Status) > 0 ))  {        
-                                classArray["Employee Jobs"] = new classType1(data,"Employee Jobs",1);
-                                classArray["Employee Jobs"].isTotalCost=false;
-                                lastID["Employee Jobs"]=(Number(Math.max(lastID["Employee Jobs"],lastID["Scheduler"])))+1;
-                                windowLog.trace("Load all employee jobs succesfully("+classArray["Employee Jobs"].arr.length+")");
-                            } else {
-                                windowLog.trace("error loading employee jobs, exit");
-                                logout();
-                            }},
-                        error     	: function (jqxhr, textStatus, error ) {
-                            windowLog.warn("Load empoyee jobs failed:"+textStatus + ", " + error); 
-                            logout();
-                        }
-                });
-
-                
-                $.ajax({url          : "../main/read_contractor_jobs.php",
-                        method		: "POST",
-                        data      	: JSON.stringify({projectNumber:'all'}),
-                        dataType	: "json",
-                        async       : false,  
-                        success		: function(data) {
-                            if (( data !== '' ) &&
-                                ( Number(data[0].Status) > 0 ))  {        
-                                classArray["Sub Contractors"] = new classType1(data,"Sub Contractors",1);
-                                windowLog.trace("Load all Sub Contractors succesfully("+classArray["Sub Contractors"].arr.length+")");
-                            } else {
-                                windowLog.trace("error loading Sub Contractors, exit");
-                                logout();
-                            }},
-                        error     	: function (jqxhr, textStatus, error ) {
-                            windowLog.warn("Load Sub Contractors failed:"+textStatus + ", " + error); 
-                            logout();
-                        }
-                });*/
-
                 let data ="";
 
                 $.ajax({url         : "../main/read_projects.php",

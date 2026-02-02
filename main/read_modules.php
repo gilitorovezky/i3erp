@@ -13,7 +13,7 @@
     file_put_contents('../log/log_'.$logDate.'.log', "(modules.php) ".$current_time." info 1-inside read_modules.php\n", FILE_APPEND); 
     
     if ( mysqli_connect_errno() == 0 ) {
-        $sql_st="SELECT module_id,module_name,screen_number,visible,permission,module_file_url,data,method FROM modules";
+        $sql_st="SELECT module_id,module_name,screen_number,visible,permission,module_file_url,class_type,data,method FROM modules";
         file_put_contents('../log/log_'.$logDate.'.log', "(read_modules) ".$current_time."info 1-sql st:".$sql_st."\n", FILE_APPEND); 
         $modules=mysqli_query($con,$sql_st);
         file_put_contents('../log/log_'.$logDate.'.log', "(read_modules) ".$current_time."info 2-# of rows:".$modules->num_rows."\n", FILE_APPEND); 
@@ -31,7 +31,8 @@
                                         "permission"      => $row["permission"],
                                         "module_file_url" => $row["module_file_url"],
                                         "data"            => $row["data"],
-                                        "method"          => $row["method"]);
+                                        "method"          => $row["method"],
+                                        "class_type"      => $row["class_type"]);
 
                 file_put_contents('../log/log_'.$logDate.'.log',"(read_modules) ".$current_time." info 4-".print_r($ret_recs[$i++],true)."\n", FILE_APPEND); 
             }

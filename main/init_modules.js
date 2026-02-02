@@ -43,16 +43,14 @@ function initModules() {
           $.ajax({
                 url         : config.module_file_url,
                 type        : config.method || "POST",
-                //data        : JSON.stringify({'projectNumber':'all'}),
                 data        : JSON.stringify(jsonObj),
-                //async       : false,
                 headers     : config.headers || {},
                 dataType    : "json",
                 contentType : config.contentType || 'application/json; charset=utf-8',
                 success     : function(data, textStatus, xhr) {
                     if (data[0].Status > 0) {
                         windowLog.trace("Loaded "+config.module_name+" succesfully");
-                           classArray[config.module_name] = new classType1(data,config.module_name,Number(config.screen_number));
+                           classArray[config.module_name] = new classMap[Number(config.class_type)](data,config.module_name,Number(config.screen_number));
                         classArray[config.module_name].isTotalCost=false;
                     }
                     else
