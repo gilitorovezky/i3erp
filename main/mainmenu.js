@@ -22,7 +22,7 @@ const customerPanes=["Leads","Estimates","Projects"];
 
 const screens=["",home,configuration];
 
-const modules1 = ["Employee Jobs","Purchases","Payments","Sub Contractors","Vendors",
+ modules1 = ["Employee Jobs","Purchases","Payments","Sub Contractors","Vendors",
                  "Companies","Contractors","Employees","Projects","Customers","Estimates","Scheduler","Hourly Rate"];
 
 const captions = {
@@ -434,9 +434,6 @@ bgColor["pedro"]=   "rgb(49 200 247 / 25%)";
 bgColor["orel"] =   "rgb(153, 226, 210)";*/
 
 var lastID=[];
-modules1.forEach( (record) => {
-        lastID[record]=1; // init lastID with default value (1)
-    }); 
 
 let arrClasses=[];	// holds the classes
 let intervalEJID=0;
@@ -1083,6 +1080,11 @@ $(document).ready( function() {
             logout();
         }
         $("#ul, #ur, #ll, #lr").addClass("homeScreen");
+
+        classArray.arr.forEach( (record) => {
+            lastID[record.module_name]=1; // init lastID with default value (1)
+        }); 
+
     }
     else   {
             $(".parentDivClass").css({'display':"flex"});
