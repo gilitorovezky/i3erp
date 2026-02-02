@@ -835,14 +835,14 @@ var pageAccessedByReload = (
 // .load() method deprecated from jQuery 1.8 onward
 $(window).on("load", function() {
 
-    windowLog.trace("Insdie window onload");
-   console.log("Insdie onLoad load");
+    windowLog.trace("inside window onload");
+   windowLog.trace("inside onLoad load");
 });
 
 window.addEventListener("load", function() {
 
-    windowLog.trace("Insdie addEventListener load");
-    console.log("Insdie addEventListener load");
+    windowLog.trace("inside addEventListener load");
+    windowLog.trace("inside addEventListener load");
     /*username=Cookies.get('username');
     fullname = username;
     $("#overLay ul").attr('data-module',"");
@@ -852,7 +852,7 @@ window.addEventListener("load", function() {
         uid=Cookies.get('uid');
   }
     else { 
-        console.log("Error- username undefined, exit");
+        windowLog.trace("Error- username undefined, exit");
         logout();
     }
     
@@ -888,8 +888,8 @@ window.addEventListener("load", function() {
     }
 
      $("body").delegate("#projectLbl1,#customersLbl2","contextmenu",function() {
-        if (event.target.tagName === "LABEL") {
-            event.preventDefault();
+        if (e.target.tagName === "LABEL") {
+            e.preventDefault();
             floatingMessage.style.left = event.pageX+'px';
             floatingMessage.style.top = event.pageY+'px';
             floatingMessage.innerHTML="<p class='label1'>Right click "+event.target.innerText+"</p>";
@@ -959,7 +959,8 @@ $(document).ready( function() {
             },
             error     	: (function (jqxhr, textStatus, error ) {
                 windowLog.trace("Load schedule failed:"+textStatus + ", " + error);
-                logout();})
+                logout();
+            })
     });
 
     windowLog.trace("Inside document ready");
@@ -968,7 +969,7 @@ $(document).ready( function() {
     //$('#logout').css({'cursor'   : 	'pointer'});
     username=Cookies.get('username');
     if (typeof username === "undefined" ) {
-        console.log("Error- username undefined, exit");
+        windowLog.trace("Error- username undefined, exit");
         logout();
     }
     if (username === 'eddie') { //only Eddie could access
@@ -976,359 +977,372 @@ $(document).ready( function() {
         const iniModulesResult=initModules();
 
         if ( iniModulesResult ) {
-            loadModules();
-            $(".loggedin").css({'background-color'    : '#f8f7f3'});
-        }
+            loadModules().then(function() {
+                windowLog.trace('Modules finished loading');
+          
+                $(".loggedin").css({'background-color'    : '#f8f7f3'});
+                
 
-        $("#configID").html("Configuration");
-        $("#systemID").html("System");
-        $("#rootID").html("Home");
-        $("#libraryID").html("Library");
-        $('#welcomeNameID,#rootID,#configID,#libraryID,#systemID,#logout').css({'cursor':'pointer'});
-    
-        
+                $("#configID").html("Configuration");
+                $("#systemID").html("System");
+                $("#rootID").html("Home");
+                $("#libraryID").html("Library");
+                $('#welcomeNameID,#rootID,#configID,#libraryID,#systemID,#logout').css({'cursor':'pointer'});
+            
+                /*
 
-        $.ajax({url         : "../main/read_payments.php",
-                method		: "POST",
-                data      	: {'projectNumber':"all"},
-                dataType	: "json",
-                async       : false,  
-                success		: function(data) {  
-                    if ( ( data !== '' ) && 
-                         ( Number(data[0].Status) > 0 ) ) {
-                       classArray["Payments"] = new classType1(data,"Payments",1); 
-                       windowLog.trace("Load all Payments completed succesfully("+(classArray["Payments"].arr.length)+")");
-                    }
-                    else 
-                        windowLog.trace("error loading Payments, exit");
-                },
-                error     	: (function (jqxhr, textStatus, error ) {
-                    windowLog.warn("Load Payments failed:"+textStatus + ", " + error);
-                })
-        });
+                $.ajax({url         : "../main/read_payments.php",
+                        method		: "POST",
+                        data      	: {'projectNumber':"all"},
+                        dataType	: "json",
+                        async       : false,  
+                        success		: function(data) {  
+                            if ( ( data !== '' ) && 
+                                ( Number(data[0].Status) > 0 ) ) {
+                            classArray["Payments"] = new classType1(data,"Payments",1); 
+                            windowLog.trace("Load all Payments completed succesfully("+(classArray["Payments"].arr.length)+")");
+                            }
+                            else 
+                                windowLog.trace("error loading Payments, exit");
+                        },
+                        error     	: (function (jqxhr, textStatus, error ) {
+                            windowLog.warn("Load Payments failed:"+textStatus + ", " + error);
+                        })
+                });
 
-       $.ajax({url          : "../main/read_purchases.php",
-               method		: "POST",
-               data      	: {'projectNumber':"all"},
-               dataType	    : "json",
-               async        : false,  
-               success		: function(data) {  
-                    if ( ( data !== '' ) && 
-                         ( Number(data[0].Status) > 0 ) ) {
-                       classArray["Purchases"] = new classType1(data,"Purchases",1); 
-                       windowLog.trace("Load all Purchases completed succesfully("+(classArray["Purchases"].arr.length)+")");
-                    }
-                    else 
-                        windowLog.trace("error loading Purchases, exit");
-                },
-                error     	: (function (jqxhr, textStatus, error ) {
-                    windowLog.warn("Load Purchases failed:"+textStatus + ", " + error);
-                })
-        });
-        
-       $.ajax({url          : "../main/read_contractor_jobs.php",
-                method		: "POST",
-                data      	: JSON.stringify({projectNumber:'all'}),
-                dataType	: "json",
-                async       : false,  
-                success		: function(data) {
-                    if (( data !== '' ) &&
-                        ( Number(data[0].Status) > 0 ))  {        
-                        classArray["Sub Contractors"] = new classType1(data,"Sub Contractors",1);
-                        windowLog.trace("Load all Sub Contractors succesfully("+classArray["Sub Contractors"].arr.length+")");
-                    } else {
-                        windowLog.trace("error loading Sub Contractors, exit");
-                        logout();
-                    }},
-                error     	: function (jqxhr, textStatus, error ) {
-                    windowLog.warn("Load Sub Contractors failed:"+textStatus + ", " + error); 
-                    logout();
-                }
-        });
+                $.ajax({url          : "../main/read_purchases.php",
+                    method		: "POST",
+                    data      	: {'projectNumber':"all"},
+                    dataType	    : "json",
+                    async        : false,  
+                    success		: function(data) {  
+                            if ( ( data !== '' ) && 
+                                ( Number(data[0].Status) > 0 ) ) {
+                            classArray["Purchases"] = new classType1(data,"Purchases",1); 
+                            windowLog.trace("Load all Purchases completed succesfully("+(classArray["Purchases"].arr.length)+")");
+                            }
+                            else 
+                                windowLog.trace("error loading Purchases, exit");
+                        },
+                        error     	: (function (jqxhr, textStatus, error ) {
+                            windowLog.warn("Load Purchases failed:"+textStatus + ", " + error);
+                        })
+                });
 
-        let data ="";
+                        $.ajax({url         : "../main/read_employee_jobs.php",
+                        method		: "POST",
+                        data      	: JSON.stringify({'projectNumber':'all'}),
+                        dataType	: "json",
+                        async       : false,  
+                        success		: function(data) {
+                            if (( data !== '' ) &&
+                                ( Number(data[0].Status) > 0 ))  {        
+                                classArray["Employee Jobs"] = new classType1(data,"Employee Jobs",1);
+                                classArray["Employee Jobs"].isTotalCost=false;
+                                lastID["Employee Jobs"]=(Number(Math.max(lastID["Employee Jobs"],lastID["Scheduler"])))+1;
+                                windowLog.trace("Load all employee jobs succesfully("+classArray["Employee Jobs"].arr.length+")");
+                            } else {
+                                windowLog.trace("error loading employee jobs, exit");
+                                logout();
+                            }},
+                        error     	: function (jqxhr, textStatus, error ) {
+                            windowLog.warn("Load empoyee jobs failed:"+textStatus + ", " + error); 
+                            logout();
+                        }
+                });
 
-        $.ajax({url         : "../main/read_projects.php",
-                type        : "GET",
-                dataType    : "json",
-                async       : false, // Make the request synchronous
-                    success: function(data) {
-                        Projects = new classProjects(data);
-                        classArray["Projects"] = Projects;
-                        if (Projects.length > 0) {
-                            lastID["Projects"] = Number(Projects.arrProjects[Projects.arrProjects.length-1].project_id);
-                            windowLog.trace("Project Data received");
-                        } else {
-                            windowLog.warn("No projects found");
+                
+                $.ajax({url          : "../main/read_contractor_jobs.php",
+                        method		: "POST",
+                        data      	: JSON.stringify({projectNumber:'all'}),
+                        dataType	: "json",
+                        async       : false,  
+                        success		: function(data) {
+                            if (( data !== '' ) &&
+                                ( Number(data[0].Status) > 0 ))  {        
+                                classArray["Sub Contractors"] = new classType1(data,"Sub Contractors",1);
+                                windowLog.trace("Load all Sub Contractors succesfully("+classArray["Sub Contractors"].arr.length+")");
+                            } else {
+                                windowLog.trace("error loading Sub Contractors, exit");
+                                logout();
+                            }},
+                        error     	: function (jqxhr, textStatus, error ) {
+                            windowLog.warn("Load Sub Contractors failed:"+textStatus + ", " + error); 
+                            logout();
+                        }
+                });*/
+
+                let data ="";
+
+                $.ajax({url         : "../main/read_projects.php",
+                        type        : "GET",
+                        dataType    : "json",
+                        async       : false, // Make the request synchronous
+                            success: function(data) {
+                                Projects = new classProjects(data);
+                                classArray["Projects"] = Projects;
+                                if (Projects.length > 0) {
+                                    lastID["Projects"] = Number(Projects.arrProjects[Projects.arrProjects.length-1].project_id);
+                                    windowLog.trace("Project Data received");
+                                } else {
+                                    windowLog.warn("No projects found");
+                                }
+                            },
+                        error     	: function (jqxhr, textStatus, error ) {
+                            windowLog.warn("Load projects failed:"+textStatus + ", " + error); 
+                            logout();
+                        }
+                });
+
+                /*$.ajax({url         : "../estimates/read_estimates.php",
+                        method		: "POST",
+                        data      	: JSON.stringify({'calltype':'all'}),
+                        dataType	: "json",
+                        async       : false,  
+                        success		: function(data) {
+                            if ( (data !== '') &&
+                                    (Number(data[0].Status) > 0) )  {
+                                    classArray["Estimates"]  = new classType1(data,"Estimates",1);
+                                    windowLog.trace("Load all estimates completed succesfully("+classArray["Estimates"].arr.length+")");
+                            } else	{
+                                windowLog.warn("error loading estimaates, exit");
+                                logout();
+                            }
+                        },
+                        error     	: (function (jqxhr, textStatus, error ) {
+                            windowLog.warn("Load estimates failed:"+textStatus + ", " + error);
+                            logtout();
+                        })
+                });
+
+                data ="";
+                $.ajax({url     : "../leads/read_leads.php",
+                        method		: "POST",
+                        data      	: JSON.stringify({'calltype':'all'}),
+                        dataType	: "json",
+                        async       : false,  
+                        success		: function(data) {
+                            if ((data !== '') &&
+                                    (Number(data[0].Status) > 0) )  {
+                                    classArray["Leads"]  = new classType1(data,"Leads",1);
+                                    windowLog.trace("Load all Leads completed succesfully("+(classArray["Leads"].arr.length)+")");
+                            } else	{
+                                windowLog.warn("error loading Leads, exit");
+                                logout();
+                            }
+                        },
+                        error     	: (function (jqxhr, textStatus, error ) {
+                            windowLog.warn("Load Leads failed:"+textStatus + ", " + error);
+                            logtout();
+                        })
+                });
+
+                data ="";
+                $.ajax({url     : "../customers/read_customers.php",
+                    method		: "POST",
+                    data      	: JSON.stringify({'calltype':'all'}),
+                    dataType	: "json",
+                    async       : false,  
+                    success		: function(data) {
+                        if (( data !== '' ) &&
+                            ( Number(data[0].Status) > 0 ))  {
+                                classArray["Customers"] = new classType1(data,"Customers",1);
+                                classArray["Customers"].cNames=[];
+                                classArray["Customers"].telNumbers=[];
+                                classArray["Customers"].zips=[];
+                                classArray["Customers"].emails=[];
+                                for (var i = 0; i < classArray["Customers"].arr.length; i++) { //loop throu the return msg 
+                                    const tempEntry=classArray["Customers"].arr[i];
+                                
+                                    classArray["Customers"].cNames.push(buildCstmrSearchString(tempEntry));
+                                    classArray["Customers"].telNumbers.push(classArray["Customers"].arr[i].customer_tel_number);
+                                    classArray["Customers"].zips.push(classArray["Customers"].arr[i].zip);
+                                    classArray["Customers"].emails.push(classArray["Customers"].arr[i].customer_email);
+                                }
+                                windowLog.trace("Load all Customers completed succesfully("+classArray["Customers"].arr.length+")");
+                        } else	{
+                            windowLog.warn("error loading Customers.. see admin");
+                            logout();
                         }
                     },
-                error     	: function (jqxhr, textStatus, error ) {
-                    windowLog.warn("Load projects failed:"+textStatus + ", " + error); 
-                    logout();
-                }
-        });
-
-        $.ajax({url         : "../estimates/read_estimates.php",
-                method		: "POST",
-                data      	: JSON.stringify({'calltype':'all'}),
-                dataType	: "json",
-                async       : false,  
-                success		: function(data) {
-                    if ( (data !== '') &&
-                            (Number(data[0].Status) > 0) )  {
-                            classArray["Estimates"]  = new classType1(data,"Estimates",1);
-                            windowLog.trace("Load all estimates completed succesfully("+classArray["Estimates"].arr.length+")");
-                    } else	{
-                        windowLog.warn("error loading estimaates, exit");
+                    error     	: (function (jqxhr, textStatus, error ) {
+                        windowLog.warn("Load Customers failed:"+textStatus + ", " + error); 
                         logout();
-                    }
-                },
-                error     	: (function (jqxhr, textStatus, error ) {
-                    windowLog.warn("Load estimates failed:"+textStatus + ", " + error);
-                    logtout();
-                })
-        });
-
-        data ="";
-        $.ajax({url     : "../leads/read_leads.php",
-                method		: "POST",
-                data      	: JSON.stringify({'calltype':'all'}),
-                dataType	: "json",
-                async       : false,  
-                success		: function(data) {
-                    if ((data !== '') &&
-                            (Number(data[0].Status) > 0) )  {
-                            classArray["Leads"]  = new classType1(data,"Leads",1);
-                            windowLog.trace("Load all Leads completed succesfully("+(classArray["Leads"].arr.length)+")");
-                    } else	{
-                        windowLog.warn("error loading Leads, exit");
-                        logout();
-                    }
-                },
-                error     	: (function (jqxhr, textStatus, error ) {
-                    windowLog.warn("Load Leads failed:"+textStatus + ", " + error);
-                    logtout();
-                })
-        });
-
-        data ="";
-        $.ajax({url     : "../customers/read_customers.php",
-            method		: "POST",
-            data      	: JSON.stringify({'calltype':'all'}),
-            dataType	: "json",
-            async       : false,  
-            success		: function(data) {
-                if (( data !== '' ) &&
-                    ( Number(data[0].Status) > 0 ))  {
-                        classArray["Customers"] = new classType1(data,"Customers",1);
-                        classArray["Customers"].cNames=[];
-                        classArray["Customers"].telNumbers=[];
-                        classArray["Customers"].zips=[];
-                        classArray["Customers"].emails=[];
-                        for (var i = 0; i < classArray["Customers"].arr.length; i++) { //loop throu the return msg 
-                            const tempEntry=classArray["Customers"].arr[i];
-                        
-                            classArray["Customers"].cNames.push(buildCstmrSearchString(tempEntry));
-                            classArray["Customers"].telNumbers.push(classArray["Customers"].arr[i].customer_tel_number);
-                            classArray["Customers"].zips.push(classArray["Customers"].arr[i].zip);
-                            classArray["Customers"].emails.push(classArray["Customers"].arr[i].customer_email);
-                        }
-                        windowLog.trace("Load all Customers completed succesfully("+classArray["Customers"].arr.length+")");
-                } else	{
-                    windowLog.warn("error loading Customers.. see admin");
-                    logout();
-                }
-            },
-            error     	: (function (jqxhr, textStatus, error ) {
-                windowLog.warn("Load Customers failed:"+textStatus + ", " + error); 
-                logout();
-            })
-        });
-
-        $.ajax({url         : "../main/read_employees.php", // must read before tasks
-                method		: "POST",
-                data      	: {'calltype':"all"},
-                dataType	: "json",
-                async       : false,  
-                success		: function(data) {  
-                    if ( ( data !== '' ) && 
-                         ( Number(data[0].Status) > 0 ) ) {
-                            classArray["Employees"] = new classType2(data,"Employees",2);
-                            windowLog.trace("Load all employees completed succesfully("+classArray["Employees"].arr.length+")");
-                            classArray["Employees"].colors=[];
-                            classArray["Employees"].arr.forEach( (key) => { 
-                                classArray["Employees"].pNames[key.fullname.toString()]=key.employee_id;    // initialize the employee/id array 
-                                classArray["Employees"].colors[key.fullname.toString()]=key.profile_color;  // initialize the employee/colors array 
-                            });
-                    }
-                    else {
-                        windowLog.warn("error loading employees, exit");
-                        logout();
-                    }
-                },
-                error     	: (function (jqxhr, textStatus, error ) {
-                    windowLog.warn("Load employees failed:"+textStatus + ", " + error); 
-                    logout();
-                })
-        });
-
-
-        $.ajax({url     : "../main/load_task.php",
-            method		: "POST",
-            data      	: JSON.stringify({'calltype':'scheduler'}),
-            dataType	: "json",
-            async       : false,  
-            success		: function(tasks) {
-                if ( tasks !== '' ) {
-                    //windowLog.trace("Load all tasks completed succesfully");
-                    Tasks = new classTasks(tasks); // create Tasks class
-                    classArray["Scheduler"] = Tasks;
-                    /*Tasks.intervalEJID=window.setInterval(function() {
-                        refreshReportCallBack();
-                    }, appConfig.tsPolling_Interval*1000*60);*/
-                    windowLog.trace("All Tasks loaded succesfully("+classArray["Scheduler"].arr.length+")");
-                    windowLog.trace("Set the clock to pollingTasks:"+appConfig.tsPolling_Interval*1000*60);
-                    assignedTasksArr=Tasks.arrTasks.filter((x) => ( ( x.employee_id > 0) && ( Number(x.is_assigned) === 1 ) && ( classArray["Employees"].arr[classArray["Employees"].arr.findIndex(t => t.employee_id === x.employee_id)].is_active === "1" ) ));
-
-                } else	{
-                    windowLog.trace("error loading tasks, exit");
-                    logout();
-                }
-            },
-            error     	: (function (jqxhr, textStatus, error ) {
-                windowLog.warn("Load schedule failed:"+textStatus + ", " + error); 
-                logout();
-            })
-        });
-
-        $.ajax({url         : "../main/read_employee_jobs.php",
-                method		: "POST",
-                data      	: JSON.stringify({'projectNumber':'all'}),
-                dataType	: "json",
-                async       : false,  
-                success		: function(data) {
-                    if (( data !== '' ) &&
-                        ( Number(data[0].Status) > 0 ))  {        
-                        classArray["Employee Jobs"] = new classType1(data,"Employee Jobs",1);
-                        classArray["Employee Jobs"].isTotalCost=false;
-                        lastID["Employee Jobs"]=(Number(Math.max(lastID["Employee Jobs"],lastID["Scheduler"])))+1;
-                        windowLog.trace("Load all employee jobs succesfully("+classArray["Employee Jobs"].arr.length+")");
-                    } else {
-                        windowLog.trace("error loading employee jobs, exit");
-                        logout();
-                    }},
-                error     	: function (jqxhr, textStatus, error ) {
-                    windowLog.warn("Load empoyee jobs failed:"+textStatus + ", " + error); 
-                    logout();
-                }
-        });
-
-        $.ajax({url         : "../main/read_companies.php",
-                method		: "POST",
-                dataType	: "json",
-                async       : false,  
-                success		: function(data) {  
-                    if ( ( data !== '' ) && 
-                         ( Number(data[0].Status) > 0 ) ) {
-                       classArray["Companies"] = new classType2(data,"Companies",2); 
-                       classArray["Companies"].arr.forEach( (key) => { //copy the return data from the DB into the class array
-                        classArray["Companies"].pNames[key.company_name.toString()]=key.company_id; 
                     })
-                    windowLog.trace("Load all Companies completed succesfully("+(classArray["Companies"].arr.length)+")");
-                    }
-                    else 
-                        windowLog.trace("error loading Companies, exit");
-                },
-                error     	: (function (jqxhr, textStatus, error ) {
-                    windowLog.warn("Load Companies failed:"+textStatus + ", " + error);
-                })
-        });
+                });*/
 
-        $.ajax({url         : "../main/read_contractors.php",
-                method		: "POST",
-                dataType	: "json",
-                async       : false,  
-                success		: function(data) {  
-                    if ( ( data !== '' ) && 
-                         ( Number(data[0].Status) > 0 ) ) {
-                       classArray["Contractors"] = new classType2(data,"Contractors",2); 
-                       classArray["Contractors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
-                        classArray["Contractors"].pNames[key.contractorName.toString()]=key.contractor_id; 
+                $.ajax({url         : "../main/read_employees.php", // must read before tasks
+                        method		: "POST",
+                        data      	: {'calltype':"all"},
+                        dataType	: "json",
+                        async       : false,  
+                        success		: function(data) {  
+                            if ( ( data !== '' ) && 
+                                ( Number(data[0].Status) > 0 ) ) {
+                                    classArray["Employees"] = new classType2(data,"Employees",2);
+                                    windowLog.trace("Load all employees completed succesfully("+classArray["Employees"].arr.length+")");
+                                    classArray["Employees"].colors=[];
+                                    classArray["Employees"].arr.forEach( (key) => { 
+                                        classArray["Employees"].pNames[key.fullname.toString()]=key.employee_id;    // initialize the employee/id array 
+                                        classArray["Employees"].colors[key.fullname.toString()]=key.profile_color;  // initialize the employee/colors array 
+                                    });
+                            }
+                            else {
+                                windowLog.warn("error loading employees, exit");
+                                logout();
+                            }
+                        },
+                        error     	: (function (jqxhr, textStatus, error ) {
+                            windowLog.warn("Load employees failed:"+textStatus + ", " + error); 
+                            logout();
                         })
-                    windowLog.trace("Load all Contractors completed succesfully("+(classArray["Contractors"].arr.length)+")");
-                    }
-                    else 
-                        windowLog.trace("error loading Contractors, exit");
-                },
-                error     	: (function (jqxhr, textStatus, error ) {
-                    windowLog.warn("Load Contractors failed:"+textStatus + ", " + error);
-                })
-        });
+                });
 
-        $.ajax({url         : "../main/read_vendors.php",
-                method		: "POST",
-                dataType	: "json",
-                async       : false,  
-                success		: function(data) {  
-                    if ( ( data !== '' ) && 
-                         ( Number(data[0].Status) > 0 ) ) {
-                        classArray["Vendors"] = new classType2(data,"Vendors",2); 
-                        classArray["Vendors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
-                        classArray["Vendors"].pNames[key.vendor_name]=key.vendor_id;})
-                        windowLog.trace("Load all Vendors completed succesfully("+(classArray["Vendors"].arr.length)+")");
-                    }
-                    else 
-                        windowLog.warn("error loading vendors, exit");
-                },
-                error     	: (function (jqxhr, textStatus, error ) {
-                    windowLog.wann("Load vendors failed:"+textStatus + ", " + error);
-                })
-        });
 
-        $.ajax({url         :   "../main/read_hourlyrate.php",
-                method      :   "POST",
-                dataType    :   "json",
-                async       :   false,  
-                data        :   {employeeID: "all"},
-                success     :   function (data) { 
-                    if ( ( data !== '' ) && 
-                         ( Number(data[0].Status) > 0 ) ) {
-                        classArray["Hourly Rate"] = new classType2(data,"Hourly Rate",2);
-                        windowLog.trace("Load all hourly rate completed succesfully("+classArray["Hourly Rate"].arr.length+")");
-                    } else { 
-                        windowLog.warn("Failed to log hourlyrate, exit"); 
+                $.ajax({url     : "../main/load_task.php",
+                    method		: "POST",
+                    data      	: JSON.stringify({'calltype':'scheduler'}),
+                    dataType	: "json",
+                    async       : false,  
+                    success		: function(tasks) {
+                        if ( tasks !== '' ) {
+                            //windowLog.trace("Load all tasks completed succesfully");
+                            Tasks = new classTasks(tasks); // create Tasks class
+                            classArray["Scheduler"] = Tasks;
+                            /*Tasks.intervalEJID=window.setInterval(function() {
+                                refreshReportCallBack();
+                            }, appConfig.tsPolling_Interval*1000*60);*/
+                            windowLog.trace("All Tasks loaded succesfully("+classArray["Scheduler"].arr.length+")");
+                            windowLog.trace("Set the clock to pollingTasks:"+appConfig.tsPolling_Interval*1000*60);
+                            assignedTasksArr=Tasks.arrTasks.filter((x) => ( ( x.employee_id > 0) && ( Number(x.is_assigned) === 1 ) && ( classArray["Employees"].arr[classArray["Employees"].arr.findIndex(t => t.employee_id === x.employee_id)].is_active === "1" ) ));
+
+                        } else	{
+                            windowLog.trace("error loading tasks, exit");
+                            logout();
+                        }
+                    },
+                    error     	: (function (jqxhr, textStatus, error ) {
+                        windowLog.warn("Load schedule failed:"+textStatus + ", " + error); 
                         logout();
-                    }
-                },
-                error       :   function (jqXHR, textStatus, error) { 
-                    windowLog.warn("Load employees failed:"+textStatus + ", " + error); 
-                    logout();
+                    })
+                });
+
+                lastID["Employee Jobs"]=(Number(Math.max(lastID["Employee Jobs"],lastID["Scheduler"])))+1;
+
+                $.ajax({url         : "../main/read_companies.php",
+                        method		: "POST",
+                        dataType	: "json",
+                        async       : false,  
+                        success		: function(data) {  
+                            if ( ( data !== '' ) && 
+                                ( Number(data[0].Status) > 0 ) ) {
+                            classArray["Companies"] = new classType2(data,"Companies",2); 
+                            classArray["Companies"].arr.forEach( (key) => { //copy the return data from the DB into the class array
+                                classArray["Companies"].pNames[key.company_name.toString()]=key.company_id; 
+                            })
+                            windowLog.trace("Load all Companies completed succesfully("+(classArray["Companies"].arr.length)+")");
+                            }
+                            else 
+                                windowLog.trace("error loading Companies, exit");
+                        },
+                        error     	: (function (jqxhr, textStatus, error ) {
+                            windowLog.warn("Load Companies failed:"+textStatus + ", " + error);
+                        })
+                });
+
+                $.ajax({url         : "../main/read_contractors.php",
+                        method		: "POST",
+                        dataType	: "json",
+                        async       : false,  
+                        success		: function(data) {  
+                            if ( ( data !== '' ) && 
+                                ( Number(data[0].Status) > 0 ) ) {
+                            classArray["Contractors"] = new classType2(data,"Contractors",2); 
+                            classArray["Contractors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
+                                classArray["Contractors"].pNames[key.contractorName.toString()]=key.contractor_id; 
+                                })
+                            windowLog.trace("Load all Contractors completed succesfully("+(classArray["Contractors"].arr.length)+")");
+                            }
+                            else 
+                                windowLog.trace("error loading Contractors, exit");
+                        },
+                        error     	: (function (jqxhr, textStatus, error ) {
+                            windowLog.warn("Load Contractors failed:"+textStatus + ", " + error);
+                        })
+                });
+
+                $.ajax({url         : "../main/read_vendors.php",
+                        method		: "POST",
+                        dataType	: "json",
+                        async       : false,  
+                        success		: function(data) {  
+                            if ( ( data !== '' ) && 
+                                ( Number(data[0].Status) > 0 ) ) {
+                                classArray["Vendors"] = new classType2(data,"Vendors",2); 
+                                classArray["Vendors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
+                                classArray["Vendors"].pNames[key.vendor_name]=key.vendor_id;})
+                                windowLog.trace("Load all Vendors completed succesfully("+(classArray["Vendors"].arr.length)+")");
+                            }
+                            else 
+                                windowLog.warn("error loading vendors, exit");
+                        },
+                        error     	: (function (jqxhr, textStatus, error ) {
+                            windowLog.wann("Load vendors failed:"+textStatus + ", " + error);
+                        })
+                });
+
+                $.ajax({url         :   "../main/read_hourlyrate.php",
+                        method      :   "POST",
+                        dataType    :   "json",
+                        async       :   false,  
+                        data        :   {employeeID: "all"},
+                        success     :   function (data) { 
+                            if ( ( data !== '' ) && 
+                                ( Number(data[0].Status) > 0 ) ) {
+                                classArray["Hourly Rate"] = new classType2(data,"Hourly Rate",2);
+                                windowLog.trace("Load all hourly rate completed succesfully("+classArray["Hourly Rate"].arr.length+")");
+                            } else { 
+                                windowLog.warn("Failed to log hourlyrate, exit"); 
+                                logout();
+                            }
+                        },
+                        error       :   function (jqXHR, textStatus, error) { 
+                            windowLog.warn("Load employees failed:"+textStatus + ", " + error); 
+                            logout();
+                        }
+                });
+            
+
+                $("#innerPT_ID,#CloseBtnPsumry").on("click", innerPThandler);
+
+                windowLog.trace("Window HxW:"+window.innerHeight+":"+window.innerWidth);
+                if ( ( window.innerHeight < 480 ) || 
+                    ( window.innerWidth  < 480 ) ) {
+                    zoom(0.8); 
+                    $("#footer").css({'font-size' : '7px'});
+                    isZoom = true;
+                    windowLog.trace("Zoom out");
                 }
-        });
-        
+                if ( pageAccessedByReload )
+                    displayMainMenue("home"); // home or config (window.location.hash.slice(1)
 
-        $("#innerPT_ID,#CloseBtnPsumry").on("click", innerPThandler);
-
-        windowLog.trace("Window HxW:"+window.innerHeight+":"+window.innerWidth);
-        if ( ( window.innerHeight < 480 ) || 
-             ( window.innerWidth  < 480 ) ) {
-            zoom(0.8); 
-            $("#footer").css({'font-size' : '7px'});
-            isZoom = true;
-            windowLog.trace("Zoom out");
+                $(".parentDivClass").css({'display':"flex"});
+            });
         }
-        if ( pageAccessedByReload )
-            displayMainMenue("home"); // home or config (window.location.hash.slice(1)
+        else {
+            windowLog.warn("Fatal Eror- failed to load modules- exit");
+            logout();
+        }
+        $("#ul, #ur, #ll, #lr").addClass("homeScreen");
     }
-    else {
-        $('img[id^=Pls]').remove();
-        $("#userFileUpload").on("click",function(event) { return uploadFilesCheckBoxHandler(event); });
-        screenNumber = "user";
-        //displayMainMenue("engineer");    
-        //$("#newCustomer,#newScheduler").remove();
-    }
-
-    $("#ul, #ur, #ll, #lr").addClass("homeScreen");
+    else   {
+            $(".parentDivClass").css({'display':"flex"});
+            $('img[id^=Pls]').remove();
+            $("#userFileUpload").on("click",function(event) { return uploadFilesCheckBoxHandler(event); });
+            screenNumber = "user";
+            //displayMainMenue("engineer");    
+            //$("#newCustomer,#newScheduler").remove();
+        }
 }}) ;
 
 function checkRefresh() {
@@ -2064,18 +2078,19 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
     $.ajax({
         url         : "../main/read_employee_jobs.php",
         method      : "POST",
-        data        : {'projectNumber':'all'},
+        data        : JSON.stringify({'projectNumber':'all'}),
         dataType    : "json",
         async       : false,
         success     : (function(data) {  
             classArray["Employee Jobs"] = new classType1(data,"Employee Jobs",1);
             lastID["Employee Jobs"]=(Number(Math.max(lastID["Employee Jobs"],lastID["Scheduler"])))+1;
         }),
-        error       : (function (xhr) { 
-              windowLog.trace("Save schedule failed"); })
-        });
+         error     	: (function (jqxhr, textStatus, error ) {
+                windowLog.warn("Load Moules failed:"+textStatus + ", " + error);
+            })
+    });
 
-    if ( pojectNumber == 0 ) 
+    if ( pojectNumber === 0 ) 
         eArray = classArray[screen_name].arr;//EmployeeJobs.arrEmployeeJobs;
     else {
         eArray = classArray[screen_name].arr.filter(((element) => element.project_number == pojectNumber));

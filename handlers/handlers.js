@@ -1,9 +1,9 @@
 /*
 const optionsHandler = {
-    option1: (option) => console.log(`Selected option '${option}'.`),
-    option2: (option) => console.log(`Great!!! You have selected the '${option}' option.`),
-    option3: (option) => console.log(`Mmmmm, it's interesting you have choosen the '${option}' option.`),
-    option4: (option) => console.log(`If it's right for you, the '${option}' option is fine for me too.`),
+    option1: (option) => windowLog.trace(`Selected option '${option}'.`),
+    option2: (option) => windowLog.trace(`Great!!! You have selected the '${option}' option.`),
+    option3: (option) => windowLog.trace(`Mmmmm, it's interesting you have choosen the '${option}' option.`),
+    option4: (option) => windowLog.trace(`If it's right for you, the '${option}' option is fine for me too.`),
     }
 */
     /*let option = 'option1';
@@ -40,10 +40,10 @@ var requests = urls.map(function(url){
 // Resolve all the promises
 Promise.all(requests)
 .then((results) => {
-  console.log(JSON.stringify(results, null, 2));
+  windowLog.trace(JSON.stringify(results, null, 2));
 }).catch(function(err) {
-  console.log("returns just the 1st failure ...");
-  console.log(err);
+  windowLog.trace("returns just the 1st failure ...");
+  windowLog.trace(err);
 })
 */
     var lastFocusedEntry=[]; // holds the last focused entry in the record
@@ -108,7 +108,7 @@ Promise.all(requests)
         /*if (isCtrlShift && event.code === 'KeyV') {
             event.preventDefault(); // Prevent the browser's default action (e.g., save page, screenshot)
             
-            console.log('Ctrl + Shift + S pressed! Custom action here.');
+            windowLog.trace('Ctrl + Shift + S pressed! Custom action here.');
             alert('Custom Save Action Executed!');
             
             // Place your custom logic here (e.g., save data via AJAX)
@@ -693,7 +693,7 @@ Promise.all(requests)
             function constructPath() {
                 var path="";
                 if ($(this).attr("id").includes("d_")) {
-                  //console.log($(this).attr("id"));
+                  //windowLog.trace($(this).attr("id"));
                   path=$(this).attr("id").slice(2);
                   return path;
                 }
@@ -705,7 +705,7 @@ Promise.all(requests)
                 if ( i > 0 )
                     parentFolder += "/";  // add the seperator except if this the last element
             }
-                //console.log($(this).attr("id"));
+                //windowLog.trace($(this).attr("id"));
             //path=$(this).attr("id").slice(2);
             fileName=e.target.innerText;
             windowLog.trace("dblClk filename:"+fileName);
@@ -1629,7 +1629,7 @@ Promise.all(requests)
             if (checkShortcut(event, shortcut)) {
                 event.preventDefault();
                 shortcut.action();
-                console.log(`Shortcut triggered: ${shortcut.key}`);
+                windowLog.trace(`Shortcut triggered: ${shortcut.key}`);
                 return;
             }
         }

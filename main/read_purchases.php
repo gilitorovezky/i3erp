@@ -6,7 +6,11 @@
 
     $ret_recs = array();
     
-    $projectNumber=str_replace("'","\'",$_POST["projectNumber"]); // projectNumber : all or projectNumber
+//    $projectNumber=str_replace("'","\'",$_POST["projectNumber"]); // projectNumber : all or projectNumber
+    $post_json = file_get_contents('php://input');
+    $sessionJSON = json_decode($post_json, true);
+    $projectNumber=str_replace("'","\'",$sessionJSON['projectNumber']); // call type : * or project id
+
     file_put_contents('../log/log_'.$logDate.'.log',"(read_purchases) ".$current_time." info 1-sql connect error:".mysqli_connect_errno()." prjNumber:".$projectNumber."\n", FILE_APPEND); 
     if ( mysqli_connect_errno() == 0 ) {
 

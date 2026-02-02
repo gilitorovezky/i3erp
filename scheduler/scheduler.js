@@ -353,7 +353,7 @@ let Monday = new Date();	// Holds the first Monday of the current week
          if ( $(this).find('div[id="rootElement"]').length > 1)
           updateButtonStatus(this);
 
-          //console.log("Cell Text: " + cellText + ", Cell ID: " + cellId);
+          //windowLog.trace("Cell Text: " + cellText + ", Cell ID: " + cellId);
         });
     });
 

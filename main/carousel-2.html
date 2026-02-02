@@ -31,14 +31,14 @@ showDivs(slideIndex);
           x = param_array[i].split('=');
           //params[x[0]] = x[1]; // x[1] is the file name to show 
           out += `<img class="mySlides" src="${x[1]}">`;
-          console.log(x[1]);
+          windowLog.trace(x[1]);
       }
 
       out +=`<button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>`;
       out +=`<button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>`;
     
     items.innerHTML = out;
-    console.log(out);
+    windowLog.trace(out);
   }
 
 

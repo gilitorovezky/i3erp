@@ -6,9 +6,11 @@
     $logDate=date("n.j.Y");
 
     $ret_recs = array();
-
-    $projectNumber=str_replace("'","\'",$_POST["projectNumber"]); // projectNumber : all or projectNumber
-    file_put_contents('../log/log_'.$logDate.'.log',"(read_payments) ".$current_time." info 1-sql connect error:".mysqli_connect_errno()." prjNumber:".$_POST["projectNumber"]."\n", FILE_APPEND); 
+    $post_json = file_get_contents('php://input');
+    $sessionJSON = json_decode($post_json, true);
+    $projectNumber=str_replace("'","\'",$sessionJSON['projectNumber']); // call type : * or project id
+    //$projectNumber=str_replace("'","\'",$_POST["projectNumber"]); // projectNumber : all or projectNumber
+    file_put_contents('../log/log_'.$logDate.'.log',"(read_payments) ".$current_time." info 1-sql connect error:".mysqli_connect_errno()." prjNumber:".$projectNumber."\n", FILE_APPEND); 
 
     if ( mysqli_connect_errno() == 0 ) {
         if ( $projectNumber =='all' )

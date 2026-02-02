@@ -15,7 +15,7 @@
     var path="";
     var regex=/^d_/s; // directory starts with d_
     if (regex.test($(this).attr("id" ))) {
-      //console.log($(this).attr("id"));
+      //windowLog.trace($(this).attr("id"));
       path=$(this).attr("id").split("_")[2];
       return path;
     }

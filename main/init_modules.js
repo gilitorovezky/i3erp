@@ -32,44 +32,52 @@ function initModules() {
 }
 
 
-     function ajaxRequest(config) {
-      //  const data2Send={config[data]};
-      const value=Object.values(JSON.parse(config.data))[0];
-      const key=Object.keys(JSON.parse(config.data))[0];
-      var jsonObj = {};
-          jsonObj[key]=value;
-      return $.ajax({
-        url         : config.module_file_url,
-        type        : config.method || "POST",
-        //data        : JSON.stringify({'projectNumber':'all'}),
-        data        : JSON.stringify(jsonObj),
-        async       : false,
-        headers     : config.headers || {},
-        dataType    : "json",
-        contentType : config.contentType || 'application/json; charset=utf-8',
-        success     : function(data, textStatus, xhr) {
-            if (data[0].Status > 0)
-                windowLog.trace("Loaded "+config.module_name+" succesfully");
-            else
-                windowLog.warn("Loaded "+config.module_name+" failed");
-          // Success handled by promise
-        },
-        error: function(xhr, textStatus, errorThrown) {
-          // Error handled by promise
-        }
-      });
+    function ajaxRequest(config) {
+    
+        const value=Object.values(JSON.parse(config.data))[0];
+        const key=Object.keys(JSON.parse(config.data))[0];
+        var jsonObj = {};
+        jsonObj[key]=value;
+
+        return  Promise.resolve(
+          $.ajax({
+                url         : config.module_file_url,
+                type        : config.method || "POST",
+                //data        : JSON.stringify({'projectNumber':'all'}),
+                data        : JSON.stringify(jsonObj),
+                //async       : false,
+                headers     : config.headers || {},
+                dataType    : "json",
+                contentType : config.contentType || 'application/json; charset=utf-8',
+                success     : function(data, textStatus, xhr) {
+                    if (data[0].Status > 0) {
+                        windowLog.trace("Loaded "+config.module_name+" succesfully");
+                           classArray[config.module_name] = new classType1(data,config.module_name,Number(config.screen_number));
+                        classArray[config.module_name].isTotalCost=false;
+                    }
+                    else
+                        windowLog.warn("Loaded "+config.module_name+" failed");
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                // Error handled by promise
+                }
+            })
+        );
     }
 
     async function readFilesSequentially(onProgress) {
       const results = [];
-      const delayPerFile = 2500; // 2.5 seconds per file = 10 seconds total for 4 files
+      const delayPerFile = 500; // 2.5 seconds per file = 10 seconds total for 4 files
+
+    windowLog.trace('Starting sequential load, total requests:', classModules.arr.length);
       
       for (let i = 0; i < classModules.arr.length; i++) {
         const request = classModules.arr[i];
-        
+        windowLog.trace(`Starting request ${i + 1}/${classModules.arr.length}:`, classModules.arr[i].module_file_url);
         try {
           // Wait for this request to complete before moving to next
           const response = await ajaxRequest(request);
+           windowLog.trace(`Completed request ${i + 1}:`, classModules.arr[i].module_file_url);
           
           results.push({
             url: request.url,
@@ -84,10 +92,12 @@ function initModules() {
           
           // Add delay before next file (except after the last file)
           if (i < classModules.arr.length - 1) {
+            windowLog.trace(`Waiting ${delayPerFile}ms before next request...`);
             await new Promise(resolve => setTimeout(resolve, delayPerFile));
+            windowLog.trace('Delay complete, continuing...');
           }
         } catch (error) {
-            console.error(`Error reading ${request.url}:`, error);
+            windowLog.warn(`Error reading ${request.url}:`, error);
           throw error;
         }
       }
@@ -111,9 +121,9 @@ function initModules() {
 
   async function loadModules() {
 
-      try {
+    try {
         const files = await readFilesSequentially(updateProgress);
-        console.log('All files loaded:', files);
+        windowlog.trace('All files loaded:', files);
         
         // Hide progress bar and show content
         setTimeout(() => {
@@ -121,9 +131,9 @@ function initModules() {
           //displayFiles(files);
         }, 500);
         
-      } catch (error) {
-        console.error('Failed to load files:', error);
+    } catch (error) {
+        windowLog.warn('Failed to load files:', error);
         hideProgress();
 
-      }
     }
+}

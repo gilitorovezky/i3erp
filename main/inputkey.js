@@ -1,9 +1,9 @@
 
     const shortcuts = [
-            { ctrl: true, shift: true, key: 'a', action: () => console.log('Ctrl+Shift+A - Select All activated!') },
-            { ctrl: true, shift: true, key: 'h', action: () => console.log('Ctrl+Shift+H - Home shortcut activated!') },
-            { ctrl: true, key: 'z', action: () => console.log('Ctrl+Z - Undo activated!') },
-            { ctrl: true, key: 'n', action: () => console.log('Ctrl+N - New activated!') },
+            { ctrl: true, shift: true, key: 'a', action: () => windowLog.trace('Ctrl+Shift+A - Select All activated!') },
+            { ctrl: true, shift: true, key: 'h', action: () => windowLog.trace('Ctrl+Shift+H - Home shortcut activated!') },
+            { ctrl: true, key: 'z', action: () => windowLog.trace('Ctrl+Z - Undo activated!') },
+            { ctrl: true, key: 'n', action: () => windowLog.trace('Ctrl+N - New activated!') },
             { ctrl: true, key: 'e', action: () =>  $("#editCBID").prop("checked", !$('#editCBID').is(":checked")) }, // Enable Edit mode
         ];
 
@@ -1571,8 +1571,8 @@ for (const [key, value] of Object.entries(obj)) {
 }
 
 // O(1) lookup by value
-console.log(reverseMap.get('John')); // 'name'
-console.log(reverseMap.get(30));     // 'age'
+windowLog.trace(reverseMap.get('John')); // 'name'
+windowLog.trace(reverseMap.get(30));     // 'age'
 // */
 
     function checkShortcut(event, shortcut) {

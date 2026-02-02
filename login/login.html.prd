@@ -46,7 +46,7 @@
 	function OnSubmit()
 	{
 		let formData = new FormData();
-		console.log("Submitting username and passowrd");
+		windowLog.trace("Submitting username and passowrd");
 		// send the username/pasword to the server for verification
 		formData.append('username', document.getElementById("username").value);
 		formData.append('password',document.getElementById("password").value);
@@ -57,7 +57,7 @@
 			.then(response  => response.json())
 			.then((txt) 	=> {checkLogin(txt)}) // Print return message (success or failure)
 			.catch(error 	=> {
-				console.log('Error:', error);
+				windowLog.trace('Error:', error);
 				document.getElementById("loginResultID").innerHTML = "Error login in";
 			return true;
 		}); 
