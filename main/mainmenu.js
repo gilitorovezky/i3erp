@@ -1326,6 +1326,7 @@ $(document).ready( function() {
 
                 $(".parentDivClass").css({'display':"flex"});
                 $(".navtop div").css({'display':"flex"});
+                $(".navtop").css({"background-color"	: "#faba0a"});
             });
         }
         else {
