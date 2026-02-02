@@ -53,7 +53,7 @@
     
         classArray["Employee Jobs"].isTotalCost=event.target.checked;
     
-       var arrChkBox = document.getElementsByName("labor_cost");
+        var arrChkBox = document.getElementsByName("labor_cost");
             $(arrChkBox).toggle();
     
         return false;
