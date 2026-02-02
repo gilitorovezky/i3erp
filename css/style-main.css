@@ -78,7 +78,7 @@ body {
 }
 
 .navtop div {
-	display				: flex;
+	display				: none;
 	margin				: 0 auto;
 	height				: 100%;
 }

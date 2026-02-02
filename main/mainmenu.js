@@ -981,8 +981,6 @@ $(document).ready( function() {
                 windowLog.trace('Modules finished loading');
           
                 $(".loggedin").css({'background-color'    : '#f8f7f3'});
-                
-
                 $("#configID").html("Configuration");
                 $("#systemID").html("System");
                 $("#rootID").html("Home");
@@ -1327,6 +1325,7 @@ $(document).ready( function() {
                     displayMainMenue("home"); // home or config (window.location.hash.slice(1)
 
                 $(".parentDivClass").css({'display':"flex"});
+                $(".navtop div").css({'display':"flex"});
             });
         }
         else {
@@ -1337,6 +1336,7 @@ $(document).ready( function() {
     }
     else   {
             $(".parentDivClass").css({'display':"flex"});
+            $(".navtop div").css({'display':"flex"});
             $('img[id^=Pls]').remove();
             $("#userFileUpload").on("click",function(event) { return uploadFilesCheckBoxHandler(event); });
             screenNumber = "user";
