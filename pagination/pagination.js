@@ -156,7 +156,7 @@
 
     // Initialize virtual scroll
     const virtualScroll = new VirtualScroll({
-        container: document.getElementById('scrollContainer'),
+        container: document.getElementById('scrollDivID'), //scrollContainer'),
         tableBody: document.getElementById('tableBody'),
         spacerTop: document.getElementById('spacerTop'),
         spacerBottom: document.getElementById('spacerBottom'),
