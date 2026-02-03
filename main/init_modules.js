@@ -50,6 +50,7 @@ function initModules() {
                     if (data[0].Status > 0) {
                         windowLog.trace("Loaded "+config.module_name+" succesfully");
                            classArray[config.module_name] = new classMap[Number(config.class_type)](data,config.module_name,Number(config.screen_number));
+                           classArray[config.module_name].position=config.position;
                     }
                     else
                         windowLog.warn("Loaded "+config.module_name+" failed");
