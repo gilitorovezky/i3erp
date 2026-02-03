@@ -4,7 +4,7 @@
             this.tableBody = options.tableBody;
             this.spacerTop = options.spacerTop;
             this.spacerBottom = options.spacerBottom;
-            this.recordInfo = options.recordInfo;
+            //this.recordInfo = options.recordInfo;
             
             this.allData = [];
             this.windowSize = options.windowSize || 50;
@@ -29,7 +29,7 @@
             // Simulate loading data from PHP/MySQL
             // In real implementation: fetch('api/get_all_records.php')
             
-            this.recordInfo.textContent = 'Loading data...';
+            //this.recordInfo.textContent = 'Loading data...';
             
             // Simulate API delay
             await new Promise(resolve => setTimeout(resolve, 500));
@@ -116,9 +116,9 @@
         }
 
         updateInfo() {
-            const showing = this.endIndex - this.startIndex;
-            this.recordInfo.textContent = 
-                `Showing ${this.startIndex + 1}-${this.endIndex} of ${this.allData.length} records (Rendering ${showing} rows)`;
+            //const showing = this.endIndex - this.startIndex;
+            //this.recordInfo.textContent = 
+            //    `Showing ${this.startIndex + 1}-${this.endIndex} of ${this.allData.length} records (Rendering ${showing} rows)`;
         }
 
         updateWindowSize() {
@@ -137,7 +137,7 @@
             this.startIndex = 0;
             this.endIndex = this.windowSize;
             this.render();
-            this.updateInfo();
+            //this.updateInfo();
         }
 
         scrollToBottom() {
@@ -157,10 +157,10 @@
     // Initialize virtual scroll
     const virtualScroll = new VirtualScroll({
         container: document.getElementById('scrollDivID'), //scrollContainer'),
-        tableBody: document.getElementById('tableBody'),
+        tableBody: document.getElementById('result-table1'),
         spacerTop: document.getElementById('spacerTop'),
         spacerBottom: document.getElementById('spacerBottom'),
-        recordInfo: document.getElementById('recordInfo'),
+        //recordInfo: document.getElementById('recordInfo'),
         windowSize: 50,
         buffer: 10,
         rowHeight: 45

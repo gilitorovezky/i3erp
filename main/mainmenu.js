@@ -20,10 +20,7 @@ var today=date.getFullYear()+"-"+(("0" + (date.getMonth()+1)).slice(-2))+"-"+(("
 const dummyDate= "1999-01-01"
 const customerPanes=["Leads","Estimates","Projects"];
 
-const screens=["",home,configuration];
-
- modules1 = ["Employee Jobs","Purchases","Payments","Sub Contractors","Vendors",
-                 "Companies","Contractors","Employees","Projects","Customers","Estimates","Scheduler","Hourly Rate"];
+const screens=["home","configuration"];
 
 const captions = {
         "genesis":["upperLeft","upperRight","lowerLeft","lowerRight"], // do not change - must match the id in the html ome@ h!!
@@ -589,6 +586,7 @@ class classConfig {
         this.masterModuleAttributes=JSON.parse(arrConfig[1].masterModuleAttributes);
         this.newEntryMaxDepth=arrConfig[1].new_entry_max_depth;
         this.saveMsgTimeout=Number(arrConfig[1].saveMsgTimeout);
+        this.fastLoading=arrConfig[1].fast_loading==='1'?true:false;
         //this.defaultProfileColor=arrConfig[1].default_profile_color;
     }
 }
@@ -979,7 +977,7 @@ $(document).ready( function() {
         const iniModulesResult=initModules();
 
         if ( iniModulesResult ) {
-            loadModules().then(function() {
+            loadModules().then(function() { // load al modules from the DB and show the progress bar
                 windowLog.trace('Modules finished loading');
           
                 $(".loggedin").css({'background-color'    : '#f8f7f3'});
@@ -1047,15 +1045,16 @@ $(document).ready( function() {
                                         classArray["Employees"].colors[key.fullname.toString()]=key.profile_color;  // initialize the employee/colors array 
                                     });
                 classArray["Companies"].arr.forEach( (key) => { //copy the return data from the DB into the class array
-                                classArray["Companies"].pNames[key.company_name.toString()]=key.company_id; 
-                                    });
+                    classArray["Companies"].pNames[key.company_name.toString()]=key.company_id; 
+                });
 
                 classArray["Contractors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
-                                classArray["Contractors"].pNames[key.contractorName.toString()]=key.contractor_id; 
-                                    });
+                    classArray["Contractors"].pNames[key.contractorName.toString()]=key.contractor_id; 
+                });
 
                 classArray["Vendors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
-                                classArray["Vendors"].pNames[key.vendor_name]=key.vendor_id;});    
+                    classArray["Vendors"].pNames[key.vendor_name]=key.vendor_id;
+                });
 
                 $("#innerPT_ID,#CloseBtnPsumry").on("click", innerPThandler);
 
@@ -1074,6 +1073,7 @@ $(document).ready( function() {
                 $(".navtop div").css({'display':"flex"});
                 $(".navtop").css({"background-color"	: "#faba0a"});
             });
+            
         }
         else {
             windowLog.warn("Fatal Eror- failed to load modules- exit");
@@ -1081,9 +1081,7 @@ $(document).ready( function() {
         }
         $("#ul, #ur, #ll, #lr").addClass("homeScreen");
 
-        classArray.arr.forEach( (record) => {
-            lastID[record.module_name]=1; // init lastID with default value (1)
-        }); 
+       
 
     }
     else   {

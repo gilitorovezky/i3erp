@@ -25,6 +25,7 @@
                                    "maxUArows"                       =>  $row["maxUArows"],
                                    "new_entry_max_depth"             =>  $row["new_entry_max_depth"],
                                    //"default_profile_color"           =>  $row["default_profile_color"],
+                                   "fast_loading"                    =>  $row["fast_loading"],
                                    "masterModuleAttributes"          =>  $row["masterModuleAttributes"]
                                 );
             

@@ -82,14 +82,13 @@ function initModules() {
           //});
           
           // Update progress
-          if (onProgress) {
-            onProgress(i + 1, classModules.arr.length, request.module_name);
-          }
-          
-          // Add delay before next file (except after the last file)
-          if (i < classModules.arr.length - 1) {
-            await new Promise(resolve => setTimeout(resolve, delayPerFile));
-          }
+            if (!appConfig.fastLoading && onProgress) {
+                onProgress(i + 1, classModules.arr.length, request.module_name);
+                
+                if (i < classModules.arr.length - 1) { // Add delay before next file (except after the last file)
+                    await new Promise(resolve => setTimeout(resolve, delayPerFile));
+                }
+            }
         } catch (error) {
             windowLog.warn(`Error reading ${request.module_name}:`+ error);
           throw error;
@@ -116,13 +115,19 @@ function initModules() {
   async function loadModules() {
 
     try {
-        const retCode = await readFilesSequentially(updateProgress);
-        windowLog.trace('All files loaded (retCode):'+retCode);
+
+        if (appConfig.fastLoading) {
+            hideProgress();   
+        }
+        const retStatus= await readFilesSequentially(updateProgress);
         
-        setTimeout(() => {
-          hideProgress();
-        }, 1500);
+        windowLog.trace('All files loaded (retCode):'+retStatus);
         
+        if (!appConfig.fastLoading) {
+            setTimeout(() => {
+            hideProgress();
+            }, 1500);
+        }
     } catch (error) {
         windowLog.warn('Failed to load files:'+ error);
         hideProgress();
