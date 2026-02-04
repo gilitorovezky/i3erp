@@ -23,5 +23,5 @@
         echo json_encode(["error" => "Failed to fetch layers"]);
     }
 
-    $conn->close();
+    $con->close();
 ?>
