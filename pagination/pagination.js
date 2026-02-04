@@ -1,4 +1,4 @@
-    class VirtualScroll {
+    class VirtualScroll2 {
         constructor(options) {
             this.container = options.container;
             this.tableBody = options.tableBody;
@@ -35,10 +35,10 @@
             await new Promise(resolve => setTimeout(resolve, 500));
             
             // Generate sample data (replace with actual fetch call)
-            const totalRecords = 1000;
+            //const totalRecords = 1000;
             this.allData = [];
             
-            for (let i = 1; i <= totalRecords; i++) {
+            /*for (let i = 1; i <= totalRecords; i++) {
                 this.allData.push({
                     id: i,
                     name: `User ${i}`,
@@ -46,10 +46,10 @@
                     status: i % 3 === 0 ? 'Active' : i % 3 === 1 ? 'Inactive' : 'Pending',
                     created: new Date(2024, 0, i % 28 + 1).toLocaleDateString()
                 });
-            }
+            }*/
             
-            this.render();
-            this.updateInfo();
+            //this.render();
+            //this.updateInfo();
         }
 
         
@@ -155,7 +155,7 @@
     }
 
     // Initialize virtual scroll
-    const virtualScroll = new VirtualScroll({
+    const virtualScroll2 = new VirtualScroll2({
         container: document.getElementById('scrollDivID'), //scrollContainer'),
         tableBody: document.getElementById('result-table1'),
         spacerTop: document.getElementById('spacerTop'),
@@ -167,4 +167,4 @@
     });
 
     // Load data on page load
-    virtualScroll.loadAllData();
+    //virtualScroll.loadAllData();

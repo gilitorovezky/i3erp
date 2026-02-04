@@ -20,9 +20,9 @@ var today=date.getFullYear()+"-"+(("0" + (date.getMonth()+1)).slice(-2))+"-"+(("
 const dummyDate= "1999-01-01"
 const customerPanes=["Leads","Estimates","Projects"];
 
-const screens=["home","configuration"];
+//const screens=["home","configuration"];
 
-const captions = {
+let captions = {
         "genesis":["upperLeft","upperRight","lowerLeft","lowerRight"], // do not change - must match the id in the html ome@ h!!
         "shortcuts":["ul","ur","ll","lr"], // shortcuts menue
         "home":["Employee Jobs","Purchases","Payments","Sub Contractors","Projects","Scheduler","Customers","Estimates","Leads"], // main menu 
@@ -440,6 +440,161 @@ let subScreen="";       // hold the new rec type from home screen, like projects
 const initialProjectNumber=1000;
 const initialCstmrNumber=1;
 
+class VirtualScroll {
+        constructor(options) {
+            this.container = options.container;
+            this.tableBody = options.tableBody;
+            this.spacerTop = options.spacerTop;
+            this.spacerBottom = options.spacerBottom;
+            //this.recordInfo = options.recordInfo;
+            
+            this.allData = [];
+            this.windowSize = options.windowSize || 50;
+            this.buffer = options.buffer || 10;
+            this.rowHeight = options.rowHeight || 45;
+            
+            this.startIndex = 0;
+            this.endIndex = this.windowSize;
+            
+            this.isScrolling = false;
+            this.scrollTimeout = null;
+            
+            this.init();
+        }
+
+        init() {
+            this.container.addEventListener('scroll', () => this.handleScroll());
+        }
+
+        // Load all data from server (simulated)
+        async loadAllData() {
+            // Simulate loading data from PHP/MySQL
+            // In real implementation: fetch('api/get_all_records.php')
+            
+            //this.recordInfo.textContent = 'Loading data...';
+            
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Generate sample data (replace with actual fetch call)
+            //const totalRecords = 1000;
+            this.allData = [];
+            
+            /*for (let i = 1; i <= totalRecords; i++) {
+                this.allData.push({
+                    id: i,
+                    name: `User ${i}`,
+                    email: `user${i}@example.com`,
+                    status: i % 3 === 0 ? 'Active' : i % 3 === 1 ? 'Inactive' : 'Pending',
+                    created: new Date(2024, 0, i % 28 + 1).toLocaleDateString()
+                });
+            }*/
+            
+            //this.render();
+            //this.updateInfo();
+        }
+
+        
+
+        handleScroll() {
+            if (this.isScrolling) return;
+            
+            clearTimeout(this.scrollTimeout);
+            this.scrollTimeout = setTimeout(() => {
+                this.updateVisibleRange();
+            }, 50);
+        }
+
+        updateVisibleRange() {
+            const scrollTop = this.container.scrollTop;
+            const containerHeight = this.container.clientHeight;
+            
+            // Calculate which records should be visible
+            const scrollIndex = Math.floor(scrollTop / this.rowHeight);
+            const visibleCount = Math.ceil(containerHeight / this.rowHeight);
+            
+            // Add buffer for smooth scrolling
+            const newStart = Math.max(0, scrollIndex - this.buffer);
+            const newEnd = Math.min(
+                this.allData.length,
+                scrollIndex + visibleCount + this.buffer
+            );
+            
+            // Only update if the range changed significantly
+            if (newStart !== this.startIndex || newEnd !== this.endIndex) {
+                this.startIndex = newStart;
+                this.endIndex = newEnd;
+                this.render();
+                this.updateInfo();
+            }
+        }
+
+        render() {
+            this.isScrolling = true;
+            
+            // Calculate spacer heights
+            const topHeight = this.startIndex * this.rowHeight;
+            const bottomHeight = (this.allData.length - this.endIndex) * this.rowHeight;
+            
+            this.spacerTop.style.height = `${topHeight}px`;
+            this.spacerBottom.style.height = `${bottomHeight}px`;
+            
+            // Render visible rows
+            const visibleData = this.allData.slice(this.startIndex, this.endIndex);
+            
+            this.tableBody.innerHTML = visibleData.map(record => `
+                <tr>
+                    <td>${record.id}</td>
+                    <td>${record.name}</td>
+                    <td>${record.email}</td>
+                    <td>${record.status}</td>
+                    <td>${record.created}</td>
+                </tr>
+            `).join('');
+            
+            setTimeout(() => {
+                this.isScrolling = false;
+            }, 100);
+        }
+
+        updateInfo() {
+            //const showing = this.endIndex - this.startIndex;
+            //this.recordInfo.textContent = 
+            //    `Showing ${this.startIndex + 1}-${this.endIndex} of ${this.allData.length} records (Rendering ${showing} rows)`;
+        }
+
+        updateWindowSize() {
+            const input = document.getElementById('windowSize');
+            const newSize = parseInt(input.value);
+            
+            if (newSize >= 10 && newSize <= 200) {
+                this.windowSize = newSize;
+                this.buffer = Math.floor(newSize * 0.2);
+                this.updateVisibleRange();
+            }
+        }
+
+        scrollToTop() {
+            this.container.scrollTop = 0;
+            this.startIndex = 0;
+            this.endIndex = this.windowSize;
+            this.render();
+            //this.updateInfo();
+        }
+
+        scrollToBottom() {
+            this.container.scrollTop = this.allData.length * this.rowHeight;
+            this.updateVisibleRange();
+        }
+
+        scrollToRecord(recordId) {
+            const index = this.allData.findIndex(r => r.id === recordId);
+            if (index !== -1) {
+                this.container.scrollTop = index * this.rowHeight;
+                this.updateVisibleRange();
+            }
+        }
+    }
 
 
 class classMainMenue {
@@ -612,7 +767,20 @@ class genesisClass {
         }
         else
             windowLog.trace(this.moduleName+"- Empty table!");
+
+        this.virtualScroll = new VirtualScroll({
+            container: document.getElementById('scrollDivID'), //scrollContainer'),
+            tableBody: document.getElementById('result-table1'),
+            spacerTop: document.getElementById('spacerTop'),
+            spacerBottom: document.getElementById('spacerBottom'),
+            //recordInfo: document.getElementById('recordInfo'),
+            windowSize: 50,
+            buffer: 10,
+            rowHeight: 45
+        });
+
     }
+
 
     moduleName() {
         return 'screenName ' + this.moduleName;
@@ -842,19 +1010,19 @@ $(window).on("load", function() {
 window.addEventListener("load", function() {
 
     windowLog.trace("inside addEventListener load");
-    windowLog.trace("inside addEventListener load");
     /*username=Cookies.get('username');
     fullname = username;
     $("#overLay ul").attr('data-module',"");
     $("#welcomeNameID").html("Welcome Back, "+username);*/
     //$("#saveTableLabel").hide();
+    /*
     if ( typeof username != "undefined" ) {
         uid=Cookies.get('uid');
-  }
+    }
     else { 
         windowLog.trace("Error- username undefined, exit");
         logout();
-    }
+    }*/
     
     if ( pageAccessedByReload  ) {
 
@@ -878,6 +1046,7 @@ window.addEventListener("load", function() {
             break;    
         }
     }
+    /*
     screenNumber = "home";//window.location.hash.slice(1);
     displayMainMenue("home"); //window.location.hash.slice(1));
 
@@ -886,34 +1055,35 @@ window.addEventListener("load", function() {
         $("#prjShortCut").focus();
         $("#savingTD").html("<a style='font-size : 12px;' id='saveTableLabel'>''</a>");
     }
+*/
 
-     $("body").delegate("#projectLbl1,#customersLbl2","contextmenu",function() {
-        if (e.target.tagName === "LABEL") {
-            e.preventDefault();
-            floatingMessage.style.left = event.pageX+'px';
-            floatingMessage.style.top = event.pageY+'px';
-            floatingMessage.innerHTML="<p class='label1'>Right click "+event.target.innerText+"</p>";
-            floatingMessage.style.display = 'block';
-            setTimeout(function() {
-                floatingMessage.style.display = 'none';
-            }, 1000); // Hide after 2 seconds
-        }
-     });
+});
+
+$("body").delegate("#projectLbl1,#customersLbl2","contextmenu",function() {
+    if (e.target.tagName === "LABEL") {
+        e.preventDefault();
+        floatingMessage.style.left = event.pageX+'px';
+        floatingMessage.style.top = event.pageY+'px';
+        floatingMessage.innerHTML="<p class='label1'>Right click "+event.target.innerText+"</p>";
+        floatingMessage.style.display = 'block';
+        setTimeout(function() {
+            floatingMessage.style.display = 'none';
+        }, 1000); // Hide after 2 seconds
+    }
+});
 
 
-   $(".css-3d-text").on('contextmenu', function(event) {
-        if (event.target.tagName === "A") {
-            event.preventDefault();
-            floatingMessage.style.left = event.pageX+'px';
-            floatingMessage.style.top = event.pageY+'px';
-            floatingMessage.innerHTML="<p class='label1'>Right click "+event.target.innerText+"</p>";
-            floatingMessage.style.display = 'block';
-            setTimeout(function() {
-                floatingMessage.style.display = 'none';
-            }, 1000); // Hide after 2 seconds
-        }
-    });
-
+$(".css-3d-text").on('contextmenu', function(event) {
+    if (event.target.tagName === "A") {
+        event.preventDefault();
+        floatingMessage.style.left = event.pageX+'px';
+        floatingMessage.style.top = event.pageY+'px';
+        floatingMessage.innerHTML="<p class='label1'>Right click "+event.target.innerText+"</p>";
+        floatingMessage.style.display = 'block';
+        setTimeout(function() {
+            floatingMessage.style.display = 'none';
+        }, 1000); // Hide after 2 seconds
+    }
 });
 
 (function($) {
@@ -932,46 +1102,209 @@ window.addEventListener("load", function() {
 
 let assignedTasksArr;   // global array that holds all assgined tasks
 
-$(document).ready( function() {
+
+
+async function init() {
 
     username=Cookies.get('username');
     fullname = username;
     $("#overLay ul").attr('data-module',"");
     $("#welcomeNameID").html("Welcome Back, "+username);
-
-    if ( typeof username != "undefined" ) {
-        uid=Cookies.get('uid');
-
-    $.ajax({url         : "../main/read_config.php",
-            method		: "GET",
-            dataType	: "json",
-            async       : false,  
-            success		: function(data) {  
-            if ( ( data !== '' ) && 
-                    ( Number(data[0].Status) > 0 ) ) {
-                    initConfig(data);
-                    windowLog.trace("Loaded config settings successfully");
-                }
-                else {
-                    windowLog.warn("error loading configurtions, exit");
-                    logout();
-                }
-            },
-            error     	: (function (jqxhr, textStatus, error ) {
-                windowLog.trace("Load schedule failed:"+textStatus + ", " + error);
-                logout();
-            })
-    });
-
-    windowLog.trace("Inside document ready");
-
-    $("#logout").html("Logout");
-    //$('#logout').css({'cursor'   : 	'pointer'});
-    username=Cookies.get('username');
     if (typeof username === "undefined" ) {
         windowLog.trace("Error- username undefined, exit");
         logout();
     }
+
+    uid=Cookies.get('uid');
+
+    try {
+        let iniConfig = await $.ajax({
+            url: "../main/read_config.php",
+            method: "GET",
+            dataType: "json"
+        });
+
+        windowLog.trace("Inside document ready");
+
+        $("#logout").html("Logout");
+        //$('#logout').css({'cursor'   : 	'pointer'});
+    
+        if (username === 'eddie') { //only Eddie could access
+            if ((iniConfig !== '') && 
+                (Number(iniConfig[0].Status) > 0)) {
+                    setConfig(iniConfig);
+                    //await loadModules(); // aw
+                    const iniModulesResult=initModules();
+                    loadModules().then(function() { // load al modules from the DB and show the progress bar
+                        windowLog.trace('Modules finished loading');
+                    
+                        $(".loggedin").css({'background-color'    : '#f8f7f3'});
+                        $("#configID").html("Configuration");
+                        $("#systemID").html("System");
+                        $("#rootID").html("Home");
+                        $("#libraryID").html("Library");
+                        $('#welcomeNameID,#rootID,#configID,#libraryID,#systemID,#logout').css({'cursor':'pointer'});
+                    
+                        $.ajax({url         : "../main/read_projects.php",
+                                type        : "GET",
+                                dataType    : "json",
+                                async       : false, // Make the request synchronous
+                                    success: function(data) {
+                                        Projects = new classProjects(data);
+                                        classArray["Projects"] = Projects;
+                                        if (Projects.length > 0) {
+                                            lastID["Projects"] = Number(Projects.arrProjects[Projects.arrProjects.length-1].project_id);
+                                            windowLog.trace("Project Data received");
+                                        } else {
+                                            windowLog.warn("No projects found");
+                                        }
+                                    },
+                                error     	: function (jqxhr, textStatus, error ) {
+                                    windowLog.warn("Load projects failed:"+textStatus + ", " + error); 
+                                    logout();
+                                }
+                        });
+
+                        $.ajax({url     : "../main/load_task.php",
+                            method		: "POST",
+                            data      	: JSON.stringify({'calltype':'scheduler'}),
+                            dataType	: "json",
+                            async       : false,  
+                            success		: function(tasks) {
+                                if ( tasks !== '' ) {
+                                    //windowLog.trace("Load all tasks completed succesfully");
+                                    Tasks = new classTasks(tasks); // create Tasks class
+                                    classArray["Scheduler"] = Tasks;
+                                    /*Tasks.intervalEJID=window.setInterval(function() {
+                                        refreshReportCallBack();
+                                    }, appConfig.tsPolling_Interval*1000*60);*/
+                                    windowLog.trace("All Tasks loaded succesfully("+classArray["Scheduler"].arr.length+")");
+                                    windowLog.trace("Set the clock to pollingTasks:"+appConfig.tsPolling_Interval*1000*60);
+                                    assignedTasksArr=Tasks.arrTasks.filter((x) => ( ( x.employee_id > 0) && ( Number(x.is_assigned) === 1 ) && ( classArray["Employees"].arr[classArray["Employees"].arr.findIndex(t => t.employee_id === x.employee_id)].is_active === "1" ) ));
+
+                                } else	{
+                                    windowLog.trace("error loading tasks, exit");
+                                    logout();
+                                }
+                            },
+                            error     	: (function (jqxhr, textStatus, error ) {
+                                windowLog.warn("Load schedule failed:"+textStatus + ", " + error); 
+                                logout();
+                            })
+                        });
+
+                        lastID["Employee Jobs"]=(Number(Math.max(lastID["Employee Jobs"],lastID["Scheduler"])))+1;
+                        classArray["Employee Jobs"].isTotalCost=false;
+                        classArray["Employees"].colors=[];
+                                            classArray["Employees"].arr.forEach( (key) => { 
+                                                classArray["Employees"].pNames[key.fullname.toString()]=key.employee_id;    // initialize the employee/id array 
+                                                classArray["Employees"].colors[key.fullname.toString()]=key.profile_color;  // initialize the employee/colors array 
+                                            });
+                        classArray["Companies"].arr.forEach( (key) => { //copy the return data from the DB into the class array
+                            classArray["Companies"].pNames[key.company_name.toString()]=key.company_id; 
+                        });
+
+                        classArray["Contractors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
+                            classArray["Contractors"].pNames[key.contractorName.toString()]=key.contractor_id; 
+                        });
+
+                        classArray["Vendors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
+                            classArray["Vendors"].pNames[key.vendor_name]=key.vendor_id;
+                        });
+
+                        $("#innerPT_ID,#CloseBtnPsumry").on("click", innerPThandler);
+
+                        windowLog.trace("Window HxW:"+window.innerHeight+":"+window.innerWidth);
+                        if ( ( window.innerHeight < 480 ) || 
+                            ( window.innerWidth  < 480 ) ) {
+                            zoom(0.8); 
+                            $("#footer").css({'font-size' : '7px'});
+                            isZoom = true;
+                            windowLog.trace("Zoom out");
+                        }
+
+                        $(".parentDivClass").css({'display':"flex"});
+                        $(".navtop div").css({'display':"flex"});
+                        $(".navtop").css({"background-color"	: "#faba0a"});
+                            $("#ul, #ur, #ll, #lr").addClass("homeScreen");
+                        screenNumber = "home";//window.location.hash.slice(1);
+                        displayMainMenue("home"); //window.location.hash.slice(1));
+                        $(".main_menue").show();
+                        $("#prjShortCut").focus();
+                        $("#savingTD").html("<a style='font-size : 12px;' id='saveTableLabel'>''</a>");
+                    });
+                }
+                else {
+                    windowLog.warn("Fatal Error- failed to load modules- exit");
+                    logout();
+                }
+        }
+        else   {
+                $(".parentDivClass").css({'display':"flex"});
+                $(".navtop div").css({'display':"flex"});
+                $('img[id^=Pls]').remove();
+                $("#userFileUpload").on("click",function(event) { return uploadFilesCheckBoxHandler(event); });
+                screenNumber = "user";
+                displayMainMenue("engineer");
+                displayMainMenue("home"); //window.location.hash.slice(1));
+                $(".main_menue").show();
+                //$("#newCustomer,#newScheduler").remove();
+        }
+        
+        return true; // Initialization complete
+    }
+    catch (error) {
+        windowLog.warn("General failed: " + error.statusText);
+        logout();
+    }
+}
+
+$(document).ready(async function() {
+
+    await init();
+
+    
+
+
+  /*      username=Cookies.get('username');
+        fullname = username;
+        $("#overLay ul").attr('data-module',"");
+        $("#welcomeNameID").html("Welcome Back, "+username);
+
+        if ( typeof username != "undefined" ) {
+            uid=Cookies.get('uid');
+
+        $.ajax({url         : "../main/read_config.php",
+                method		: "GET",
+                dataType	: "json",
+                async       : false,  
+                success		: function(data) {  
+                if ( ( data !== '' ) && 
+                        ( Number(data[0].Status) > 0 ) ) {
+                        setConfig(data);
+                        windowLog.trace("Loaded config settings successfully");
+                    }
+                    else {
+                        windowLog.warn("error loading configurtions, exit");
+                        logout();
+                    }
+                },
+                error     	: (function (jqxhr, textStatus, error ) {
+                    windowLog.trace("Load schedule failed:"+textStatus + ", " + error);
+                    logout();
+                })
+        });
+
+        windowLog.trace("Inside document ready");
+
+        $("#logout").html("Logout");
+        //$('#logout').css({'cursor'   : 	'pointer'});
+        username=Cookies.get('username');
+        if (typeof username === "undefined" ) {
+            windowLog.trace("Error- username undefined, exit");
+            logout();
+        }
+
     if (username === 'eddie') { //only Eddie could access
 
         const iniModulesResult=initModules();
@@ -1021,7 +1354,7 @@ $(document).ready( function() {
                             classArray["Scheduler"] = Tasks;
                             /*Tasks.intervalEJID=window.setInterval(function() {
                                 refreshReportCallBack();
-                            }, appConfig.tsPolling_Interval*1000*60);*/
+                            }, appConfig.tsPolling_Interval*1000*60);
                             windowLog.trace("All Tasks loaded succesfully("+classArray["Scheduler"].arr.length+")");
                             windowLog.trace("Set the clock to pollingTasks:"+appConfig.tsPolling_Interval*1000*60);
                             assignedTasksArr=Tasks.arrTasks.filter((x) => ( ( x.employee_id > 0) && ( Number(x.is_assigned) === 1 ) && ( classArray["Employees"].arr[classArray["Employees"].arr.findIndex(t => t.employee_id === x.employee_id)].is_active === "1" ) ));
@@ -1073,16 +1406,12 @@ $(document).ready( function() {
                 $(".navtop div").css({'display':"flex"});
                 $(".navtop").css({"background-color"	: "#faba0a"});
             });
-            
         }
         else {
-            windowLog.warn("Fatal Eror- failed to load modules- exit");
+            windowLog.warn("Fatal Error- failed to load modules- exit");
             logout();
         }
         $("#ul, #ur, #ll, #lr").addClass("homeScreen");
-
-       
-
     }
     else   {
             $(".parentDivClass").css({'display':"flex"});
@@ -1093,7 +1422,8 @@ $(document).ready( function() {
             //displayMainMenue("engineer");    
             //$("#newCustomer,#newScheduler").remove();
         }
-}}) ;
+}*/
+}) ;
 
 function checkRefresh() {
     switch ( event.currentTarget.performance.navigation.type ) {
@@ -1121,6 +1451,10 @@ function displayMainMenue(screenName) {
     //const date=new Date();
     hashPassword("hello");
     windowLog.trace("inside DisplayMainMenue:today-"+today);
+
+    // Gili!!
+    captions["lauyer1"]=Object.values(classArray).filter(record => record.position == "upperLeft").filter(record => record.screenNumber ===1).forEach(filteredItem => {console.log(filteredItem.moduleName)})
+
 
     if ( username === 'eddie' ) { //only Eddie could access
         if ( screenName === "home" ) {
@@ -1258,7 +1592,7 @@ function closeProjectSummary() {
     $("#result-table3").html("");
     $("#rootID,#configID,#libraryID,#systemID").show();
     $("#psDivID").removeClass("scrollit");
-    if ( screen_name.text == "Home" ) { // in case closed from the home screen project field
+    if ( screen_name.text === "Home" ) { // in case closed from the home screen project field
         home();
         $('.outer-table').visible();
         $("#result-table1").show();
@@ -1964,9 +2298,10 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
         }
         DelCounter=true;
         
-        out += `</tbody></table>`;
+        out += `</tbody></table></tbody>`;
         
-        document.querySelector(targetDisplay).innerHTML = out+`</tbody>`; // print to screen the return messages
+        classArray["Employee Jobs"].render();
+        //document.querySelector(targetDisplay).innerHTML = out; // print to screen the return messages
         
         if (targetDisplay == "#result-table1") {
             currCell = $('#result-table1 tbody tr:last td:eq(1)').first(); // currCell points to 2nd TD in the last TR
@@ -2234,7 +2569,7 @@ function displayPurchaseResults(projectNumber,targetDisplay) {
     return false;
 }	
 
-function initConfig(data) {
+function setConfig(data) {
 
    
     switch (data[1].debug_level) {
@@ -2289,7 +2624,7 @@ function home()	{
     $(".grid-gallery").css({'display' : "none"});
     $(".main_menue").css({'background-color'    : '#faba0a'});
     /*$("#editLabelID, #formModeID, #exportDialogueID").remove();*/
-     $("#formModeID, #exportDialogueID").remove();
+    $("#formModeID, #exportDialogueID").remove();
     $(".main_menue").show();
     $("#ul, #ur, #ll, #lr").removeClass("configScreen");
     $("#ul, #ur, #ll, #lr").addClass("homeScreen");

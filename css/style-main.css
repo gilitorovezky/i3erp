@@ -420,10 +420,10 @@ body.loggedin {
 }
 
 .res_table2  th {
-	border				:	none;
-	font-size			:  	12px;
-	width				:  	200px; 
-	color				:	black;
+	border				: none;
+	font-size			: 12px;
+	width				: 200px; 
+	color				: black;
 }
 
 .res_table2 tr {
@@ -431,14 +431,14 @@ body.loggedin {
 } 
 
 .res_table2 td {
-	border				:  thin solid #030300;
-	text-align			:  center;
-	width				:  200px; 
-	font-size			:  12px;
+	border				: thin solid #030300;
+	text-align			: center;
+	width				: 200px; 
+	font-size			: 12px;
 } 
 
 .innerPT {
-	color				:	#06011d; 
+	color				: #06011d; 
 	border				: none;
 }
 
@@ -1181,4 +1181,9 @@ img 	{
 	outline: none;
 	box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.4);
 	transform: scale(1.02);
+}
+
+
+.spacer-top, .spacer-bottom {
+	width: 100%;
 }

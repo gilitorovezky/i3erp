@@ -960,18 +960,6 @@ Promise.all(requests)
             case "bHalf"                :
             case "tHalf"                :
                 $("#"+e.target.id).find('input').focus();
-
-                /*if (username === 'eddie') { //only Eddie could access
-                    switch ( window.location.hash ) {
-                        case "#home"    :  
-                            screens[2]();
-                        break;
-    
-                        case "#config"  :
-                            screens[1]();
-                        break;
-                    }
-                }*/
             break;
 
             case "allFilesID"           :
