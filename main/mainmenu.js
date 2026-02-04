@@ -440,191 +440,6 @@ let subScreen="";       // hold the new rec type from home screen, like projects
 const initialProjectNumber=1000;
 const initialCstmrNumber=1;
 
-class VirtualScroll {
-        constructor(options) {
-            this.container = options.container;
-            this.tableBody = options.tableBody;
-            this.spacerTop = options.spacerTop;
-            this.spacerBottom = options.spacerBottom;
-            //this.recordInfo = options.recordInfo;
-            
-            this.allData = [];
-            this.windowSize = options.windowSize || 50;
-            this.buffer = options.buffer || 10;
-            this.rowHeight = options.rowHeight || 45;
-            
-            this.startIndex = 0;
-            this.endIndex = this.windowSize;
-            
-            this.isScrolling = false;
-            this.scrollTimeout = null;
-            
-            this.init();
-        }
-
-        init() {
-            this.container.addEventListener('scroll', () => this.handleScroll());
-        }
-
-        // Load all data from server (simulated)
-        async loadAllData() {
-            // Simulate loading data from PHP/MySQL
-            // In real implementation: fetch('api/get_all_records.php')
-            
-            //this.recordInfo.textContent = 'Loading data...';
-            
-            // Simulate API delay
-            await new Promise(resolve => setTimeout(resolve, 500));
-            
-            // Generate sample data (replace with actual fetch call)
-            //const totalRecords = 1000;
-            this.allData = [];
-            
-            /*for (let i = 1; i <= totalRecords; i++) {
-                this.allData.push({
-                    id: i,
-                    name: `User ${i}`,
-                    email: `user${i}@example.com`,
-                    status: i % 3 === 0 ? 'Active' : i % 3 === 1 ? 'Inactive' : 'Pending',
-                    created: new Date(2024, 0, i % 28 + 1).toLocaleDateString()
-                });
-            }*/
-            
-            //this.render();
-            //this.updateInfo();
-        }
-
-        
-
-        handleScroll() {
-            if (this.isScrolling) return;
-            
-            clearTimeout(this.scrollTimeout);
-            this.scrollTimeout = setTimeout(() => {
-                this.updateVisibleRange();
-            }, 50);
-        }
-
-        updateVisibleRange() {
-            const scrollTop = this.container.scrollTop;
-            const containerHeight = this.container.clientHeight;
-            
-            // Calculate which records should be visible
-            const scrollIndex = Math.floor(scrollTop / this.rowHeight);
-            const visibleCount = Math.ceil(containerHeight / this.rowHeight);
-            
-            // Add buffer for smooth scrolling
-            const newStart = Math.max(0, scrollIndex - this.buffer);
-            const newEnd = Math.min(
-                this.allData.length,
-                scrollIndex + visibleCount + this.buffer
-            );
-            
-            // Only update if the range changed significantly
-            if (newStart !== this.startIndex || newEnd !== this.endIndex) {
-                this.startIndex = newStart;
-                this.endIndex = newEnd;
-                this.render();
-                this.updateInfo();
-            }
-        }
-
-        render() {
-            this.isScrolling = true;
-            
-            // Calculate spacer heights
-            const topHeight = this.startIndex * this.rowHeight;
-            const bottomHeight = (this.allData.length - this.endIndex) * this.rowHeight;
-            
-            this.spacerTop.style.height = `${topHeight}px`;
-            this.spacerBottom.style.height = `${bottomHeight}px`;
-            
-            // Render visible rows
-            const visibleData = this.allData.slice(this.startIndex, this.endIndex);
-            
-            this.tableBody.innerHTML = visibleData.map(record => `
-                <tr>
-                    <td>${record.id}</td>
-                    <td>${record.name}</td>
-                    <td>${record.email}</td>
-                    <td>${record.status}</td>
-                    <td>${record.created}</td>
-                </tr>
-            `).join('');
-            
-            setTimeout(() => {
-                this.isScrolling = false;
-            }, 100);
-        }
-
-        updateInfo() {
-            //const showing = this.endIndex - this.startIndex;
-            //this.recordInfo.textContent = 
-            //    `Showing ${this.startIndex + 1}-${this.endIndex} of ${this.allData.length} records (Rendering ${showing} rows)`;
-        }
-
-        updateWindowSize() {
-            const input = document.getElementById('windowSize');
-            const newSize = parseInt(input.value);
-            
-            if (newSize >= 10 && newSize <= 200) {
-                this.windowSize = newSize;
-                this.buffer = Math.floor(newSize * 0.2);
-                this.updateVisibleRange();
-            }
-        }
-
-        scrollToTop() {
-            this.container.scrollTop = 0;
-            this.startIndex = 0;
-            this.endIndex = this.windowSize;
-            this.render();
-            //this.updateInfo();
-        }
-
-        scrollToBottom() {
-            this.container.scrollTop = this.allData.length * this.rowHeight;
-            this.updateVisibleRange();
-        }
-
-        scrollToRecord(recordId) {
-            const index = this.allData.findIndex(r => r.id === recordId);
-            if (index !== -1) {
-                this.container.scrollTop = index * this.rowHeight;
-                this.updateVisibleRange();
-            }
-        }
-    }
-
-
-class classMainMenue {
-
-    hide() {
-        if ( !IsTaskInProgress ) {	//  if Task in progress dont hide the signout
-            $('#upperRightQuadrant').hide();
-        }
-        else {
-            $('#tHalf').hide();
-            $('#upperRightQuadrant').show();
-        }
-        $('#upperLeft').hide();
-    }
-
-    show() {
-        $('#upperLeft').show();
-        if (username == 'eddie') {
-            $('#upperRight').show(); // show/enable the uperright 
-            $('#userFileUpload,#fileslabel').hide();
-        }
-        else {
-            if ( IsTaskInProgress ) { // only if task in progress enablesignout and upload files
-                $('#tHalf').hide();
-                $('#upperRightQuadrant').show();
-            }	
-        }
-    }
-};
-
 const taskState =["open","signin","signout","lunchin","lunchout","closed"];
 
 class classTask	{
@@ -1452,9 +1267,15 @@ function displayMainMenue(screenName) {
     hashPassword("hello");
     windowLog.trace("inside DisplayMainMenue:today-"+today);
 
-    // Gili!!
-    captions["lauyer1"]=Object.values(classArray).filter(record => record.position == "upperLeft").filter(record => record.screenNumber ===1).forEach(filteredItem => {console.log(filteredItem.moduleName)})
 
+    for (let i=0;i < classModules.arr.length;i++) { // construct dynamicly the layers
+        const lNumber=Number(classModules.arr[i].layer_number);
+        const layerName = `layer${Number(lNumber)}`;
+        captions[layerName] = [];
+        captions.genesis.forEach((psn)=>{
+            Object.values(classArray).filter(record => record.position === psn).filter(record => record.screenNumber === lNumber).forEach(filteredItem => {captions[layerName].push(filteredItem.moduleName)});
+        });
+    }
 
     if ( username === 'eddie' ) { //only Eddie could access
         if ( screenName === "home" ) {
@@ -2300,7 +2121,7 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
         
         out += `</tbody></table></tbody>`;
         
-        classArray["Employee Jobs"].render();
+        classArray["Employee Jobs"].virtualScroll.render();
         //document.querySelector(targetDisplay).innerHTML = out; // print to screen the return messages
         
         if (targetDisplay == "#result-table1") {
@@ -2707,7 +2528,7 @@ function sortTable(table, sortColumn) {
         if(a[sortColumn] > b[sortColumn]){
         return 1;
         }
-        return -1;
+        return 
     })
     // put the sorted data back into the table
     data2table(tableBody, tableData);
