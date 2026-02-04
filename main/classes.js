@@ -26,7 +26,7 @@ class VirtualScroll {
         }
 
         // Load all data from server (simulated)
-        async loadAllData() {
+        async loadAllData(inArray) {
             // Simulate loading data from PHP/MySQL
             // In real implementation: fetch('api/get_all_records.php')
             
@@ -37,7 +37,7 @@ class VirtualScroll {
             
             // Generate sample data (replace with actual fetch call)
             //const totalRecords = 1000;
-            this.allData = [];
+            this.allData = inArray;
             
             /*for (let i = 1; i <= totalRecords; i++) {
                 this.allData.push({
