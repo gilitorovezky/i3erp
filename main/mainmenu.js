@@ -957,12 +957,6 @@ async function init() {
                      
                         loadModules().then(function() { // load al modules from the DB and show the progress bar
                          
-
-                            let captions2 = {};
-
-                            //const layers = ["genesis", "layer1", "layer2"];
-                            //const positions = ["lowerLeft", "lowerRight"];
-
                             layers2.forEach(entry => {
                                 captions2[entry.layer_name] = {};
                                 
@@ -972,14 +966,7 @@ async function init() {
                                         captions2[entry.layer_name][pos] = entryFound[0].moduleName;
                                 });
                             });
-                            for (let i=0;i < layers2.length;i++) { // construct dynamicly the layers
-                                const lNumber=Number(layers2[i].layer_number);
-                                //const layerName = `layer${Number(lNumber)}`;
-                                const layerName = layers2[i].layer_name;
-                                
-                                
-                                Object.values(classArray).filter(record => record.screenNumber === entry.layer_number).forEach((item)=> entry=[item.moduleName,item.position]).forEach(entry => console.log(entry))
-                            }
+                           
                         
                             $.ajax({url         : "../main/read_projects.php",
                                     type        : "GET",
@@ -1108,166 +1095,6 @@ $(document).ready(async function() {
 
     await init();
 
-    
-
-
-  /*      username=Cookies.get('username');
-        fullname = username;
-        $("#overLay ul").attr('data-module',"");
-        $("#welcomeNameID").html("Welcome Back, "+username);
-
-        if ( typeof username != "undefined" ) {
-            uid=Cookies.get('uid');
-
-        $.ajax({url         : "../main/read_config.php",
-                method		: "GET",
-                dataType	: "json",
-                async       : false,  
-                success		: function(data) {  
-                if ( ( data !== '' ) && 
-                        ( Number(data[0].Status) > 0 ) ) {
-                        setConfig(data);
-                        windowLog.trace("Loaded config settings successfully");
-                    }
-                    else {
-                        windowLog.warn("error loading configurtions, exit");
-                        logout();
-                    }
-                },
-                error     	: (function (jqxhr, textStatus, error ) {
-                    windowLog.trace("Load schedule failed:"+textStatus + ", " + error);
-                    logout();
-                })
-        });
-
-        windowLog.trace("Inside document ready");
-
-        $("#logout").html("Logout");
-        //$('#logout').css({'cursor'   : 	'pointer'});
-        username=Cookies.get('username');
-        if (typeof username === "undefined" ) {
-            windowLog.trace("Error- username undefined, exit");
-            logout();
-        }
-
-    if (username === 'eddie') { //only Eddie could access
-
-        const iniModulesResult=initModules();
-
-        if ( iniModulesResult ) {
-            loadModules().then(function() { // load al modules from the DB and show the progress bar
-                windowLog.trace('Modules finished loading');
-          
-                $(".loggedin").css({'background-color'    : '#f8f7f3'});
-                $("#configID").html("Configuration");
-                $("#systemID").html("System");
-                $("#rootID").html("Home");
-                $("#libraryID").html("Library");
-                $('#welcomeNameID,#rootID,#configID,#libraryID,#systemID,#logout').css({'cursor':'pointer'});
-            
-                let data ="";
-
-                $.ajax({url         : "../main/read_projects.php",
-                        type        : "GET",
-                        dataType    : "json",
-                        async       : false, // Make the request synchronous
-                            success: function(data) {
-                                Projects = new classProjects(data);
-                                classArray["Projects"] = Projects;
-                                if (Projects.length > 0) {
-                                    lastID["Projects"] = Number(Projects.arrProjects[Projects.arrProjects.length-1].project_id);
-                                    windowLog.trace("Project Data received");
-                                } else {
-                                    windowLog.warn("No projects found");
-                                }
-                            },
-                        error     	: function (jqxhr, textStatus, error ) {
-                            windowLog.warn("Load projects failed:"+textStatus + ", " + error); 
-                            logout();
-                        }
-                });
-
-                $.ajax({url     : "../main/load_task.php",
-                    method		: "POST",
-                    data      	: JSON.stringify({'calltype':'scheduler'}),
-                    dataType	: "json",
-                    async       : false,  
-                    success		: function(tasks) {
-                        if ( tasks !== '' ) {
-                            //windowLog.trace("Load all tasks completed succesfully");
-                            Tasks = new classTasks(tasks); // create Tasks class
-                            classArray["Scheduler"] = Tasks;
-                            /*Tasks.intervalEJID=window.setInterval(function() {
-                                refreshReportCallBack();
-                            }, appConfig.tsPolling_Interval*1000*60);
-                            windowLog.trace("All Tasks loaded succesfully("+classArray["Scheduler"].arr.length+")");
-                            windowLog.trace("Set the clock to pollingTasks:"+appConfig.tsPolling_Interval*1000*60);
-                            assignedTasksArr=Tasks.arrTasks.filter((x) => ( ( x.employee_id > 0) && ( Number(x.is_assigned) === 1 ) && ( classArray["Employees"].arr[classArray["Employees"].arr.findIndex(t => t.employee_id === x.employee_id)].is_active === "1" ) ));
-
-                        } else	{
-                            windowLog.trace("error loading tasks, exit");
-                            logout();
-                        }
-                    },
-                    error     	: (function (jqxhr, textStatus, error ) {
-                        windowLog.warn("Load schedule failed:"+textStatus + ", " + error); 
-                        logout();
-                    })
-                });
-
-                lastID["Employee Jobs"]=(Number(Math.max(lastID["Employee Jobs"],lastID["Scheduler"])))+1;
-                classArray["Employee Jobs"].isTotalCost=false;
-                classArray["Employees"].colors=[];
-                                    classArray["Employees"].arr.forEach( (key) => { 
-                                        classArray["Employees"].pNames[key.fullname.toString()]=key.employee_id;    // initialize the employee/id array 
-                                        classArray["Employees"].colors[key.fullname.toString()]=key.profile_color;  // initialize the employee/colors array 
-                                    });
-                classArray["Companies"].arr.forEach( (key) => { //copy the return data from the DB into the class array
-                    classArray["Companies"].pNames[key.company_name.toString()]=key.company_id; 
-                });
-
-                classArray["Contractors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
-                    classArray["Contractors"].pNames[key.contractorName.toString()]=key.contractor_id; 
-                });
-
-                classArray["Vendors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
-                    classArray["Vendors"].pNames[key.vendor_name]=key.vendor_id;
-                });
-
-                $("#innerPT_ID,#CloseBtnPsumry").on("click", innerPThandler);
-
-                windowLog.trace("Window HxW:"+window.innerHeight+":"+window.innerWidth);
-                if ( ( window.innerHeight < 480 ) || 
-                    ( window.innerWidth  < 480 ) ) {
-                    zoom(0.8); 
-                    $("#footer").css({'font-size' : '7px'});
-                    isZoom = true;
-                    windowLog.trace("Zoom out");
-                }
-                if ( pageAccessedByReload )
-                    displayMainMenue("home"); // home or config (window.location.hash.slice(1)
-
-                $(".parentDivClass").css({'display':"flex"});
-                $(".navtop div").css({'display':"flex"});
-                $(".navtop").css({"background-color"	: "#faba0a"});
-            });
-        }
-        else {
-            windowLog.warn("Fatal Error- failed to load modules- exit");
-            logout();
-        }
-        $("#ul, #ur, #ll, #lr").addClass("homeScreen");
-    }
-    else   {
-            $(".parentDivClass").css({'display':"flex"});
-            $(".navtop div").css({'display':"flex"});
-            $('img[id^=Pls]').remove();
-            $("#userFileUpload").on("click",function(event) { return uploadFilesCheckBoxHandler(event); });
-            screenNumber = "user";
-            //displayMainMenue("engineer");    
-            //$("#newCustomer,#newScheduler").remove();
-        }
-}*/
 }) ;
 
 function checkRefresh() {
