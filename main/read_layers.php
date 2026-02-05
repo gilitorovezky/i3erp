@@ -19,9 +19,8 @@
         $ret_recs  = $result->fetch_all(MYSQLI_ASSOC);
         file_put_contents('../log/log_'.$logDate.'.log',"(read_layers) ".$current_time." info 4-".print_r($ret_recs,true)."\n", FILE_APPEND); 
         echo json_encode($ret_recs );
-    } else {
+    } else 
         echo json_encode(["error" => "Failed to fetch layers"]);
-    }
 
     $con->close();
 ?>
