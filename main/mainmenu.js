@@ -22,6 +22,8 @@ const customerPanes=["Leads","Estimates","Projects"];
 
 //const screens=["home","configuration"];
 
+//const layers= ["home","config"];
+
 let captions = {
         "genesis":["upperLeft","upperRight","lowerLeft","lowerRight"], // do not change - must match the id in the html ome@ h!!
         "shortcuts":["ul","ur","ll","lr"], // shortcuts menue
@@ -423,12 +425,6 @@ const states = [
             { name: "Wisconsin", abbreviation: "WI"},
             { name: "Wyoming", abbreviation: "WY"}
         ];
-
-
-/*let bgColor = [];
-bgColor["jake"] =   "rgb(231 237 7 / 33%)";
-bgColor["pedro"]=   "rgb(49 200 247 / 25%)";
-bgColor["orel"] =   "rgb(153, 226, 210)";*/
 
 var lastID=[];
 
@@ -933,145 +929,179 @@ async function init() {
     uid=Cookies.get('uid');
 
     try {
-        let iniConfig = await $.ajax({
-            url: "../main/read_config.php",
-            method: "GET",
-            dataType: "json"
-        });
-
-        windowLog.trace("Inside document ready");
-
-        $("#logout").html("Logout");
-        //$('#logout').css({'cursor'   : 	'pointer'});
-    
-        if (username === 'eddie') { //only Eddie could access
-            if ((iniConfig !== '') && 
-                (Number(iniConfig[0].Status) > 0)) {
-                    setConfig(iniConfig);
-                    //await loadModules(); // aw
-                    const iniModulesResult=initModules();
-                    loadModules().then(function() { // load al modules from the DB and show the progress bar
-                        windowLog.trace('Modules finished loading');
-                    
-                        $(".loggedin").css({'background-color'    : '#f8f7f3'});
-                        $("#configID").html("Configuration");
-                        $("#systemID").html("System");
-                        $("#rootID").html("Home");
-                        $("#libraryID").html("Library");
-                        $('#welcomeNameID,#rootID,#configID,#libraryID,#systemID,#logout').css({'cursor':'pointer'});
-                    
-                        $.ajax({url         : "../main/read_projects.php",
-                                type        : "GET",
-                                dataType    : "json",
-                                async       : false, // Make the request synchronous
-                                    success: function(data) {
-                                        Projects = new classProjects(data);
-                                        classArray["Projects"] = Projects;
-                                        if (Projects.length > 0) {
-                                            lastID["Projects"] = Number(Projects.arrProjects[Projects.arrProjects.length-1].project_id);
-                                            windowLog.trace("Project Data received");
-                                        } else {
-                                            windowLog.warn("No projects found");
-                                        }
-                                    },
-                                error     	: function (jqxhr, textStatus, error ) {
-                                    windowLog.warn("Load projects failed:"+textStatus + ", " + error); 
-                                    logout();
-                                }
-                        });
-
-                        $.ajax({url     : "../main/load_task.php",
-                            method		: "POST",
-                            data      	: JSON.stringify({'calltype':'scheduler'}),
-                            dataType	: "json",
-                            async       : false,  
-                            success		: function(tasks) {
-                                if ( tasks !== '' ) {
-                                    //windowLog.trace("Load all tasks completed succesfully");
-                                    Tasks = new classTasks(tasks); // create Tasks class
-                                    classArray["Scheduler"] = Tasks;
-                                    /*Tasks.intervalEJID=window.setInterval(function() {
-                                        refreshReportCallBack();
-                                    }, appConfig.tsPolling_Interval*1000*60);*/
-                                    windowLog.trace("All Tasks loaded succesfully("+classArray["Scheduler"].arr.length+")");
-                                    windowLog.trace("Set the clock to pollingTasks:"+appConfig.tsPolling_Interval*1000*60);
-                                    assignedTasksArr=Tasks.arrTasks.filter((x) => ( ( x.employee_id > 0) && ( Number(x.is_assigned) === 1 ) && ( classArray["Employees"].arr[classArray["Employees"].arr.findIndex(t => t.employee_id === x.employee_id)].is_active === "1" ) ));
-
-                                } else	{
-                                    windowLog.trace("error loading tasks, exit");
-                                    logout();
-                                }
-                            },
-                            error     	: (function (jqxhr, textStatus, error ) {
-                                windowLog.warn("Load schedule failed:"+textStatus + ", " + error); 
-                                logout();
-                            })
-                        });
-
-                        lastID["Employee Jobs"]=(Number(Math.max(lastID["Employee Jobs"],lastID["Scheduler"])))+1;
-                        classArray["Employee Jobs"].isTotalCost=false;
-                        classArray["Employees"].colors=[];
-                                            classArray["Employees"].arr.forEach( (key) => { 
-                                                classArray["Employees"].pNames[key.fullname.toString()]=key.employee_id;    // initialize the employee/id array 
-                                                classArray["Employees"].colors[key.fullname.toString()]=key.profile_color;  // initialize the employee/colors array 
-                                            });
-                        classArray["Companies"].arr.forEach( (key) => { //copy the return data from the DB into the class array
-                            classArray["Companies"].pNames[key.company_name.toString()]=key.company_id; 
-                        });
-
-                        classArray["Contractors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
-                            classArray["Contractors"].pNames[key.contractorName.toString()]=key.contractor_id; 
-                        });
-
-                        classArray["Vendors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
-                            classArray["Vendors"].pNames[key.vendor_name]=key.vendor_id;
-                        });
-
-                        $("#innerPT_ID,#CloseBtnPsumry").on("click", innerPThandler);
-
-                        windowLog.trace("Window HxW:"+window.innerHeight+":"+window.innerWidth);
-                        if ( ( window.innerHeight < 480 ) || 
-                            ( window.innerWidth  < 480 ) ) {
-                            zoom(0.8); 
-                            $("#footer").css({'font-size' : '7px'});
-                            isZoom = true;
-                            windowLog.trace("Zoom out");
-                        }
-
-                        $(".parentDivClass").css({'display':"flex"});
-                        $(".navtop div").css({'display':"flex"});
-                        $(".navtop").css({"background-color"	: "#faba0a"});
-                            $("#ul, #ur, #ll, #lr").addClass("homeScreen");
-                        screenNumber = "home";//window.location.hash.slice(1);
-                        displayMainMenue("home"); //window.location.hash.slice(1));
-                        $(".main_menue").show();
-                        $("#prjShortCut").focus();
-                        $("#savingTD").html("<a style='font-size : 12px;' id='saveTableLabel'>''</a>");
-                    });
-                }
-                else {
-                    windowLog.warn("Fatal Error- failed to load modules- exit");
-                    logout();
-                }
-        }
-        else   {
-                $(".parentDivClass").css({'display':"flex"});
-                $(".navtop div").css({'display':"flex"});
-                $('img[id^=Pls]').remove();
-                $("#userFileUpload").on("click",function(event) { return uploadFilesCheckBoxHandler(event); });
-                screenNumber = "user";
-                displayMainMenue("engineer");
-                displayMainMenue("home"); //window.location.hash.slice(1));
-                $(".main_menue").show();
-                //$("#newCustomer,#newScheduler").remove();
-        }
+            let layers2 = await $.ajax({
+                url: "../main/read_layers.php",
+                method: "GET",
+                dataType: "json"
+            });
         
-        return true; // Initialization complete
-    }
-    catch (error) {
-        windowLog.warn("General failed: " + error.statusText);
-        logout();
-    }
+            let iniConfig = await $.ajax({
+                url: "../main/read_config.php",
+                method: "GET",
+                dataType: "json"
+            });
+
+            windowLog.trace("Inside document ready");
+
+            $("#logout").html("Logout");
+            //$('#logout').css({'cursor'   : 	'pointer'});
+        
+            if (username === 'eddie') { //only Eddie could access
+                if ((iniConfig !== '') && 
+                    (Number(iniConfig[0].Status) > 0)) {
+                        setConfig(iniConfig);
+                        //await loadModules(); // aw
+                        const iniModulesResult=initModules();
+                        let captions2={};
+                        
+                     
+                        loadModules().then(function() { // load al modules from the DB and show the progress bar
+                         
+
+                            let captions2 = {};
+
+                            //const layers = ["genesis", "layer1", "layer2"];
+                            //const positions = ["lowerLeft", "lowerRight"];
+
+                            layers2.forEach(entry => {
+                                captions2[entry.layer_name] = {};
+                                
+                                captions.genesis.forEach((pos, index) => { // loop over the positions
+                                    const entryFound=Object.values(classArray).filter(record => record.screenNumber === Number(entry.layer_number)).filter(record => pos === record.position);
+                                    if ( entryFound.length ) // if found
+                                        captions2[entry.layer_name][pos] = entryFound[0].moduleName;
+                                });
+                            });
+                            for (let i=0;i < layers2.length;i++) { // construct dynamicly the layers
+                                const lNumber=Number(layers2[i].layer_number);
+                                //const layerName = `layer${Number(lNumber)}`;
+                                const layerName = layers2[i].layer_name;
+                                
+                                
+                                Object.values(classArray).filter(record => record.screenNumber === entry.layer_number).forEach((item)=> entry=[item.moduleName,item.position]).forEach(entry => console.log(entry))
+                            }
+                        
+                            $.ajax({url         : "../main/read_projects.php",
+                                    type        : "GET",
+                                    dataType    : "json",
+                                    async       : false, // Make the request synchronous
+                                        success: function(data) {
+                                            Projects = new classProjects(data);
+                                            classArray["Projects"] = Projects;
+                                            if (Projects.length > 0) {
+                                                lastID["Projects"] = Number(Projects.arrProjects[Projects.arrProjects.length-1].project_id);
+                                                windowLog.trace("Project Data received");
+                                            } else {
+                                                windowLog.warn("No projects found");
+                                            }
+                                        },
+                                    error     	: function (jqxhr, textStatus, error ) {
+                                        windowLog.warn("Load projects failed:"+textStatus + ", " + error); 
+                                        logout();
+                                    }
+                            });
+
+                            $.ajax({url     : "../main/load_task.php",
+                                method		: "POST",
+                                data      	: JSON.stringify({'calltype':'scheduler'}),
+                                dataType	: "json",
+                                async       : false,  
+                                success		: function(tasks) {
+                                    if ( tasks !== '' ) {
+                                        //windowLog.trace("Load all tasks completed succesfully");
+                                        Tasks = new classTasks(tasks); // create Tasks class
+                                        classArray["Scheduler"] = Tasks;
+                                        /*Tasks.intervalEJID=window.setInterval(function() {
+                                            refreshReportCallBack();
+                                        }, appConfig.tsPolling_Interval*1000*60);*/
+                                        windowLog.trace("All Tasks loaded succesfully("+classArray["Scheduler"].arr.length+")");
+                                        windowLog.trace("Set the clock to pollingTasks:"+appConfig.tsPolling_Interval*1000*60);
+                                        assignedTasksArr=Tasks.arrTasks.filter((x) => ( ( x.employee_id > 0) && ( Number(x.is_assigned) === 1 ) && ( classArray["Employees"].arr[classArray["Employees"].arr.findIndex(t => t.employee_id === x.employee_id)].is_active === "1" ) ));
+
+                                    } else	{
+                                        windowLog.trace("error loading tasks, exit");
+                                        logout();
+                                    }
+                                },
+                                error     	: (function (jqxhr, textStatus, error ) {
+                                    windowLog.warn("Load schedule failed:"+textStatus + ", " + error); 
+                                    logout();
+                                })
+                            });
+                            windowLog.trace('Modules finished loading');
+
+                            lastID["Employee Jobs"]=(Number(Math.max(lastID["Employee Jobs"],lastID["Scheduler"])))+1;
+                            classArray["Employee Jobs"].isTotalCost=false;
+                            classArray["Employees"].colors=[];
+                                                classArray["Employees"].arr.forEach( (key) => { 
+                                                    classArray["Employees"].pNames[key.fullname.toString()]=key.employee_id;    // initialize the employee/id array 
+                                                    classArray["Employees"].colors[key.fullname.toString()]=key.profile_color;  // initialize the employee/colors array 
+                                                });
+                            classArray["Companies"].arr.forEach( (key) => { //copy the return data from the DB into the class array
+                                classArray["Companies"].pNames[key.company_name.toString()]=key.company_id; 
+                            });
+
+                            classArray["Contractors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
+                                classArray["Contractors"].pNames[key.contractorName.toString()]=key.contractor_id; 
+                            });
+
+                            classArray["Vendors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
+                                classArray["Vendors"].pNames[key.vendor_name]=key.vendor_id;
+                            });
+
+                            $("#innerPT_ID,#CloseBtnPsumry").on("click", innerPThandler);
+
+                            windowLog.trace("Window HxW:"+window.innerHeight+":"+window.innerWidth);
+                            if ( ( window.innerHeight < 480 ) || 
+                                ( window.innerWidth  < 480 ) ) {
+                                zoom(0.8); 
+                                $("#footer").css({'font-size' : '7px'});
+                                isZoom = true;
+                                windowLog.trace("Zoom out");
+                            }
+
+                            $(".parentDivClass").css({'display':"flex"});
+                            $(".navtop div").css({'display':"flex"});
+                            $(".navtop").css({"background-color"	: "#faba0a"});
+                                $("#ul, #ur, #ll, #lr").addClass("homeScreen");
+                            screenNumber = "home";//window.location.hash.slice(1);
+                            displayMainMenue("home"); //window.location.hash.slice(1));
+                            $(".main_menue").show();
+                            $("#prjShortCut").focus();
+                            $("#savingTD").html("<a style='font-size : 12px;' id='saveTableLabel'>''</a>");
+                                                    
+                            $(".loggedin").css({'background-color'    : '#f8f7f3'});
+                            $("#configID").html("Configuration");
+                            $("#systemID").html("System");
+                            $("#rootID").html("Home");
+                            $("#libraryID").html("Library");
+                            $('#welcomeNameID,#rootID,#configID,#libraryID,#systemID,#logout').css({'cursor':'pointer'});
+
+                        });
+                    }
+                    else {
+                        windowLog.warn("Fatal Error- failed to load modules- exit");
+                        logout();
+                    }
+            }
+            else {
+                    $(".parentDivClass").css({'display':"flex"});
+                    $(".navtop div").css({'display':"flex"});
+                    $('img[id^=Pls]').remove();
+                    $("#userFileUpload").on("click",function(event) { return uploadFilesCheckBoxHandler(event); });
+                    screenNumber = "user";
+                    displayMainMenue("engineer");
+                    displayMainMenue("home"); //window.location.hash.slice(1));
+                    $(".main_menue").show();
+                    //$("#newCustomer,#newScheduler").remove();
+            }
+            
+            return true; // Initialization complete
+        }
+        catch (error) {
+            windowLog.warn("General failed: " + error.statusText);
+            logout();
+        }
 }
 
 $(document).ready(async function() {
@@ -1267,15 +1297,7 @@ function displayMainMenue(screenName) {
     hashPassword("hello");
     windowLog.trace("inside DisplayMainMenue:today-"+today);
 
-
-    for (let i=0;i < classModules.arr.length;i++) { // construct dynamicly the layers
-        const lNumber=Number(classModules.arr[i].layer_number);
-        const layerName = `layer${Number(lNumber)}`;
-        captions[layerName] = [];
-        captions.genesis.forEach((psn)=>{
-            Object.values(classArray).filter(record => record.position === psn).filter(record => record.screenNumber === lNumber).forEach(filteredItem => {captions[layerName].push(filteredItem.moduleName)});
-        });
-    }
+    
 
     if ( username === 'eddie' ) { //only Eddie could access
         if ( screenName === "home" ) {
@@ -1836,7 +1858,7 @@ function displayProjects(projectManager) {
 
     currCell = $('#result-table1 tbody tr:last td:eq(2)').first(); // currCell points to 2nd TD in the last TR (skip the del image placeholder)
     currCell.children().first().focus();// focus on the first input!!
-    $('.scrollit').scrollTop($('.scrollit').prop("scrollHeight"));
+    //$('.scrollit').scrollTop($('.scrollit').prop("scrollHeight"));
 
     /* setCellFocusVal();
         
@@ -1965,7 +1987,7 @@ function displayPaymentResults(projectNumber,targetDisplay) {
         tableSummary(length,sumOfPayments);
          //AddingSort(); // adding sorting option to the table
     }
-    $('.scrollit').scrollTop($('.scrollit').prop("scrollHeight"))
+    //$('.scrollit').scrollTop($('.scrollit').prop("scrollHeight"))
     
     return false;
 } 
@@ -1978,7 +2000,9 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
 
     let out = "";
     let eArray=[];
+    let eJobs=[];
     var sumofJobs=0;
+    var tableHeader="";
    /*
     $.ajax({
         url         : "../main/read_employee_jobs.php",
@@ -2004,7 +2028,7 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
 
     const length=eArray.length;
     const localCurrentTime=("0" + (date.getHours())).slice(-2)+":"+("0" + (date.getMinutes())).slice(-2);
-    
+    classArray["Employee Jobs"].virtualScroll.allData=[];
     prepareDisplay(targetDisplay); // hide the top menue
    
     if (length == 0) {
@@ -2019,13 +2043,14 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
             tempOut += '<a id="ejTotalCostID"><label for="isTCID" class="label1">&nbsp Show Total Cost<input type="checkbox" id="isTCID" name="checked" value="no" class="checkboxes"/></label></a>';
             $("#exportID").html(tempOut);
             $("#exportID").show();
-            out += `<thead id="mainHeader"><tr><th></th><th class="pmClass">Project Number</th>`; 
+            tableHeader += `<thead id="mainHeader"><tr><th></th><th class="pmClass">Project Number</th>`; 
         }
         else
-            out += `<table class="res_table2" id="result-table"><thead><tr>`;
-        out += headers[screen_name]['columns']+`</tr></thead>`;
-        out += `<tbody class="thover">`;
+            tableHeader += `<table class="res_table2" id="result-table"><thead><tr>`;
+        tableHeader += headers[screen_name]['columns']+`</tr></thead>`;
+        tableHeader += `<tbody class="thover">`;
     
+
         for (var i = 0; i < length; i++) { 
             if (eArray[i].job_signin != null) 
                 dateSignIn = eArray[i].job_signin.split("-");
@@ -2116,12 +2141,15 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
                 out += `<td>${fileupload}</td>`; 
             }
             out += `</tr>`;
+            eJobs.push(out);
+            out="";
         }
         DelCounter=true;
-        
-        out += `</tbody></table></tbody>`;
-        
-        classArray["Employee Jobs"].virtualScroll.render();
+        classArray["Employee Jobs"].virtualScroll.loadAllData(eJobs);
+        classArray["Employee Jobs"].virtualScroll.footer = `</tbody></table></tbody>`;
+        classArray["Employee Jobs"].virtualScroll.header=tableHeader; 
+        classArray["Employee Jobs"].virtualScroll.scrollToBottom();
+       
         //document.querySelector(targetDisplay).innerHTML = out; // print to screen the return messages
         
         if (targetDisplay == "#result-table1") {
@@ -2130,7 +2158,7 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
             tableSummary(length,sumofJobs);
             //AddingSort();
         }
-        $('.scrollit').scrollTop($('.scrollit').prop("scrollHeight"));
+       // $('.scrollit').scrollTop($('.scrollit').prop("scrollHeight"));
 
         /*$("#isTCID").change(function() {
             

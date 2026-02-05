@@ -13,6 +13,8 @@ class VirtualScroll {
             this.rowHeight = options.rowHeight || 45;
             
             this.startIndex = 0;
+            this.header="";
+            this.footer="";
             this.endIndex = this.windowSize;
             
             this.isScrolling = false;
@@ -33,7 +35,7 @@ class VirtualScroll {
             //this.recordInfo.textContent = 'Loading data...';
             
             // Simulate API delay
-            await new Promise(resolve => setTimeout(resolve, 500));
+            //await new Promise(resolve => setTimeout(resolve, 500));
             
             // Generate sample data (replace with actual fetch call)
             //const totalRecords = 1000;
@@ -52,8 +54,6 @@ class VirtualScroll {
             //this.render();
             //this.updateInfo();
         }
-
-        
 
         handleScroll() {
             if (this.isScrolling) return;
@@ -100,17 +100,17 @@ class VirtualScroll {
             
             // Render visible rows
             const visibleData = this.allData.slice(this.startIndex, this.endIndex);
-            
-            this.tableBody.innerHTML = visibleData.map(record => `
-                <tr>
+            this.tableBody.innerHTML=this.header;
+            this.tableBody.innerHTML += visibleData.map(record => `${record}`
+ /*               <tr>
                     <td>${record.id}</td>
                     <td>${record.name}</td>
                     <td>${record.email}</td>
                     <td>${record.status}</td>
                     <td>${record.created}</td>
-                </tr>
-            `).join('');
-            
+                </tr>`*/
+            ).join('');
+            this.tableBody.innerHTML += this.footer;
             setTimeout(() => {
                 this.isScrolling = false;
             }, 100);
