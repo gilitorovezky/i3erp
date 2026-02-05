@@ -1187,3 +1187,7 @@ img 	{
 .spacer-top, .spacer-bottom {
 	width: 100%;
 }
+
+.scroll-content {
+            position: relative;
+        }

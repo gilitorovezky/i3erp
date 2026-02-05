@@ -1853,7 +1853,7 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
 
     const length=eArray.length;
     const localCurrentTime=("0" + (date.getHours())).slice(-2)+":"+("0" + (date.getMinutes())).slice(-2);
-    classArray["Employee Jobs"].virtualScroll.allData=[];
+    //classArray["Employee Jobs"].virtualScroll.allData=[];
     prepareDisplay(targetDisplay); // hide the top menue
    
     if (length == 0) {
@@ -1873,8 +1873,9 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
         else
             tableHeader += `<table class="res_table2" id="result-table"><thead><tr>`;
         tableHeader += headers[screen_name]['columns']+`</tr></thead>`;
-        tableHeader += `<tbody class="thover">`;
-    
+        tableHeader += `<tbody id="tableBody" class="thover">`;
+        const table = document.getElementById('result-table1');
+        table.insertAdjacentHTML('afterbegin', tableHeader);
 
         for (var i = 0; i < length; i++) { 
             if (eArray[i].job_signin != null) 
@@ -1970,9 +1971,13 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
             out="";
         }
         DelCounter=true;
+        //classArray["Employee Jobs"].virtualScroll.header=tableHeader; 
+        classArray["Employee Jobs"].virtualScroll.tableBody =document.getElementById('tableBody');
+
         classArray["Employee Jobs"].virtualScroll.loadAllData(eJobs);
+        classArray["Employee Jobs"].virtualScroll.setUpScrollEvent();
         classArray["Employee Jobs"].virtualScroll.footer = `</tbody></table></tbody>`;
-        classArray["Employee Jobs"].virtualScroll.header=tableHeader; 
+        classArray["Employee Jobs"].virtualScroll.tableBody =document.getElementById('tableBody');
         classArray["Employee Jobs"].virtualScroll.scrollToBottom();
        
         //document.querySelector(targetDisplay).innerHTML = out; // print to screen the return messages

@@ -20,10 +20,10 @@ class VirtualScroll {
             this.isScrolling = false;
             this.scrollTimeout = null;
             
-            this.init();
+            //this.init();
         }
 
-        init() {
+        setUpScrollEvent() {
             this.container.addEventListener('scroll', () => this.handleScroll());
         }
 
@@ -39,7 +39,7 @@ class VirtualScroll {
             
             // Generate sample data (replace with actual fetch call)
             //const totalRecords = 1000;
-            this.allData = inArray;
+            this.allData = [...inArray]; // Copy it!
             
             /*for (let i = 1; i <= totalRecords; i++) {
                 this.allData.push({
@@ -100,7 +100,7 @@ class VirtualScroll {
             
             // Render visible rows
             const visibleData = this.allData.slice(this.startIndex, this.endIndex);
-            this.tableBody.innerHTML=this.header;
+            //this.tableBody.innerHTML=this.header;
             this.tableBody.innerHTML += visibleData.map(record => `${record}`
  /*               <tr>
                     <td>${record.id}</td>
