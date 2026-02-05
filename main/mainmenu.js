@@ -1,9 +1,6 @@
 var date = new Date();
-
 let windowLog = new Log4js.getLogger("windowTest"); 
-
 var editing = false;    // global flag to indicate if any valid char was typed
-//var active = 0;
 var screenNumber="home";	
 var username;
 var fullname;
@@ -16,6 +13,7 @@ var classArray=[];
 var Tasks;
 let isZoom = false;
 var today=date.getFullYear()+"-"+(("0" + (date.getMonth()+1)).slice(-2))+"-"+(("0"+date.getDate()).slice(-2)); 
+let captions2={};
 
 const dummyDate= "1999-01-01"
 const customerPanes=["Leads","Estimates","Projects"];
@@ -952,7 +950,7 @@ async function init() {
                         setConfig(iniConfig);
                         //await loadModules(); // aw
                         const iniModulesResult=initModules();
-                        let captions2={};
+                       
                         
                      
                         loadModules().then(function() { // load al modules from the DB and show the progress bar
@@ -1153,7 +1151,7 @@ function displayMainMenue(screenName) {
             //$("#tHalf,#newScheduler,#buttomHalf").invisible();
         }
         for (var i = 0; i < 4; i++)  // loop over the captions	
-            document.getElementById(captions["genesis"][i]).innerHTML=captions[screenName][i];
+            document.getElementById(captions["genesis"][i]).innerHTML=captions2[screenName][captions["genesis"][i]]; //captions[screenName][i];
     }
     else {	// Prepare the User's main menue
         //t_index = 3;
