@@ -117,9 +117,10 @@ function initModules() {
 
     try {
 
-        if (appConfig.fastLoading) {
+        if ( appConfig.fastLoading )
             hideProgress();   
-        }
+        else
+            $("#progressContainer").show();
         const retStatus= await readFilesSequentially(updateProgress);
         
         windowLog.trace('All files loaded (retCode):'+retStatus);
