@@ -74,11 +74,11 @@
 	function checkLogin(json) {
 
 		if ( json.result > 0 ) {   //authentication pass
+			window.location.replace("home.html#home"); // http://localhost:8080/login/home.html#home
 			username = document.getElementById("username").value;  
     		fullname = document.getElementById("username").value;
 			Cookies.set('username', document.getElementById("username").value, { expires: 365, path: '/' });
 			Cookies.set('uid',json.uid);
-			window.location.replace("home.html#home"); // http://localhost:8080/login/home.html#home
 		} else 
 			document.getElementById("loginResultID").innerHTML = json.description;
 	}

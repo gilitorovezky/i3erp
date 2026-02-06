@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Scroll Pagination</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Fixed header table */
+        .table-header {
+            width: 100%;
+            border-collapse: collapse;
+            background: #f8f9fa;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            height: auto;
+        }
+
+        .table-header th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .scroll-container {
+            height: 600px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .scroll-content {
+            position: relative;
+        }
+
+        .spacer-top, .spacer-bottom {
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .controls {
+            padding: 20px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        button {
+            padding: 8px 16px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        input[type="number"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100px;
+        }
+
+        label {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Virtual Scroll Pagination</h1>
+            <div class="stats">
+                <span id="recordInfo">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Fixed header table -->
+        <table class="table-header">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+        </table>
+
+        <!-- Scrollable content -->
+        <div class="scroll-container" id="scrollContainer">
+            <div class="scroll-content">
+                <div class="spacer-top" id="spacerTop"></div>
+                <table>
+                    <tbody id="tableBody">
+                    </tbody>
+                </table>
+                <div class="spacer-bottom" id="spacerBottom"></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <label>
+                Window Size:
+                <input type="number" id="windowSize" value="50" min="10" max="200">
+            </label>
+            <button onclick="virtualScroll.updateWindowSize()">Update</button>
+            <button onclick="virtualScroll.scrollToTop()">Scroll to Top</button>
+            <button onclick="virtualScroll.scrollToBottom()">Scroll to Bottom</button>
+        </div>
+    </div>
+
+    <script>
+        class VirtualScroll {
+            constructor(options) {
+                this.container = options.container;
+                this.tableBody = options.tableBody;
+                this.spacerTop = options.spacerTop;
+                this.spacerBottom = options.spacerBottom;
+                this.recordInfo = options.recordInfo;
+                
+                this.allData = [];
+                this.windowSize = options.windowSize || 50;
+                this.buffer = options.buffer || 10;
+                this.rowHeight = options.rowHeight || 45;
+                
+                this.startIndex = 0;
+                this.endIndex = this.windowSize;
+                
+                this.isScrolling = false;
+                this.scrollTimeout = null;
+            }
+
+            init() {
+                this.container.addEventListener('scroll', () => this.handleScroll());
+            }
+
+            async loadAllData() {
+                this.recordInfo.textContent = 'Loading data...';
+                
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                const totalRecords = 1000;
+                this.allData = [];
+                
+                for (let i = 1; i <= totalRecords; i++) {
+                    this.allData.push({
+                        id: i,
+                        name: `User ${i}`,
+                        email: `user${i}@example.com`,
+                        status: i % 3 === 0 ? 'Active' : i % 3 === 1 ? 'Inactive' : 'Pending',
+                        created: new Date(2024, 0, i % 28 + 1).toLocaleDateString()
+                    });
+                }
+                
+                this.render();
+                this.updateInfo();
+            }
+
+            handleScroll() {
+                if (this.isScrolling) return;
+                
+                clearTimeout(this.scrollTimeout);
+                this.scrollTimeout = setTimeout(() => {
+                    this.updateVisibleRange();
+                }, 16); // Reduced from 50ms to 16ms (one frame)
+            }
+
+            updateVisibleRange() {
+                const scrollTop = this.container.scrollTop;
+                const containerHeight = this.container.clientHeight;
+                
+                const scrollIndex = Math.floor(scrollTop / this.rowHeight);
+                const visibleCount = Math.ceil(containerHeight / this.rowHeight);
+                
+                const newStart = Math.max(0, scrollIndex - this.buffer);
+                const newEnd = Math.min(
+                    this.allData.length,
+                    scrollIndex + visibleCount + this.buffer
+                );
+                
+                if (newStart !== this.startIndex || newEnd !== this.endIndex) {
+                    this.startIndex = newStart;
+                    this.endIndex = newEnd;
+                    this.render();
+                    this.updateInfo();
+                }
+            }
+
+            render() {
+                this.isScrolling = true;
+                
+                const topHeight = this.startIndex * this.rowHeight;
+                const bottomHeight = (this.allData.length - this.endIndex) * this.rowHeight;
+                
+                this.spacerTop.style.height = `${topHeight}px`;
+                this.spacerBottom.style.height = `${bottomHeight}px`;
+                
+                const visibleData = this.allData.slice(this.startIndex, this.endIndex);
+                
+                this.tableBody.innerHTML = visibleData.map(record => `
+                    <tr>
+                        <td>${record.id}</td>
+                        <td>${record.name}</td>
+                        <td>${record.email}</td>
+                        <td>${record.status}</td>
+                        <td>${record.created}</td>
+                    </tr>
+                `).join('');
+                
+                setTimeout(() => {
+                    this.isScrolling = false;
+                }, 100);
+            }
+
+            updateInfo() {
+                const showing = this.endIndex - this.startIndex;
+                this.recordInfo.textContent = 
+                    `Showing ${this.startIndex + 1}-${this.endIndex} of ${this.allData.length} records (Rendering ${showing} rows)`;
+            }
+
+            updateWindowSize() {
+                const input = document.getElementById('windowSize');
+                const newSize = parseInt(input.value);
+                
+                if (newSize >= 10 && newSize <= 200) {
+                    this.windowSize = newSize;
+                    this.buffer = Math.floor(newSize * 0.2);
+                    this.updateVisibleRange();
+                }
+            }
+
+            scrollToTop() {
+                this.container.scrollTop = 0;
+                this.startIndex = 0;
+                this.endIndex = this.windowSize;
+                this.render();
+                this.updateInfo();
+            }
+
+            scrollToBottom() {
+                this.container.scrollTop = this.allData.length * this.rowHeight;
+                this.updateVisibleRange();
+            }
+
+            scrollToRecord(recordId) {
+                const index = this.allData.findIndex(r => r.id === recordId);
+                if (index !== -1) {
+                    this.container.scrollTop = index * this.rowHeight;
+                    this.updateVisibleRange();
+                }
+            }
+        }
+
+        const virtualScroll = new VirtualScroll({
+            container: document.getElementById('scrollContainer'),
+            tableBody: document.getElementById('tableBody'),
+            spacerTop: document.getElementById('spacerTop'),
+            spacerBottom: document.getElementById('spacerBottom'),
+            recordInfo: document.getElementById('recordInfo'),
+            windowSize: 50,
+            buffer: 10,
+            rowHeight: 45
+        });
+
+        virtualScroll.loadAllData();
+        virtualScroll.init();
+    </script>
+</body>
+</html>

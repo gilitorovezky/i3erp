@@ -4,13 +4,14 @@ class VirtualScroll {
             this.container = options.container;
             //this.tableBody = options.tableBody;
             this.spacerTop = options.spacerTop;
-            this.spacerBottom = options.spacerBottom;
+            //this.spacerBottom = options.spacerBottom;
             //this.recordInfo = options.recordInfo;
             
             this.allData = [];
             this.windowSize = options.windowSize || 50;
             this.buffer = options.buffer || 10;
             this.rowHeight = options.rowHeight || 45;
+            this.visibleRows = options.buffer || 10;
             
             this.startIndex = 0;
             this.header="";
@@ -96,7 +97,7 @@ class VirtualScroll {
             const bottomHeight = (this.allData.length - this.endIndex) * this.rowHeight;
             
             this.spacerTop.style.height = `${topHeight}px`;
-            this.spacerBottom.style.height = `${bottomHeight}px`;
+            //this.spacerBottom.style.height = `${bottomHeight}px`;
             
             // Render visible rows
             const visibleData = this.allData.slice(this.startIndex, this.endIndex);

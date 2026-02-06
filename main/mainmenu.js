@@ -581,7 +581,7 @@ class genesisClass {
             container: document.getElementById('scrollDivID'), //scrollContainer'),
            
             spacerTop: document.getElementById('spacerTop'),
-            spacerBottom: document.getElementById('spacerBottom'),
+            //spacerBottom: document.getElementById('spacerBottom'),
             //recordInfo: document.getElementById('recordInfo'),
             windowSize: 50,
             buffer: 10,
@@ -1889,7 +1889,7 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
             tableHeader += `<table class="res_table2" id="result-table"><thead><tr>`;
         $(".scrollID-Div").css({'display' : "table-footer-group"});
         tableHeader += headers[screen_name]['columns']+`</tr></thead>`;
-        tableHeader += `<tbody id="tableBody" class="thover scrollit">`;
+        tableHeader += `<tbody id="tableBody" class="thover">`;
         const table = document.getElementById('result-table1');
         table.insertAdjacentHTML('afterbegin', tableHeader);
         //$(".scrollit").css({'display' : "block"});
