@@ -129,7 +129,9 @@ body.loggedin {
 	justify-content		: center;
 	align-items			: center;
 	height				: 86vh;
-	
+	margin: 0 auto;
+	padding: 0;
+	width: 100%;
 }
 
 .innerCell {
@@ -331,6 +333,8 @@ body.loggedin {
 	width 				: 300px;
 }
 
+.scrollID-Div {/* display: block; */width   : 99%;height	: 80vh;/* visibility: hidden; */}
+
 .scrollit {
     overflow-y			: auto;
     width				: 96%;
@@ -338,7 +342,11 @@ body.loggedin {
     height				: 80vh;
 }
 
-.scrollit th {
+.mHeader {
+	    width				: 96%;
+}
+
+.mHeader th {
 	position			: sticky;
 	top					: 0;
 	background			: #faba0a;

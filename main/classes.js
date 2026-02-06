@@ -2,7 +2,7 @@
 class VirtualScroll {
         constructor(options) {
             this.container = options.container;
-            this.tableBody = options.tableBody;
+            //this.tableBody = options.tableBody;
             this.spacerTop = options.spacerTop;
             this.spacerBottom = options.spacerBottom;
             //this.recordInfo = options.recordInfo;
@@ -100,17 +100,10 @@ class VirtualScroll {
             
             // Render visible rows
             const visibleData = this.allData.slice(this.startIndex, this.endIndex);
-            //this.tableBody.innerHTML=this.header;
-            this.tableBody.innerHTML += visibleData.map(record => `${record}`
- /*               <tr>
-                    <td>${record.id}</td>
-                    <td>${record.name}</td>
-                    <td>${record.email}</td>
-                    <td>${record.status}</td>
-                    <td>${record.created}</td>
-                </tr>`*/
-            ).join('');
-            this.tableBody.innerHTML += this.footer;
+            //visibleData.join('') + this.footer;
+            //this.tableBody.innerHTML = visibleData.map(record => `${record}`).join('');
+            //this.tableBody.innerHTML += this.footer;
+            this.tableBody.innerHTML = visibleData.join('') + this.footer;
             setTimeout(() => {
                 this.isScrolling = false;
             }, 100);

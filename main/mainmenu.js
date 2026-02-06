@@ -579,7 +579,7 @@ class genesisClass {
 
         this.virtualScroll = new VirtualScroll({
             container: document.getElementById('scrollDivID'), //scrollContainer'),
-            tableBody: document.getElementById('result-table1'),
+           
             spacerTop: document.getElementById('spacerTop'),
             spacerBottom: document.getElementById('spacerBottom'),
             //recordInfo: document.getElementById('recordInfo'),
@@ -954,7 +954,21 @@ async function init() {
                         
                      
                         loadModules().then(function() { // load al modules from the DB and show the progress bar
-                         
+                         // Build lookup map
+                            const lookupMap = Object.values(classArray).reduce((map, record) => {
+                                map[`${record.screenNumber}-${record.position}`] = record.moduleName;
+                                return map;
+                            }, {});
+
+                            // Build captions
+                            layers2.forEach(entry => {
+                                captions2[entry.layer_name] = captions.genesis.reduce((obj, pos) => {
+                                    const moduleName = lookupMap[`${entry.layer_number}-${pos}`];
+                                    if (moduleName) obj[pos] = moduleName;
+                                        return obj;
+                                }, {});
+                            });
+                            /*
                             layers2.forEach(entry => {
                                 captions2[entry.layer_name] = {};
                                 
@@ -963,7 +977,7 @@ async function init() {
                                     if ( entryFound.length ) // if found
                                         captions2[entry.layer_name][pos] = entryFound[0].moduleName;
                                 });
-                            });
+                            });*/
                            
                         
                             $.ajax({url         : "../main/read_projects.php",
@@ -1566,6 +1580,7 @@ function checkSignOutStatus(result) {
 function prepareDisplay(display) {
 
     windowLog.trace("Inside prepareDisplay:"+display);
+    //$(".scrollID-Div").css({'display' : "none"});
 
     var editHtml=`<div id="editDiv" style="display:flex;align-items:flex-end"><a tabindex="0" class="label1">Edit </a><label class="switch"><input type="checkbox" id="editCBID" name="editMode" value="no"><span id="editSliderID" class="slider round"></span></label></div>`;
 
@@ -1573,7 +1588,7 @@ function prepareDisplay(display) {
     $(".grid-gallery").hide();
     //$("#editLabel").css({'text-align'   : 'right'});
     $(".main_menue").hide();
-    $(".scrollit").css({'display' : "block"});
+  
     $("#caption,#mainDiv,#result-table1").show();
     //$("#savingTD").html("<a style=\"font-size : 12px;\" id=\"saveTableLabel\"></a>");
     $("#centercellID,#newTaskShortCutID").invisible();
@@ -1868,15 +1883,16 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
             tempOut += '<a id="ejTotalCostID"><label for="isTCID" class="label1">&nbsp Show Total Cost<input type="checkbox" id="isTCID" name="checked" value="no" class="checkboxes"/></label></a>';
             $("#exportID").html(tempOut);
             $("#exportID").show();
-            tableHeader += `<thead id="mainHeader"><tr><th></th><th class="pmClass">Project Number</th>`; 
+            tableHeader += `<thead class="mHeader" id="mainHeader"><tr><th></th><th class="pmClass">Project Number</th>`; 
         }
         else
             tableHeader += `<table class="res_table2" id="result-table"><thead><tr>`;
+        $(".scrollID-Div").css({'display' : "table-footer-group"});
         tableHeader += headers[screen_name]['columns']+`</tr></thead>`;
-        tableHeader += `<tbody id="tableBody" class="thover">`;
+        tableHeader += `<tbody id="tableBody" class="thover scrollit">`;
         const table = document.getElementById('result-table1');
         table.insertAdjacentHTML('afterbegin', tableHeader);
-
+        //$(".scrollit").css({'display' : "block"});
         for (var i = 0; i < length; i++) { 
             if (eArray[i].job_signin != null) 
                 dateSignIn = eArray[i].job_signin.split("-");
@@ -1979,6 +1995,8 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
         classArray["Employee Jobs"].virtualScroll.footer = `</tbody></table></tbody>`;
         classArray["Employee Jobs"].virtualScroll.tableBody =document.getElementById('tableBody');
         classArray["Employee Jobs"].virtualScroll.scrollToBottom();
+        classArray["Employee Jobs"].virtualScroll.startIndex = 0;
+        classArray["Employee Jobs"].virtualScroll.endIndex = 0;
        
         //document.querySelector(targetDisplay).innerHTML = out; // print to screen the return messages
         
@@ -2296,6 +2314,7 @@ function home()	{
     
     today=date.getFullYear()+"-"+(("0" + (date.getMonth() + 1)).slice(-2))+"-"+(("0" + date.getDate()).slice(-2)); 
     windowLog.trace("Inside home:today-"+today);
+    $(".scrollID-Div").css({'display' : "none"});
     
     $("#screen_name").html("Home");
     $("#screen_name, #addSingleRec,#editDiv").hide();

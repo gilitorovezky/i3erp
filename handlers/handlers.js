@@ -828,7 +828,7 @@ Promise.all(requests)
             case "ul"               :
                 lookupID = "upperLeft";
                 if (username == 'eddie') {
-                    window.location.hash = headers[captions[screenNumber][captions["genesis"].indexOf(lookupID)]].hash;
+                    window.location.hash = headers[captions2[screenNumber][lookupID]].hash;
                     /*if (screenNumber === "home")
                         window.location.hash = headers["Employee Jobs"].hash;
                     else
@@ -842,7 +842,7 @@ Promise.all(requests)
             case "ur"               :
                 lookupID = "upperRight";
                 if ( username === 'eddie' ) {
-                      window.location.hash = headers[captions[screenNumber][captions["genesis"].indexOf(lookupID)]].hash;
+                      window.location.hash = headers[captions2[screenNumber][lookupID]].hash;
                    /* if ( screenNumber === "home" )
                         window.location.hash = headers["Purchases"].hash;
                     else
@@ -862,7 +862,7 @@ Promise.all(requests)
                         window.location.hash = headers["Purchases"].hash;
                     else
                         window.location.hash = headers["Vendors"].hash; */
-                    window.location.hash = headers[captions[screenNumber][captions["genesis"].indexOf(lookupID)]].hash;
+                    window.location.hash = headers[captions2[screenNumber][lookupID]].hash;
 
                 else
                     lowerLeft();
@@ -872,7 +872,7 @@ Promise.all(requests)
             case "lr"                   :
                  lookupID = "lowerRight";
                  if ( username == 'eddie' ) 
-                     window.location.hash = headers[captions[screenNumber][captions["genesis"].indexOf(lookupID)]].hash;
+                    window.location.hash = headers[captions2[screenNumber][lookupID]].hash;
                     /*
                     if ( screenNumber === "home" )
                         window.location.hash = headers["Purchases"].hash;
@@ -1012,7 +1012,7 @@ Promise.all(requests)
 
     $("#main-menue,#navID,#innerCellID").on('click',function (e) {  // disable any firther clicks handlerClick(e) {
 
-        windowLog.trace("inside handler click:"+e.target.id);
+        windowLog.trace("inside mainMenu nav and innerCell handler click:"+e.target.id);
         
         dispatcher(e);
 
