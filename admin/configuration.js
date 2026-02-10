@@ -9,7 +9,8 @@
         $("#result-table1").unbind('mouseenter');
         $("#ul, #ur, #ll, #lr").addClass("configScreen");
         $("#ul, #ur, #ll, #lr").removeClass("homeScreen");
-         $(".scrollID-Div").css({'display' : "none"});
+        $(".viewportDiv").css({'display' : "none"});
+        $("#search-bar").css({"display": "none"});
     
         //$("#searchDivID").invisible();
 

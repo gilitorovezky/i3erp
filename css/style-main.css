@@ -2,7 +2,7 @@
     font-family: -apple-system, BlinkMacSystemFont, "segoe ui", roboto, oxygen, ubuntu, cantarell, "fira sans", "droid sans", "helvetica neue", Arial, sans-serif;
     -webkit-font-smoothing	: antialiased;
     -moz-osx-font-smoothing	: grayscale;
-	outline: 1px solid red !important;
+	/*outline: 1px solid red !important;*/
 }
 
 body {
@@ -129,7 +129,7 @@ body.loggedin {
 	display				: flex;
 	justify-content		: center;
 	align-items			: center;
-	height: 83vh;
+	height: 78vh;
 }
 
 .innerCell {
@@ -331,18 +331,18 @@ body.loggedin {
 	width 				: 300px;
 }
 
-.scrollID-Div {
+.viewportDiv {
 
 	/*display : none; 
 	width   : 99%;
 	height	: 80vh;*/
 	display : none;
-		height: 600px;
-		overflow-y: auto;
-		position: relative;
-		border: 1px solid #ddd;
-		width: 90%;
-		margin: 0 auto;
+	height: 600px;
+	overflow-y: auto;
+	position: relative;
+	border: 1px solid #ddd;
+	width: 90%;
+	margin: 0 auto;
     
 }
 
@@ -1229,29 +1229,48 @@ img 	{
 
 .spacer-top { /* .spacer-bottom */
 	position: absolute; 
-		top         : 0; 
-		left        : 0; 
-		width           : 100%; 
-		pointer-events  : none;
+	top         : 0; 
+	left        : 0; 
+	width           : 100%; 
+	pointer-events  : none;
 }
 
 .scroll-content {
-            position: relative;
+    position: relative;
 }
 
 
 .viewportDiv {
-	height			: 600px;
 	overflow-y		: auto;
 	position		: relative;
-	border			: 1px solid #ddd;
+	/*border			: 1px solid #ddd;*/
 	width			: 90%;
 	margin			: 0 auto;
 }
 
 .data-table {
-                table-layout: fixed;
-                width: 90%;
-                border-collapse: collapse;
-                margin: 0 auto;
+	table-layout: fixed;
+	width: 90%;
+	border-collapse: collapse;
+	margin: 0 auto;
 }
+
+   .spacerDiv {
+	position: absolute; 
+	top         : 0; 
+	left        : 0; 
+	width           : 100%; 
+	pointer-events  : none;
+       } 
+
+	#search-bar {
+	display: none;
+	width: 10%;            /* Your requested width */
+	min-width: 120px;      /* Prevents it from becoming unusable on small screens */
+	margin-left: 10%;      /* Aligns it to the left edge of the 80% table */
+	margin-bottom: 10px;   
+	padding: 8px;
+	box-sizing: border-box;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+        }

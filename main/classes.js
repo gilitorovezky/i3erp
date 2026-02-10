@@ -25,7 +25,7 @@ class VirtualScroll {
         }
 
         setUpScrollEvent() {
-            this.container.addEventListener('scroll', () => this.handleScroll());
+            //this.container.addEventListener('scroll', () => this.handleScroll());
         }
 
         // Load all data from server (simulated)
@@ -96,8 +96,8 @@ class VirtualScroll {
             const topHeight = this.startIndex * this.rowHeight;
             const bottomHeight = (this.allData.length - this.endIndex) * this.rowHeight;
             
-            this.spacerTop.style.height = `${topHeight}px`;
-            //this.spacerBottom.style.height = `${bottomHeight}px`;
+            //this.spacerTop.style.height = `${topHeight}px`;
+            this.spacerBottom.style.height = `${bottomHeight}px`;
             
             // Render visible rows
             const visibleData = this.allData.slice(this.startIndex, this.endIndex);
@@ -131,7 +131,7 @@ class VirtualScroll {
             this.container.scrollTop = 0;
             this.startIndex = 0;
             this.endIndex = this.windowSize;
-            this.render();
+            //this.render();
             //this.updateInfo();
         }
 

@@ -17,6 +17,14 @@ let captions2={};
 
 const dummyDate= "1999-01-01"
 const customerPanes=["Leads","Estimates","Projects"];
+let filteredData = [];
+
+const viewport = document.getElementById('scrollDivID');
+const renderTarget = document.getElementById('render-target');
+const spacer = document.getElementById('spacer');
+const rowHeight = 10;
+const visibleRows = 20;  
+
 
 //const screens=["home","configuration"];
 
@@ -580,7 +588,7 @@ class genesisClass {
         this.virtualScroll = new VirtualScroll({
             container: document.getElementById('scrollDivID'), //scrollContainer'),
            
-            spacerTop: document.getElementById('spacerTop'),
+            //spacerTop: document.getElementById('spacerTop'),
             //spacerBottom: document.getElementById('spacerBottom'),
             //recordInfo: document.getElementById('recordInfo'),
             windowSize: 50,
@@ -1580,11 +1588,12 @@ function checkSignOutStatus(result) {
 function prepareDisplay(display) {
 
     windowLog.trace("Inside prepareDisplay:"+display);
-    //$(".scrollID-Div").css({'display' : "none"});
+    //$(".viewportDiv").css({'display' : "none"});
 
     var editHtml=`<div id="editDiv" style="display:flex;align-items:flex-end"><a tabindex="0" class="label1">Edit </a><label class="switch"><input type="checkbox" id="editCBID" name="editMode" value="no"><span id="editSliderID" class="slider round"></span></label></div>`;
 
     $("#editLabel").html(editHtml);
+    $("#mainHeader").html("");
     $(".grid-gallery").hide();
     //$("#editLabel").css({'text-align'   : 'right'});
     $(".main_menue").hide();
@@ -1871,25 +1880,25 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
     //classArray["Employee Jobs"].virtualScroll.allData=[];
     prepareDisplay(targetDisplay); // hide the top menue
    
-    if (length == 0) {
+    if (length === 0) {
         $(targetDisplay).html("<br><br>No records to show");
         $(targetDisplay).css({'font-size' 	: '13px',
                               'color' 		: 'red'});
     }
     else { 
-        if (targetDisplay == "#result-table1") {
+        if (targetDisplay === "#result-table1") {
             
             var tempOut = '<a class="hyperlinkLabel" id="exportDialogueID" onclick="return exportDlgReport(event)">&nbsp Export Report</a><dialog id="exportDateRangeDialog"></dialog>';
             tempOut += '<a id="ejTotalCostID"><label for="isTCID" class="label1">&nbsp Show Total Cost<input type="checkbox" id="isTCID" name="checked" value="no" class="checkboxes"/></label></a>';
             $("#exportID").html(tempOut);
             $("#exportID").show();
-            tableHeader += `<thead class="mHeader" id="mainHeader"><tr><th></th><th class="pmClass">Project Number</th>`; 
+            tableHeader = `<thead class="mHeader" id="mainHeader"><tr><th></th><th class="pmClass">Project Number</th>`; 
         }
         else
-            tableHeader += `<table class="res_table2" id="result-table"><thead><tr>`;
-        $(".scrollID-Div").css({'display' : "table-footer-group"});
+            tableHeader = `<table class="res_table2" id="result-table"><thead><tr>`;
+        $(".viewportDiv").css({'display' : "table-footer-group"});
         tableHeader += headers[screen_name]['columns']+`</tr></thead>`;
-        tableHeader += `<tbody id="tableBody" class="thover">`;
+       // tableHeader += `<tbody id="tableBody" class="thover">`;
         const table = document.getElementById('result-table1');
         table.insertAdjacentHTML('afterbegin', tableHeader);
         //$(".scrollit").css({'display' : "block"});
@@ -1989,14 +1998,31 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
         DelCounter=true;
         //classArray["Employee Jobs"].virtualScroll.header=tableHeader; 
         classArray["Employee Jobs"].virtualScroll.tableBody =document.getElementById('tableBody');
+        
+        viewport.onscroll = updateTable;
+        $("#search-bar").css({"display": "block"});
+        // Search logic
+        document.getElementById('search-bar').oninput = function(e) {
+            const term = e.target.value.toLowerCase();
+            filteredData = masterData.filter(function(item) {
+                return item.name.toLowerCase().indexOf(term) > -1;
+            });
+            viewport.scrollTop = 0;
+            updateTable();
+        };
+        
+        filteredData = [...eJobs];
 
-        classArray["Employee Jobs"].virtualScroll.loadAllData(eJobs);
-        classArray["Employee Jobs"].virtualScroll.setUpScrollEvent();
+        updateTable(); // Initial render
+        //classArray["Employee Jobs"].virtualScroll.loadAllData(eJobs);
+        /*classArray["Employee Jobs"].virtualScroll.setUpScrollEvent();
         classArray["Employee Jobs"].virtualScroll.footer = `</tbody></table></tbody>`;
         classArray["Employee Jobs"].virtualScroll.tableBody =document.getElementById('tableBody');
-        classArray["Employee Jobs"].virtualScroll.scrollToBottom();
+        //classArray["Employee Jobs"].virtualScroll.scrollToBottom();
         classArray["Employee Jobs"].virtualScroll.startIndex = 0;
         classArray["Employee Jobs"].virtualScroll.endIndex = 0;
+        */
+
        
         //document.querySelector(targetDisplay).innerHTML = out; // print to screen the return messages
         
@@ -2314,7 +2340,7 @@ function home()	{
     
     today=date.getFullYear()+"-"+(("0" + (date.getMonth() + 1)).slice(-2))+"-"+(("0" + date.getDate()).slice(-2)); 
     windowLog.trace("Inside home:today-"+today);
-    $(".scrollID-Div").css({'display' : "none"});
+    $(".viewportDiv").css({'display' : "none"});
     
     $("#screen_name").html("Home");
     $("#screen_name, #addSingleRec,#editDiv").hide();
@@ -2326,6 +2352,8 @@ function home()	{
     $(".main_menue").show();
     $("#ul, #ur, #ll, #lr").removeClass("configScreen");
     $("#ul, #ur, #ll, #lr").addClass("homeScreen");
+    $("#search-bar").css({"display": "none"});
+
     
     if (lastScreen === "Scheduler") { // if the last screen was Scheduler than restore default
         $("#newTaskShortCutID").invisible();
@@ -2343,7 +2371,7 @@ function home()	{
     //if ( !pageAccessedByReload )
     displayMainMenue("home");
     $('.uList').text("");
-    $('#exportID,#result-table1,#postScrollit').html(" ");
+    $('#exportID,#render-target,#postScrollit').html(" ");
     $('#main-menue,#innerCellID,#newProject,#tHalf,#bHalf,#customers').show();
     $("#prjShortCut").focus();
     //$("#rootID").html("Configuration");
@@ -2699,3 +2727,61 @@ const closeButton = document.getElementById('close-announcement');
 closeButton.addEventListener('click', () => {
   announcementBar.style.display = 'none';
 }); */
+
+
+      function updateTable() {
+
+            const count = filteredData.length;
+            spacer.style.height = (count * rowHeight) + "px";
+
+            const scrollTop = viewport.scrollTop;
+            let startIndex = Math.floor(scrollTop / rowHeight);
+            
+            // Limit startIndex so we don't go off the end
+            startIndex = Math.min(Math.max(0, startIndex), count - visibleRows);
+            let endIndex = Math.min(count, startIndex + visibleRows + 5);
+
+            const paddingTop = startIndex * rowHeight;
+            const visibleSlice = filteredData.slice(startIndex, endIndex);
+
+            // Using standard strings to avoid template literal issues in older browsers
+            /*let html = '<tr style="height: ' + paddingTop + 'px;"><td colspan="3" style="border:none;"></td></tr>';
+            
+            for (let i = 0; i < visibleSlice.length; i++) {
+                let item = visibleSlice[i];
+                html += '<tr style="height: ' + rowHeight + 'px;">' +
+                        '<td>' + item.id + '</td>' +
+                        '<td>' + item.name + '</td>' +
+                        '<td>' + item.category + '</td>' +
+                        '</tr>';
+            }
+
+            renderTarget.innerHTML = html;*/
+
+                // Build HTML string
+            let html = '';
+
+            // ONLY add the top spacer if we have actually scrolled down
+            if (startIndex > 0) {
+                const paddingTop = startIndex * rowHeight;
+                html += '<tr style="height: ' + paddingTop + 'px;"><td colspan="3" style="border:none; padding:0;"></td></tr>';
+            }
+
+            // ACTUAL DATA ROWS
+            /*html += visibleSlice.map(item => {
+                return '<tr style="height: ' + rowHeight + 'px;">' +
+                    '<td>' + item.id + '</td>' +
+                    '<td>' + item.name + '</td>' +
+                    '<td>' + item.category + '</td>' +
+                    '</tr>';
+            }).join('');*/
+            html += visibleSlice.join(''); 
+
+            // BOTTOM SPACER ROW
+            const paddingBottom = Math.max(0, (count - endIndex) * rowHeight);
+            if (paddingBottom > 0) {
+                html += '<tr style="height: ' + paddingBottom + 'px;"><td colspan="3" style="border:none; padding:0;"></td></tr>';
+            }
+
+            renderTarget.innerHTML = html;
+        }

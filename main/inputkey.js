@@ -1001,7 +1001,7 @@
                                     currCell.children().first().css({'border'    : 'none'}); // remove the highlight from the current cell                        
                                     //currCell=currCell.closest('tr').next().find('td:nth-child('+currCell.index()+')'); // the TD at the next row straight below
                                     currCell=currCell.closest('tr').next().find('td:nth-child('+(currCell.index()+1)+')');   // the TD at the next row straight below
-                                    currCell.children().first().css({'border'    : '1px solid black'}); // highlight the new current cell
+                                    currCell.children().first().css({'border'    : '1px  black'}); // highlight the new current cell
                                     //active+=numOfColumns;  
                                     //e.target.setSelectionRange(0,0);
                                     setCellFocus();
