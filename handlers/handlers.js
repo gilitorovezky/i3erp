@@ -980,7 +980,7 @@ Promise.all(requests)
             break;
 
             case "rootID"       :   // home
-                screenNumber="home";
+                screenNumber="Home";
                 window.location.hash = headers["Home"].hash;
             break;
 
@@ -1700,3 +1700,5 @@ Promise.all(requests)
         }
         return retStatus;
     }
+
+    

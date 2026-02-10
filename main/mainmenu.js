@@ -17,13 +17,13 @@ let captions2={};
 
 const dummyDate= "1999-01-01"
 const customerPanes=["Leads","Estimates","Projects"];
-let filteredData = [];
+//let filteredData = [];
 
-const viewport = document.getElementById('scrollDivID');
-const renderTarget = document.getElementById('render-target');
-const spacer = document.getElementById('spacer');
-const rowHeight = 10;
-const visibleRows = 20;  
+//const viewport = document.getElementById('scrollDivID');
+//const renderTarget = document.getElementById('render-target');
+//const spacer = document.getElementById('spacer');
+//const rowHeight = 10;
+//const visibleRows = 20;  
 
 
 //const screens=["home","configuration"];
@@ -585,7 +585,7 @@ class genesisClass {
         else
             windowLog.trace(this.moduleName+"- Empty table!");
 
-        this.virtualScroll = new VirtualScroll({
+        /*this.virtualScroll = new VirtualScroll({
             container: document.getElementById('scrollDivID'), //scrollContainer'),
            
             //spacerTop: document.getElementById('spacerTop'),
@@ -594,7 +594,7 @@ class genesisClass {
             windowSize: 50,
             buffer: 10,
             rowHeight: 45
-        });
+        });*/
 
     }
 
@@ -856,7 +856,7 @@ window.addEventListener("load", function() {
                 $("#centercellID").visible();
 
                 /*if (username == 'eddie') 
-                    screenNumber="home";
+                    screenNumber="Home";
                 else
                     screenNumber="engineer";*/
              
@@ -1071,8 +1071,8 @@ async function init() {
                             $(".navtop div").css({'display':"flex"});
                             $(".navtop").css({"background-color"	: "#faba0a"});
                                 $("#ul, #ur, #ll, #lr").addClass("homeScreen");
-                            screenNumber = "home";//window.location.hash.slice(1);
-                            displayMainMenue("home"); //window.location.hash.slice(1));
+                            screenNumber = "Home";//window.location.hash.slice(1);
+                            displayMainMenue("Home"); //window.location.hash.slice(1));
                             $(".main_menue").show();
                             $("#prjShortCut").focus();
                             $("#savingTD").html("<a style='font-size : 12px;' id='saveTableLabel'>''</a>");
@@ -1144,14 +1144,14 @@ function displayMainMenue(screenName) {
     hashPassword("hello");
     windowLog.trace("inside DisplayMainMenue:today-"+today);
 
-    
-
     if ( username === 'eddie' ) { //only Eddie could access
-        if ( screenName === "home" ) {
+        if ( screenName === "Home" ) {
           
             $('#customers').html('<label tabindex="15" for="cstmrShortCut" class="css-3d-text label2" id="customersLbl">Customers</label><a><img tabindex="16" src="../misc/plus.png" id="newCustomer" width="10" height="10"></a>\n<input tabindex="17" type="text" class="prjShortCutInput" id="cstmrShortCut" name="customerNumber" size="20" maxlength="50">\n'); 
+            //$("#tHalf").html('<a><img tabindex="19" src="../misc/plus.png" width="10" id="mainNewTaskSchdlr" height="10"></a>');
             $("#tHalf").html('<label tabindex="18" class="css-3d-text label2" id="schedulerLabelID">Scheduler</label><a><img tabindex="19" src="../misc/plus.png" width="10" id="mainNewTaskSchdlr" height="10"></a>');
             $('#bHalf').html('<label tabindex="20" for="newProject" class="css-3d-text label2" id="projectLbl">Projects</label><a><img tabindex="21" src="../misc/plus.png" id="newProject" width="10" height="10"></a>\n<input tabindex="22" type="text" class="prjShortCutInput" id="prjShortCut" name="projectNumber" size="20" maxlength="50">\n');
+            //$('#bHalf').html('<a><img tabindex="21" src="../misc/plus.png" id="newProject" width="10" height="10"></a>\n<input tabindex="22" type="text" class="prjShortCutInput" id="prjShortCut" name="projectNumber" size="20" maxlength="50">\n');
             $('#cText').invisible();
             $('#userFileUpload,#fileslabel').hide();
             //$('#tHalf').html(`<label class="css-3d-text label2" id="tHalf"></label><a><img src='../misc/plus.png' alt='plus' width='10' id="newScheduler" height='10'></a>`);        
@@ -1333,7 +1333,7 @@ function upperLeft() {
 
     windowLog.trace("Inside Upper Left");
     if (username == 'eddie') {
-        if ( screenNumber === "home" ) {
+        if ( screenNumber === "Home" ) {
             $("#screen_name").html("Employee Jobs");
              displayEmployeeJobResults(0,"#result-table1") ;// 0 indicate all records to show
         }
@@ -1413,7 +1413,7 @@ function upperRight() {
 
     windowLog.trace("Upper Right");
     if (username == 'eddie') {
-        if ( screenNumber === "home" )
+        if ( screenNumber === "Home" )
              displayPurchaseResults(0,"#result-table1");
         else
             displayVendors("#result-table1");
@@ -1461,7 +1461,7 @@ function lowerRight() {
 
     if (username == 'eddie') {
         
-        if ( screenNumber === "home" ) 
+        if ( screenNumber === "Home" ) 
             displayContractorJobsResults(0,"#result-table1") ;
         else 
             displayCompaniesResults("#result-table1"); 
@@ -1473,7 +1473,7 @@ function lowerRight() {
 function lowerLeft() {
     
     if (username == 'eddie') { 
-            if (screenNumber === "home")
+            if (screenNumber === "Home")
            displayPaymentResults(0,"#result-table1");
         else 
             displayContractors("#result-table1");
@@ -1997,31 +1997,28 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
         }
         DelCounter=true;
         //classArray["Employee Jobs"].virtualScroll.header=tableHeader; 
-        classArray["Employee Jobs"].virtualScroll.tableBody =document.getElementById('tableBody');
-        
-        viewport.onscroll = updateTable;
+       
+        //viewport.onscroll = updateTable;
         $("#search-bar").css({"display": "block"});
         // Search logic
-        document.getElementById('search-bar').oninput = function(e) {
-            const term = e.target.value.toLowerCase();
-            filteredData = masterData.filter(function(item) {
-                return item.name.toLowerCase().indexOf(term) > -1;
-            });
-            viewport.scrollTop = 0;
-            updateTable();
-        };
         
-        filteredData = [...eJobs];
+        
+        //filteredData = [...eJobs];
 
-        updateTable(); // Initial render
-        //classArray["Employee Jobs"].virtualScroll.loadAllData(eJobs);
-        /*classArray["Employee Jobs"].virtualScroll.setUpScrollEvent();
-        classArray["Employee Jobs"].virtualScroll.footer = `</tbody></table></tbody>`;
-        classArray["Employee Jobs"].virtualScroll.tableBody =document.getElementById('tableBody');
-        //classArray["Employee Jobs"].virtualScroll.scrollToBottom();
-        classArray["Employee Jobs"].virtualScroll.startIndex = 0;
-        classArray["Employee Jobs"].virtualScroll.endIndex = 0;
-        */
+        classArray["Employee Jobs"].virtualScroll = new VirtualScroll({
+            container: document.getElementById('scrollDivID'), //scrollContainer'),
+           
+            //spacerTop: document.getElementById('spacerTop'),
+            //spacerBottom: document.getElementById('spacerBottom'),
+            //recordInfo: document.getElementById('recordInfo'),
+            visibleRows : 40,
+            rowHeight   : 10,
+        });
+        classArray["Employee Jobs"].virtualScroll.tableBody = document.getElementById('tableBody');
+        classArray["Employee Jobs"].virtualScroll.init(eJobs);
+        classArray["Employee Jobs"].virtualScroll.attachListener();
+        
+        classArray["Employee Jobs"].virtualScroll.updateTable(); // Initial render
 
        
         //document.querySelector(targetDisplay).innerHTML = out; // print to screen the return messages
@@ -2201,7 +2198,7 @@ function displayContractorJobsResults(projectNumber,targetDisplay) {
             setCellFocus();
             tableSummary(length,sumofCntrJobs);
         }
-        $('.scrollit').scrollTop($('.scrollit').prop("scrollHeight"))
+        //$('.scrollit').scrollTop($('.scrollit').prop("scrollHeight"))
     }
     return false;
 } 
@@ -2287,7 +2284,7 @@ function displayPurchaseResults(projectNumber,targetDisplay) {
             setCellFocus();
             tableSummary(length,sumOfInvoices);
         }
-        $('.scrollit').scrollTop($('.scrollit').prop("scrollHeight"));
+        //$('.scrollit').scrollTop($('.scrollit').prop("scrollHeight"));
     }
     return false;
 }	
@@ -2354,7 +2351,6 @@ function home()	{
     $("#ul, #ur, #ll, #lr").addClass("homeScreen");
     $("#search-bar").css({"display": "none"});
 
-    
     if (lastScreen === "Scheduler") { // if the last screen was Scheduler than restore default
         $("#newTaskShortCutID").invisible();
         document.getElementById('result-table').id = 'result-table1';
@@ -2369,7 +2365,7 @@ function home()	{
     document.getElementById("result-table1").hidden=true;
     $("#centercellID").visible();
     //if ( !pageAccessedByReload )
-    displayMainMenue("home");
+    displayMainMenue("Home");
     $('.uList').text("");
     $('#exportID,#render-target,#postScrollit').html(" ");
     $('#main-menue,#innerCellID,#newProject,#tHalf,#bHalf,#customers').show();
@@ -2410,9 +2406,7 @@ function welcomeBanner() {
     })(windowLog.trace("Nothing"));
 }
 
-
-// making the table sortable
-function AddingSort() {
+function AddingSort() { // making the table sortable
 
     const table = document.querySelector('#result-table1'); //get the table to be sorted
 
@@ -2729,7 +2723,7 @@ closeButton.addEventListener('click', () => {
 }); */
 
 
-      function updateTable() {
+     /* function updateTable() {
 
             const count = filteredData.length;
             spacer.style.height = (count * rowHeight) + "px";
@@ -2744,21 +2738,6 @@ closeButton.addEventListener('click', () => {
             const paddingTop = startIndex * rowHeight;
             const visibleSlice = filteredData.slice(startIndex, endIndex);
 
-            // Using standard strings to avoid template literal issues in older browsers
-            /*let html = '<tr style="height: ' + paddingTop + 'px;"><td colspan="3" style="border:none;"></td></tr>';
-            
-            for (let i = 0; i < visibleSlice.length; i++) {
-                let item = visibleSlice[i];
-                html += '<tr style="height: ' + rowHeight + 'px;">' +
-                        '<td>' + item.id + '</td>' +
-                        '<td>' + item.name + '</td>' +
-                        '<td>' + item.category + '</td>' +
-                        '</tr>';
-            }
-
-            renderTarget.innerHTML = html;*/
-
-                // Build HTML string
             let html = '';
 
             // ONLY add the top spacer if we have actually scrolled down
@@ -2767,14 +2746,6 @@ closeButton.addEventListener('click', () => {
                 html += '<tr style="height: ' + paddingTop + 'px;"><td colspan="3" style="border:none; padding:0;"></td></tr>';
             }
 
-            // ACTUAL DATA ROWS
-            /*html += visibleSlice.map(item => {
-                return '<tr style="height: ' + rowHeight + 'px;">' +
-                    '<td>' + item.id + '</td>' +
-                    '<td>' + item.name + '</td>' +
-                    '<td>' + item.category + '</td>' +
-                    '</tr>';
-            }).join('');*/
             html += visibleSlice.join(''); 
 
             // BOTTOM SPACER ROW
@@ -2784,4 +2755,4 @@ closeButton.addEventListener('click', () => {
             }
 
             renderTarget.innerHTML = html;
-        }
+    } */

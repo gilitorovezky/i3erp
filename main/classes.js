@@ -1,20 +1,28 @@
 
 class VirtualScroll {
         constructor(options) {
-            this.container = options.container;
+            this.viewport = document.getElementById('scrollDivID');
+            //this.viewport.onscroll=this.updateTable;
+            this.viewport.searchBar=document.getElementById('search-bar');
+            this.viewport.searchBar.oninput=this.onSearchBarInput;
+            this.viewport.scrollTop = 0;
             //this.tableBody = options.tableBody;
-            this.spacerTop = options.spacerTop;
+            this.renderTarget = document.getElementById('render-target');
+            this.spacer = document.getElementById('spacer');
+            this.rowHeight = 10;
+            this.visibleRows = 40;  
             //this.spacerBottom = options.spacerBottom;
             //this.recordInfo = options.recordInfo;
             
-            this.allData = [];
+            //this.allData = [];
+            this.filteredData = [];
             this.windowSize = options.windowSize || 50;
-            this.buffer = options.buffer || 10;
-            this.rowHeight = options.rowHeight || 45;
-            this.visibleRows = options.buffer || 10;
+            //this.buffer = options.buffer || 10;
+            //this.rowHeight = options.rowHeight || 45;
+            //this.visibleRows = options.buffer || 10;
             
             this.startIndex = 0;
-            this.header="";
+            //this.header="";
             this.footer="";
             this.endIndex = this.windowSize;
             
@@ -22,14 +30,14 @@ class VirtualScroll {
             this.scrollTimeout = null;
             
             //this.init();
-        }
+        
 
-        setUpScrollEvent() {
+        /*setUpScrollEvent() {
             //this.container.addEventListener('scroll', () => this.handleScroll());
-        }
+        }*/
 
         // Load all data from server (simulated)
-        async loadAllData(inArray) {
+        /*async loadAllData(inArray) {
             // Simulate loading data from PHP/MySQL
             // In real implementation: fetch('api/get_all_records.php')
             
@@ -50,22 +58,21 @@ class VirtualScroll {
                     status: i % 3 === 0 ? 'Active' : i % 3 === 1 ? 'Inactive' : 'Pending',
                     created: new Date(2024, 0, i % 28 + 1).toLocaleDateString()
                 });
-            }*/
+            }
             
-            //this.render();
             //this.updateInfo();
-        }
+        }*/
 
-        handleScroll() {
+        /*handleScroll() {
             if (this.isScrolling) return;
             
             clearTimeout(this.scrollTimeout);
             this.scrollTimeout = setTimeout(() => {
                 this.updateVisibleRange();
             }, 50);
-        }
+        }*/
 
-        updateVisibleRange() {
+        /*updateVisibleRange() {
             const scrollTop = this.container.scrollTop;
             const containerHeight = this.container.clientHeight;
             
@@ -84,31 +91,71 @@ class VirtualScroll {
             if (newStart !== this.startIndex || newEnd !== this.endIndex) {
                 this.startIndex = newStart;
                 this.endIndex = newEnd;
-                this.render();
                 this.updateInfo();
             }
+        }*/
+
+        this.init =(inArray) => {
+
+            this.filteredData = [...inArray];
+        }
+        this.updateTable = () =>{
+
+           
+            const count = this.filteredData.length;
+            spacer.style.height = (count * this.rowHeight) + "px";
+            
+            const scrollTop = this.viewport.scrollTop;
+            let startIndex = Math.floor(scrollTop / this.rowHeight);
+            
+            // Limit startIndex so we don't go off the end
+            startIndex = Math.min(Math.max(0, startIndex), count - this.visibleRows);
+            let endIndex = Math.min(count, startIndex + this.visibleRows + 5);
+
+            const paddingTop = startIndex * this.rowHeight;
+            const visibleSlice = this.filteredData.slice(startIndex, endIndex);
+
+            let html = '';
+
+            // ONLY add the top spacer if we have actually scrolled down
+            if (startIndex > 0) {
+                const paddingTop = startIndex * this.rowHeight;
+                html += '<tr style="height: ' + paddingTop + 'px;"><td colspan="3" style="border:none; padding:0;"></td></tr>';
+            }
+
+            html += visibleSlice.join(''); 
+
+            // BOTTOM SPACER ROW
+            const paddingBottom = Math.max(0, (count - endIndex) * this.rowHeight);
+            if ( paddingBottom > 0 ) {
+                html += '<tr style="height: ' + paddingBottom + 'px;"><td colspan="3" style="border:none; padding:0;"></td></tr>';
+            }
+
+            this.renderTarget.innerHTML = html;
+        }
         }
 
-        render() {
-            this.isScrolling = true;
-            
-            // Calculate spacer heights
-            const topHeight = this.startIndex * this.rowHeight;
-            const bottomHeight = (this.allData.length - this.endIndex) * this.rowHeight;
-            
-            //this.spacerTop.style.height = `${topHeight}px`;
-            this.spacerBottom.style.height = `${bottomHeight}px`;
-            
-            // Render visible rows
-            const visibleData = this.allData.slice(this.startIndex, this.endIndex);
-            //visibleData.join('') + this.footer;
-            //this.tableBody.innerHTML = visibleData.map(record => `${record}`).join('');
-            //this.tableBody.innerHTML += this.footer;
-            this.tableBody.innerHTML = visibleData.join('') + this.footer;
-            setTimeout(() => {
-                this.isScrolling = false;
-            }, 100);
+        attachListener() {
+            //window.addEventListener('scroll', this.updateTable);
+
+            const scrollDiv = document.getElementById('scrollDivID');
+
+            // 2. Define the action on scroll
+            scrollDiv.onscroll = () => {
+                this.updateTable();
+            };
         }
+
+
+        onSearchBarInput() {
+            const term = e.target.value.toLowerCase();
+            let searchResultArray=[];
+            searchResultArray = classArray["Employee Jobs"].arr.filter(function(item) {
+                return item.project_number.toLowerCase().indexOf(term) > -1;
+            });
+            viewport.scrollTop = 0;
+            updateTable(searchResultArray);
+        };        
 
         updateInfo() {
             //const showing = this.endIndex - this.startIndex;
@@ -116,7 +163,7 @@ class VirtualScroll {
             //    `Showing ${this.startIndex + 1}-${this.endIndex} of ${this.allData.length} records (Rendering ${showing} rows)`;
         }
 
-        updateWindowSize() {
+        /*updateWindowSize() {
             const input = document.getElementById('windowSize');
             const newSize = parseInt(input.value);
             
@@ -125,28 +172,27 @@ class VirtualScroll {
                 this.buffer = Math.floor(newSize * 0.2);
                 this.updateVisibleRange();
             }
-        }
+        }*/
 
-        scrollToTop() {
+        /*scrollToTop() {
             this.container.scrollTop = 0;
             this.startIndex = 0;
             this.endIndex = this.windowSize;
-            //this.render();
             //this.updateInfo();
-        }
+        }*/
 
-        scrollToBottom() {
+        /*scrollToBottom() {
             this.container.scrollTop = this.allData.length * this.rowHeight;
             this.updateVisibleRange();
-        }
+        }*/
 
-        scrollToRecord(recordId) {
+        /*scrollToRecord(recordId) {
             const index = this.allData.findIndex(r => r.id === recordId);
             if (index !== -1) {
                 this.container.scrollTop = index * this.rowHeight;
                 this.updateVisibleRange();
             }
-        }
+        }*/
     }
 
 
