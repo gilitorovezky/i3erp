@@ -2017,7 +2017,6 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
         classArray["Employee Jobs"].virtualScroll.tableBody = document.getElementById('tableBody');
         classArray["Employee Jobs"].virtualScroll.init(eJobs);
         classArray["Employee Jobs"].virtualScroll.attachListener();
-        
         classArray["Employee Jobs"].virtualScroll.updateTable(); // Initial render
 
        

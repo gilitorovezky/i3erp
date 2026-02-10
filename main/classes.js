@@ -9,27 +9,17 @@ class VirtualScroll {
             //this.tableBody = options.tableBody;
             this.renderTarget = document.getElementById('render-target');
             this.spacer = document.getElementById('spacer');
-            this.rowHeight = 10;
-            this.visibleRows = 40;  
-            //this.spacerBottom = options.spacerBottom;
-            //this.recordInfo = options.recordInfo;
             
-            //this.allData = [];
             this.filteredData = [];
             this.windowSize = options.windowSize || 50;
-            //this.buffer = options.buffer || 10;
-            //this.rowHeight = options.rowHeight || 45;
-            //this.visibleRows = options.buffer || 10;
+            this.rowHeight = options.rowHeight || 10;
+            this.visibleRows = options.visibleRows || 40;
             
             this.startIndex = 0;
-            //this.header="";
-            this.footer="";
-            this.endIndex = this.windowSize;
-            
+            this.header="";
+            this.footer="";            
             this.isScrolling = false;
             this.scrollTimeout = null;
-            
-            //this.init();
         
 
         /*setUpScrollEvent() {

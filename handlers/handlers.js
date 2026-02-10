@@ -827,7 +827,7 @@ Promise.all(requests)
             case "upperLeft"        :
             case "ul"               :
                 lookupID = "upperLeft";
-                if (username == 'eddie') {
+                if (username === 'eddie') {
                     window.location.hash = headers[captions2[screenNumber][lookupID]].hash;
                     /*if (screenNumber === "home")
                         window.location.hash = headers["Employee Jobs"].hash;
@@ -856,7 +856,7 @@ Promise.all(requests)
             case "lowerLeft"            :
             case "ll"                   :
                 lookupID = "lowerLeft"  ;
-                if ( username == 'eddie' ) 
+                if ( username === 'eddie' ) 
                 /* if ( username == 'eddie' ) {
                     if ( screenNumber === "home" )
                         window.location.hash = headers["Purchases"].hash;
@@ -871,7 +871,7 @@ Promise.all(requests)
             case "lowerRight"           :
             case "lr"                   :
                  lookupID = "lowerRight";
-                 if ( username == 'eddie' ) 
+                 if ( username === 'eddie' ) 
                     window.location.hash = headers[captions2[screenNumber][lookupID]].hash;
                     /*
                     if ( screenNumber === "home" )
