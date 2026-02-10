@@ -2006,16 +2006,14 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
         //filteredData = [...eJobs];
 
         classArray["Employee Jobs"].virtualScroll = new VirtualScroll({
-            container: document.getElementById('scrollDivID'), //scrollContainer'),
-           
-            //spacerTop: document.getElementById('spacerTop'),
-            //spacerBottom: document.getElementById('spacerBottom'),
-            //recordInfo: document.getElementById('recordInfo'),
+            //container: document.getElementById('scrollDivID'), //scrollContainer'),
+            inArray     : eJobs,
             visibleRows : 40,
             rowHeight   : 10,
+            tableBody   : document.getElementById('tableBody'),
+            throttleDelay : 200
         });
-        classArray["Employee Jobs"].virtualScroll.tableBody = document.getElementById('tableBody');
-        classArray["Employee Jobs"].virtualScroll.init(eJobs);
+        //classArray["Employee Jobs"].virtualScroll.tableBody = document.getElementById('tableBody');
         classArray["Employee Jobs"].virtualScroll.attachListener();
         classArray["Employee Jobs"].virtualScroll.updateTable(); // Initial render
 

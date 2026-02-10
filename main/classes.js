@@ -18,8 +18,10 @@ class VirtualScroll {
             this.startIndex = 0;
             this.header="";
             this.footer="";            
-            this.isScrolling = false;
-            this.scrollTimeout = null;
+            this.filteredData = [...options.inArray];
+            this.tableBody = options.tableBody || document.getElementById('tableBody');
+            this.throttleTimeout = null;
+            this.throttleDelay = options.throttleDelay || 200; // milliseconds
         
 
         /*setUpScrollEvent() {
@@ -85,53 +87,54 @@ class VirtualScroll {
             }
         }*/
 
-        this.init =(inArray) => {
+            this.init =(inArray) => {
 
-            this.filteredData = [...inArray];
-        }
-        this.updateTable = () =>{
-
-           
-            const count = this.filteredData.length;
-            spacer.style.height = (count * this.rowHeight) + "px";
-            
-            const scrollTop = this.viewport.scrollTop;
-            let startIndex = Math.floor(scrollTop / this.rowHeight);
-            
-            // Limit startIndex so we don't go off the end
-            startIndex = Math.min(Math.max(0, startIndex), count - this.visibleRows);
-            let endIndex = Math.min(count, startIndex + this.visibleRows + 5);
-
-            const paddingTop = startIndex * this.rowHeight;
-            const visibleSlice = this.filteredData.slice(startIndex, endIndex);
-
-            let html = '';
-
-            // ONLY add the top spacer if we have actually scrolled down
-            if (startIndex > 0) {
-                const paddingTop = startIndex * this.rowHeight;
-                html += '<tr style="height: ' + paddingTop + 'px;"><td colspan="3" style="border:none; padding:0;"></td></tr>';
             }
 
-            html += visibleSlice.join(''); 
+            this.updateTable = () =>{
 
-            // BOTTOM SPACER ROW
-            const paddingBottom = Math.max(0, (count - endIndex) * this.rowHeight);
-            if ( paddingBottom > 0 ) {
-                html += '<tr style="height: ' + paddingBottom + 'px;"><td colspan="3" style="border:none; padding:0;"></td></tr>';
+                if ( this.throttleTimeout === null ) {
+                
+                    const count = this.filteredData.length;
+                    spacer.style.height = (count * this.rowHeight) + "px";
+                    
+                    const scrollTop = this.viewport.scrollTop;
+                    let startIndex = Math.floor(scrollTop / this.rowHeight);
+                    
+                    // Limit startIndex so we don't go off the end
+                    startIndex = Math.min(Math.max(0, startIndex), count - this.visibleRows);
+                    let endIndex = Math.min(count, startIndex + this.visibleRows + 5);
+
+                    const paddingTop = startIndex * this.rowHeight;
+                    const visibleSlice = this.filteredData.slice(startIndex, endIndex);
+
+                    let html = '';
+
+                    // ONLY add the top spacer if we have actually scrolled down
+                    if (startIndex > 0) {
+                        const paddingTop = startIndex * this.rowHeight;
+                        html += '<tr style="height: ' + paddingTop + 'px;"><td colspan="3" style="border:none; padding:0;"></td></tr>';
+                    }
+
+                    html += visibleSlice.join(''); 
+
+                    // BOTTOM SPACER ROW
+                    const paddingBottom = Math.max(0, (count - endIndex) * this.rowHeight);
+                    if ( paddingBottom > 0 ) {
+                        html += '<tr style="height: ' + paddingBottom + 'px;"><td colspan="3" style="border:none; padding:0;"></td></tr>';
+                    }
+                    windowLog.trace("updte scoll content");
+                    this.renderTarget.innerHTML = html;
+                        this.throttleTimeout = setTimeout(() => {
+                        this.throttleTimeout = null;
+                    }, this.throttleDelay);
+                }
             }
-
-            this.renderTarget.innerHTML = html;
-        }
         }
 
         attachListener() {
-            //window.addEventListener('scroll', this.updateTable);
-
-            const scrollDiv = document.getElementById('scrollDivID');
-
-            // 2. Define the action on scroll
-            scrollDiv.onscroll = () => {
+           
+            this.viewport.onscroll = () => {
                 this.updateTable();
             };
         }
