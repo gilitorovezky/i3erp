@@ -444,368 +444,6 @@ const initialCstmrNumber=1;
 
 const taskState =["open","signin","signout","lunchin","lunchout","closed"];
 
-class classTask	{
-
-    constructor() {
-        this.task_id=0;
-        this.taskStatus=0;
-        this.prjNumber=0;
-        this.prjName="";
-        this.taskSignInTime=0;
-        this.taskSignOutTime=0;
-        this.taskLunchSignInTime=0;
-        this.taskLunchSignOutTime=0;
-        this.description="";
-        this.isLunch=false;
-        this.jobProgress="";
-        this.timer=0;
-        this.project_address="";
-    }
-    
-    showDescription() {
-        $('#tHalf').removeClass("nextTask");
-        $('#tHalf').addClass("taskResult");
-        let msg = `Address:<br>`+`<a id="addressNextTask" style="font-size:13px;color:blue;cursor:pointer">${this.project_address} </a><br>`;
-        msg += `Description:<br>`+this.description;
-        $('#tHalf').html(msg);
-    }
-
-    upperleftMsg(msg) {
-        //$("#tHalf").unbind("click");
-        $('#tHalf').html("Are you sure you want to "+msg+"<br><br><input type='button' class='button boxShadow' value='Yes' id='yesBtn'/>&nbsp<input type='button' class='button boxShadow' value='No' id='noBtn'/>");
-    }
-
-    open() {
-        this.upperleftMsg("Sign In");
-    }
-
-    signin() {
-        this.upperleftMsg("Start Lunch?");
-    }
-
-    lunchin() {
-        this.upperleftMsg("Lunch Out");
-    }
-
-    lunchout() {
-        this.upperleftMsg("");        
-    }
-
-    reset() {
-        this.task_id=0;
-        this.taskStatus=0;
-        this.prjNumber=0;
-        this.taskSignInTime=0;
-        this.taskSignOutTime=0;
-        this.taskLunchSignInTime=0;
-        this.taskLunchSignOutTime=0;
-        this.description="";
-        this.isLunch=false;
-        this.jobProgress="";
-        this.timer=0;
-    }
-}
-
-var currentWorkingTask = new classTask;
-
-class classConfig {
-
-    constructor() {
-        this.ntPolling_Interval=1;	// default employee new Task polling interval in minute
-        this.tsPolling_Interval=1;	// default taskStatus polling interval in monute
-    }
-    
-    initGlobalSettings(arrConfig) { // 1 - system parms, 2 - last modified file
-        //this.root_projects=arrConfig[1].root_projects;
-        //this.gas_dir=arrConfig[1].gas_dir;
-        //this.receipts_dir=arrConfig[1].receipts_dir;
-        const ntInterval=Number(arrConfig[1].newTask_polling_interval);
-        const fldrs=JSON.parse(arrConfig['fldrs']['folders']);
-        this.db_version= arrConfig[1].db_version;
-        this.maxUploadFileSize=arrConfig[1].maxUploadFileSize;
-        
-        $("#footer").text(arrConfig[1].app_version); // updating the footer value
-        if (  ntInterval >= 0 && ntInterval <= 10 ) {
-            windowLog.trace("new Task polling Interval(min):"+ntInterval);
-            this.ntPolling_Interval=ntInterval; 
-        }
-        else 
-            windowLog.trace("Set new Task polling Interval(min) to default:"+this.ntPolling_Interval);
-
-        const tsInterval=Number(arrConfig[1].taskStatus_polling_interval);
-        if (  tsInterval >= 0 && tsInterval <= 10 ) {
-            windowLog.trace("taskStatus polling Interval(min):"+tsInterval);
-            this.tsPolling_Interval=tsInterval; 
-        }
-        else 
-            windowLog.trace("Set new Task polling Interval(min) to default:"+this.tsPolling_Interval);
-        this.lastMdfyFile=arrConfig[2].filename;
-        this.lastMdfyDate=arrConfig[2].lastMdfyDate;
-        this.loginPollingInterval=Number(arrConfig[1].logins_polling_interval);
-        
-        this.root=fldrs.system.root_library;
-        this.root_projects=this.root+fldrs.system.root_projects;
-        this.docket_dir=this.root+fldrs.system.root_docket;
-        this.gas_dir=this.root_projects+fldrs.system.gas_receipts;
-        this.receipts_dir=this.root_projects+fldrs.system.general_receipts;
-        this.archive_dir=this.root+fldrs.system.archive;// archieve folder for "deleted files"
-        this.config_dir=this.root+fldrs.system.root_config;// config directory
-        this.customers_dir=this.root+fldrs.system.customers;
-        this.leads_dir=this.root+fldrs.system.leads;
-        this.estimates_dir=this.root+fldrs.system.estimates;
-        this.maxUAtasksInRow=arrConfig[1].maxUAtasksInRow;
-        this.maxUArows=arrConfig[1].maxUArows;
-        this.masterModuleAttributes=JSON.parse(arrConfig[1].masterModuleAttributes);
-        this.newEntryMaxDepth=arrConfig[1].new_entry_max_depth;
-        this.saveMsgTimeout=Number(arrConfig[1].saveMsgTimeout);
-        this.fastLoading=arrConfig[1].fast_loading==='1'?true:false;
-        //this.defaultProfileColor=arrConfig[1].default_profile_color;
-    }
-}
-
-var appConfig = new classConfig;
-
-// genesis class, holds all the common informaton for the child classes
-class genesisClass {
-    constructor(inArray,moduleName,screen) {
-
-        this.arr=[];		// General array to hold the results from the DB
-        this.moduleName = moduleName;
-        this.screenNumber=screen;
-        if ( (Object.keys(inArray).length > 0) && (Number(inArray[0].Status) > 0) )
-            lastID[moduleName]=Number(inArray[0].maxID);
-
-        if (Object.keys(inArray).length > 1) { 		// GT 1 since there will be always 1 entry for the retrn result
-            windowLog.trace("Initializing "+moduleName+"...");
-            Object.keys(inArray).forEach( (key) => { //copy the return data from the DB into the class array
-                this.arr.push(inArray[key]);
-            } );
-            this.arr.splice(0,1); // delete the 0 entry before copying the inout array to the class	
-        }
-        else
-            windowLog.trace(this.moduleName+"- Empty table!");
-
-        /*this.virtualScroll = new VirtualScroll({
-            container: document.getElementById('scrollDivID'), //scrollContainer'),
-           
-            //spacerTop: document.getElementById('spacerTop'),
-            //spacerBottom: document.getElementById('spacerBottom'),
-            //recordInfo: document.getElementById('recordInfo'),
-            windowSize: 50,
-            buffer: 10,
-            rowHeight: 45
-        });*/
-
-    }
-
-
-    moduleName() {
-        return 'screenName ' + this.moduleName;
-    }
-    
-    showType() {
-        return this.type;
-    }
-
-    initNames() {
-
-    }
-
-    // return the arr entry number of a given index (task_id, contrctor_id ...)
-    retEntrybyID(item) {
-
-        var entry=-1;
-        var i=0;
-        var found = false;
-        const key=headers[this.moduleName].primaryKey;
-        while ( ( i < this.arr.length) && (!found) ) {
-            if  ( this.arr[i][key] === item ) {
-                found = true; 	// exit the while gracefully
-                entry = i;
-            }
-            i++;
-        }
-
-
-        return entry;
-    } 
-};
-
-class classTasks extends genesisClass {
-
-    constructor(inArray) {
-
-        
-        super(inArray,"Scheduler",1);	// call the parent constructor
-
-        this.arrTasks=[];
-        windowLog.trace("Inside classTasks constructor");
-        this.noneClosedDailyTasks=[];
-        this.intervalEJID=0;
-        this.nextTaskID=1;
-        this.newTask=0;						// hold the newest task
-        this.unAssignedCount=0;
-       
-        //this.arrTasks.splice(0,1); 
-        if (Object.keys(inArray).length > 1) {
-            this.nextTaskID=Number(inArray[0].maxID);
-            delete inArray[0];
-            Object.keys(inArray).forEach( (key) => { //copy the return data from the DB into the class array
-                if ( inArray[key].employee_id == 0 || Number(inArray[key].is_assigned) == 0 ) 
-                    this.unAssignedCount++;
-                this.arrTasks.push(inArray[key]);
-                const tToday = new Date();
-                const today=formatDateForInput(tToday); // convert to yyyy-mm-dd
-
-                if ( (inArray[key].task_status != 'closed') && ( inArray[key].task_date.split(' ')[0] == today) ) {
-                    this.noneClosedDailyTasks[inArray[key].task_id+"-"]=inArray[key].task_status;	// add new entry, adding - to make the arra yassociative for faster search later
-                    windowLog.trace("Adding nonClosed task:"+inArray[key].task_id);
-                }
-                
-            } );
-        }
-        //this.arrTasks.splice(0,1); // delete the 0 entry before copying the inout array to the class	
-        /*this.arrTasks.forEach(element => { 
-            if ( (element.task_status != 'closed') && ( element.task_date.split(' ')[0] == today) ) {
-                this.noneClosedDailyTasks[element.task_id+"-"]=element.task_status;	// add new entry, adding - to make the arra yassociative for faster search later
-                windowLog.trace("Adding nonClosed task:"+element.task_id);
-            }
-        });*/
-    }
-    
-    toJSON = function(tenpO) {
-        var sobj = {}, i;
-        for (i in tenpO) {
-            const j=i.slice(0,-1); // remove the - at the end from the task_id before sending the array to php
-        if (tenpO.hasOwnProperty(i))
-            sobj[j] = typeof tenpO[i] == 'function' ?
-            tenpO[i].toString() : tenpO[i];
-        }
-        return sobj;
-    };
-
-    refreshTasks() {
-        windowLog.trace("Refresh tasks");
-    }
-};
-
-class classProjects extends genesisClass {
-
-    static pNames = [];
-    static prjTotalCosts=0.0;
-    static totalPurchases=0.0;
-    static totalEmployeeCost=0.0;
-    static totalContractorCost;
-    static totalBalance=0.0; 		
-    static projectNumber;
-    static projectName;
-    static details;
-    static totalPayments=0.0;
-
-    constructor(pList) {
-
-        super(pList,"Projects",1);	// call the parent constructor
-
-       
-        this.arrProjects=pList;
-        this.maxID;
-        this.pNames=[];
-        this.length = this.arrProjects.length;
-        for (var i = 0; i < this.length; i++)  //loop throu the return msg 
-            this.pNames.push(this.arrProjects[i].project_name);
-    } 
-
-    retEntrybyID(ID) {
-
-        var entry=-1;
-        var i=0;
-        var found = false;
-        while ( ( i < this.arrProjects.length) && (!found) ) {
-            if  ( this.arrProjects[i].project_id === ID ) {
-                found = true; 	// exit the while gracefully
-                entry = i;
-            }
-            i++;
-        }
-        return entry;
-    } 
-
-    element(i) { // for testing
-        return this.arrProjects[i].project_details;
-    }	
-
-    setprojectNumber(pID) {
-        Projects.projectNumber=this.arrProjects[pID].project_number;
-    }
-
-    getprojectNumber() {
-        return Projects.projectNumber;
-    }
-
-    getEmployeeCost(i) {
-        Projects.totalEmployeeCost=+(this.arrProjects[i].project_total_empl_cost);
-        return Projects.totalEmployeeCost.toFixed(2);	
-    }
-
-    getContractorCost(i) {
-        Projects.totalContractorCost=+(this.arrProjects[i].project_total_cntrc_cost);
-        return Projects.totalContractorCost.toFixed(2); 
-    }
-
-    getTotalPurchases(i) {
-        return (Projects.totalPurchases=+(this.arrProjects[i].project_total_purchases)).toFixed(2); 
-    }
-        
-    getPrjTotalCosts()	{ // sum of all costs : employees labor+contractors work and purchases
-        Projects.prjTotalCosts=Projects.totalEmployeeCost+Projects.totalContractorCost+Projects.totalPurchases;
-        return Projects.prjTotalCosts.toFixed(2); 
-    }
-
-    getTotalBalance()	{
-        return (Projects.totalBalance=Projects.totalPayments-Projects.prjTotalCosts).toFixed(2);
-    }
-
-    getDetails(i) {
-        return this.arrProjects[i].project_details;
-    }
-
-    getAddress(i) {
-        return this.arrProjects[i].project_address;
-    }
-
-    getPrjName(i) {
-        return this.arrProjects[i].project_name;
-        //Projects.pNames[i];
-    }
-
-    setTotalPayments(i) {
-        return (Projects.totalPayments = +this.arrProjects[i].project_total_payments);
-    }
-}
-
-// Class type1 for the home screen
-class classType1 extends genesisClass {
-
-    constructor(inputArray,moduleName,screenNumber) {
-        super(inputArray,moduleName,screenNumber);	// call the parent constructor
-        this.pNames=[];		// only names for the contexcual search		
-    }
-};
-
-// Class type2 for configuration screen
-class classType2 extends genesisClass {
-
-    constructor(inputArray,moduleName,screenNumber) {
-        super(inputArray,moduleName,screenNumber);	// call the parent constructor
-        this.ID=[];			// Only be used by Employees and Contractors
-        this.pNames=[];		// only names for the contexcual search		
-    }
-};
-
-const classMap = {
-  1: classType1,
-  2: classType2
-};
 
 MainMenue = new classMainMenue;
 
@@ -1654,8 +1292,7 @@ function displayProjects(projectManager) {
     const screen_name="Projects";
     windowLog.trace("Inside "+screen_name);
     let out = "";
-    //var slidingWindow;
-    //var sumOfProjects=0;
+   
 
     passedArray=Projects.arrProjects;
     lastScreen=screen_name;
@@ -1671,9 +1308,6 @@ function displayProjects(projectManager) {
    
     lastID["Projects"]=Number(Projects.arrProjects[Projects.arrProjects.length-1].project_id);
 
-    /*minRec=Math.max(Projects.arrProjects.length-200,0);
-    maxRec=Math.min(Projects.arrProjects.length+200,Projects.arrProjects.length);
-    slidingWindow=refreshProjects(minRec,maxRec);*/
     windowLog.trace("Start processing projects");
     out =  headers[screen_name]['columns'];
     out += `<tbody class="thover">`;
@@ -1724,37 +1358,6 @@ function displayProjects(projectManager) {
     return false;
 }
 
-// currently not implemented
-function refreshProjects(start,end) {
-    
-    var out="";
-
-    windowLog.trace("Inside refresh Projects");
-    for (var i = start; i < end; i++) { //loop throu the return msg 
-        out += `<tr>`;
-        
-        //jTime=passedArray[i].project_date_created.slice(-5); // retreive the hh:mm
-        //out += `<td><a href=""><img src='../misc/minus-2.jpg' value="DeleteImage" alt='plus' width='10' height='10' onclick='return deleteRow(event)'></a></td>`;
-        out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="DeleteImage" alt='plus' width='10' height='10'></td>`;
-        out += `<td><input tabindex="0" type="text" name="projectNumber" class="projectNameClass" value="${Projects.arrProjects[i].project_number}">`;
-        out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="projectID" value=${Projects.arrProjects[i].project_id}></td>`;
-        out += `<td><input tabindex="0" type="text" name="companyName" class="projectNameClass" value='${Projects.arrProjects[i].company_name}'></td>`;
-        out += `<td><input tabindex="0" type="text" name="customerLastName" class="projectNameClass" value='${Projects.arrProjects[i].project_cstmr_lastname}'></td>`;
-        out += `<td><input tabindex="0" type="text" name="projectType" class="projectNameClass" value='${Projects.arrProjects[i].project_type}'></td>`;
-        out += `<td><input tabindex="0" type="text" name="projectSalesRep" class="projectNameClass" value='${Projects.arrProjects[i].project_m_contractor}'></td>`;
-        out += `<td><input tabindex="0" type="text" name="projectAddress" class="projectNameClass" value='${Projects.arrProjects[i].project_address}'></td>`;
-        //out += `<td tabindex="0"><a target="_blank" rel="noopener noreferrer" style="font-size:13px; text-decoration:none;" href="http://maps.google.com/?q=${passedArray[i].project_address}">${passedArray[i].project_address}</a></td>`;
-        var url=Projects.arrProjects[i].project_address;
-        out += `</tr>`;
-    }
-    return out;
-}
-
-/*function projectDateFunction(e) {
-    event.target.style.background = "pink";
-        windowLog.trace("hi there");
-}*/
-
 function projects(e) {
 
     displayProjects(username);
@@ -1773,19 +1376,19 @@ function displayPaymentResults(projectNumber,targetDisplay) {
     windowLog.trace("Inside "+screen_name);
     let eArray=[];
     let out = "";
-    let eJobs=[];
-    var fileuploadLink="";
+    let pJobs=[];
     var sumOfPayments=0;    // sum of all payments
 
+    if (classArray[screen_name].arr.length) {
+        if ( projectNumber === 0 ) 
+            eArray = classArray[screen_name].arr;//EmployeeJobs.arrEmployeeJobs;
+        else 
+            eArray=classArray[screen_name].arr.filter(((element) => element.project_number === projectNumber)); //EmployeeJobs.arrEmployeeJobs.filter(((element) => element.project_number == projectsList)); 			
+    }
 
-    if ( projectNumber === 0 ) 
-        eArray = classArray[screen_name].arr;//EmployeeJobs.arrEmployeeJobs;
-    else 
-        // filter only the records of the project number
-        eArray=classArray[screen_name].arr.filter(((element) => element.project_number == projectNumber)); //EmployeeJobs.arrEmployeeJobs.filter(((element) => element.project_number == projectsList)); 			
-    length=eArray.length;
+    const length=eArray.length;
 
-    if (targetDisplay === "#result-table1") { // Only  update the screen name if employee-jobs is displayed in the top screen
+    if ( targetDisplay === "#result-table1" ) { // Only  update the screen name if employee-jobs is displayed in the top screen
         $("#screen_name").html(screen_name);
         lastScreen=screen_name;
         $(".viewportDiv").css({'display' : "table-footer-group"});
@@ -1804,7 +1407,7 @@ function displayPaymentResults(projectNumber,targetDisplay) {
     out ="";
     //out += `<tbody id="tBodyID" class="thover">`; 
     for (var i = 0; i < length; i++) { //loop throu the return msg 
-        fileuploadLink=uploadFilesMngr(Number(eArray[i].file_uploaded,(eArray[i].project_number != "")));
+        const fileuploadLink=uploadFilesMngr(Number(eArray[i].file_uploaded,(eArray[i].project_number != "")));
         outFiles = `<td tabindex="0" style="width:8%"><a class="hyperlinkLabel" id="allFilesID" data-files="0">${fileuploadLink}</a></td>`;
         if ( targetDisplay === "#result-table1" ) {
             out += `<tr>`;
@@ -1816,11 +1419,10 @@ function displayPaymentResults(projectNumber,targetDisplay) {
             out += `<td><input type="text" id="paymentMethodID" name="paymentMethod" class="projectNameClass" value="${eArray[i].payment_method}"></td>`;
             out += `<td><input type="text" id="checkNumberID" name="checkNumberCNF" maxlength="20" class="projectNameClass" value='${eArray[i].payment_number}'></td>`;
             out += `<td><input type="text" id="descriptionID" name="Description" class="projectNameClass" value="${eArray[i].description}"></td>`;
-            out += outFiles;
-            out += `</tr>`;
+            out += outFiles+`</tr>`;
             if ( eArray[i].payment_amount != "")
                 sumOfPayments += Number(eArray[i].payment_amount);
-            eJobs.push(out);
+            pJobs.push(out);
             out="";
         }
         else {
@@ -1833,15 +1435,14 @@ function displayPaymentResults(projectNumber,targetDisplay) {
             
             out += `<td>${eArray[i].description}</td>`;
             out += outFiles;
-            out += `</tr>`;
-            eJobs.push(out);
+            out += outFiles+`</tr>`;
+            pJobs.push(out);
             out="";
         }
     }
 
     classArray[screen_name].virtualScroll = new VirtualScroll({
-        //container: document.getElementById('scrollDivID'), //scrollContainer'),
-        inArray         : eJobs,
+        inArray         : pJobs,
         visibleRows     : 40,
         rowHeight       : 10,
         tableBody       : document.getElementById('tableBody'),
@@ -1856,9 +1457,6 @@ function displayPaymentResults(projectNumber,targetDisplay) {
         //tableSummary(length,sumofJobs);
         //AddingSort();
     }
-    //out += `</tbody></table>`;
-    
-    //$('.scrollit').scrollTop($('.scrollit').prop("scrollHeight"))
     
     return false;
 } 
@@ -2121,77 +1719,91 @@ function displayContractorJobsResults(projectNumber,targetDisplay) {
     windowLog.trace("Inside "+screen_name);
     let out = "";
     let cArray=[];
+    let cJobs=[];
     var sumofCntrJobs =0;
    
     if (classArray[screen_name].arr.length) {
         if ( projectNumber == 0 ) // work with all rojects
             cArray = classArray[screen_name].arr;
         else
-            cArray = classArray[screen_name].arr.filter(((element) => element.project_number == projectNumber)); 
+            cArray = classArray[screen_name].arr.filter(((element) => element.project_number === projectNumber)); 
     }
 
     const length=cArray.length;
 
-    if (targetDisplay == "#result-table1") {	// Only update the screen name if employee-jobs is displayed in the top screen
+    if ( targetDisplay === "#result-table1" ) {	// Only update the screen name if employee-jobs is displayed in the top screen
         $("#screen_name").html(screen_name);
         lastScreen=screen_name;
+        $(".viewportDiv").css({'display' : "table-footer-group"});
     }
     
     prepareDisplay(targetDisplay);
     
-    if (length == 0) {
+    if (length === 0) {
         $(targetDisplay).html("<br><br>No records to show");
         $(targetDisplay).css({'font-size' 	: '13px',
                               'color' 		: 'red'});
     }
     else { 
         document.getElementById("result-table3").hidden=false;
-        if (targetDisplay == "#result-table1") // if the targetDisplay is not the main then do not show the project number
-            out += `<thead id="mainHeader"><tr><th></th><th class="pmClass">Project Number</th>`; 
+        if (targetDisplay === "#result-table1") // if the targetDisplay is not the main then do not show the project number
+            out += `<thead id="mainHeader" class="mHeader"><tr><th></th><th class="pmClass">Project Number</th>`; 
         else
             out += `<table class="res_table2" id="result-table"><thead><tr>`;
         out += headers[screen_name]['columns']+`</tr></thead>`;
-        out += `<tbody class="thover">`;
+        const table = document.getElementById('result-table1');
+        table.insertAdjacentHTML('afterbegin', out);
+        out ="";
         for (var i = 0; i < length; i++) { //loop throu the return msg 
             const fileuploadLink=uploadFilesMngr(Number(cArray[i].file_uploaded),(cArray[i].project_number != ""));
             outFiles = `<td tabindex="0" style="width:8%"><a class="hyperlinkLabel" id="allFilesID" data-files="0">${fileuploadLink}</a></td>`;
             if ( targetDisplay == "#result-table1" ) {
-                    out += `<tr>`;
-                    out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="DeleteImage" alt='plus' width='10' height='10'></td>`;
-                    out += `<td><input tabindex="0" type="text" id="prjctNumberID" name="projectNumber" class="projectNameClass" size="44" maxlength="50" value="${cArray[i].project_number}">`;
-                    out += `<input type="hidden" id="${headers[$("#screen_name").html()]['primaryKey']}" name="taskID" value=${cArray[i].task_id}></td>`;
-                    out += `<td><input tabindex="0" type="text" id='ContractorNameID' name="ContractorName" class="projectNameClass" value="${cArray[i].contractor_name}" size="20"></td>`;
-                    out += `<td><input tabindex="0" type="date" id="jobDateID" name="jobDate" class="inputDate" value=${cArray[i].job_date}></td>`;
-                    if ( cArray[i].payment_amount != 0.00)
-                        out += `<td><input tabindex="0" type="text" id="paymentID" name="payment" class="projectNameClass" value="${cArray[i].payment_amount}"></td>`;
-                    else
-                        out += `<td><input tabindex="0" type="text" id="paymentID" name="payment" class="projectNameClass" value=""></td>`;
+                out += `<tr>`;
+                out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="DeleteImage" alt='plus' width='10' height='10'></td>`;
+                out += `<td><input tabindex="0" type="text" id="prjctNumberID" name="projectNumber" class="projectNameClass" size="44" maxlength="50" value="${cArray[i].project_number}">`;
+                out += `<input type="hidden" id="${headers[$("#screen_name").html()]['primaryKey']}" name="taskID" value=${cArray[i].task_id}></td>`;
+                out += `<td><input tabindex="0" type="text" id='ContractorNameID' name="ContractorName" class="projectNameClass" value="${cArray[i].contractor_name}" size="20"></td>`;
+                out += `<td><input tabindex="0" type="date" id="jobDateID" name="jobDate" class="inputDate" value=${cArray[i].job_date}></td>`;
+                if ( cArray[i].payment_amount != 0.00)
+                    out += `<td><input tabindex="0" type="text" id="paymentID" name="payment" class="projectNameClass" value="${cArray[i].payment_amount}"></td>`;
+                else
+                    out += `<td><input tabindex="0" type="text" id="paymentID" name="payment" class="projectNameClass" value=""></td>`;
 
-                    out += `<td><input tabindex="0" type="text" id="paymentNumberID" name="paymentNumber" class="projectNameClass" maxlength="20" value="${cArray[i].payment_number}"></td>`;
-                    out += `<td><input tabindex="0" type="date" id="paymentDate" name="jobPaymentDate" class="inputDate" value=${cArray[i].date_paid}></td>`;
-                    out += `<td><input tabindex="0" type="text" id="descriptionID" name="description" class="projectNameClass" maxlength="40" value="${cArray[i].description}"></td>`;
-                    //fileupload=uploadFilesMngr(Number(cArray[i].file_uploaded),(cArray[i].project_number != ""));
-                    out += outFiles+`</tr>`;
-                    //out += `</tr>`;
-                    if ( cArray[i].payment_amount != "" )
-                        sumofCntrJobs += Number(cArray[i].payment_amount);
+                out += `<td><input tabindex="0" type="text" id="paymentNumberID" name="paymentNumber" class="projectNameClass" maxlength="20" value="${cArray[i].payment_number}"></td>`;
+                out += `<td><input tabindex="0" type="date" id="paymentDate" name="jobPaymentDate" class="inputDate" value=${cArray[i].date_paid}></td>`;
+                out += `<td><input tabindex="0" type="text" id="descriptionID" name="description" class="projectNameClass" maxlength="40" value="${cArray[i].description}"></td>`;
+                //fileupload=uploadFilesMngr(Number(cArray[i].file_uploaded),(cArray[i].project_number != ""));
+                out += outFiles+`</tr>`;
+                //out += `</tr>`;
+                if ( cArray[i].payment_amount != "" )
+                    sumofCntrJobs += Number(cArray[i].payment_amount);
+                cJobs.push(out);
+                out="";
             } 
             else { // called with table3
-                    out += `<tr>`;
-                    out += `<td>${cArray[i].contractor_name}</td>`;
-                    out += `<td>${cArray[i].job_date}</td>`;
-                    out += `<td>${cArray[i].payment_amount}</td>`;
-                    out += `<td>${cArray[i].payment_number}</td>`;
-                    out += `<td>${cArray[i].date_paid}</td>`;
-                    out += `<td>${cArray[i].description}</td>`;
-                    out += `<td style="width:2%">${fileUpload}</td>`;
-                    out += `</tr>`;
-            
+                out += `<tr>`;
+                out += `<td>${cArray[i].contractor_name}</td>`;
+                out += `<td>${cArray[i].job_date}</td>`;
+                out += `<td>${cArray[i].payment_amount}</td>`;
+                out += `<td>${cArray[i].payment_number}</td>`;
+                out += `<td>${cArray[i].date_paid}</td>`;
+                out += `<td>${cArray[i].description}</td>`;
+                out += `<td style="width:2%">${fileUpload}</td>`;
+                out += `</tr>`;
+                cJobs.push(out);
+                out="";
             }
-        }       
-        out += `</tbody></table>`;
+        }  
         
-        document.querySelector(targetDisplay).innerHTML = out+`</tbody>`; // print to screen the return messages
+         classArray[screen_name].virtualScroll = new VirtualScroll({
+            inArray         : cJobs,
+            visibleRows     : 40,
+            rowHeight       : 10,
+            tableBody       : document.getElementById('tableBody'),
+            throttleDelay   : 100
+        });
+        classArray[screen_name].virtualScroll.attachListener();
+        classArray[screen_name].virtualScroll.updateTable(); // Initial render
         
         if (targetDisplay == "#result-table1") {
             currCell = $('#result-table1 tbody tr:last td:eq(1)').first(); // currCell points to 1st TD in the last TR
@@ -2207,49 +1819,51 @@ function displayPurchaseResults(projectNumber,targetDisplay) {
     
     const screen_name="Purchases";
     windowLog.trace("Inside "+screen_name);
-    //var t_files2show="";
-    let out = "";
     let pArray=[];
-    var sumOfInvoices =0;
+    let out="";
+    let pJobs=[];
+    var sumOfInvoices=0;
 
     if (classArray[screen_name].arr.length) {
-        if ( projectNumber == 0 ) 
+        if ( projectNumber === 0 ) 
             pArray = classArray[screen_name].arr;
         else 
             // filter only the records of the project number
-            pArray=classArray[screen_name].arr.filter(((element) => element.project_number == projectNumber)); 	
+            pArray=classArray[screen_name].arr.filter(((element) => element.project_number === projectNumber)); 	
     }
     const length=pArray.length;
 
-    if ( targetDisplay == "#result-table1" ) { // Only  update the screen name if employee-jobs is displayed in the top screen
+    if ( targetDisplay === "#result-table1" ) { // Only  update the screen name if employee-jobs is displayed in the top screen
         $("#screen_name").html(screen_name);
         lastScreen=screen_name;
+        $(".viewportDiv").css({'display' : "table-footer-group"});
     }
     
     prepareDisplay(targetDisplay);
 
-    if (length == 0) {	// No records
+    if ( length === 0 ) {	// No records
        
         $(targetDisplay).html("<br><br>No records to show");
         $(targetDisplay).css({'font-size' : '13px',
                               'color'     : 'red'});
     }
     else {
-        if (targetDisplay == "#result-table1") {
-            out +=`<thead id="mainHeader"><tr><th></th><th class="pmClass">Project Number</th>`; 
+        if (targetDisplay === "#result-table1") {
+            out =`<thead id="mainHeader" class="mHeader"><tr><th></th><th class="pmClass">Project Number</th>`; 
             DelCounter=length;
         }
         else
-            out += `<table class="res_table2" id="result-table"><thead><tr>`;
+            out = `<table class="res_table2" id="result-table"><thead><tr>`;
         
         out += headers[screen_name]['columns']+`</tr></thead>`;
-        out += `<tbody class="thover">`;
-        
+        const table = document.getElementById('result-table1');
+        table.insertAdjacentHTML('afterbegin', out);
+        out ="";
         for (var i = 0; i < length; i++) { //loop throu the return msg starting from 1 since entry 0 holds the return msg
             const fileuploadLink=uploadFilesMngr(Number(pArray[i].file_uploaded),(pArray[i].project_number != ""));
             outFiles = `<td tabindex="0" style="width:8%"><a class="hyperlinkLabel" id="allFilesID" data-files="0">${fileuploadLink}</a></td>`;
            
-            if ( targetDisplay == "#result-table1" ) {
+            if ( targetDisplay === "#result-table1" ) {
                 out += `<tr>`;
                 out += `<td><img src='../misc/minus-2.jpg' id="delImageID" value="DeleteImage" alt='plus' width='10' height='10'></td>`;
                 out += `<td><input tabindex="0" type="text" id="prjctNumberID" name="projectNumber" class="projectNameClass" size="44" maxlength="50" value="${pArray[i].project_number}">`;
@@ -2264,6 +1878,8 @@ function displayPurchaseResults(projectNumber,targetDisplay) {
                 out += outFiles+`</tr>`;
                 if ( pArray[i].purchase_amount != "")
                     sumOfInvoices += Number(pArray[i].purchase_amount);
+                pJobs.push(out);
+                out="";
             }
             else {	// display is the project summary
                 out += `<td>${pArray[i].vendor_name}</td>`;
@@ -2274,11 +1890,22 @@ function displayPurchaseResults(projectNumber,targetDisplay) {
                 out += `<td>${pArray[i].purchase_method}</td>`;
                 out += `<td>${pArray[i].description}</td>`;
                 out += outFiles+`</tr>`;
+                pJobs.push(out);
+                out="";
             }
         }    
-        out += `</tbody></table>`;
-        document.querySelector(targetDisplay).innerHTML=out+`</tbody>`; // print to screen the return messages
-        
+       
+        classArray[screen_name].virtualScroll = new VirtualScroll({
+            //container: document.getElementById('scrollDivID'), //scrollContainer'),
+            inArray         : pJobs,
+            visibleRows     : 40,
+            rowHeight       : 10,
+            tableBody       : document.getElementById('tableBody'),
+            throttleDelay   : 100
+        });
+        classArray[screen_name].virtualScroll.attachListener();
+        classArray[screen_name].virtualScroll.updateTable(); // Initial render
+            
         if (targetDisplay == "#result-table1") {
             currCell = $('#result-table1 tbody tr:last td:eq(1)').first();
             setCellFocus();
