@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* ... Previous Styles ... */
+        .viewportDiv {
+            height: 600px;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid #ddd;
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            height: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: cell; /* Visual hint for selection */
+        }
+
+        /* Highlight for selected cells */
+        td.selected {
+            background-color: #e1f5fe !important;
+            outline: 2px solid #03a9f4;
+            outline-offset: -2px;
+        }
+       
+        thead th {
+            position: sticky;
+            background: #f6d608; 
+            top: 0;
+            z-index: 2;
+            height: 20px;
+            border-bottom: 2px solid #ccc;
+            color: rgb(232, 50, 50);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th.sort-asc::after { content: " ▲"; font-size: 0.7em; }
+        th.sort-desc::after { content: " ▼"; font-size: 0.7em; }
+
+        .controls {
+            width: 90%;
+            margin: 0 auto 10px auto;
+            display: flex;
+            gap: 10px;
+        }
+
+        #search-bar { padding: 8px; border: 1px solid #ccc; border-radius: 4px; flex-grow: 1; }
+        #reset-btn { padding: 8px 15px; cursor: pointer; }
+
+        .data-table { table-layout: fixed; width: 100%; border-collapse: collapse; }
+        .spacerDiv { position: absolute; top: 0; left: 0; width: 100%; pointer-events: none; }
+
+        /* Floating Sum Field */
+        #sum-display {
+            position: fixed;
+            bottom: 20px;
+            right: 5%;
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: none; /* Hidden by default */
+            z-index: 100;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <input type="text" id="search-bar" placeholder="Search products..." >
+        <button id="reset-btn">Reset All</button>
+    </div>
+
+    <div id="viewport" class="viewportDiv">
+       <div id="spacer" class="spacerDiv"></div> 
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width: 15%;" data-key="id">ID</th>
+                    <th style="width: 60%;" data-key="name">Product Name</th>
+                    <th style="width: 25%;" data-key="category">Category</th>
+                </tr>
+            </thead>
+            <tbody id="render-target"></tbody>
+        </table>
+    </div>
+
+    <div id="sum-display">Total Sum: <span id="sum-value">0</span></div>
+
+    <script>
+        const rowHeight = 40;
+        const visibleRows = 15;
+        
+        let sortStack = []; 
+        // We store selections as strings: "rowID-columnKey"
+        let selectedCells = new Set(); 
+
+        const masterData = Array.from({ length: 1000 }, (_, i) => ({
+            id: i + 1,
+            name: "Product " + Math.floor(Math.random() * 1000),
+            category: "Category " + (i % 5)
+        }));
+        let filteredData = [...masterData];
+
+        const viewport = document.getElementById('viewport');
+        const renderTarget = document.getElementById('render-target');
+        const spacer = document.getElementById('spacer');
+        const sumDisplay = document.getElementById('sum-display');
+        const sumValue = document.getElementById('sum-value');
+
+        function updateTable() {
+            const count = filteredData.length;
+            spacer.style.height = (count * rowHeight) + "px";
+
+            const scrollTop = viewport.scrollTop;
+            let startIndex = Math.floor(scrollTop / rowHeight);
+            startIndex = Math.min(Math.max(0, startIndex), Math.max(0, count - visibleRows));
+            let endIndex = Math.min(count, startIndex + visibleRows + 5);
+
+            let html = '';
+            if (startIndex > 0) {
+                html += `<tr style="height: ${startIndex * rowHeight}px;"><td colspan="3" style="border:none;"></td></tr>`;
+            }
+
+            const visibleSlice = filteredData.slice(startIndex, endIndex);
+            html += visibleSlice.map(item => {
+                // Check if specific cells in this row are selected
+                const selId = selectedCells.has(`${item.id}-id`) ? 'class="selected"' : '';
+                const selName = selectedCells.has(`${item.id}-name`) ? 'class="selected"' : '';
+                const selCat = selectedCells.has(`${item.id}-category`) ? 'class="selected"' : '';
+
+                return `
+                <tr style="height: ${rowHeight}px;">
+                    <td ${selId} data-id="${item.id}" data-col="id">${item.id}</td>
+                    <td ${selName} data-id="${item.id}" data-col="name">${item.name}</td>
+                    <td ${selCat} data-id="${item.id}" data-col="category">${item.category}</td>
+                </tr>`;
+            }).join('');
+
+            const paddingBottom = Math.max(0, (count - endIndex) * rowHeight);
+            if (paddingBottom > 0) {
+                html += `<tr style="height: ${paddingBottom}px;"><td colspan="3" style="border:none;"></td></tr>`;
+            }
+
+            renderTarget.innerHTML = html;
+        }
+
+        // --- SELECTION LOGIC ---
+        renderTarget.addEventListener('click', (e) => {
+            const td = e.target.closest('td');
+            if (!td) return;
+
+            const id = td.getAttribute('data-id');
+            const col = td.getAttribute('data-col');
+            const cellKey = `${id}-${col}`;
+
+            if (!e.ctrlKey && !e.metaKey) {
+                selectedCells.clear();
+            }
+
+            if (selectedCells.has(cellKey)) {
+                selectedCells.delete(cellKey);
+            } else {
+                selectedCells.add(cellKey);
+            }
+
+            calculateSum();
+            updateTable();
+        });
+
+        function calculateSum() {
+            let total = 0;
+            let hasNumbers = false;
+
+            selectedCells.forEach(key => {
+                const [id, col] = key.split('-');
+                const row = masterData.find(item => item.id == id);
+                const val = row[col];
+                
+                // Attempt to parse as number
+                const num = parseFloat(val);
+                if (!isNaN(num) && typeof val !== 'string' || !isNaN(val)) {
+                    total += num;
+                    hasNumbers = true;
+                }
+            });
+
+            if (hasNumbers && selectedCells.size > 0) {
+                sumDisplay.style.display = 'block';
+                sumValue.innerText = total.toLocaleString();
+            } else {
+                sumDisplay.style.display = 'none';
+            }
+        }
+
+        // --- SORTING & OTHER HELPERS ---
+        document.querySelectorAll('thead th').forEach(th => {
+            th.addEventListener('click', (e) => {
+                const key = th.getAttribute('data-key');
+                if (sortStack.length === 1 && sortStack[0].key === key) {
+                    sortStack[0].direction = sortStack[0].direction === 'asc' ? 'desc' : 'asc';
+                } else {
+                    sortStack = [{ key, direction: 'asc' }];
+                }
+                updateSortUI();
+                applySort();
+                updateTable();
+            });
+        });
+
+        function applySort() {
+            if (sortStack.length === 0) return;
+            filteredData.sort((a, b) => {
+                for (let sort of sortStack) {
+                    let valA = a[sort.key];
+                    let valB = b[sort.key];
+                    if (valA === valB) continue;
+                    return sort.direction === 'asc' ? (valA < valB ? -1 : 1) : (valA > valB ? -1 : 1);
+                }
+                return 0;
+            });
+        }
+
+        function updateSortUI() {
+            document.querySelectorAll('thead th').forEach(th => {
+                const key = th.getAttribute('data-key');
+                const sort = sortStack.find(s => s.key === key);
+                th.classList.remove('sort-asc', 'sort-desc');
+                if (sort) th.classList.add(sort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
+            });
+        }
+
+        document.getElementById('reset-btn').onclick = () => {
+            selectedCells.clear();
+            sortStack = [];
+            filteredData = [...masterData];
+            calculateSum();
+            updateSortUI();
+            updateTable();
+        };
+
+        viewport.onscroll = updateTable;
+        updateTable();
+    </script>
+</body>
+</html>

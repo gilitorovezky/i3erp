@@ -119,20 +119,6 @@
             const paddingTop = startIndex * rowHeight;
             const visibleSlice = filteredData.slice(startIndex, endIndex);
 
-            // Using standard strings to avoid template literal issues in older browsers
-            /*let html = '<tr style="height: ' + paddingTop + 'px;"><td colspan="3" style="border:none;"></td></tr>';
-            
-            for (let i = 0; i < visibleSlice.length; i++) {
-                let item = visibleSlice[i];
-                html += '<tr style="height: ' + rowHeight + 'px;">' +
-                        '<td>' + item.id + '</td>' +
-                        '<td>' + item.name + '</td>' +
-                        '<td>' + item.category + '</td>' +
-                        '</tr>';
-            }
-
-            renderTarget.innerHTML = html;*/
-
                 // Build HTML string
             let html = '';
 
@@ -173,7 +159,6 @@
             updateTable();
         };
 
-        // Initial render
         updateTable();
     </script>
 </body>

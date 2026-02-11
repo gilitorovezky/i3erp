@@ -1773,6 +1773,7 @@ function displayPaymentResults(projectNumber,targetDisplay) {
     windowLog.trace("Inside "+screen_name);
     let eArray=[];
     let out = "";
+    let eJobs=[];
     var fileuploadLink="";
     var sumOfPayments=0;    // sum of all payments
 
@@ -1787,15 +1788,20 @@ function displayPaymentResults(projectNumber,targetDisplay) {
     if (targetDisplay === "#result-table1") { // Only  update the screen name if employee-jobs is displayed in the top screen
         $("#screen_name").html(screen_name);
         lastScreen=screen_name;
+        $(".viewportDiv").css({'display' : "table-footer-group"});
     }
 
     prepareDisplay(targetDisplay); 
       
     if ( targetDisplay === "#result-table1" ) // if the targetDisplay is not the main then do not show the project number
-        out =`<thead id="mainHeader"><tr><th></th><th class="pmClass">Project Number</th>`; 
+        out =`<thead id="mainHeader" class="mHeader"><tr><th></th><th class="pmClass">Project Number</th>`; 
     else
         out = `<table class="res_table2" id="result-table"><thead><tr>`;
+
     out += headers[screen_name]['columns']+`</tr></thead>`;
+    const table = document.getElementById('result-table1');
+    table.insertAdjacentHTML('afterbegin', out);
+    out ="";
     //out += `<tbody id="tBodyID" class="thover">`; 
     for (var i = 0; i < length; i++) { //loop throu the return msg 
         fileuploadLink=uploadFilesMngr(Number(eArray[i].file_uploaded,(eArray[i].project_number != "")));
@@ -1814,6 +1820,8 @@ function displayPaymentResults(projectNumber,targetDisplay) {
             out += `</tr>`;
             if ( eArray[i].payment_amount != "")
                 sumOfPayments += Number(eArray[i].payment_amount);
+            eJobs.push(out);
+            out="";
         }
         else {
             out += `<tr>`;
@@ -1826,12 +1834,14 @@ function displayPaymentResults(projectNumber,targetDisplay) {
             out += `<td>${eArray[i].description}</td>`;
             out += outFiles;
             out += `</tr>`;
+            eJobs.push(out);
+            out="";
         }
     }
 
     classArray[screen_name].virtualScroll = new VirtualScroll({
         //container: document.getElementById('scrollDivID'), //scrollContainer'),
-        inArray         : eArray,
+        inArray         : eJobs,
         visibleRows     : 40,
         rowHeight       : 10,
         tableBody       : document.getElementById('tableBody'),
@@ -1843,18 +1853,11 @@ function displayPaymentResults(projectNumber,targetDisplay) {
     if (targetDisplay == "#result-table1") {
         currCell = $('#result-table1 tbody tr:last td:eq(1)').first(); // currCell points to 2nd TD in the last TR
         setCellFocus();
-        tableSummary(length,sumofJobs);
+        //tableSummary(length,sumofJobs);
         //AddingSort();
     }
     //out += `</tbody></table>`;
     
-    //document.querySelector(targetDisplay).innerHTML = out+`</tbody>`; // print to screen the return messages
-    if (targetDisplay == "#result-table1") {
-        currCell = $('#result-table1 tbody tr:last td:eq(1)').first(); // currCell points to 2nd TD in the last TR
-        setCellFocus();
-        tableSummary(length,sumOfPayments);
-         //AddingSort(); // adding sorting option to the table
-    }
     //$('.scrollit').scrollTop($('.scrollit').prop("scrollHeight"))
     
     return false;
@@ -1871,22 +1874,7 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
     let eJobs=[];
     var sumofJobs=0;
     var tableHeader="";
-   /*
-    $.ajax({
-        url         : "../main/read_employee_jobs.php",
-        method      : "POST",
-        data        : JSON.stringify({'projectNumber':'all'}),
-        dataType    : "json",
-        async       : false,
-        success     : (function(data) {  
-            classArray["Employee Jobs"] = new classType1(data,"Employee Jobs",1);
-            lastID["Employee Jobs"]=(Number(Math.max(lastID["Employee Jobs"],lastID["Scheduler"])))+1;
-        }),
-         error     	: (function (jqxhr, textStatus, error ) {
-                windowLog.warn("Load Moules failed:"+textStatus + ", " + error);
-            })
-    });*/
-
+   
     if ( pojectNumber === 0 ) 
         eArray = classArray[screen_name].arr;//EmployeeJobs.arrEmployeeJobs;
     else {
@@ -1911,7 +1899,7 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
             tempOut += '<a id="ejTotalCostID"><label for="isTCID" class="label1">&nbsp Show Total Cost<input type="checkbox" id="isTCID" name="checked" value="no" class="checkboxes"/></label></a>';
             $("#exportID").html(tempOut);
             $("#exportID").show();
-            tableHeader = `<thead class="mHeader" id="mainHeader"><tr><th></th><th class="pmClass">Project Number</th>`; 
+            tableHeader = `<thead id="mainHeader" class="mHeader"><tr><th></th><th class="pmClass">Project Number</th>`; 
         }
         else
             tableHeader = `<table class="res_table2" id="result-table"><thead><tr>`;
