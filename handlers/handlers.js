@@ -411,15 +411,6 @@ Promise.all(requests)
         //    customerPanes.map(x => $("#new"+x+"Btn").toggle());
     });
 
-
-    /*$("#navID").on('click',function(event)    {
-
-        windowLog.trace("Inside navID click:"+event.target.id);
-        dispatcher(event);
-        
-        return false;
-    });*/
-
     $("#aboutDialog,#fileUploadControl").on('click',function(event)    {
 
         windowLog.trace("Inside about/file Dialog click:"+event.target.id);
