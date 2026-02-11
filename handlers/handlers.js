@@ -77,6 +77,15 @@ Promise.all(requests)
             var result=Object.values(headers).filter(function(i) { 
                 return newURL.includes(i.hash); //i.hash.includes(newURL)
             });
+
+            if (oldURL !== "home" &&
+                oldURL !== "Configurttoin" ) {
+
+                const foundEntry=Object.entries(headers).find(([key, value]) => oldURL.includes(value.hash));
+               
+                classArray[foundEntry[0]].virtualScroll.destroy();// ckenup the class
+                classArray[foundEntry[0]].virtualScroll=null;
+            }
            
         // if (headers[lastScreen].hash != newURL) // check if the user already in the requested screen, then do noithing
             if (oldURL != newURL) // check if the user already in the requested screen, then do noithing

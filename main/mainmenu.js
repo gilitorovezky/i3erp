@@ -1606,6 +1606,7 @@ function prepareDisplay(display) {
     $("#leadsTab_name").html("");
 
     if ( display == "#result-table1") {
+        $("#mainHeader").remove();
         document.getElementById("result-table1").hidden=false;
         $("#screen_name").show();
         $("#result-table1").unbind('mouseover');
@@ -1776,26 +1777,26 @@ function displayPaymentResults(projectNumber,targetDisplay) {
     var sumOfPayments=0;    // sum of all payments
 
 
-    if ( projectNumber == 0 ) 
+    if ( projectNumber === 0 ) 
         eArray = classArray[screen_name].arr;//EmployeeJobs.arrEmployeeJobs;
     else 
         // filter only the records of the project number
         eArray=classArray[screen_name].arr.filter(((element) => element.project_number == projectNumber)); //EmployeeJobs.arrEmployeeJobs.filter(((element) => element.project_number == projectsList)); 			
     length=eArray.length;
 
-    if (targetDisplay == "#result-table1") { // Only  update the screen name if employee-jobs is displayed in the top screen
+    if (targetDisplay === "#result-table1") { // Only  update the screen name if employee-jobs is displayed in the top screen
         $("#screen_name").html(screen_name);
         lastScreen=screen_name;
     }
 
     prepareDisplay(targetDisplay); 
       
-    if (targetDisplay == "#result-table1") // if the targetDisplay is not the main then do not show the project number
-        out +=`<thead id="mainHeader"><tr><th></th><th class="pmClass">Project Number</th>`; 
+    if ( targetDisplay === "#result-table1" ) // if the targetDisplay is not the main then do not show the project number
+        out =`<thead id="mainHeader"><tr><th></th><th class="pmClass">Project Number</th>`; 
     else
-        out += `<table class="res_table2" id="result-table"><thead><tr>`;
+        out = `<table class="res_table2" id="result-table"><thead><tr>`;
     out += headers[screen_name]['columns']+`</tr></thead>`;
-    out += `<tbody id="tBodyID" class="thover">`; 
+    //out += `<tbody id="tBodyID" class="thover">`; 
     for (var i = 0; i < length; i++) { //loop throu the return msg 
         fileuploadLink=uploadFilesMngr(Number(eArray[i].file_uploaded,(eArray[i].project_number != "")));
         outFiles = `<td tabindex="0" style="width:8%"><a class="hyperlinkLabel" id="allFilesID" data-files="0">${fileuploadLink}</a></td>`;
@@ -1827,9 +1828,27 @@ function displayPaymentResults(projectNumber,targetDisplay) {
             out += `</tr>`;
         }
     }
-    out += `</tbody></table>`;
+
+    classArray[screen_name].virtualScroll = new VirtualScroll({
+        //container: document.getElementById('scrollDivID'), //scrollContainer'),
+        inArray         : eArray,
+        visibleRows     : 40,
+        rowHeight       : 10,
+        tableBody       : document.getElementById('tableBody'),
+        throttleDelay   : 100
+    });
+    classArray[screen_name].virtualScroll.attachListener();
+    classArray[screen_name].virtualScroll.updateTable(); // Initial render
     
-    document.querySelector(targetDisplay).innerHTML = out+`</tbody>`; // print to screen the return messages
+    if (targetDisplay == "#result-table1") {
+        currCell = $('#result-table1 tbody tr:last td:eq(1)').first(); // currCell points to 2nd TD in the last TR
+        setCellFocus();
+        tableSummary(length,sumofJobs);
+        //AddingSort();
+    }
+    //out += `</tbody></table>`;
+    
+    //document.querySelector(targetDisplay).innerHTML = out+`</tbody>`; // print to screen the return messages
     if (targetDisplay == "#result-table1") {
         currCell = $('#result-table1 tbody tr:last td:eq(1)').first(); // currCell points to 2nd TD in the last TR
         setCellFocus();
@@ -2007,18 +2026,14 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
 
         classArray["Employee Jobs"].virtualScroll = new VirtualScroll({
             //container: document.getElementById('scrollDivID'), //scrollContainer'),
-            inArray     : eJobs,
-            visibleRows : 40,
-            rowHeight   : 10,
-            tableBody   : document.getElementById('tableBody'),
-            throttleDelay : 200
+            inArray         : eJobs,
+            visibleRows     : 40,
+            rowHeight       : 10,
+            tableBody       : document.getElementById('tableBody'),
+            throttleDelay   : 100
         });
-        //classArray["Employee Jobs"].virtualScroll.tableBody = document.getElementById('tableBody');
         classArray["Employee Jobs"].virtualScroll.attachListener();
         classArray["Employee Jobs"].virtualScroll.updateTable(); // Initial render
-
-       
-        //document.querySelector(targetDisplay).innerHTML = out; // print to screen the return messages
         
         if (targetDisplay == "#result-table1") {
             currCell = $('#result-table1 tbody tr:last td:eq(1)').first(); // currCell points to 2nd TD in the last TR

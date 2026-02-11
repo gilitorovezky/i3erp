@@ -139,6 +139,11 @@ class VirtualScroll {
             };
         }
 
+        detachListener() {
+            
+            this.viewport.removeEventListener('scroll', this.updateTable);
+        }
+
 
         onSearchBarInput() {
             const term = e.target.value.toLowerCase();
@@ -155,7 +160,11 @@ class VirtualScroll {
             //this.recordInfo.textContent = 
             //    `Showing ${this.startIndex + 1}-${this.endIndex} of ${this.allData.length} records (Rendering ${showing} rows)`;
         }
-
+        
+        destroy() {
+            this.detachListener();
+        // Clean up any other resources (timers, etc.)
+        }
         /*updateWindowSize() {
             const input = document.getElementById('windowSize');
             const newSize = parseInt(input.value);
