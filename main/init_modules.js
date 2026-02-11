@@ -116,7 +116,6 @@ function initModules() {
   async function loadModules() {
 
     try {
-
         if ( appConfig.fastLoading )
             hideProgress();   
         else

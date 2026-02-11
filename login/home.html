@@ -33,42 +33,42 @@
 
 	<body class="loggedin">
 	
-	<div class="progress-container" id="progressContainer">
+	<div id="progressContainer" class="progress-container">
     	<div class="progress-bar-bg">
     		<div class="progress-bar" id="progressBar"></div>
     	</div>
     	<div class="progress-text" id="progressText">Loading 0/0</div>
   	</div>
-		<nav id="navID" class="navtop">
-			<div>
-				<img alt='Y9' src="../misc/y9-logo.png">
-				<a tabindex="1" id="welcomeNameID" class="fas fa-sign-out-alt"></a>
-				<h1></h1>
-				<a tabindex="2" id="rootID" class="fas fa-sign-out-alt"></a>	<!-- servers as home -->
-				<a tabindex="3" id="libraryID" class="fas fa-sign-out-alt"></a>
-				<a tabindex="4" id="configID" class="fas fa-sign-out-alt"></a>
-				<a tabindex="5" id="systemID" class="fas fa-sign-out-alt"></a>
-				<a tabindex="6" id="logout" class="fas fa-sign-out-alt"></a>
-			</div>
-		</nav>
-		<br> 
-		<div id="caption">
-			<table id="captionTbl" class="caption">
-			<tr id="captionRow">
-				<td style="width: 10%;"></td>
-				<td style="width: 10%;"></td>
-				<td style="width: 5%; text-align:center" id="preWeekID"></td>
-				<td style="width: 5%;"></td>
-				<td id="screen_nameTD" class="center-cell"><a tabindex="0" hidden id="screen_name" style="font-weight: bold">Home</a></td>
-				<td id="leadsTab_nameTD"><a tabindex="0" id="leadsTab_name" style="font-weight: bold"></a></td>
-				<td id="exportID" class="caption label"></td> 
-				<td style="width: 5%;" id="newTaskShortCutID" ></td> 
-				<td style="width: 10%;" id="savingTD" ></td>
-				<td style="width: 5%; text-align: right;" id="editLabel" class="editLabel"></td>
-			</tr>
-			</table>
-			<input type="text" id="search-bar" placeholder="Type to search..." >
+	<nav id="navID" class="navtop">
+		<div>
+			<img alt='Y9' src="../misc/y9-logo.png">
+			<a tabindex="1" id="welcomeNameID" class="fas fa-sign-out-alt"></a>
+			<h1></h1>
+			<a tabindex="2" id="rootID" class="fas fa-sign-out-alt"></a>	<!-- servers as home -->
+			<a tabindex="3" id="libraryID" class="fas fa-sign-out-alt"></a>
+			<a tabindex="4" id="configID" class="fas fa-sign-out-alt"></a>
+			<a tabindex="5" id="systemID" class="fas fa-sign-out-alt"></a>
+			<a tabindex="6" id="logout" class="fas fa-sign-out-alt"></a>
 		</div>
+	</nav>
+	<br> 
+	<div id="caption">
+		<table id="captionTbl" class="caption">
+		<tr id="captionRow">
+			<td style="width: 10%;"></td>
+			<td style="width: 10%;"></td>
+			<td style="width: 5%; text-align:center" id="preWeekID"></td>
+			<td style="width: 5%;"></td>
+			<td id="screen_nameTD" class="center-cell"><a tabindex="0" hidden id="screen_name" style="font-weight: bold">Home</a></td>
+			<td id="leadsTab_nameTD"><a tabindex="0" id="leadsTab_name" style="font-weight: bold"></a></td>
+			<td id="exportID" class="caption label"></td> 
+			<td style="width: 5%;" id="newTaskShortCutID" ></td> 
+			<td style="width: 10%;" id="savingTD" ></td>
+			<td style="width: 5%; text-align: right;" id="editLabel" class="editLabel"></td>
+		</tr>
+		</table>
+		<input type="text" id="search-bar" placeholder="Type to search..." >
+	</div>
 		<!--<div >
 			for future use
 			<table id="searchDivID" style="margin: 0 auto; width:100%">
@@ -80,137 +80,137 @@
 			</table>
 		</div> -->
 
-		<div id="mainDiv"> 
-			<div id="parentDiv" class="parentDivClass"> <!-- animate"> -->
-				<div hidden class="main_menue boxShadow" id="centercellID"> 
-					<table id="main-menue">
-						<tr>
-							<td id="ul" >
-								<a tabindex="7" class="css-3d-text" id="upperLeft"></a> 
-								<a><img tabindex="8" src='../misc/plus.png' alt='plus' width='10' id="Pls-ul" height='10'></a>
-							</td>
-							<td id="ur" >
-								<div id="upperRightQuadrant">
-									<a tabindex="9" class="css-3d-text" id="upperRight"></a>
-									<a><img tabindex="10" src='../misc/plus.png' alt='plus' width='10' id="Pls-ur" height='10'></a>
-									<label class="label1" for="userFileUpload" id="fileslabel"></label> 
-									<input class="label1" type="checkbox" id="userFileUpload">
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td id="ll">
-								<a tabindex="11" class="css-3d-text" id="lowerLeft" target="_blank"></a>
-								<a><img tabindex="12" src='../misc/plus.png' alt='plus' width='10' id="Pls-ll" height='10'></a>
-							</td>
-							<td id="lr">
-								<a tabindex="13" class="css-3d-text" id="lowerRight"></a>
-								<a><img tabindex="14" src='../misc/plus.png' alt='plus' width='10' id="Pls-lr" height='10'></a>
-							</td>
-						</tr>
-					</table>
-					<table class="innerCell boxShadow" id="innerCellID">
-						<tr>
-							<td id="customers" style="white-space:pre"></td>
-						</tr>
-						<tr>
-							<td id="tHalf"></td>
-						</tr>
-						<tr>
-							<td id="bHalf" style="white-space:pre"></td>
-						</tr>
-					</table>
-				</div>
-				<table hidden class="projectSummary" id="pSummaryID">
+	<div id="mainDiv"> 
+		<div id="parentDiv" class="parentDivClass"> <!-- animate"> -->
+			<div hidden class="main_menue boxShadow" id="centercellID"> 
+				<table id="main-menue">
 					<tr>
-						<td>
-						<table class="innerPT">
-							<tr>
-								<td><a class ="title">Project Number</a></td>
-								<td><a class ="normal" id="jPnumber"></a></td>
-							</tr>
-							<tr>
-								<td><a class ="title">Details</a></td>
-								<td><a class ="normal" id="jDetails"></a></td>
-							</tr>
-							<tr>
-								<td><a class ="title">Project Name</a></td>
-								<td><a class ="normal" id="jName"></a></td>
-							</tr>
-							<tr>
-								<td><a class ="title">Address</a></td>
-								<td><a class ="normal" id="jAddress"></a></td>
-							</tr>
-							<tr>
-							<td><a class ="title" style="color: green;text-decoration:none">Total Payments</a></td>
-							<td><a class ="normal" id="jPayments"></a></td>
-							</tr>
-						</table>
+						<td id="ul" >
+							<a tabindex="7" class="css-3d-text" id="upperLeft"></a> 
+							<a><img tabindex="8" src='../misc/plus.png' alt='plus' width='10' id="Pls-ul" height='10'></a>
 						</td>
-						<td>
-						<table id="innerPT_ID" class="innerPT">
-							<tbody>
-								<tr>
-									<td colspan="3"><a class ="title">Project Cost</a></td>
-									<td rowspan="5"><div id="pCircle"><div id="pBalance">Total <br></div></div></td>
-								</tr>
-								<tr>
-									<td><a id="pEJ_ID" class="title" style="text-decoration:none" href="">Employees</a></td>	
-									<td><a class="normal" id="jEmployees"></a></td>	
-								</tr>
-								<tr>
-									<td><a id="pCJ_ID" class="title" style= "text-decoration:none" href="">Sub Contractors</a></td>
-									<td><a class="normal" id="jContractos"></a></td>
-								</tr>
-								<tr>
-									<td><a id="pPrcs_ID" class="title" style= "text-decoration:none" href="">Purchases</a></td>
-									<td><a class="normal" id="jPurchases"></a><br></td>
-								</tr>
-								<tr>
-									<td class="title" style="color: green;text-decoration:none">Total Cost</td>
-									<td><a class="normal" id="jpTotalCosts"></a> <br></td>
-									<td></td>
-									<td><button type="button" id="prjAllFilesID">All files</button></td>
-								</tr>
-							</tbody>
-						</table>
-						</td>
-					</tr>
-					<tr>
-						<td class="pSummary" colspan=2>
-							<!-- <div id="psDivID" hidden class="scrollit" style="width:100%"> -->
-							<div id="psDivID" hidden> 
-							<table class="res_table2" id="result-table3">
-								<!-- place holder to display results -->
-							</table>
+						<td id="ur" >
+							<div id="upperRightQuadrant">
+								<a tabindex="9" class="css-3d-text" id="upperRight"></a>
+								<a><img tabindex="10" src='../misc/plus.png' alt='plus' width='10' id="Pls-ur" height='10'></a>
+								<label class="label1" for="userFileUpload" id="fileslabel"></label> 
+								<input class="label1" type="checkbox" id="userFileUpload">
 							</div>
 						</td>
 					</tr>
-					<tr><td colspan="2" ><center> <input type="submit" value="Close" id="CloseBtnPsumry"></center></td></tr>
+					<tr>
+						<td id="ll">
+							<a tabindex="11" class="css-3d-text" id="lowerLeft" target="_blank"></a>
+							<a><img tabindex="12" src='../misc/plus.png' alt='plus' width='10' id="Pls-ll" height='10'></a>
+						</td>
+						<td id="lr">
+							<a tabindex="13" class="css-3d-text" id="lowerRight"></a>
+							<a><img tabindex="14" src='../misc/plus.png' alt='plus' width='10' id="Pls-lr" height='10'></a>
+						</td>
+					</tr>
+				</table>
+				<table class="innerCell boxShadow" id="innerCellID">
+					<tr>
+						<td id="customers" style="white-space:pre"></td>
+					</tr>
+					<tr>
+						<td id="tHalf"></td>
+					</tr>
+					<tr>
+						<td id="bHalf" style="white-space:pre"></td>
+					</tr>
 				</table>
 			</div>
-			<div>
-		
-			</div>
-			<div id="scrollDivID" class="viewportDiv" hidden > <!-- <div class="scroll-content"> -->
-				<div id="spacer" class="spacerDiv"></div> 
-				<table id="result-table1" class ="outer-table" >
-					<tbody id="render-target" class="thover"></tbody>
-				</table>
-			</div>
-			<div id="gallery" class="grid-gallery"></div>
+			<table hidden class="projectSummary" id="pSummaryID">
+				<tr>
+					<td>
+					<table class="innerPT">
+						<tr>
+							<td><a class ="title">Project Number</a></td>
+							<td><a class ="normal" id="jPnumber"></a></td>
+						</tr>
+						<tr>
+							<td><a class ="title">Details</a></td>
+							<td><a class ="normal" id="jDetails"></a></td>
+						</tr>
+						<tr>
+							<td><a class ="title">Project Name</a></td>
+							<td><a class ="normal" id="jName"></a></td>
+						</tr>
+						<tr>
+							<td><a class ="title">Address</a></td>
+							<td><a class ="normal" id="jAddress"></a></td>
+						</tr>
+						<tr>
+						<td><a class ="title" style="color: green;text-decoration:none">Total Payments</a></td>
+						<td><a class ="normal" id="jPayments"></a></td>
+						</tr>
+					</table>
+					</td>
+					<td>
+					<table id="innerPT_ID" class="innerPT">
+						<tbody>
+							<tr>
+								<td colspan="3"><a class ="title">Project Cost</a></td>
+								<td rowspan="5"><div id="pCircle"><div id="pBalance">Total <br></div></div></td>
+							</tr>
+							<tr>
+								<td><a id="pEJ_ID" class="title" style="text-decoration:none" href="">Employees</a></td>	
+								<td><a class="normal" id="jEmployees"></a></td>	
+							</tr>
+							<tr>
+								<td><a id="pCJ_ID" class="title" style= "text-decoration:none" href="">Sub Contractors</a></td>
+								<td><a class="normal" id="jContractos"></a></td>
+							</tr>
+							<tr>
+								<td><a id="pPrcs_ID" class="title" style= "text-decoration:none" href="">Purchases</a></td>
+								<td><a class="normal" id="jPurchases"></a><br></td>
+							</tr>
+							<tr>
+								<td class="title" style="color: green;text-decoration:none">Total Cost</td>
+								<td><a class="normal" id="jpTotalCosts"></a> <br></td>
+								<td></td>
+								<td><button type="button" id="prjAllFilesID">All files</button></td>
+							</tr>
+						</tbody>
+					</table>
+					</td>
+				</tr>
+				<tr>
+					<td class="pSummary" colspan=2>
+						<!-- <div id="psDivID" hidden class="scrollit" style="width:100%"> -->
+						<div id="psDivID" hidden> 
+						<table class="res_table2" id="result-table3">
+							<!-- place holder to display results -->
+						</table>
+						</div>
+					</td>
+				</tr>
+				<tr><td colspan="2" ><center> <input type="submit" value="Close" id="CloseBtnPsumry"></center></td></tr>
+			</table>
 		</div>
-		<div id="newRecDiv-0">
-			<table hidden class="newRecDialg" id="addSingleRec"></table> 
+		<div>
+	
 		</div>
-		
-		<div id="postScrollit"></div>
-		<dialog id="aboutDialog" class="aboutDlg"></dialog>
-		<div id="overLay" class="overLayUL"><ul class="uList" id="uListID"></ul></div>
-		<dialog id="editControl" class="editCntrlClass"></dialog>
-		<div id="fileUploadControl" class="editCntrlClass"></div>
-		<div id="estimateDlg" class="estmtDlgClass"></div>
-		<div id="floating-message" class="floating-message"></div>
+		<div id="scrollDivID" class="viewportDiv" hidden > <!-- <div class="scroll-content"> -->
+			<div id="spacer" class="spacerDiv"></div> 
+			<table id="result-table1" class ="outer-table" >
+				<tbody id="render-target" class="thover"></tbody>
+			</table>
+		</div>
+		<div id="gallery" class="grid-gallery"></div>
+	</div>
+	<div id="newRecDiv-0">
+		<table hidden class="newRecDialg" id="addSingleRec"></table> 
+	</div>
+	
+	<div id="postScrollit"></div>
+	<dialog id="aboutDialog" class="aboutDlg"></dialog>
+	<div id="overLay" class="overLayUL"><ul class="uList" id="uListID"></ul></div>
+	<dialog id="editControl" class="editCntrlClass"></dialog>
+	<div id="fileUploadControl" class="editCntrlClass"></div>
+	<div id="estimateDlg" class="estmtDlgClass"></div>
+	<div id="floating-message" class="floating-message"></div>
 
 		<footer id="footer"></footer>
 

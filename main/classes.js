@@ -21,70 +21,6 @@ class VirtualScroll {
             this.tableBody = options.tableBody || document.getElementById('tableBody');
             this.throttleTimeout = null;
             this.throttleDelay = options.throttleDelay || 200; // milliseconds
-        
-
-        /*setUpScrollEvent() {
-            //this.container.addEventListener('scroll', () => this.handleScroll());
-        }*/
-
-        // Load all data from server (simulated)
-        /*async loadAllData(inArray) {
-            // Simulate loading data from PHP/MySQL
-            // In real implementation: fetch('api/get_all_records.php')
-            
-            //this.recordInfo.textContent = 'Loading data...';
-            
-            // Simulate API delay
-            //await new Promise(resolve => setTimeout(resolve, 500));
-            
-            // Generate sample data (replace with actual fetch call)
-            //const totalRecords = 1000;
-            this.allData = [...inArray]; // Copy it!
-            
-            /*for (let i = 1; i <= totalRecords; i++) {
-                this.allData.push({
-                    id: i,
-                    name: `User ${i}`,
-                    email: `user${i}@example.com`,
-                    status: i % 3 === 0 ? 'Active' : i % 3 === 1 ? 'Inactive' : 'Pending',
-                    created: new Date(2024, 0, i % 28 + 1).toLocaleDateString()
-                });
-            }
-            
-            //this.updateInfo();
-        }*/
-
-        /*handleScroll() {
-            if (this.isScrolling) return;
-            
-            clearTimeout(this.scrollTimeout);
-            this.scrollTimeout = setTimeout(() => {
-                this.updateVisibleRange();
-            }, 50);
-        }*/
-
-        /*updateVisibleRange() {
-            const scrollTop = this.container.scrollTop;
-            const containerHeight = this.container.clientHeight;
-            
-            // Calculate which records should be visible
-            const scrollIndex = Math.floor(scrollTop / this.rowHeight);
-            const visibleCount = Math.ceil(containerHeight / this.rowHeight);
-            
-            // Add buffer for smooth scrolling
-            const newStart = Math.max(0, scrollIndex - this.buffer);
-            const newEnd = Math.min(
-                this.allData.length,
-                scrollIndex + visibleCount + this.buffer
-            );
-            
-            // Only update if the range changed significantly
-            if (newStart !== this.startIndex || newEnd !== this.endIndex) {
-                this.startIndex = newStart;
-                this.endIndex = newEnd;
-                this.updateInfo();
-            }
-        }*/
 
             this.init =(inArray) => {
 
@@ -413,6 +349,84 @@ class genesisClass {
         return entry;
     } 
 };
+
+const TableRendererMixin = {
+    /**
+     * Renders filtered data to target display
+     * @param {string} screenName - Screen identifier for headers
+     * @param {number} projectNumber - Filter by project (0 = show all)
+     * @param {string} targetDisplay - CSS selector for target element
+     * @returns {Object} { data: Array, length: number }
+     */
+    render(screenName, projectNumber, targetDisplay) {
+        // Filter the data
+        const filteredData = this._filterByProject(projectNumber);
+        
+        // Update main display if needed
+        if (targetDisplay === "#result-table1") {
+            this._updateMainDisplay(screenName);
+        }
+        
+        // Prepare and render
+        prepareDisplay(targetDisplay);
+        this._renderHeader(screenName, targetDisplay);
+        
+        return {
+            data: filteredData,
+            length: filteredData.length
+        };
+    },
+    
+    _filterByProject(projectNumber) {
+        if (!this.arr || !this.arr.length) {
+            return [];
+        }
+        
+        if (projectNumber === 0) {
+            return this.arr;
+        }
+        
+        return this.arr.filter(element => element.project_number === projectNumber);
+    },
+    
+    _updateMainDisplay(screenName) {
+        $("#screen_name").html(screenName);
+        TableRendererMixin._lastScreen = screenName;
+        $(".viewportDiv").css({'display': "table-footer-group"});
+    },
+    
+    _renderHeader(screenName, targetDisplay) {
+        let headerHTML = '';
+        
+        if (targetDisplay === "#result-table1") {
+            headerHTML = `<thead id="mainHeader" class="mHeader">
+                <tr>
+                    <th></th>
+                    <th class="pmClass">Project Number</th>`;
+        } else {
+            headerHTML = `<table class="res_table2" id="result-table">
+                <thead><tr>`;
+        }
+        
+        headerHTML += headers[screenName]['columns'] + `</tr></thead>`;
+        
+        const table = document.getElementById('result-table1');
+        table.insertAdjacentHTML('afterbegin', headerHTML);
+    },
+    
+    getLastScreen() {
+        return TableRendererMixin._lastScreen;
+    }
+};
+
+// Static property for tracking last screen
+TableRendererMixin._lastScreen = null;
+
+// ============================================
+// 2. ADD MIXIN TO genesisClass
+// ============================================
+Object.assign(genesisClass.prototype, TableRendererMixin);
+Object.assign(genesisClass.prototype, TableRendererMixin);
 
 class classTasks extends genesisClass {
 

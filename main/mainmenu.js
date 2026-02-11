@@ -558,6 +558,22 @@ $(".css-3d-text").on('contextmenu', function(event) {
 let assignedTasksArr;   // global array that holds all assgined tasks
 
 
+function createNavigation() {
+    const nav = document.getElementById('navID');
+    
+    const navContent = `
+        <div>
+            <img alt='Y9' src="../misc/y9-logo.png">
+            <a tabindex="1" id="welcomeNameID" class="fas fa-sign-out-alt"></a>
+            <h1></h1>
+            <a tabindex="2" id="rootID" class="fas fa-sign-out-alt"></a>
+            <a tabindex="3" id="libraryID" class="fas fa-sign-out-alt"></a>
+            <a tabindex="4" id="configID" class="fas fa-sign-out-alt"></a>
+            <a tabindex="5" id="systemID" class="fas fa-sign-out-alt"></a>
+            <a tabindex="6" id="logout" class="fas fa-sign-out-alt"></a>
+        </div>
+    `;
+}
 
 async function init() {
 
@@ -587,6 +603,8 @@ async function init() {
 
             windowLog.trace("Inside document ready");
 
+            createNavigation();
+
             $("#logout").html("Logout");
             //$('#logout').css({'cursor'   : 	'pointer'});
         
@@ -596,8 +614,6 @@ async function init() {
                         setConfig(iniConfig);
                         //await loadModules(); // aw
                         const iniModulesResult=initModules();
-                       
-                        
                      
                         loadModules().then(function() { // load al modules from the DB and show the progress bar
                          // Build lookup map
