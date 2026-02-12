@@ -1,7 +1,7 @@
     function configuration() {
 
         windowLog.trace("Inside Configuration");
-        screenNumber="config";
+        screenNumber=layers2[1].layer_name;
         $(".scrollit").hide();
         //$("#editLabelID").hide();
         $("#result-table1").unbind('mouseover');
@@ -14,7 +14,7 @@
     
         //$("#searchDivID").invisible();
 
-        displayMainMenue("config");
+        displayMainMenue(layers2[1].layer_name);
        // $("#main-menue").css("background-color","#4ccd4a");
 
        // $("#exportDialogueID").invisible(); 

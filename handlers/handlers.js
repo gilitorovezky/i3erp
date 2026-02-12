@@ -964,7 +964,7 @@ Promise.all(requests)
 
             case "allFilesID"           :
             
-                if ( screenNumber === "config" )//captions[2].includes(lastScreen) )   // is the screen in configuration?
+                if ( screenNumber === layers2[1].layer_name )  // is the screen in configuration?
                     showFileUpload(e.target,"configurationUpload","aboutDialog",lastScreen);
                 else {
                     if ( $(e.target).closest('tr').find('[id^="prjctNumberID"]').val() != "" )   // only upload when project name is valid
@@ -993,7 +993,7 @@ Promise.all(requests)
             break;
 
             case "configID"     :
-                screenNumber="config";
+                screenNumber=layers2[1].layer_name;
                 window.location.hash = headers["Configuration"].hash;
             break;
 
@@ -1031,7 +1031,7 @@ Promise.all(requests)
 
             case "allFilesID"       :
                 if ( $('#editCBID').is(":checked") ) {    // is in edit mode?
-                    if ( screenNumber === "config" )    // is the screen in configuration?
+                    if ( screenNumber === layers2[1].layer_name )    // is the screen in configuration?
                         showFileUpload(event.target,"configurationUpload","aboutDialog",lastScreen);
                     else {
                         //if ( $(event.target).closest('tr').find('[id^="prjctNumberID"]').val() != "" )   // only upload when project name is valid

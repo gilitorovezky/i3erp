@@ -14,6 +14,7 @@ var Tasks;
 let isZoom = false;
 var today=date.getFullYear()+"-"+(("0" + (date.getMonth()+1)).slice(-2))+"-"+(("0"+date.getDate()).slice(-2)); 
 let captions2={};
+let layers2="";
 
 const dummyDate= "1999-01-01"
 const customerPanes=["Leads","Estimates","Projects"];
@@ -27,8 +28,6 @@ const customerPanes=["Leads","Estimates","Projects"];
 
 
 //const screens=["home","configuration"];
-
-//const layers= ["home","config"];
 
 let captions = {
         "genesis":["upperLeft","upperRight","lowerLeft","lowerRight"], // do not change - must match the id in the html ome@ h!!
@@ -356,13 +355,13 @@ const nametoIDLookup = {
 
 // only the first 4 do not include thead and <th></th> since these records are also showing in the project summary therefor no need delete 
 const headers = {
-    "Home":{hash:'home',callBack:home,tableName:'home',sn:1},
-    "Employee Jobs":{hash:'empljbs',callBack:upperLeft,callType:"generalUpload",sn:"home",columns:'<th style="width:4%">Full Name</th><th style="width:10%">Job Date</th><th style="width:4%">Job SignIn</th><th style="width:5%">Lunch SignIn</th><th style="width:6%">Lunch SignOut</th><th style="width:5%">Job SignOut</th><th style="width:5%">Total Hours</th><th style="width:15%">Description</th><th style="width:5%">Total Cost</th><th style="width:100px">Files</th>',numOfCols:12,showInPrj:true,primaryKey:'task_id',tableName:'employee_jobs',params:0},
-    "Purchases":{hash:'prchs',callBack:upperRight,callType:"generalUpload",sn:"home",columns:'<th>Vendor Name</th><th>Purchase Number</th><th>Purchase Amount</th><th>Purchase Date</th><th>Purchase Method</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'purchase_id',tableName:'purchases',params:0},
-    "Payments":{hash:'pymnts',callBack:lowerLeft,callType:"generalUpload",sn:"home",columns:'<th>Payment Amount</th><th>Payment Date</th><th>Payment Method</th><th>Payment Number</th><th>Description</th><th>Files</th>',numOfCols:8,showInPrj:true,primaryKey:'payment_id',tableName:'payments',params:0},
-    "Sub Contractors":{hash:'sbcntrcj',callBack:lowerRight,callType:"generalUpload",sn:"home",columns:'<th>Contractor Name</th><th>Job Date</th><th>Payment Amount</th><th>Payment Number</th><th>Date Paid</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'task_id',tableName:'contractor_jobs',params:0},
+    "Home":{hash:'home',callBack:home,tableName:'home',sn:"home"},
+    "Employee Jobs":{hash:'empljbs',callBack:upperLeft,callType:"generalUpload",sn:"",columns:'<th style="width:4%">Full Name</th><th style="width:10%">Job Date</th><th style="width:4%">Job SignIn</th><th style="width:5%">Lunch SignIn</th><th style="width:6%">Lunch SignOut</th><th style="width:5%">Job SignOut</th><th style="width:5%">Total Hours</th><th style="width:15%">Description</th><th style="width:5%">Total Cost</th><th style="width:100px">Files</th>',numOfCols:12,showInPrj:true,primaryKey:'task_id',tableName:'employee_jobs',params:0},
+    "Purchases":{hash:'prchs',callBack:upperRight,callType:"generalUpload",sn:"",columns:'<th>Vendor Name</th><th>Purchase Number</th><th>Purchase Amount</th><th>Purchase Date</th><th>Purchase Method</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'purchase_id',tableName:'purchases',params:0},
+    "Payments":{hash:'pymnts',callBack:lowerLeft,callType:"generalUpload",sn:"",columns:'<th>Payment Amount</th><th>Payment Date</th><th>Payment Method</th><th>Payment Number</th><th>Description</th><th>Files</th>',numOfCols:8,showInPrj:true,primaryKey:'payment_id',tableName:'payments',params:0},
+    "Sub Contractors":{hash:'sbcntrcj',callBack:lowerRight,callType:"generalUpload",sn:"",columns:'<th>Contractor Name</th><th>Job Date</th><th>Payment Amount</th><th>Payment Number</th><th>Date Paid</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'task_id',tableName:'contractor_jobs',params:0},
     "Projects":{hash:'dprjct',callBack:projects,callType:"generalUpload",sn:"aux",columns:'<thead id="mainHeader" class="mHeader"><th></th><th>Project Number</th><th>Company Name</th><th>Customer Last Name</th><th>Project Type</th><th>Project Manager/Rep</th><th>Project Address</th><th>Files</th></tr></thead>',numOfCols:8,showInPrj:false,primaryKey:'project_id',tableName:'projects',params:0},
-    "Scheduler":{hash:'schdlr',callBack:scheduler,callType:"schedulerUpload",columns:'<th style="width:5%">Job Date</th><th style="width:15%">Description</th><th>Installer</th><th>Files</th></tr></thead>',numOfCols:6,showInPrj:true,primaryKey:'task_id',tableName:'task_list',sn:"home",params:0}, // sn=screennumber
+    "Scheduler":{hash:'schdlr',callBack:scheduler,callType:"schedulerUpload",columns:'<th style="width:5%">Job Date</th><th style="width:15%">Description</th><th>Installer</th><th>Files</th></tr></thead>',numOfCols:6,showInPrj:true,primaryKey:'task_id',tableName:'task_list',sn:"home",params:0},
     "Vendors":{hash:'vndrs',callBack:upperRight,callType:"generalUpload",sn:"config",columns:'<th>Vendor Name</th><th>Vendor Address</th><th>Notes</th><th style="width:100px">Files</th>',numOfCols:5,showInPrj:false,primaryKey:'vendor_id',tableName:'vendors',params:0},
     "Companies":{hash:'dcmpny',callBack:lowerRight,callType:"generalUpload",sn:"config",columns:'<th>Company Name</th><th>Notes</th><th style="width:100px">Files</th>',numOfCols:4,showInPrj:false,primaryKey:'company_id',tableName:'companies',params:0},
     "Contractors":{hash:'dc',callBack:lowerLeft,callType:"generalUpload",sn:"config",columns:'<th>Contractor Name</th><th>Notes</th><th style="width:100px">Files</th>',numOfCols:4,showInPrj:false,primaryKey:'contractor_id',tableName:'contractors',params:0},
@@ -501,17 +500,6 @@ window.addEventListener("load", function() {
             break;    
         }
     }
-    /*
-    screenNumber = "home";//window.location.hash.slice(1);
-    displayMainMenue("home"); //window.location.hash.slice(1));
-
-    $(".main_menue").show();
-    if (username == 'eddie') {
-        $("#prjShortCut").focus();
-        $("#savingTD").html("<a style='font-size : 12px;' id='saveTableLabel'>''</a>");
-    }
-*/
-
 });
 
 $("body").delegate("#projectLbl1,#customersLbl2","contextmenu",function() {
@@ -589,7 +577,7 @@ async function init() {
     uid=Cookies.get('uid');
 
     try {
-        let layers2 = await $.ajax({
+        layers2 = await $.ajax({
             url: "../main/read_layers.php",
             method: "GET",
             dataType: "json"
@@ -622,7 +610,7 @@ async function init() {
                             return map;
                         }, {});
 
-                        // Build captions
+                        // Build captions2
                         layers2.forEach(entry => {
                             captions2[entry.layer_name] = captions.genesis.reduce((obj, pos) => {
                                 const moduleName = lookupMap[`${entry.layer_number}-${pos}`];
@@ -630,17 +618,6 @@ async function init() {
                                     return obj;
                             }, {});
                         });
-                        /*
-                        layers2.forEach(entry => {
-                            captions2[entry.layer_name] = {};
-                            
-                            captions.genesis.forEach((pos, index) => { // loop over the positions
-                                const entryFound=Object.values(classArray).filter(record => record.screenNumber === Number(entry.layer_number)).filter(record => pos === record.position);
-                                if ( entryFound.length ) // if found
-                                    captions2[entry.layer_name][pos] = entryFound[0].moduleName;
-                            });
-                        });*/
-                        
                     
                         $.ajax({url         : "../main/read_projects.php",
                                 type        : "GET",
@@ -725,8 +702,8 @@ async function init() {
                         $(".navtop div").css({'display':"flex"});
                         $(".navtop").css({"background-color"	: "#faba0a"});
                             $("#ul, #ur, #ll, #lr").addClass("homeScreen");
-                        screenNumber = "Home";//window.location.hash.slice(1);
-                        displayMainMenue("Home"); //window.location.hash.slice(1));
+                        screenNumber = layers2[0].layer_name;//window.location.hash.slice(1);
+                        displayMainMenue(layers2[0].layer_name); //window.location.hash.slice(1));
                         $(".main_menue").show();
                         $("#prjShortCut").focus();
                         $("#savingTD").html("<a style='font-size : 12px;' id='saveTableLabel'>''</a>");
@@ -751,8 +728,8 @@ async function init() {
                 $('img[id^=Pls]').remove();
                 $("#userFileUpload").on("click",function(event) { return uploadFilesCheckBoxHandler(event); });
                 screenNumber = "user";
-                displayMainMenue("engineer");
-                displayMainMenue("home"); //window.location.hash.slice(1));
+                //displayMainMenue("engineer");
+                displayMainMenue(layers2[0].layer_name); //window.location.hash.slice(1));
                 $(".main_menue").show();
                 //$("#newCustomer,#newScheduler").remove();
         }
@@ -1961,12 +1938,12 @@ function home()	{
         $("#result-table1").addClass("outer-table");
         $(".res_table1 thead th:first-child").css({'width':'22px'});
     }
-    lastScreen="Home";
-    screenName="Home";
+    lastScreen=layers2[0].layer_name;
+    screenName=layers2[0].layer_name;
     document.getElementById("result-table1").hidden=true;
     $("#centercellID").visible();
     //if ( !pageAccessedByReload )
-    displayMainMenue("Home");
+    displayMainMenue(screenName);
     $('.uList').text("");
     $('#exportID,#render-target,#postScrollit').html(" ");
     $('#main-menue,#innerCellID,#newProject,#tHalf,#bHalf,#customers').show();

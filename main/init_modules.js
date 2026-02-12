@@ -38,7 +38,7 @@ function initModules() {
         var jsonObj = {};
         jsonObj[key]=value;
 
-        return  Promise.resolve(
+        return Promise.resolve(
           $.ajax({
                 url         : config.module_file_url,
                 type        : config.method || "POST",
@@ -51,6 +51,7 @@ function initModules() {
                         windowLog.trace("Loaded "+config.module_name+" succesfully");
                            classArray[config.module_name] = new classMap[Number(config.class_type)](data,config.module_name,Number(config.layer_number));
                            classArray[config.module_name].position=config.position;
+                           headers[config.module_name].sn=layers2.find((rec) => rec.layer_number == config.layer_number).layer_name; // updatre the sn field dynamicly
                     }
                     else
                         windowLog.warn("Loaded "+config.module_name+" failed");
