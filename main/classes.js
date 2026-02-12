@@ -13,14 +13,13 @@ class VirtualScroll {
             this.windowSize = options.windowSize || 50;
             this.rowHeight = options.rowHeight || 10;
             this.visibleRows = options.visibleRows || 40;
-            
             this.startIndex = 0;
             this.header="";
             this.footer="";            
             this.filteredData = [...options.inArray];
             this.tableBody = options.tableBody || document.getElementById('tableBody');
             this.throttleTimeout = null;
-            this.throttleDelay = options.throttleDelay || 200; // milliseconds
+            this.throttleDelay = options.throttleDelay || 150; // milliseconds
 
             this.init =(inArray) => {
 
@@ -98,38 +97,7 @@ class VirtualScroll {
 
         destroy() {
             this.detachListener();
-        // Clean up any other resources (timers, etc.)
         }
-        /*updateWindowSize() {
-            const input = document.getElementById('windowSize');
-            const newSize = parseInt(input.value);
-            
-            if (newSize >= 10 && newSize <= 200) {
-                this.windowSize = newSize;
-                this.buffer = Math.floor(newSize * 0.2);
-                this.updateVisibleRange();
-            }
-        }*/
-
-        /*scrollToTop() {
-            this.container.scrollTop = 0;
-            this.startIndex = 0;
-            this.endIndex = this.windowSize;
-            //this.updateInfo();
-        }*/
-
-        /*scrollToBottom() {
-            this.container.scrollTop = this.allData.length * this.rowHeight;
-            this.updateVisibleRange();
-        }*/
-
-        /*scrollToRecord(recordId) {
-            const index = this.allData.findIndex(r => r.id === recordId);
-            if (index !== -1) {
-                this.container.scrollTop = index * this.rowHeight;
-                this.updateVisibleRange();
-            }
-        }*/
 }
 
 
