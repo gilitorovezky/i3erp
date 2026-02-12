@@ -361,7 +361,7 @@ const headers = {
     "Purchases":{hash:'prchs',callBack:upperRight,callType:"generalUpload",sn:"home",columns:'<th>Vendor Name</th><th>Purchase Number</th><th>Purchase Amount</th><th>Purchase Date</th><th>Purchase Method</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'purchase_id',tableName:'purchases',params:0},
     "Payments":{hash:'pymnts',callBack:lowerLeft,callType:"generalUpload",sn:"home",columns:'<th>Payment Amount</th><th>Payment Date</th><th>Payment Method</th><th>Payment Number</th><th>Description</th><th>Files</th>',numOfCols:8,showInPrj:true,primaryKey:'payment_id',tableName:'payments',params:0},
     "Sub Contractors":{hash:'sbcntrcj',callBack:lowerRight,callType:"generalUpload",sn:"home",columns:'<th>Contractor Name</th><th>Job Date</th><th>Payment Amount</th><th>Payment Number</th><th>Date Paid</th><th>Description</th><th style="width:100px">Files</th>',numOfCols:9,showInPrj:true,primaryKey:'task_id',tableName:'contractor_jobs',params:0},
-    "Projects":{hash:'dprjct',callBack:projects,callType:"generalUpload",sn:"aux",columns:'<thead class="mainHeaderClass" id="mainHeader"><th></th><th>Project Number</th><th>Company Name</th><th>Customer Last Name</th><th>Project Type</th><th>Project Manager/Rep</th><th>Project Address</th><th>Files</th></tr></thead>',numOfCols:8,showInPrj:false,primaryKey:'project_id',tableName:'projects',params:0},
+    "Projects":{hash:'dprjct',callBack:projects,callType:"generalUpload",sn:"aux",columns:'<thead id="mainHeader" class="mHeader"><th></th><th>Project Number</th><th>Company Name</th><th>Customer Last Name</th><th>Project Type</th><th>Project Manager/Rep</th><th>Project Address</th><th>Files</th></tr></thead>',numOfCols:8,showInPrj:false,primaryKey:'project_id',tableName:'projects',params:0},
     "Scheduler":{hash:'schdlr',callBack:scheduler,callType:"schedulerUpload",columns:'<th style="width:5%">Job Date</th><th style="width:15%">Description</th><th>Installer</th><th>Files</th></tr></thead>',numOfCols:6,showInPrj:true,primaryKey:'task_id',tableName:'task_list',sn:"home",params:0}, // sn=screennumber
     "Vendors":{hash:'vndrs',callBack:upperRight,callType:"generalUpload",sn:"config",columns:'<th>Vendor Name</th><th>Vendor Address</th><th>Notes</th><th style="width:100px">Files</th>',numOfCols:5,showInPrj:false,primaryKey:'vendor_id',tableName:'vendors',params:0},
     "Companies":{hash:'dcmpny',callBack:lowerRight,callType:"generalUpload",sn:"config",columns:'<th>Company Name</th><th>Notes</th><th style="width:100px">Files</th>',numOfCols:4,showInPrj:false,primaryKey:'company_id',tableName:'companies',params:0},
@@ -589,180 +589,180 @@ async function init() {
     uid=Cookies.get('uid');
 
     try {
-            let layers2 = await $.ajax({
-                url: "../main/read_layers.php",
-                method: "GET",
-                dataType: "json"
-            });
-        
-            let iniConfig = await $.ajax({
-                url: "../main/read_config.php",
-                method: "GET",
-                dataType: "json"
-            });
+        let layers2 = await $.ajax({
+            url: "../main/read_layers.php",
+            method: "GET",
+            dataType: "json"
+        });
+    
+        let iniConfig = await $.ajax({
+            url: "../main/read_config.php",
+            method: "GET",
+            dataType: "json"
+        });
 
-            windowLog.trace("Inside document ready");
+        windowLog.trace("Inside document ready");
 
-            createNavigation();
+        createNavigation();
 
-            $("#logout").html("Logout");
-            //$('#logout').css({'cursor'   : 	'pointer'});
-        
-            if (username === 'eddie') { //only Eddie could access
-                if ((iniConfig !== '') && 
-                    (Number(iniConfig[0].Status) > 0)) {
-                        setConfig(iniConfig);
-                        //await loadModules(); // aw
-                        const iniModulesResult=initModules();
-                     
-                        loadModules().then(function() { // load al modules from the DB and show the progress bar
-                         // Build lookup map
-                            const lookupMap = Object.values(classArray).reduce((map, record) => {
-                                map[`${record.screenNumber}-${record.position}`] = record.moduleName;
-                                return map;
+        $("#logout").html("Logout");
+        //$('#logout').css({'cursor'   : 	'pointer'});
+    
+        if (username === 'eddie') { //only Eddie could access
+            if ((iniConfig !== '') && 
+                (Number(iniConfig[0].Status) > 0)) {
+                    setConfig(iniConfig);
+                    //await loadModules(); // aw
+                    const iniModulesResult=initModules();
+                    
+                    loadModules().then(function() { // load al modules from the DB and show the progress bar
+                        // Build lookup map
+                        const lookupMap = Object.values(classArray).reduce((map, record) => {
+                            map[`${record.screenNumber}-${record.position}`] = record.moduleName;
+                            return map;
+                        }, {});
+
+                        // Build captions
+                        layers2.forEach(entry => {
+                            captions2[entry.layer_name] = captions.genesis.reduce((obj, pos) => {
+                                const moduleName = lookupMap[`${entry.layer_number}-${pos}`];
+                                if (moduleName) obj[pos] = moduleName;
+                                    return obj;
                             }, {});
-
-                            // Build captions
-                            layers2.forEach(entry => {
-                                captions2[entry.layer_name] = captions.genesis.reduce((obj, pos) => {
-                                    const moduleName = lookupMap[`${entry.layer_number}-${pos}`];
-                                    if (moduleName) obj[pos] = moduleName;
-                                        return obj;
-                                }, {});
-                            });
-                            /*
-                            layers2.forEach(entry => {
-                                captions2[entry.layer_name] = {};
-                                
-                                captions.genesis.forEach((pos, index) => { // loop over the positions
-                                    const entryFound=Object.values(classArray).filter(record => record.screenNumber === Number(entry.layer_number)).filter(record => pos === record.position);
-                                    if ( entryFound.length ) // if found
-                                        captions2[entry.layer_name][pos] = entryFound[0].moduleName;
-                                });
-                            });*/
-                           
-                        
-                            $.ajax({url         : "../main/read_projects.php",
-                                    type        : "GET",
-                                    dataType    : "json",
-                                    async       : false, // Make the request synchronous
-                                        success: function(data) {
-                                            Projects = new classProjects(data);
-                                            classArray["Projects"] = Projects;
-                                            if (Projects.length > 0) {
-                                                lastID["Projects"] = Number(Projects.arrProjects[Projects.arrProjects.length-1].project_id);
-                                                windowLog.trace("Project Data received");
-                                            } else {
-                                                windowLog.warn("No projects found");
-                                            }
-                                        },
-                                    error     	: function (jqxhr, textStatus, error ) {
-                                        windowLog.warn("Load projects failed:"+textStatus + ", " + error); 
-                                        logout();
-                                    }
-                            });
-
-                            $.ajax({url     : "../main/load_task.php",
-                                method		: "POST",
-                                data      	: JSON.stringify({'calltype':'scheduler'}),
-                                dataType	: "json",
-                                async       : false,  
-                                success		: function(tasks) {
-                                    if ( tasks !== '' ) {
-                                        //windowLog.trace("Load all tasks completed succesfully");
-                                        Tasks = new classTasks(tasks); // create Tasks class
-                                        classArray["Scheduler"] = Tasks;
-                                        /*Tasks.intervalEJID=window.setInterval(function() {
-                                            refreshReportCallBack();
-                                        }, appConfig.tsPolling_Interval*1000*60);*/
-                                        windowLog.trace("All Tasks loaded succesfully("+classArray["Scheduler"].arr.length+")");
-                                        windowLog.trace("Set the clock to pollingTasks:"+appConfig.tsPolling_Interval*1000*60);
-                                        assignedTasksArr=Tasks.arrTasks.filter((x) => ( ( x.employee_id > 0) && ( Number(x.is_assigned) === 1 ) && ( classArray["Employees"].arr[classArray["Employees"].arr.findIndex(t => t.employee_id === x.employee_id)].is_active === "1" ) ));
-
-                                    } else	{
-                                        windowLog.trace("error loading tasks, exit");
-                                        logout();
-                                    }
-                                },
-                                error     	: (function (jqxhr, textStatus, error ) {
-                                    windowLog.warn("Load schedule failed:"+textStatus + ", " + error); 
-                                    logout();
-                                })
-                            });
-                            windowLog.trace('Modules finished loading');
-
-                            lastID["Employee Jobs"]=(Number(Math.max(lastID["Employee Jobs"],lastID["Scheduler"])))+1;
-                            classArray["Employee Jobs"].isTotalCost=false;
-                            classArray["Employees"].colors=[];
-                                                classArray["Employees"].arr.forEach( (key) => { 
-                                                    classArray["Employees"].pNames[key.fullname.toString()]=key.employee_id;    // initialize the employee/id array 
-                                                    classArray["Employees"].colors[key.fullname.toString()]=key.profile_color;  // initialize the employee/colors array 
-                                                });
-                            classArray["Companies"].arr.forEach( (key) => { //copy the return data from the DB into the class array
-                                classArray["Companies"].pNames[key.company_name.toString()]=key.company_id; 
-                            });
-
-                            classArray["Contractors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
-                                classArray["Contractors"].pNames[key.contractorName.toString()]=key.contractor_id; 
-                            });
-
-                            classArray["Vendors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
-                                classArray["Vendors"].pNames[key.vendor_name]=key.vendor_id;
-                            });
-
-                            $("#innerPT_ID,#CloseBtnPsumry").on("click", innerPThandler);
-
-                            windowLog.trace("Window HxW:"+window.innerHeight+":"+window.innerWidth);
-                            if ( ( window.innerHeight < 480 ) || 
-                                ( window.innerWidth  < 480 ) ) {
-                                zoom(0.8); 
-                                $("#footer").css({'font-size' : '7px'});
-                                isZoom = true;
-                                windowLog.trace("Zoom out");
-                            }
-
-                            $(".parentDivClass").css({'display':"flex"});
-                            $(".navtop div").css({'display':"flex"});
-                            $(".navtop").css({"background-color"	: "#faba0a"});
-                                $("#ul, #ur, #ll, #lr").addClass("homeScreen");
-                            screenNumber = "Home";//window.location.hash.slice(1);
-                            displayMainMenue("Home"); //window.location.hash.slice(1));
-                            $(".main_menue").show();
-                            $("#prjShortCut").focus();
-                            $("#savingTD").html("<a style='font-size : 12px;' id='saveTableLabel'>''</a>");
-                                                    
-                            $(".loggedin").css({'background-color'    : '#f8f7f3'});
-                            $("#configID").html("Configuration");
-                            $("#systemID").html("System");
-                            $("#rootID").html("Home");
-                            $("#libraryID").html("Library");
-                            $('#welcomeNameID,#rootID,#configID,#libraryID,#systemID,#logout').css({'cursor':'pointer'});
-
                         });
-                    }
-                    else {
-                        windowLog.warn("Fatal Error- failed to load modules- exit");
-                        logout();
-                    }
-            }
-            else {
-                    $(".parentDivClass").css({'display':"flex"});
-                    $(".navtop div").css({'display':"flex"});
-                    $('img[id^=Pls]').remove();
-                    $("#userFileUpload").on("click",function(event) { return uploadFilesCheckBoxHandler(event); });
-                    screenNumber = "user";
-                    displayMainMenue("engineer");
-                    displayMainMenue("home"); //window.location.hash.slice(1));
-                    $(".main_menue").show();
-                    //$("#newCustomer,#newScheduler").remove();
-            }
-            
-            return true; // Initialization complete
+                        /*
+                        layers2.forEach(entry => {
+                            captions2[entry.layer_name] = {};
+                            
+                            captions.genesis.forEach((pos, index) => { // loop over the positions
+                                const entryFound=Object.values(classArray).filter(record => record.screenNumber === Number(entry.layer_number)).filter(record => pos === record.position);
+                                if ( entryFound.length ) // if found
+                                    captions2[entry.layer_name][pos] = entryFound[0].moduleName;
+                            });
+                        });*/
+                        
+                    
+                        $.ajax({url         : "../main/read_projects.php",
+                                type        : "GET",
+                                dataType    : "json",
+                                async       : false, // Make the request synchronous
+                                    success: function(data) {
+                                        Projects = new classProjects(data);
+                                        classArray["Projects"] = Projects;
+                                        if (Projects.length > 0) {
+                                            lastID["Projects"] = Number(Projects.arrProjects[Projects.arrProjects.length-1].project_id);
+                                            windowLog.trace("Project Data received");
+                                        } else {
+                                            windowLog.warn("No projects found");
+                                        }
+                                    },
+                                error     	: function (jqxhr, textStatus, error ) {
+                                    windowLog.warn("Load projects failed:"+textStatus + ", " + error); 
+                                    logout();
+                                }
+                        });
+
+                        $.ajax({url     : "../main/load_task.php",
+                            method		: "POST",
+                            data      	: JSON.stringify({'calltype':'scheduler'}),
+                            dataType	: "json",
+                            async       : false,  
+                            success		: function(tasks) {
+                                if ( tasks !== '' ) {
+                                    //windowLog.trace("Load all tasks completed succesfully");
+                                    Tasks = new classTasks(tasks); // create Tasks class
+                                    classArray["Scheduler"] = Tasks;
+                                    /*Tasks.intervalEJID=window.setInterval(function() {
+                                        refreshReportCallBack();
+                                    }, appConfig.tsPolling_Interval*1000*60);*/
+                                    windowLog.trace("All Tasks loaded succesfully("+classArray["Scheduler"].arr.length+")");
+                                    windowLog.trace("Set the clock to pollingTasks:"+appConfig.tsPolling_Interval*1000*60);
+                                    assignedTasksArr=Tasks.arrTasks.filter((x) => ( ( x.employee_id > 0) && ( Number(x.is_assigned) === 1 ) && ( classArray["Employees"].arr[classArray["Employees"].arr.findIndex(t => t.employee_id === x.employee_id)].is_active === "1" ) ));
+
+                                } else	{
+                                    windowLog.trace("error loading tasks, exit");
+                                    logout();
+                                }
+                            },
+                            error     	: (function (jqxhr, textStatus, error ) {
+                                windowLog.warn("Load schedule failed:"+textStatus + ", " + error); 
+                                logout();
+                            })
+                        });
+                        windowLog.trace('Modules finished loading');
+
+                        lastID["Employee Jobs"]=(Number(Math.max(lastID["Employee Jobs"],lastID["Scheduler"])))+1;
+                        classArray["Employee Jobs"].isTotalCost=false;
+                        classArray["Employees"].colors=[];
+                                            classArray["Employees"].arr.forEach( (key) => { 
+                                                classArray["Employees"].pNames[key.fullname.toString()]=key.employee_id;    // initialize the employee/id array 
+                                                classArray["Employees"].colors[key.fullname.toString()]=key.profile_color;  // initialize the employee/colors array 
+                                            });
+                        classArray["Companies"].arr.forEach( (key) => { //copy the return data from the DB into the class array
+                            classArray["Companies"].pNames[key.company_name.toString()]=key.company_id; 
+                        });
+
+                        classArray["Contractors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
+                            classArray["Contractors"].pNames[key.contractorName.toString()]=key.contractor_id; 
+                        });
+
+                        classArray["Vendors"].arr.forEach( (key) => { //copy the return data from the DB into the class array
+                            classArray["Vendors"].pNames[key.vendor_name]=key.vendor_id;
+                        });
+
+                        $("#innerPT_ID,#CloseBtnPsumry").on("click", innerPThandler);
+
+                        windowLog.trace("Window HxW:"+window.innerHeight+":"+window.innerWidth);
+                        if ( ( window.innerHeight < 480 ) || 
+                            ( window.innerWidth  < 480 ) ) {
+                            zoom(0.8); 
+                            $("#footer").css({'font-size' : '7px'});
+                            isZoom = true;
+                            windowLog.trace("Zoom out");
+                        }
+
+                        $(".parentDivClass").css({'display':"flex"});
+                        $(".navtop div").css({'display':"flex"});
+                        $(".navtop").css({"background-color"	: "#faba0a"});
+                            $("#ul, #ur, #ll, #lr").addClass("homeScreen");
+                        screenNumber = "Home";//window.location.hash.slice(1);
+                        displayMainMenue("Home"); //window.location.hash.slice(1));
+                        $(".main_menue").show();
+                        $("#prjShortCut").focus();
+                        $("#savingTD").html("<a style='font-size : 12px;' id='saveTableLabel'>''</a>");
+                                                
+                        $(".loggedin").css({'background-color'    : '#f8f7f3'});
+                        $("#configID").html("Configuration");
+                        $("#systemID").html("System");
+                        $("#rootID").html("Home");
+                        $("#libraryID").html("Library");
+                        $('#welcomeNameID,#rootID,#configID,#libraryID,#systemID,#logout').css({'cursor':'pointer'});
+
+                    });
+                }
+                else {
+                    windowLog.warn("Fatal Error- failed to load modules- exit");
+                    logout();
+                }
         }
-        catch (error) {
-            windowLog.warn("General failed: " + error.statusText);
-            logout();
+        else {
+                $(".parentDivClass").css({'display':"flex"});
+                $(".navtop div").css({'display':"flex"});
+                $('img[id^=Pls]').remove();
+                $("#userFileUpload").on("click",function(event) { return uploadFilesCheckBoxHandler(event); });
+                screenNumber = "user";
+                displayMainMenue("engineer");
+                displayMainMenue("home"); //window.location.hash.slice(1));
+                $(".main_menue").show();
+                //$("#newCustomer,#newScheduler").remove();
         }
+        
+        return true; // Initialization complete
+    }
+    catch (error) {
+        windowLog.warn("General failed: " + error.statusText);
+        logout();
+    }
 }
 
 $(document).ready(async function() {
@@ -1279,6 +1279,7 @@ function prepareDisplay(display) {
 function prepareProjectRecords2Display(inputArr) {
 
     let outArr="";
+    let prjOut=[];
 
     for (var i = 0; i < inputArr.length; i++) { //loop throu the return msg 
         //if ( (passedArray[i].project_m_contractor == projectManager ) || for future
@@ -1293,14 +1294,15 @@ function prepareProjectRecords2Display(inputArr) {
         outArr += `<td><input tabindex="0" class="projectNameClass" type="text" name="projectSalesRep" id="projectSalesRepID" value="${inputArr[i].project_m_contractor}"></td>`;
         outArr += `<td><input tabindex="0" class="projectNameClass" type="text" name="projectAddress" id="projectAddressID" value='${inputArr[i].project_address}'"></td>`;
         fileupload=uploadFilesMngr(Number(inputArr[i].file_uploaded,(inputArr[i].project_number != "")));
-        outArr += `<td>${fileupload}</td>`;
-        outArr += `</tr>`;
+        outArr += `<td>${fileupload}</td></tr>`;
         //sumOfProjects += Number(passedArray[i].project_total_payments);
         // var url=passedArray[i].project_address;
         //}
+        prjOut.push(outArr);
+        outArr="";
     } 
 
-    return outArr;
+    return prjOut;
 }
 
 function displayProjects(projectManager) {
@@ -1309,7 +1311,6 @@ function displayProjects(projectManager) {
     windowLog.trace("Inside "+screen_name);
     let out = "";
    
-
     passedArray=Projects.arrProjects;
     lastScreen=screen_name;
 
@@ -1318,47 +1319,27 @@ function displayProjects(projectManager) {
     prepareDisplay("#result-table1");
    
     $('.outer-table').invisible();
-    //out +=`<thead id="mainHeader"><tr><th></th>`; 
     
-    
-   
     lastID["Projects"]=Number(Projects.arrProjects[Projects.arrProjects.length-1].project_id);
 
     windowLog.trace("Start processing projects");
-    out =  headers[screen_name]['columns'];
-    out += `<tbody class="thover">`;
-    out += prepareProjectRecords2Display(Projects.arrProjects);
-    /*
-    for (var i = 0; i < Projects.arrProjects.length; i++) { //loop throu the return msg 
-            //if ( (passedArray[i].project_m_contractor == projectManager ) || for future
-            // ( username == "eddie") ) {    // only show projects for the associated with the PM or Eddie
-            out += `<tr>`;                
-            out += `<td></td>`; // pleace holder for delete image
-            out += `<td tabindex="0"><input type="text" name="projectNumber" id="prjctNumberID" class="projectNameClass"value="${passedArray[i].project_number}" size="44" maxlength="50">`;
-            out += `<input type="hidden" id='${headers[$("#screen_name").html()]['primaryKey']}' name="projectID" value=${passedArray[i].project_id}></td>`;
-            out += `<td tabindex="0"><input type="text" name="companyName" id="companyNameID" class="projectNameClass" value="${Projects.arrProjects[i].company_name}"></td>`;
-            out += `<td tabindex="0"><input type="text" name="customerLastName" id="customerLastNameID" class="projectNameClass" value="${passedArray[i].project_cstmr_lastname}"></td>`;
-            out += `<td tabindex="0"><input type="text" name="projectType" id="projectTypeID" class="projectNameClass" value="${passedArray[i].project_type}"></td>`;
-            out += `<td tabindex="0"><input type="text" name="projectSalesRep" id="projectSalesRepID" class="projectNameClass" value="${passedArray[i].project_m_contractor}"></td>`;
-            out += `<td tabindex="0"><input type="text" name="projectAddress" id="paddrID" class="projectNameClass" value='${passedArray[i].project_address}'"></td>`;
-            fileupload=uploadFilesMngr(Number(pArray[i].file_uploaded));
-            out += `<td style="width:2%">${fileupload}</td>`;
-            out += `</tr>`;
-            sumOfProjects += Number(passedArray[i].project_total_payments);
-            // var url=passedArray[i].project_address;
-        //}
-    } */
-    
-    out += `</tbody></table>`;//</div>`;
-    windowLog.trace("Finish processing projects");
-    document.querySelector("#result-table1").innerHTML=out+`</tbody>`;  // prepare the table
-    //tableSummary(Projects.arrProjects.length,sumOfProjects);
+
+    $(".viewportDiv").css({'display' : "table-footer-group"});
+    const table = document.getElementById('result-table1');
+    table.insertAdjacentHTML('afterbegin', headers[screen_name]['columns']+`</tr></thead>`);
+
+    out = prepareProjectRecords2Display(Projects.arrProjects);
+
+    classArray["Projects"].virtualScroll = new VirtualScroll({
+        inArray         : out
+    });
+    classArray["Projects"].virtualScroll.attachListener();
+    classArray["Projects"].virtualScroll.updateTable(); // Initial render
 
     $('.outer-table').visible();    // show the table
 
     currCell = $('#result-table1 tbody tr:last td:eq(2)').first(); // currCell points to 2nd TD in the last TR (skip the del image placeholder)
-    currCell.children().first().focus();// focus on the first input!!
-    //$('.scrollit').scrollTop($('.scrollit').prop("scrollHeight"));
+    setCellFocus()
 
     /* setCellFocusVal();
         
@@ -1458,11 +1439,7 @@ function displayPaymentResults(projectNumber,targetDisplay) {
     }
 
     classArray[screen_name].virtualScroll = new VirtualScroll({
-        inArray         : pJobs,
-        visibleRows     : 40,
-        rowHeight       : 10,
-        tableBody       : document.getElementById('tableBody'),
-        throttleDelay   : 100
+        inArray         : pJobs
     });
     classArray[screen_name].virtualScroll.attachListener();
     classArray[screen_name].virtualScroll.updateTable(); // Initial render
@@ -1498,7 +1475,6 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
 
     const length=eArray.length;
     const localCurrentTime=("0" + (date.getHours())).slice(-2)+":"+("0" + (date.getMinutes())).slice(-2);
-    //classArray["Employee Jobs"].virtualScroll.allData=[];
     prepareDisplay(targetDisplay); // hide the top menue
    
     if (length === 0) {
@@ -1519,7 +1495,6 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
             tableHeader = `<table class="res_table2" id="result-table"><thead><tr>`;
         $(".viewportDiv").css({'display' : "table-footer-group"});
         tableHeader += headers[screen_name]['columns']+`</tr></thead>`;
-       // tableHeader += `<tbody id="tableBody" class="thover">`;
         const table = document.getElementById('result-table1');
         table.insertAdjacentHTML('afterbegin', tableHeader);
         //$(".scrollit").css({'display' : "block"});
@@ -1622,23 +1597,15 @@ function displayEmployeeJobResults(pojectNumber,targetDisplay) {
         //viewport.onscroll = updateTable;
         $("#search-bar").css({"display": "block"});
         // Search logic
-        
-        
-        //filteredData = [...eJobs];
 
         classArray["Employee Jobs"].virtualScroll = new VirtualScroll({
-            //container: document.getElementById('scrollDivID'), //scrollContainer'),
-            inArray         : eJobs,
-            visibleRows     : 40,
-            rowHeight       : 10,
-            tableBody       : document.getElementById('tableBody'),
-            throttleDelay   : 100
+            inArray         : eJobs
         });
         classArray["Employee Jobs"].virtualScroll.attachListener();
         classArray["Employee Jobs"].virtualScroll.updateTable(); // Initial render
         
-        if (targetDisplay == "#result-table1") {
-            currCell = $('#result-table1 tbody tr:last td:eq(1)').first(); // currCell points to 2nd TD in the last TR
+        if (targetDisplay === "#result-table1") {
+            currCell = $('#result-table1 tbody tr:last td:eq(1)'); // currCell points to 2nd TD in the last TR
             setCellFocus();
             tableSummary(length,sumofJobs);
             //AddingSort();
@@ -1812,11 +1779,7 @@ function displayContractorJobsResults(projectNumber,targetDisplay) {
         }  
         
          classArray[screen_name].virtualScroll = new VirtualScroll({
-            inArray         : cJobs,
-            visibleRows     : 40,
-            rowHeight       : 10,
-            tableBody       : document.getElementById('tableBody'),
-            throttleDelay   : 100
+            inArray         : cJobs
         });
         classArray[screen_name].virtualScroll.attachListener();
         classArray[screen_name].virtualScroll.updateTable(); // Initial render
@@ -1912,18 +1875,13 @@ function displayPurchaseResults(projectNumber,targetDisplay) {
         }    
        
         classArray[screen_name].virtualScroll = new VirtualScroll({
-            //container: document.getElementById('scrollDivID'), //scrollContainer'),
-            inArray         : pJobs,
-            visibleRows     : 40,
-            rowHeight       : 10,
-            tableBody       : document.getElementById('tableBody'),
-            throttleDelay   : 100
+            inArray         : pJobs
         });
         classArray[screen_name].virtualScroll.attachListener();
         classArray[screen_name].virtualScroll.updateTable(); // Initial render
             
-        if (targetDisplay == "#result-table1") {
-            currCell = $('#result-table1 tbody tr:last td:eq(1)').first();
+        if (targetDisplay === "#result-table1") {
+            currCell = $('#result-table1 tbody tr:last td:eq(1)');
             setCellFocus();
             tableSummary(length,sumOfInvoices);
         }
