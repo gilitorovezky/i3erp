@@ -12,7 +12,7 @@
     header('Content-Type: application/json');
     file_put_contents('../log/log_'.$logDate.'.log', "(layers.php) ".$current_time." info 1-inside read_layers.php\n", FILE_APPEND); 
 
-    $sql = "SELECT id, layer_name, layer_number FROM layers";
+    $sql = "SELECT id, layer_name, layer_number, bg_color FROM layers";
     $result = $con->query($sql);
 
     if ($result) {

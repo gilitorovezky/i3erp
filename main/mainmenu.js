@@ -703,7 +703,7 @@ async function init() {
                         $(".navtop").css({"background-color"	: "#faba0a"});
                             $("#ul, #ur, #ll, #lr").addClass("homeScreen");
                         screenNumber = layers2[0].layer_name;//window.location.hash.slice(1);
-                        displayMainMenue(layers2[0].layer_name); //window.location.hash.slice(1));
+                        displayMainMenue(screenNumber); //window.location.hash.slice(1));
                         $(".main_menue").show();
                         $("#prjShortCut").focus();
                         $("#savingTD").html("<a style='font-size : 12px;' id='saveTableLabel'>''</a>");
@@ -1921,7 +1921,7 @@ function home()	{
     $("#screen_name, #addSingleRec,#editDiv").hide();
     $(".scrollit").hide();
     $(".grid-gallery").css({'display' : "none"});
-    $(".main_menue").css({'background-color'    : '#faba0a'});
+    $(".main_menue").css({'background-color'    : layers2[0].bg_color});
     /*$("#editLabelID, #formModeID, #exportDialogueID").remove();*/
     $("#formModeID, #exportDialogueID").remove();
     $(".main_menue").show();

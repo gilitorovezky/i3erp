@@ -40,7 +40,7 @@
         screenName="Configuration";
         
         $('#newProject,#addSingleRec,#overLay,#screen_name,#editDiv,#bHalf,#customers,#tHalf,#newScheduler').hide();
-        $(".main_menue").css({'background-color':'#4ccd4a'});
+        $(".main_menue").css({'background-color': layers2[1].bg_color});
         $("#main-menue, #centercellID, #parentDiv").show();
         $("#centercellID").visible();
         $("#upperLeft").focus();
@@ -174,10 +174,9 @@
 
     function displayVendors(targetDisplay) {
 
-        windowLog.trace("Inside displayVendors...");
-		
-        var tabI=1;
         const screen_name="Vendors";
+        windowLog.trace("Inside "+screen_name);
+		
         let out = "";
         let eArray=[];
 
