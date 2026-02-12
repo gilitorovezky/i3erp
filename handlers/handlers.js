@@ -79,7 +79,7 @@ Promise.all(requests)
             });
 
             if (oldURL !== "home" &&
-                oldURL !== "Configurttoin" ) {
+                oldURL !== "config" ) {
 
                 const foundEntry=Object.entries(headers).find(([key, value]) => oldURL.includes(value.hash));
                
