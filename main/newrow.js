@@ -404,10 +404,10 @@
             out = `<thead id="mainHeader"><th></th><th class="pmClass">Project Number</th>`;
             //out += headers[lastScreen]['columns']+`</thead>`; // first th is a place holder to the del image
         }
-        else {
+        /*else {
             if ( module !== "Projects" )    // special case
                 out = `<thead id="mainHeader"><th></th>`;
-        }
+        }*/
         out += headers[module]['columns']+`</thead>`; // header is already included
         out += `<tfoot style="border-bottom:none"><tr id = "footerRow" style="border-bottom:none"><td colspan=${headers[module]['numOfCols']}>`;
         if ( newRecordPntr === "addSingleRec" ) // show the SaveandNew only in case of single record

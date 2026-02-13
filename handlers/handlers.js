@@ -821,11 +821,10 @@ Promise.all(requests)
 
         var lookupID="";
         windowLog.trace("Inside dispatcher click:"+e.target.id);
-        const id=e.target.id.substr(0,e.target.id.indexOf("-")) != "" ? e.target.id.substr(0,e.target.id.indexOf("-")) : e.target.id;
+        const id=e.target.id.substr(0,e.target.id.indexOf("-")) !== "" ? e.target.id.substr(0,e.target.id.indexOf("-")) : e.target.id;
         switch ( id ) {
         
             case "upperLeft"        :
-            case "ul"               :
                 lookupID = "upperLeft";
                 if (username === 'eddie') {
                     window.location.hash = headers[captions2[screenNumber][lookupID]].hash;
@@ -839,7 +838,7 @@ Promise.all(requests)
             break;
     
             case "upperRight"       :
-            case "ur"               :
+           
                 lookupID = "upperRight";
                 if ( username === 'eddie' ) {
                       window.location.hash = headers[captions2[screenNumber][lookupID]].hash;
@@ -854,7 +853,7 @@ Promise.all(requests)
             break;
 
             case "lowerLeft"            :
-            case "ll"                   :
+          
                 lookupID = "lowerLeft"  ;
                 if ( username === 'eddie' ) 
                 /* if ( username == 'eddie' ) {
@@ -869,7 +868,7 @@ Promise.all(requests)
             break;
     
             case "lowerRight"           :
-            case "lr"                   :
+          
                  lookupID = "lowerRight";
                  if ( username === 'eddie' ) 
                     window.location.hash = headers[captions2[screenNumber][lookupID]].hash;
@@ -900,8 +899,8 @@ Promise.all(requests)
                 const quadrant=e.target.id.substr(e.target.id.indexOf("-")+1)
                 $("#main-menue,#navID,#tHalf,#innerCellID").addClass("greyed-out");
                 $('img[id^="Pls"]').removeClass("greyed-out");
-                $("#overLay ul").attr('data-module',captions[screenNumber][captions["shortcuts"].indexOf(quadrant)]);
-                addNewRec(captions[screenNumber][captions["shortcuts"].indexOf(quadrant)],e.target,"addSingleRec");  
+                $("#overLay ul").attr('data-module',captions2[screenNumber][quadrant]);
+                addNewRec(captions2[screenNumber][quadrant],e.target,"addSingleRec");  
             break;
 
             case "newProject"           :
