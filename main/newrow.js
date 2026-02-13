@@ -474,7 +474,7 @@
                         if (lastFocusedEntry[lastFocusedEntry.length-1].module === "Projects" ) 
                             lastFocusedEntry[lastFocusedEntry.length-2].currCell.children().first().val(Projects.arrProjects[Projects.arrProjects.length-1].project_name);
                         else
-                            lastFocusedEntry[lastFocusedEntry.length-2].currCell.children().first().val(lastFocusedEntry[lastFocusedEntry.length-1].currCell.children().first().val());
+                            lastFocusedEntry[lastFocusedEntry.length-2].currCell.children().first().val(lastFocusedEntry[lastFocusedEntry.length-1].currCell.closest('tr').find('td:eq(1)').children().first().val());
                         lastFocusedEntry[lastFocusedEntry.length-2].currCell.children().first().focus();
                         validateEnableSaveConditions(lastFocusedEntry[lastFocusedEntry.length-2].module,lastFocusedEntry[lastFocusedEntry.length-2].currCell.closest('tr'));
                         //$("#addSingleRec").show();
